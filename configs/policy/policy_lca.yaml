@@ -1,0 +1,91 @@
+# Policy Configuration
+
+# =============================================================================
+# LCA (League Championship Algorithm) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Population-based metaheuristic where routing solutions are "teams" playing
+#   weekly matches. Losing teams update their "formation" (solution structure)
+#   by learning from the winner via OX crossover or local perturbation.
+#   An infeasibility tolerance enables slightly-worse solutions to win,
+#   preserving structural diversity in the population.
+#
+# ALGORITHM:
+#   1. Initialize n_teams route solutions
+#   2. Per week (iteration):
+#      a. Pair teams in random or round-robin matches
+#      b. Match result: winner = higher profit team; if profits within
+#         tolerance_pct, slight infeasibility tolerance allows upset wins
+#      c. Formation update for loser:
+#         - With prob crossover_prob: OX crossover with winner's solution
+#         - With prob 1-crossover_prob: worst_removal + greedy_insertion
+#      d. Feasibility repair: mandatory nodes always included; capacity clamp
+#   3. Track best feasible solution; repeat for max_iterations
+#
+# KEY FEATURE:
+#   Infeasibility tolerance (tolerance_pct) prevents strong teams from always
+#   winning, maintaining diversity. Formation update blends the winning team's
+#   structure with the loser's, creating intermediate solutions.
+#
+# TYPICAL USE CASES:
+#   - Medium-to-large instances (20-150 nodes)
+#   - Research benchmarking of league-structured metaheuristics
+#   - Comparison with SLC and genetic algorithm variants
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Larger n_teams → better population diversity but more iterations needed
+#   - crossover_prob=0.6 balances exploration (OX) and exploitation (LS)
+#   - tolerance_pct=0.05 allows 5% worse teams to occasionally win matches
+# =============================================================================
+
+lca:
+  custom:
+    # -------------------------------------------------------------------------
+    # League Structure
+    # -------------------------------------------------------------------------
+    - n_teams: 10
+      # Number of teams (route solutions) in the championship
+      # Range: 5-20 (5 = fast, 10 = balanced, 20 = diverse)
+
+    - n_removal: 2
+      # Nodes removed per perturbation step (formation update)
+      # Range: 1-5 (1 = micro change, 3 = moderate restructure)
+
+    # -------------------------------------------------------------------------
+    # Match Mechanics
+    # -------------------------------------------------------------------------
+    - tolerance_pct: 0.05
+      # Infeasibility tolerance — fraction of profit gap that allows upsets
+      # Range: 0.0-0.2 (0.0 = strict best-wins, 0.1 = 10% upset window)
+      # Higher values → more diversity but weaker convergence guarantee
+
+    - crossover_prob: 0.6
+      # Probability of OX crossover (vs. perturbation) after a loss
+      # Range: 0.0-1.0 (0.0 = always perturb, 1.0 = always crossover)
+      # OX crossover transfers winning team's tour structure to loser
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - max_iterations: 100
+      # Maximum weeks (main loop iterations)
+      # Range: 30-300 (50 = quick, 100 = production, 200 = benchmark)
+
+    - time_limit: 60.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = quick, 60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/league_championship_algorithm/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # Formation updates (OX + LS) are comprehensive; no further refinement
+      # Empty = use LCA output directly
+# =============================================================================

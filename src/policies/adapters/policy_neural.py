@@ -8,7 +8,7 @@ Attributes:
     PolicyRegistry: Registry where this policy is automatically registered with key "neural".
 
 Example:
-    >>> from src.policies.adapters.policy_neural import NeuralPolicy
+    >>> from policies.adapters.policy_neural import NeuralPolicy
     >>> policy = NeuralPolicy()
     >>> route, cost, _ = policy.execute(model_env=env, model_ls=ls, ...)
 """
@@ -16,10 +16,10 @@ Example:
 from typing import Any, Dict, List, Optional, Tuple
 
 import torch
+from utils.functions import move_to
 
-from src.policies.adapters import IPolicy, PolicyRegistry
-from src.policies.neural_agent import NeuralAgent
-from src.utils.functions import move_to
+from policies.adapters import IPolicy, PolicyRegistry
+from policies.neural_agent import NeuralAgent
 
 
 @PolicyRegistry.register("neural")
@@ -96,7 +96,7 @@ class NeuralPolicy(IPolicy):
             return
         self._params_logged = True
 
-        from src.tracking.core.run import get_active_run
+        from tracking.core.run import get_active_run
 
         run = get_active_run()
         if run is None:
@@ -143,7 +143,7 @@ class NeuralPolicy(IPolicy):
         if selector_name is None:
             return None
 
-        from src.models.policies.selection import get_vectorized_selector
+        from models.policies.selection import get_vectorized_selector
 
         selector_threshold = kwargs.get("selector_threshold", 0.7)
         current_day = kwargs.get("current_day", 1)

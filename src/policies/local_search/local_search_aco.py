@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.local_search.local_search_aco import ACOLocalSearch
+    >>> from policies.local_search.local_search_aco import ACOLocalSearch
     >>> ls = ACOLocalSearch(dist_matrix, waste, capacity, R, C, params)
     >>> optimized_routes = ls.optimize(routes)
 """

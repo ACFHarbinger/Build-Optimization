@@ -1,0 +1,97 @@
+# Policy Configuration
+
+# =============================================================================
+# ALNS (Adaptive Large Neighborhood Search) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Metaheuristic routing policy using destroy-repair operators with adaptive
+#   weights. Best for medium-to-large instances (50-200 nodes) where exact
+#   solvers are too slow but high-quality solutions are required.
+#
+# ALGORITHM:
+#   Iteratively destroys part of current solution and repairs it using
+#   different operators. Operator selection probabilities are adapted based
+#   on recent performance using simulated annealing acceptance criterion.
+#
+# TYPICAL USE CASES:
+#   - Production routing when 60s time budget is acceptable
+#   - Benchmark comparison against neural policies
+#   - Instances where Gurobi times out (>100 nodes)
+#
+# PERFORMANCE EXPECTATIONS:
+#   - 50 nodes: Near-optimal (gap <2%), ~10s runtime
+#   - 100 nodes: Good solutions (gap ~5%), ~30s runtime
+#   - 200 nodes: Acceptable (gap ~10%), ~60s runtime
+# =============================================================================
+
+alns:
+  custom:
+    # ---------------------------------------------------------------------
+    # Runtime Control
+    # ---------------------------------------------------------------------
+    - time_limit: 60
+      # Maximum wall-clock seconds for optimization
+      # Range: 10-600 (10s = quick test, 600s = deep search)
+      # Recommendation: 60s for production, 300s for benchmarking
+
+    - max_iterations: 5000
+      # Maximum destroy-repair cycles before termination
+      # Range: 1000-10000
+      # Note: Usually time_limit is reached first; this prevents infinite loops
+
+    # ---------------------------------------------------------------------
+    # Simulated Annealing Parameters
+    # ---------------------------------------------------------------------
+    - start_temp: 100
+      # Initial acceptance temperature T_0
+      # Higher values → accept more worse solutions early (better exploration)
+      # Range: 10-10000 (100 = moderate, 1000 = aggressive exploration)
+
+    - cooling_rate: 0.995
+      # Geometric cooling factor: T_new = cooling_rate * T_old
+      # Range: 0.90-0.9999 (0.95 = fast cooling, 0.999 = slow cooling)
+      # Recommendation: 0.995 for 60s budget, 0.998 for 300s budget
+
+    - reaction_factor: 0.1
+      # Adaptive weight learning rate for operator selection
+      # Range: 0.01-0.5 (0.01 = slow adaptation, 0.5 = reactive)
+      # Controls how quickly operator probabilities change based on performance
+
+    # ---------------------------------------------------------------------
+    # Destroy-Repair Operators
+    # ---------------------------------------------------------------------
+    - min_removal: 1
+      # Minimum number of nodes to remove in destroy phase
+      # Prevents degenerate moves; typically set to 1
+
+    - max_removal_pct: 0.3
+      # Maximum fraction of nodes to remove in destroy phase
+      # Range: 0.1-0.5 (0.1 = small perturbations, 0.5 = radical changes)
+      # Example: 0.3 on 100-node instance → remove up to 30 nodes
+
+    # Destroy operators used (automatically selected):
+    #   - Random Removal: Remove k random nodes
+    #   - Worst Removal: Remove nodes with highest cost contribution
+    #   - Shaw Removal: Remove similar nodes (geographic/waste proximity)
+    #   - String Removal: Remove consecutive route segments
+    #
+    # Repair operators used (automatically selected):
+    #   - Greedy Insertion: Insert at position with lowest cost increase
+    #   - Regret-2: Insert nodes that are hardest to place later
+    #   - Regret-3: More sophisticated regret calculation
+    # ---------------------------------------------------------------------
+    # Infrastructure Settings
+    # ---------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/adaptive_large_neighborhood_search.py
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+      # See: docs/MUST_GO_STRATEGIES.md
+
+    - post_processing: []
+      # Route refinement heuristics applied after ALNS (e.g., 2-opt, relocate)
+      # Empty list = use raw ALNS output
+      # Options: ["2opt_intra", "relocate", "swap"]
+# =============================================================================

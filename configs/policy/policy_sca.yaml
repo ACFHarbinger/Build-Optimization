@@ -1,0 +1,82 @@
+# Policy Configuration
+
+# =============================================================================
+# SCA (Sine Cosine Algorithm) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Continuous-to-discrete metaheuristic that updates real-valued positions
+#   using sine and cosine functions oscillating around a best solution.
+#   Positions are binarized via sigmoid and decoded to routes via the
+#   Largest Rank Value (LRV) method (nodes ranked by continuous value).
+#
+# ALGORITHM:
+#   1. Initialize pop_size continuous position matrices X ∈ R^N
+#   2. Per iteration t ∈ [0, T]:
+#      a. a = a_max * (1 - t/T)  (linearly decays from a_max to 0)
+#      b. For each dimension j:
+#         r1=rand(0,a), r2=rand(0,2π), r3=rand(0,2), r4=rand(0,1)
+#         if r4 < 0.5: X_j = X_j + r1*sin(r2)*|r3*X_best_j - X_j|
+#         else:        X_j = X_j + r1*cos(r2)*|r3*X_best_j - X_j|
+#   3. Binarize: B_j = 1 if sigmoid(X_j) > 0.5 else 0
+#   4. Decode via LRV: rank continuous values → visit order → greedy routes
+#   5. Evaluate profit; update best; repeat for max_iterations
+#
+# KEY FEATURE:
+#   Sine component (r4<0.5) drives exploration; cosine (r4≥0.5) drives
+#   exploitation. The linearly decaying a transitions the algorithm from
+#   global exploration to local fine-tuning over the run.
+#
+# TYPICAL USE CASES:
+#   - Benchmarking SCA against other nature-inspired methods on VRPP
+#   - Instances where smooth position updates are preferable to swap-based moves
+#   - Academic comparison with SCA literature baselines
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Competitive with QDE and ABC on small-to-medium instances
+#   - LRV decoding quality depends on population diversity
+#   - Larger populations improve decoding diversity but increase runtime
+# =============================================================================
+
+sca:
+  custom:
+    # -------------------------------------------------------------------------
+    # Population Parameters
+    # -------------------------------------------------------------------------
+    - pop_size: 20
+      # Number of continuous-position solutions
+      # Range: 10-50 (10 = fast, 20 = balanced, 50 = thorough)
+
+    # -------------------------------------------------------------------------
+    # SCA Control Parameter
+    # -------------------------------------------------------------------------
+    - a_max: 2.0
+      # Initial value of control parameter a (linearly decays to 0 over run)
+      # Range: 1.0-4.0 (2.0 = standard SCA setting from literature)
+      # a controls maximum oscillation amplitude:
+      #   Large a → wide exploration early; small a → precise exploitation later
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - max_iterations: 200
+      # Maximum SCA iterations
+      # Range: 50-500 (100 = quick, 200 = production, 500 = benchmark)
+
+    - time_limit: 60.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = quick, 60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/sine_cosine_algorithm/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # LRV decoding followed by greedy routing; no post-processing needed
+      # Empty = use SCA output directly
+# =============================================================================

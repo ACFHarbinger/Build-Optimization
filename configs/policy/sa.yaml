@@ -1,7 +1,0 @@
-# Simulated Annealing
-sa:
-  initial_temp: 100.0
-  cooling_rate: 0.995
-  min_temp: 0.01
-  max_iterations: 10000
-  n_removal: 2

@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.psoma import PSOMAConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.particle_swarm_optimization_memetic.params import PSOMAParams
-from src.policies.particle_swarm_optimization_memetic.solver import PSOMAsSolver
+from configs.policies.psoma import PSOMAConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.particle_swarm_optimization_memetic.params import PSOMAParams
+from policies.particle_swarm_optimization_memetic.solver import PSOMAsSolver
 
 from .factory import PolicyRegistry
 

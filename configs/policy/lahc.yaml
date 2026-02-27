@@ -1,5 +1,0 @@
-# Late Acceptance Hill Climbing
-lahc:
-  history_length: 50
-  max_iterations: 20000
-  n_removal: 3

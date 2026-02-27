@@ -1,0 +1,21 @@
+# Policy Configuration
+# =============================================================================
+# ILS (Iterated Local Search) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Alternates descent (greedy improvement via LLHs) and perturbation
+#   (random disruption to escape local optima).  Hill-climbing acceptance
+#   always restarts descent from the perturbed solution.
+# =============================================================================
+
+ils:
+  custom:
+    - n_restarts: 4000
+    - inner_iterations: 60
+    - perturbation_strength: 0.25
+    - n_removal: 3
+    - n_llh: 5
+    - time_limit: 120.0
+    - engine: "custom"
+    - must_go: ["other/mg_lookahead.yaml"]
+    - post_processing: []

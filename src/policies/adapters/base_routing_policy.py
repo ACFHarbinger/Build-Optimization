@@ -13,7 +13,7 @@ from typing import Any, Dict, List, Optional, Tuple, Type
 
 import numpy as np
 
-from src.interfaces.adapter import IPolicyAdapter
+from interfaces.adapter import IPolicyAdapter
 
 
 def _flatten_raw_config(source: Any) -> Dict[str, Any]:
@@ -164,7 +164,7 @@ class BaseRoutingPolicy(IPolicyAdapter):
         Returns:
             Tuple of (capacity, revenue, cost_unit, merged_values_dict)
         """
-        from src.pipeline.simulations.repository import (
+        from pipeline.simulations.repository import (
             load_area_and_waste_type_params,
         )
 
@@ -342,7 +342,7 @@ class BaseRoutingPolicy(IPolicyAdapter):
             return
         self._params_logged = True
 
-        from src.tracking.core.run import get_active_run
+        from tracking.core.run import get_active_run
 
         run = get_active_run()
         if run is None:

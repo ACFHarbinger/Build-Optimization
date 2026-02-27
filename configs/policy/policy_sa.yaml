@@ -1,0 +1,21 @@
+# Policy Configuration
+# =============================================================================
+# SA (Simulated Annealing) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Classic Boltzmann acceptance with geometric cooling schedule.
+#   High temperature = random walk; low temperature = greedy descent.
+# =============================================================================
+
+sa:
+  custom:
+    - initial_temp: 200.0
+    - alpha: 0.998
+    - min_temp: 0.01
+    - n_removal: 3
+    - n_llh: 5
+    - max_iterations: 45000
+    - time_limit: 120.0
+    - engine: "custom"
+    - must_go: ["other/mg_lookahead.yaml"]
+    - post_processing: []

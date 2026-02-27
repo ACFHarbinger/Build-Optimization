@@ -8,10 +8,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.hvpl import HVPLConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.hybrid_volleyball_premier_league.hvpl import HVPLSolver
-from src.policies.hybrid_volleyball_premier_league.params import HVPLParams
+from configs.policies.hvpl import HVPLConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.hybrid_volleyball_premier_league.hvpl import HVPLSolver
+from policies.hybrid_volleyball_premier_league.params import HVPLParams
 
 from ..adaptive_large_neighborhood_search.params import ALNSParams
 from ..ant_colony_optimization.k_sparse_aco.params import ACOParams

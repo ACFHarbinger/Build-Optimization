@@ -8,9 +8,9 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies import BCPConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.branch_cut_and_price import run_bcp
+from configs.policies import BCPConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.branch_cut_and_price import run_bcp
 
 from .factory import PolicyRegistry
 

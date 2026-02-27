@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.sca import SCAConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.sine_cosine_algorithm.params import SCAParams
-from src.policies.sine_cosine_algorithm.solver import SCASolver
+from configs.policies.sca import SCAConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.sine_cosine_algorithm.params import SCAParams
+from policies.sine_cosine_algorithm.solver import SCASolver
 
 from .factory import PolicyRegistry
 

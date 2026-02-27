@@ -3,8 +3,8 @@ Routing search strategies and orchestration.
 Contains the main Simulated Annealing and Local Search loops for the LookAhead policy.
 """
 
-from src.policies.simulated_annealing_neighborhood_search.common.routes import uncross_arcs_in_routes
-from src.policies.simulated_annealing_neighborhood_search.common.solution_initialization import (
+from policies.simulated_annealing_neighborhood_search.common.routes import uncross_arcs_in_routes
+from policies.simulated_annealing_neighborhood_search.common.solution_initialization import (
     find_initial_solution,
 )
 
@@ -65,7 +65,7 @@ def find_solutions(
     )
 
     # 2. Simulated Annealing Phase
-    from src.policies.simulated_annealing_neighborhood_search.heuristics.anneal import run_annealing_loop
+    from policies.simulated_annealing_neighborhood_search.heuristics.anneal import run_annealing_loop
 
     sa_sol, removed_bins = run_annealing_loop(
         initial_solution,
@@ -79,7 +79,7 @@ def find_solutions(
     )
 
     # 3. Refinement Phase (LS/Uncross iterative loops)
-    from src.policies.simulated_annealing_neighborhood_search.refinement.refinement import refine_solution
+    from policies.simulated_annealing_neighborhood_search.refinement.refinement import refine_solution
 
     refined_sol, _ = refine_solution(
         sa_sol,

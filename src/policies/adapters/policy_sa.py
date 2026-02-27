@@ -6,10 +6,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.sa import SAConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.simulated_annealing.params import SAParams
-from src.policies.simulated_annealing.solver import SASolver
+from configs.policies.sa import SAConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.simulated_annealing.params import SAParams
+from policies.simulated_annealing.solver import SASolver
 
 from .factory import PolicyRegistry
 

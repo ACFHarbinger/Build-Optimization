@@ -1,0 +1,86 @@
+# Policy Configuration
+
+# =============================================================================
+# HS (Harmony Search) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Music-inspired metaheuristic that builds new routing solutions (harmonies)
+#   by consulting an archive of the best known routes (Harmony Memory). The
+#   improvisation process mimics how a musician selects notes from memory or
+#   improvises new ones, with pitch adjustment for local fine-tuning.
+#
+# ALGORITHM:
+#   1. Initialize Harmony Memory (HM) with hm_size random feasible routes
+#   2. Improvisation: build a new harmony (route) node-by-node:
+#      - With prob HMCR: select a node from HM routes at the same position
+#        - With prob PAR: pitch-adjust by swapping with a random nearby node
+#      - With prob 1-HMCR: select a random unvisited node (diversification)
+#   3. Evaluate new harmony (profit of resulting routes)
+#   4. HM Update: if new harmony is better than the worst in HM, replace it
+#   5. Repeat for max_iterations or until time_limit
+#
+# KEY FEATURE:
+#   HMCR controls memory-vs-randomness trade-off. PAR adds micro-perturbations
+#   around remembered positions (pitch adjustment), enabling fine-grained
+#   local refinement without explicit neighbourhood operators.
+#
+# TYPICAL USE CASES:
+#   - Small-to-medium instances (10-80 nodes)
+#   - Research benchmarking of memory-based metaheuristics
+#   - Scenarios where maintaining a diverse archive of solutions is valuable
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Best with hm_size=10-20, HMCR=0.85-0.95, PAR=0.2-0.5
+#   - Very fast per iteration (no population interactions); good for 500+ iters
+#   - Weaker than ALNS/HGS on large instances due to single-solution focus
+# =============================================================================
+
+hs:
+  custom:
+    # -------------------------------------------------------------------------
+    # Harmony Memory
+    # -------------------------------------------------------------------------
+    - hm_size: 10
+      # Size of the Harmony Memory archive (best solutions kept)
+      # Range: 5-30 (5 = small archive, 10 = balanced, 20 = diverse archive)
+      # Larger HM → more diversity but slower worst-lookup on each update
+
+    # -------------------------------------------------------------------------
+    # Improvisation Parameters
+    # -------------------------------------------------------------------------
+    - HMCR: 0.9
+      # Harmony Memory Considering Rate — probability of using memory
+      # Range: 0.7-0.99 (0.7 = exploratory, 0.95 = memory-dominant)
+      # Standard HS setting: 0.9 (90% chance node comes from HM)
+
+    - PAR: 0.3
+      # Pitch Adjusting Rate — probability of adjusting a HM-selected node
+      # Range: 0.1-0.5 (0.1 = rare adjustment, 0.5 = frequent micro-tuning)
+      # Standard HS setting: 0.3
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - max_iterations: 500
+      # Total improvisation cycles
+      # Range: 100-5000 (500 = production, 2000 = benchmark)
+      # HS iterations are fast; more iterations improve archive quality
+
+    - time_limit: 60.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = quick, 60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/harmony_search/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # HM archive retains best solutions; no further post-processing needed
+      # Empty = use HS output directly
+# =============================================================================

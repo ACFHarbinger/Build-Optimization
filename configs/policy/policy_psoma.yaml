@@ -1,0 +1,102 @@
+# Policy Configuration
+
+# =============================================================================
+# PSOMA (Particle Swarm Optimization Memetic Algorithm) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Discrete PSO where particles are route permutations. "Velocity" is a list
+#   of swap operations derived from personal and global best positions.
+#   Periodically augmented with a memetic local-search step (worst-removal +
+#   greedy reinsertion) for intensification.
+#
+# ALGORITHM:
+#   1. Initialize pop_size particles with random feasible routes
+#   2. Each particle maintains pbest (personal best) and references gbest
+#   3. Velocity update:
+#      - Inertia: retain fraction omega of current swap operations
+#      - Cognitive: with prob c1*rand, OX-segment copy toward pbest
+#      - Social: with prob c2*rand, OX-segment copy toward gbest
+#   4. Position update: apply accumulated swap operations to current solution
+#   5. Memetic step every local_search_freq iterations:
+#      worst_removal + greedy_insertion on all particles
+#   6. Update pbest / gbest; repeat until time_limit
+#
+# KEY FEATURE:
+#   Low inertia (omega≈0.4) forces exploitation — particles converge quickly
+#   to gbest neighbourhood, while the memetic step prevents premature
+#   stagnation by re-optimising insertion quality.
+#
+# TYPICAL USE CASES:
+#   - Moderate instances (20-100 nodes)
+#   - Benchmarking swarm intelligence hybridised with local search
+#   - Scenarios where both diversity (PSO) and depth (LS) matter
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Better than pure PSO due to memetic refinement
+#   - Local search frequency trades convergence speed vs. quality
+#   - Competitive with ALNS on 30-node instances; lags on 100+ nodes
+# =============================================================================
+
+psoma:
+  custom:
+    # -------------------------------------------------------------------------
+    # Swarm Parameters
+    # -------------------------------------------------------------------------
+    - pop_size: 20
+      # Number of particles (route solutions) in the swarm
+      # Range: 10-50 (10 = fast, 20 = balanced, 50 = diverse but slower)
+
+    - n_removal: 2
+      # Nodes removed during memetic local-search step
+      # Range: 1-5 (1 = micro perturbation, 3 = moderate shake)
+
+    # -------------------------------------------------------------------------
+    # PSO Velocity Coefficients
+    # -------------------------------------------------------------------------
+    - omega: 0.4
+      # Inertia weight — fraction of previous velocity retained
+      # Range: 0.1-0.9 (0.4 = exploitation-focused, 0.9 = exploration-focused)
+      # Low omega → rapid convergence to best known region
+
+    - c1: 1.5
+      # Cognitive acceleration — pull toward particle's personal best
+      # Range: 0.5-2.5 (higher → stronger individual memory influence)
+
+    - c2: 2.0
+      # Social acceleration — pull toward global best
+      # Range: 0.5-2.5 (higher → stronger global best influence)
+      # c2 > c1 → social learning dominates (typical for exploitation)
+
+    # -------------------------------------------------------------------------
+    # Memetic Local Search
+    # -------------------------------------------------------------------------
+    - local_search_freq: 10
+      # Apply worst-removal + greedy reinsertion every N iterations
+      # Range: 5-50 (5 = frequent refinement, 20 = occasional, 50 = rare)
+      # Lower frequency → higher quality per iteration but slower overall
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - max_iterations: 200
+      # Maximum PSO iterations
+      # Range: 50-500 (100 = quick, 200 = production, 500 = benchmark)
+
+    - time_limit: 60.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = quick, 60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/particle_swarm_optimization_memetic/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # Memetic step already refines routes; no further post-processing needed
+      # Empty = use PSOMA output directly
+# =============================================================================

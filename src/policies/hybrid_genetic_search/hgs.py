@@ -16,7 +16,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from src.tracking.viz_mixin import PolicyVizMixin
+from tracking.viz_mixin import PolicyVizMixin
 
 from ..local_search.local_search_hgs import HGSLocalSearch
 from .evolution import evaluate, ordered_crossover, update_biased_fitness

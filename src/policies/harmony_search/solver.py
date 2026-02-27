@@ -21,7 +21,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from src.tracking.viz_mixin import PolicyVizMixin
+from tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.repair_operators import greedy_insertion
 from .params import HSParams
@@ -120,7 +120,7 @@ class HSSolver(PolicyVizMixin):
         genuinely diverse initial solutions. Uses self.C for the profitability
         check so that economics are consistent with the solver's _evaluate().
         """
-        from src.policies.operators.heuristics.initialization import build_nn_routes
+        from policies.operators.heuristics.initialization import build_nn_routes
 
         optimized_routes = build_nn_routes(
             nodes=self.nodes,
@@ -199,7 +199,7 @@ class HSSolver(PolicyVizMixin):
                 R=self.R,
                 mandatory_nodes=self.mandatory_nodes,
             )
-            from src.policies.local_search.local_search_aco import ACOLocalSearch
+            from policies.local_search.local_search_aco import ACOLocalSearch
 
             ls = ACOLocalSearch(self.dist_matrix, self.wastes, self.capacity, self.R, self.C, self.params)
             routes = ls.optimize(routes)

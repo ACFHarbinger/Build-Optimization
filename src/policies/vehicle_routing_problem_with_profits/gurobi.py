@@ -8,10 +8,9 @@ from typing import Dict, List, Optional
 
 import gurobipy as gp
 import numpy as np
+from constants.routing import HEURISTICS_RATIO, MIP_GAP, NODEFILE_START_GB
 from gurobipy import GRB, quicksum
 from numpy.typing import NDArray
-
-from src.constants.routing import HEURISTICS_RATIO, MIP_GAP, NODEFILE_START_GB
 
 
 def _run_gurobi_optimizer(  # noqa: C901

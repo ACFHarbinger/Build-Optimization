@@ -1,0 +1,20 @@
+# Policy Configuration
+# =============================================================================
+# RR (Record-to-Record Travel) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Deterministic acceptance criterion that permits moves within a tolerance
+#   band below the best-ever solution ("record").  The tolerance decays
+#   linearly, transitioning from broad exploration to strict exploitation.
+# =============================================================================
+
+rrt:
+  custom:
+    - tolerance: 0.10
+    - n_removal: 3
+    - n_llh: 5
+    - max_iterations: 20000
+    - time_limit: 120.0
+    - engine: "custom"
+    - must_go: ["other/mg_lookahead.yaml"]
+    - post_processing: []

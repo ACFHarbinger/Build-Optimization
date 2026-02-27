@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.hybrid_genetic_search.individual import Individual
+    >>> from policies.hybrid_genetic_search.individual import Individual
     >>> ind = Individual(genotype=[1, 5, 2, ...], cost=100.0)
 """
 

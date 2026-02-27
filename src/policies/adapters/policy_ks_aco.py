@@ -8,9 +8,9 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies import ACOConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.ant_colony_optimization.k_sparse_aco import run_k_sparse_aco
+from configs.policies import ACOConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.ant_colony_optimization.k_sparse_aco import run_k_sparse_aco
 
 from .factory import PolicyRegistry
 

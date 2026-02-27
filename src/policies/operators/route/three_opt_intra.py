@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.operators.route.three_opt_intra import move_3opt_intra
+    >>> from policies.operators.route.three_opt_intra import move_3opt_intra
     >>> improved = move_3opt_intra(ls, u, v, r_u, p_u, r_v, p_v)
 """
 

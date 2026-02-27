@@ -1,0 +1,91 @@
+# Policy Configuration
+
+# =============================================================================
+# HGS-ALNS Hybrid Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Combines Hybrid Genetic Search (HGS) with Adaptive Large Neighborhood
+#   Search (ALNS) for enhanced solution quality. HGS provides global search;
+#   ALNS refines elite solutions via destroy-repair operators.
+#
+# ALGORITHM:
+#   1. Run HGS to build initial population
+#   2. "Educate" elite solutions using ALNS (destroy-repair iterations)
+#   3. Re-insert improved solutions into HGS population
+#   4. Continue HGS evolution with enhanced individuals
+#
+# MOTIVATION:
+#   HGS excels at exploring solution space but can plateau at local optima.
+#   ALNS provides complementary diversification via adaptive operators.
+#
+# TYPICAL USE CASES:
+#   - Challenging instances where pure HGS struggles (tight capacity, time windows)
+#   - Benchmarking: Aim for best-known solutions with extended runtime
+#   - Production: When extra compute budget (60s → 120s) is acceptable
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Often 0.5-1.5% better than pure HGS, at 50-100% higher runtime
+#   - Diminishing returns beyond alns_education_iterations: 100
+# =============================================================================
+
+hgs_alns:
+  custom:
+    # ---------------------------------------------------------------------
+    # Runtime Control
+    # ---------------------------------------------------------------------
+    - time_limit: 60
+      # Maximum wall-clock seconds for full HGS-ALNS pipeline
+      # Range: 60-600 (60s = production, 300s = thorough, 600s = benchmark)
+      # Note: Shared between HGS phase and ALNS education phase
+
+    # ---------------------------------------------------------------------
+    # HGS Population Management
+    # ---------------------------------------------------------------------
+    - population_size: 50
+      # Total individuals in genetic pool
+      # Range: 25-100
+      # Same recommendations as pure HGS (see policy_hgs.yaml)
+
+    - elite_size: 10
+      # Number of solutions to "educate" with ALNS
+      # Range: 5-25 (typically 20% of population_size)
+      # Only elite solutions undergo ALNS refinement (computational efficiency)
+
+    # ---------------------------------------------------------------------
+    # Genetic Operators
+    # ---------------------------------------------------------------------
+    - mutation_rate: 0.2
+      # Probability of mutation after crossover in HGS phase
+      # Range: 0.0-0.5
+      # Same recommendations as pure HGS
+
+    # ---------------------------------------------------------------------
+    # ALNS Education Phase
+    # ---------------------------------------------------------------------
+    - alns_education_iterations: 50
+      # Number of destroy-repair cycles applied to each elite solution
+      # Range: 10-200 (10 = light polish, 100 = deep search, 200 = thorough)
+      # Higher values → better solutions but longer runtime
+      # Recommendation: 50 for 60s budget, 100 for 300s budget
+
+    # ALNS parameters (implicit, from policy_alns.yaml):
+    #   - max_removal_pct: 0.3 (remove up to 30% of nodes)
+    #   - start_temp: 100, cooling_rate: 0.995
+    #   - Destroy operators: Random, Worst, Shaw, String
+    #   - Repair operators: Greedy, Regret-2, Regret-3
+    # ---------------------------------------------------------------------
+    # Infrastructure Settings
+    # ---------------------------------------------------------------------
+    - engine: "hgs_alns"
+      # Execution backend: logic/src/policies/hybrid_genetic_search.py
+      # Automatically coordinates HGS and ALNS phases
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+      # See: docs/MUST_GO_STRATEGIES.md
+
+    - post_processing: []
+      # HGS+ALNS local search is comprehensive; no further refinement needed
+      # Empty = use hybrid output directly
+# =============================================================================

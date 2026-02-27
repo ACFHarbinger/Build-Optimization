@@ -10,7 +10,7 @@ Attributes:
     OPERATOR_NAMES (list): List of operator names.
 
 Example:
-    >>> from src.policies.ant_colony_optimization.hyper_heuristic_aco.hyper_operators import apply_2opt
+    >>> from policies.ant_colony_optimization.hyper_heuristic_aco.hyper_operators import apply_2opt
     >>> improved = apply_2opt(context)
 """
 

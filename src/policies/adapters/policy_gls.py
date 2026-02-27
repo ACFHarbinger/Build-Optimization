@@ -6,10 +6,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.gls import GLSConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.guided_local_search.params import GLSParams
-from src.policies.guided_local_search.solver import GLSSolver
+from configs.policies.gls import GLSConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.guided_local_search.params import GLSParams
+from policies.guided_local_search.solver import GLSSolver
 
 from .factory import PolicyRegistry
 

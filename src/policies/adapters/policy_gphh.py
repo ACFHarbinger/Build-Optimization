@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.gphh import GPHHConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.genetic_programming_hyper_heuristic.params import GPHHParams
-from src.policies.genetic_programming_hyper_heuristic.solver import GPHHSolver
+from configs.policies.gphh import GPHHConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.genetic_programming_hyper_heuristic.params import GPHHParams
+from policies.genetic_programming_hyper_heuristic.solver import GPHHSolver
 
 from .factory import PolicyRegistry
 

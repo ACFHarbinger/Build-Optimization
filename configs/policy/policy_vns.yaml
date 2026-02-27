@@ -1,0 +1,101 @@
+# Policy Configuration
+
+# =============================================================================
+# VNS (Variable Neighborhood Search) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Systematically explores a hierarchy of shaking neighborhoods (N_1...N_{k_max})
+#   of increasing severity with a local search descent between each shaking step.
+#   An improvement resets k to 1 (restart from the mildest structure); exhausting
+#   all k_max structures without improvement completes one outer iteration.
+#
+# SHAKING NEIGHBORHOODS (ordered by severity):
+#   N_1: random_removal(1)  + greedy_insertion       — single-node swap
+#   N_2: random_removal(2)  + greedy_insertion       — two-node swap
+#   N_3: worst_removal(2)   + regret_2_insertion     — quality-driven shake
+#   N_4: cluster_removal(3) + greedy_insertion       — spatially coherent shake
+#   N_5: random_removal(3)  + regret_2_insertion     — broad diversification
+#
+# LOCAL SEARCH POOL (5 LLHs, indices 0-4):
+#   L0: random_removal  + greedy_insertion
+#   L1: worst_removal   + regret_2_insertion
+#   L2: cluster_removal + greedy_insertion
+#   L3: worst_removal   + greedy_insertion
+#   L4: random_removal  + regret_2_insertion
+#
+# ALGORITHM (per outer iteration):
+#   1. Generate initial solution via nearest-neighbour heuristic
+#   2. Set k = 1 (start with mildest shaking structure)
+#   3. While k <= k_max:
+#      a. Shaking: draw a random neighbour in N_k
+#      b. Local search: apply random LLHs until no improvement or budget reached
+#      c. If result > incumbent: update incumbent, reset k = 1
+#         Else: advance k = k + 1
+#   4. Repeat for max_iterations outer loops or until time_limit
+#
+# TYPICAL USE CASES:
+#   - Structured local search benchmarking on VRPP / WCVRP
+#   - Problems with multiple co-existing local optima at different scales
+#   - Complement to SA (stochastic acceptance) and ILS (random perturbation):
+#     VNS uses deterministic neighbourhood progression
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Strong exploitation within each neighbourhood level
+#   - k_max controls depth of diversification; higher values explore further
+#   - local_search_iterations trades solution quality vs. wall-clock time
+#   - Generally faster convergence than SA; more systematic than ILS
+# =============================================================================
+
+vns:
+  custom:
+    # -------------------------------------------------------------------------
+    # Neighbourhood Structure Control
+    # -------------------------------------------------------------------------
+    - k_max: 5
+      # Number of shaking neighborhood structures (N_1 ... N_{k_max})
+      # Range: 2-5 (2 = fast/shallow, 5 = thorough — matches full LLH pool)
+      # Higher k_max enables broader diversification when stuck in local optima
+
+    - max_iterations: 200
+      # Total outer VNS iterations (each iterates through up to k_max structures)
+      # Range: 50-1000 (100 = quick run, 200 = production, 500 = benchmark)
+      # Effective work = max_iterations * k_max * local_search_iterations (worst case)
+
+    # -------------------------------------------------------------------------
+    # Local Search Descent Phase
+    # -------------------------------------------------------------------------
+    - local_search_iterations: 20
+      # LLH applications per descent phase (after each shaking step)
+      # Range: 5-50 (5 = lightweight, 20 = balanced, 50 = deep descent)
+      # Higher values improve solution quality but slow outer VNS iterations
+
+    - n_removal: 2
+      # Nodes removed per LLH destroy step during local search
+      # Range: 1-5 (1 = micro perturbation, 2 = standard, 4 = aggressive)
+      # Note: shaking neighborhoods use their own fixed removal counts
+
+    - n_llh: 5
+      # Number of LLHs in the local search operator pool (fixed — do not change)
+      # Pool: [random+greedy, worst+regret2, cluster+greedy, worst+greedy, random+regret2]
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - time_limit: 60.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = quick, 60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/variable_neighborhood_search/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # Optional route refinement after VNS completes
+      # Empty = use VNS output directly
+# =============================================================================

@@ -1,0 +1,88 @@
+# Policy Configuration
+
+# =============================================================================
+# QDE (Quantum Differential Evolution) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Quantum-inspired metaheuristic representing candidate solutions as
+#   amplitude vectors in [0,1]^N. Discrete routes are formed by collapsing
+#   (ranking) amplitudes and routing selected nodes greedily. Classical DE
+#   mutation and crossover evolve the continuous amplitude population.
+#
+# ALGORITHM:
+#   1. Initialize population of amplitude vectors randomly in [0,1]^N
+#   2. Mutation: v = clip(x_r1 + F*(x_r2 - x_r3), 0, 1) for three random agents
+#   3. Crossover: Binomial with rate CR — trial u_j = v_j if rand<CR else x_j
+#   4. Collapse: Rank nodes by amplitude; greedily select feasible subset
+#   5. Selection: Trial replaces target if profit is higher (greedy selection)
+#   6. Repeat for max_iterations or until time_limit
+#
+# KEY FEATURE:
+#   Quantum amplitude encoding decouples node selection from route structure,
+#   allowing DE's continuous operators to work in a smooth search landscape
+#   before discrete decoding.
+#
+# TYPICAL USE CASES:
+#   - Medium instances (20-100 nodes) with bounded time budgets
+#   - Research benchmarking of quantum-inspired VRP solvers
+#   - Comparison baseline for nature-inspired metaheuristics
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Competitive with ABC/SCA on small-to-medium instances
+#   - Runtime dominated by greedy insertion per collapse step
+#   - Sensitivity: F∈(0.4,0.8), CR∈(0.5,0.9) is robust range
+# =============================================================================
+
+qde:
+  custom:
+    # -------------------------------------------------------------------------
+    # Population Parameters
+    # -------------------------------------------------------------------------
+    - pop_size: 20
+      # Number of amplitude vectors (candidate solutions) in population
+      # Range: 10-50 (10 = fast, 20 = balanced, 50 = thorough)
+      # Larger populations improve exploration but slow each iteration
+
+    - n_removal: 2
+      # Nodes collapsed/re-inserted during each DE evaluation step
+      # Range: 1-5 (1 = fine perturbation, 4 = coarse restructure)
+
+    # -------------------------------------------------------------------------
+    # Differential Evolution Operators
+    # -------------------------------------------------------------------------
+    - F: 0.5
+      # Mutation scaling factor — magnitude of difference vector applied
+      # Range: 0.2-0.9 (0.4 = conservative, 0.8 = aggressive)
+      # F=0.5 is the classic "balanced" setting
+
+    - CR: 0.7
+      # Crossover probability — fraction of dimensions from mutant vector
+      # Range: 0.1-0.9 (0.3 = mostly target kept, 0.9 = mostly mutant)
+      # Higher CR → more trial dimensions from mutant; lower → less disruption
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - max_iterations: 200
+      # Maximum DE generations (each generation evaluates pop_size trials)
+      # Range: 50-500 (50 = quick test, 200 = production, 500 = benchmark)
+      # Note: time_limit usually triggers first on larger instances
+
+    - time_limit: 60.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = quick, 60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/quantum_differential_evolution/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # Route refinement heuristics applied after QDE
+      # Empty = use QDE output directly
+# =============================================================================

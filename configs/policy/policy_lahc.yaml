@@ -1,0 +1,76 @@
+# Policy Configuration
+
+# =============================================================================
+# LAHC (Late Acceptance Hill-Climbing) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Single-trajectory local search with deferred acceptance criterion.
+#   Instead of comparing candidates against the current solution, LAHC
+#   compares them against the solution from L iterations ago, stored in a
+#   circular queue.  This induces a dynamic cooling effect without
+#   requiring temperature parameters.
+#
+# LLH POOL (5 operators, indices 0-4):
+#   L0: random_removal  + greedy_insertion
+#   L1: worst_removal   + regret_2_insertion
+#   L2: cluster_removal + greedy_insertion
+#   L3: worst_removal   + greedy_insertion
+#   L4: random_removal  + regret_2_insertion
+#
+# ALGORITHM:
+#   1. Build initial solution via nearest-neighbour + ACOLocalSearch
+#   2. Fill circular queue of size L with initial profit
+#   3. Per iteration:
+#      a. Select random LLH; apply destroy + repair
+#      b. Accept if new_profit >= current_profit OR new_profit >= queue[i % L]
+#      c. Update queue[i % L] = current_profit
+#   4. Final ACOLocalSearch polish on best solution
+#
+# TYPICAL USE CASES:
+#   - Comparing acceptance criteria (LAHC vs SA vs Great Deluge)
+#   - Production VRPP optimization requiring parameter-free acceptance
+#   - Benchmarking against HMM-GD and GPHH
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Robust across objective function rescaling (scale-independent)
+#   - queue_size L controls implicit cooling: large L = more exploration
+#   - Very low parameter sensitivity (only L to tune)
+# =============================================================================
+
+lahc:
+  custom:
+    # -------------------------------------------------------------------------
+    # LAHC Parameters
+    # -------------------------------------------------------------------------
+    - queue_size: 150
+      # Length of the circular history queue (L)
+      # Range: 10-200 (10 = rapid cooling, 50 = moderate, 200 = slow)
+      # Large L = more historical tolerance = wider exploration
+
+    - n_removal: 3
+      # Nodes removed per LLH destroy step
+      # Range: 1-5
+
+    - n_llh: 5
+      # Number of LLHs in the operator pool (fixed — do not change)
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - max_iterations: 40000
+      # Total LLH application cycles
+      # Range: 100-100000
+
+    - time_limit: 120.0
+      # Maximum wall-clock seconds
+      # Range: 10-300
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+
+    - must_go: ["other/mg_lookahead.yaml"]
+
+    - post_processing: []
+# =============================================================================

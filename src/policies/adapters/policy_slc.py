@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.slc import SLCConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.soccer_league_competition.params import SLCParams
-from src.policies.soccer_league_competition.solver import SLCSolver
+from configs.policies.slc import SLCConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.soccer_league_competition.params import SLCParams
+from policies.soccer_league_competition.solver import SLCSolver
 
 from .factory import PolicyRegistry
 

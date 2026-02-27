@@ -9,7 +9,7 @@ Attributes:
     move_swap (function): Swap operator.
 
 Example:
-    >>> from src.policies.operators.move import move_relocate
+    >>> from policies.operators.move import move_relocate
     >>> improved = move_relocate(ls, u=1, v=2, ...)
 """
 

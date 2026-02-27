@@ -1,0 +1,23 @@
+# Policy Configuration
+# =============================================================================
+# RTS (Reactive Tabu Search) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Short-term memory forbids recent moves.  Hash-based cycle detection
+#   auto-adjusts tabu tenure: longer on cycles, shorter during exploration.
+# =============================================================================
+
+rts:
+  custom:
+    - initial_tenure: 10
+    - min_tenure: 3
+    - max_tenure: 35
+    - tenure_increase: 1.5
+    - tenure_decrease: 0.9
+    - n_removal: 3
+    - n_llh: 5
+    - max_iterations: 8000
+    - time_limit: 120.0
+    - engine: "custom"
+    - must_go: ["other/mg_lookahead.yaml"]
+    - post_processing: []

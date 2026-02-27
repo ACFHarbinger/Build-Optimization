@@ -8,10 +8,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies import HGSALNSConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.hgs_alns import HGSALNSSolver
-from src.policies.hybrid_genetic_search.params import HGSParams
+from configs.policies import HGSALNSConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.hgs_alns import HGSALNSSolver
+from policies.hybrid_genetic_search.params import HGSParams
 
 from .factory import PolicyRegistry
 

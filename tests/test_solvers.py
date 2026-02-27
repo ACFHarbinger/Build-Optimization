@@ -3,20 +3,20 @@ Tests for solvers — verifies constraint satisfaction and convergence.
 """
 
 import pytest
-from src.solvers.alns import ALNSSolver
-from src.solvers.ga import GASolver
-from src.solvers.gls import GLSSolver
-from src.solvers.greedy import GreedySolver
-from src.solvers.ils import ILSSolver
-from src.solvers.lahc import LAHCSolver
-from src.solvers.oba import OBASolver
-from src.solvers.random_search import RandomSearchSolver
-from src.solvers.rrt import RRTSolver
-from src.solvers.rts import RTSSolver
-from src.solvers.sa import SASolver
+from solvers.alns import ALNSSolver
+from solvers.ga import GASolver
+from solvers.gls import GLSSolver
+from solvers.greedy import GreedySolver
+from solvers.ils import ILSSolver
+from solvers.lahc import LAHCSolver
+from solvers.oba import OBASolver
+from solvers.random_search import RandomSearchSolver
+from solvers.rrt import RRTSolver
+from solvers.rts import RTSSolver
+from solvers.sa import SASolver
 
-from src.core.build import Build
-from src.core.item import Item, Rarity, Slot
+from core.build import Build
+from core.item import Item, Rarity, Slot
 
 # =============================================================================
 # Fixtures

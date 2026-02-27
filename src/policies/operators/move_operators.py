@@ -9,7 +9,7 @@ Attributes:
     move_swap (function): Swapping two nodes.
 
 Example:
-    >>> from src.policies.operators import move_operators
+    >>> from policies.operators import move_operators
     >>> improved = move_operators.move_relocate(ls, u=1, v=2, ...)
 """
 

@@ -1,8 +1,0 @@
-# Genetic Algorithm
-ga:
-  pop_size: 60
-  max_generations: 3500
-  crossover_rate: 0.85
-  mutation_rate: 0.15
-  tournament_size: 4
-  n_removal: 3

@@ -7,11 +7,11 @@ Uses Lin-Kernighan-Helsgaun heuristic for TSP optimization.
 from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
+from policies.tsp import get_multi_tour, get_route_cost
 
-from src.configs.policies import LKHConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.operators.heuristics.lin_kernighan_helsgaun import solve_lkh
-from src.policies.tsp import get_multi_tour, get_route_cost
+from configs.policies import LKHConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.operators.heuristics.lin_kernighan_helsgaun import solve_lkh
 
 from .factory import PolicyRegistry
 

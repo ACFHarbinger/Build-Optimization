@@ -1,9 +1,0 @@
-# Reactive Tabu Search
-rts:
-  initial_tenure: 10
-  min_tenure: 3
-  max_tenure: 35
-  tenure_increase: 1.5
-  tenure_decrease: 0.9
-  max_iterations: 1500
-  n_removal: 3

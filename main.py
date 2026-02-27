@@ -13,11 +13,12 @@ from typing import Dict
 
 import hydra
 from omegaconf import DictConfig, OmegaConf
-from src.core.scoring import ScoringConfig
-from src.core.synergy import SynergyEngine, SynergyRule
-from src.pipeline.file_source import FileSource
-from src.pipeline.transforms import deduplicate, filter_by_level
-from src.solvers.base import BaseSolver
+from solvers.base import BaseSolver
+
+from core.scoring import ScoringConfig
+from core.synergy import SynergyEngine, SynergyRule
+from data.datasets.games.file_source import FileSource
+from data.transforms import deduplicate, filter_by_level
 
 logger = logging.getLogger(__name__)
 
@@ -27,17 +28,17 @@ SOLVER_REGISTRY: Dict[str, type] = {}
 
 def _register_solvers() -> None:
     """Lazy-register all solver classes."""
-    from src.solvers.alns import ALNSSolver
-    from src.solvers.ga import GASolver
-    from src.solvers.gls import GLSSolver
-    from src.solvers.greedy import GreedySolver
-    from src.solvers.ils import ILSSolver
-    from src.solvers.lahc import LAHCSolver
-    from src.solvers.oba import OBASolver
-    from src.solvers.random_search import RandomSearchSolver
-    from src.solvers.rrt import RRTSolver
-    from src.solvers.rts import RTSSolver
-    from src.solvers.sa import SASolver
+    from solvers.alns import ALNSSolver
+    from solvers.ga import GASolver
+    from solvers.gls import GLSSolver
+    from solvers.greedy import GreedySolver
+    from solvers.ils import ILSSolver
+    from solvers.lahc import LAHCSolver
+    from solvers.oba import OBASolver
+    from solvers.random_search import RandomSearchSolver
+    from solvers.rrt import RRTSolver
+    from solvers.rts import RTSSolver
+    from solvers.sa import SASolver
 
     SOLVER_REGISTRY.update(
         {
@@ -136,10 +137,7 @@ def main(cfg: DictConfig) -> None:
         return
 
     solver_params = OmegaConf.to_container(cfg.solver[solver_name], resolve=True)
-    if isinstance(solver_params, dict):
-        solver_kwargs = solver_params
-    else:
-        solver_kwargs = {}
+    solver_kwargs = solver_params if isinstance(solver_params, dict) else {}
 
     solver: BaseSolver = solver_cls(
         items=items,

@@ -9,7 +9,7 @@ import networkx as nx
 import numpy as np
 from vrpy import VehicleRoutingProblem
 
-from src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 
 def run_bcp_vrpy(

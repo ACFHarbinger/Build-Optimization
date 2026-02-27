@@ -6,10 +6,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.oba import OBAConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.old_bachelor_acceptance.params import OBAParams
-from src.policies.old_bachelor_acceptance.solver import OBASolver
+from configs.policies.oba import OBAConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.old_bachelor_acceptance.params import OBAParams
+from policies.old_bachelor_acceptance.solver import OBASolver
 
 from .factory import PolicyRegistry
 

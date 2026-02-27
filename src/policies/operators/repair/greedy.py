@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.operators.repair.greedy import greedy_insertion
+    >>> from policies.operators.repair.greedy import greedy_insertion
     >>> routes = greedy_insertion(routes, removed, dist_matrix, wastes, capacity)
 """
 

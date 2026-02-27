@@ -1,0 +1,20 @@
+# Policy Configuration
+# =============================================================================
+# OBA (Old Bachelor Acceptance) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Non-monotonic threshold acceptance.  Threshold dilates after rejections
+#   (facilitating escape) and contracts after acceptances (intensifying search).
+# =============================================================================
+
+oba:
+  custom:
+    - dilation: 8.0
+    - contraction: 1.5
+    - n_removal: 3
+    - n_llh: 5
+    - max_iterations: 40000
+    - time_limit: 120.0
+    - engine: "custom"
+    - must_go: ["other/mg_lookahead.yaml"]
+    - post_processing: []

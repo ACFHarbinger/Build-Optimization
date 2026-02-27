@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.operators.destroy.cluster import cluster_removal
+    >>> from policies.operators.destroy.cluster import cluster_removal
     >>> routes, removed = cluster_removal(routes, n_remove=5, dist_matrix=d, nodes=all_nodes)
 """
 

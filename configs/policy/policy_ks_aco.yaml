@@ -1,0 +1,122 @@
+# Policy Configuration
+
+# =============================================================================
+# KS-ACO (Knowledge-Sharing Ant Colony Optimization) Configuration
+# =============================================================================
+# PURPOSE:
+#   Multi-colony ACO where ants share knowledge across colonies via sparse
+#   communication. Balances exploration (isolated colonies) with exploitation
+#   (knowledge transfer). Effective for large-scale problems.
+#
+# ALGORITHM:
+#   1. Maintain K parallel ant colonies (K = implicit, based on n_ants)
+#   2. Each colony evolves independently most of the time
+#   3. Periodically share best solutions among k_sparse nearest neighbors
+#   4. Update pheromones using both local and shared solutions
+#   5. Apply local search to promising solutions
+#
+# KEY FEATURES:
+#   - Sparse topology: Each colony communicates with k_sparse neighbors only
+#   - Elitist pheromone update: Best solutions weighted higher
+#   - Integrated local search: 2-opt, relocate after construction
+#
+# TYPICAL USE CASES:
+#   - Large instances (150+ nodes) where single-colony ACO stagnates
+#   - Parallel hardware (multi-core) for colony independence
+#   - Benchmarking against other ACO variants
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Better diversity than single-colony ACO
+#   - Typically 3-7% better than basic ACO on large CVRP instances
+#   - Slower than HGS but competitive with ALNS
+# =============================================================================
+
+ks_aco:
+  custom:
+    # ---------------------------------------------------------------------
+    # Colony Structure
+    # ---------------------------------------------------------------------
+    - n_ants: 20
+      # Total ants across all colonies
+      # Range: 10-100 (10 = fast/limited, 50 = balanced, 100 = thorough)
+      # Note: Divided among parallel colonies (e.g., 20 ants = 4 colonies × 5 ants)
+
+    - k_sparse: 15
+      # Number of neighboring colonies for knowledge sharing
+      # Range: 5-50 (lower = more isolation, higher = more communication)
+      # Recommendation: k_sparse ≈ 0.75 * n_ants for good balance
+
+    # ---------------------------------------------------------------------
+    # ACO Parameters
+    # ---------------------------------------------------------------------
+    - alpha: 1.0
+      # Pheromone importance
+      # Range: 0.5-3.0 (higher = stronger pheromone influence)
+
+    - beta: 2.0
+      # Heuristic information importance (typically 1/distance)
+      # Range: 1.0-5.0 (higher = greedier construction)
+
+    - rho: 0.1
+      # Pheromone evaporation rate
+      # Range: 0.01-0.3 (0.05 = slow decay, 0.2 = fast decay)
+
+    # ---------------------------------------------------------------------
+    # Pseudo-Random Proportional Rule
+    # ---------------------------------------------------------------------
+    - q0: 0.9
+      # Exploitation vs exploration balance
+      # Range: 0.7-0.99 (0.7 = more random, 0.99 = very greedy)
+      # With prob q0: select best node; otherwise: roulette selection
+
+    # ---------------------------------------------------------------------
+    # Pheromone Bounds (MAX-MIN Ant System)
+    # ---------------------------------------------------------------------
+    - tau_min: 0.001
+      # Minimum pheromone (prevents edge starvation)
+      # Very low value ensures all edges remain slightly attractive
+
+    - tau_max: 10.0
+      # Maximum pheromone (prevents premature convergence)
+      # Caps pheromone accumulation on best edges
+
+    # ---------------------------------------------------------------------
+    # Execution Control
+    # ---------------------------------------------------------------------
+    - max_iterations: 100
+      # Maximum ACO iterations
+      # Range: 50-500 (50 = quick, 200 = thorough, 500 = benchmark)
+
+    - time_limit: 30.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = production, 120s = benchmark)
+      # Usually reached before max_iterations
+
+    # ---------------------------------------------------------------------
+    # Local Search Integration
+    # ---------------------------------------------------------------------
+    - local_search: true
+      # Apply local search to constructed solutions
+      # true = 2-opt + relocate after each ant (better quality, slower)
+      # false = pure ACO construction (faster, lower quality)
+
+    - elitist_weight: 1.0
+      # Weight for best-so-far solution in pheromone update
+      # Range: 0.5-5.0 (higher = stronger elitism)
+      # Standard ACO uses 1.0; increase for faster convergence
+
+    # ---------------------------------------------------------------------
+    # Infrastructure Settings
+    # ---------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/knowledge_sharing_aco.py
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+      # See: docs/MUST_GO_STRATEGIES.md
+
+    - post_processing: []
+      # Local search already integrated; no further refinement needed
+      # Empty = use KS-ACO output directly
+# =============================================================================

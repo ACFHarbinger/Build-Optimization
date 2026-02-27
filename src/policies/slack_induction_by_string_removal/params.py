@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.slack_induction_by_string_removal.params import SISRParams
+    >>> from policies.slack_induction_by_string_removal.params import SISRParams
     >>> params = SISRParams(time_limit=10.0)
 """
 
@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.configs.policies import SISRConfig
+    from configs.policies import SISRConfig
 
 
 @dataclass

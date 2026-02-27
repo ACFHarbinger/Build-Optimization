@@ -4,7 +4,7 @@ Deterministic local search strategies.
 
 from copy import deepcopy
 
-from src.policies.simulated_annealing_neighborhood_search.common.objectives import (
+from policies.simulated_annealing_neighborhood_search.common.objectives import (
     compute_profit,
     compute_real_profit,
 )

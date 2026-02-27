@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.configs.policies import ALNSConfig
+    from configs.policies import ALNSConfig
 
 
 @dataclass

@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.ant_colony_optimization.hyper_heuristic_aco.runner import run_hyper_heuristic_aco
+    >>> from policies.ant_colony_optimization.hyper_heuristic_aco.runner import run_hyper_heuristic_aco
     >>> result = run_hyper_heuristic_aco(dist_matrix, wastes, capacity, ...)
 """
 

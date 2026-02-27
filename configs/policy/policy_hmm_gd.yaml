@@ -1,0 +1,108 @@
+# Policy Configuration
+
+# =============================================================================
+# HMM-GD (Hidden Markov Model + Great Deluge) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Online-learning hyper-heuristic combining a Hidden Markov Model for
+#   adaptive LLH selection with the Great Deluge acceptance criterion.
+#   The HMM tracks the search state (improving / stagnating / escaping) and
+#   learns which Low-Level Heuristic works best in each state. Great Deluge
+#   replaces simulated annealing: solutions are accepted when their profit
+#   exceeds a linearly falling water level.
+#
+# LLH POOL (5 operators, indices 0-4):
+#   L0: random_removal  + greedy_insertion
+#   L1: worst_removal   + regret_2_insertion
+#   L2: cluster_removal + greedy_insertion
+#   L3: worst_removal   + greedy_insertion
+#   L4: random_removal  + regret_2_insertion
+#
+# HMM STATES:
+#   State 0 — Improving:  recent LLH application raised profit
+#   State 1 — Stagnating: no improvement for ≤10 consecutive iters
+#   State 2 — Escaping:   no improvement for >10 consecutive iters
+#
+# ALGORITHM:
+#   1. Generate initial solution via greedy insertion
+#   2. Set water_level = initial_profit * (1 + flood_margin)
+#   3. Per iteration:
+#      a. Sample LLH from HMM transition matrix A[current_state]
+#      b. Apply selected LLH; compute new profit
+#      c. Great Deluge acceptance: accept if new_profit >= water_level
+#      d. Update HMM state based on profit change / stagnation count
+#      e. Online HMM update: adjust A[state][llh] proportional to success rate
+#      f. Decrease water level: water_level -= rain_speed * |best_profit|
+#   4. Track global best; repeat for max_iterations or time_limit
+#
+# TYPICAL USE CASES:
+#   - Benchmarking online-learning hyper-heuristics on VRPP
+#   - Problems where operator synergies vary by search phase
+#   - Comparison with GPHH (evolution-based) vs HMM-GD (online-learning)
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Fast convergence in improving phases (HMM learns quickly)
+#   - Great Deluge avoids temperature tuning required by simulated annealing
+#   - rain_speed sensitive to problem scale; scale down for very large profits
+# =============================================================================
+
+hmm_gd:
+  custom:
+    # -------------------------------------------------------------------------
+    # Online Learning Parameters
+    # -------------------------------------------------------------------------
+    - learning_rate: 0.1
+      # HMM transition probability update step (online Baum-Welch simplified)
+      # A[state][llh] = (1-lr)*A[state][llh] + lr*success_rate
+      # Range: 0.01-0.5 (0.01 = slow adaptation, 0.3 = rapid adaptation)
+      # Lower values → more stable but slower learning; higher → reactive
+
+    - n_llh: 5
+      # Number of LLHs in the operator pool (fixed — do not change)
+      # Pool: [random+greedy, worst+regret2, cluster+greedy, worst+greedy, random+regret2]
+
+    - n_removal: 2
+      # Nodes removed per LLH destroy step
+      # Range: 1-5 (1 = micro perturbation, 3 = moderate shake)
+
+    # -------------------------------------------------------------------------
+    # Great Deluge Acceptance Criterion
+    # -------------------------------------------------------------------------
+    - flood_margin: 0.05
+      # Initial water level offset as fraction of initial profit
+      # water_level = best_profit * (1 + flood_margin)
+      # Range: 0.01-0.2 (0.01 = tight, 0.05 = moderate, 0.2 = permissive)
+      # Higher margin → more solutions accepted early (wider exploration)
+
+    - rain_speed: 0.001
+      # Rate of water level decrease per iteration
+      # water_level -= rain_speed * |best_profit| each iteration
+      # Range: 0.0001-0.01 (small = slow tightening, large = rapid tightening)
+      # Tune so water level reaches ~0 near max_iterations
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - max_iterations: 500
+      # Total LLH application cycles
+      # Range: 100-2000 (200 = quick, 500 = production, 1000 = benchmark)
+      # Each iteration: one LLH application + HMM state update + water drop
+
+    - time_limit: 60.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = quick, 60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/hmm_great_deluge/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # HMM-guided operator selection + Great Deluge provide adaptive search
+      # Empty = use HMM-GD output directly
+# =============================================================================

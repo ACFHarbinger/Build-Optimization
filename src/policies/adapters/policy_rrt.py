@@ -6,10 +6,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.rrt import RRTConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.record_to_record_travel.params import RRParams
-from src.policies.record_to_record_travel.solver import RRSolver
+from configs.policies.rrt import RRTConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.record_to_record_travel.params import RRParams
+from policies.record_to_record_travel.solver import RRSolver
 
 from .factory import PolicyRegistry
 

@@ -4,7 +4,7 @@ Main Neural Agent class assembling mixins.
 
 from __future__ import annotations
 
-from src.tracking.viz_mixin import PolicyVizMixin
+from tracking.viz_mixin import PolicyVizMixin
 
 from .batch import BatchMixin
 from .simulation import SimulationMixin

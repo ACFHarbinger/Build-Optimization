@@ -1,0 +1,102 @@
+# Policy Configuration
+
+# =============================================================================
+# Neural Network Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Inference-only policy using pre-trained attention-based models (AM, TAM)
+#   for constructive routing. Enables comparison between neural and classical
+#   solvers on real-world waste collection scenarios.
+#
+# ALGORITHM:
+#   1. Load trained model weights from checkpoint
+#   2. Encode problem instance (bin locations, fill levels, distances)
+#   3. Autoregressively decode route via masked attention
+#   4. Return tour (greedy or sampled)
+#
+# MODELS SUPPORTED:
+#   - AM (Attention Model): Standard encoder-decoder with MHA
+#   - AMGAT (AM + Graph Attention): Enhanced with GAT encoder
+#   - TAM (Temporal AM): Multi-day awareness with GRF predictor
+#   - DDAM (Deep Decoder AM): Deeper decoder for complex problems
+#
+# TYPICAL USE CASES:
+#   - Deploy trained models in simulation (test_sim)
+#   - Benchmark neural vs classical policies (HGS, ALNS, Gurobi)
+#   - Real-time routing (<1s inference) for production systems
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Inference time: <1 second for 100-node instance (GPU)
+#   - Solution quality: Typically 5-15% worse than HGS/Gurobi
+#   - Advantage: Consistent fast runtime (no worst-case timeouts)
+# =============================================================================
+
+neural:
+  amgat:
+    # ---------------------------------------------------------------------
+    # Model Checkpoint
+    # ---------------------------------------------------------------------
+    - model_path: "assets/model_weights/cwcvrp100_riomaior_plastic/gamma1/amgat"
+      # Path to trained model directory containing:
+      #   - config.yaml: Model architecture and training hyperparameters
+      #   - best.ckpt: PyTorch Lightning checkpoint with learned weights
+      #   - hparams.yaml: Hyperparameters used during training
+      #
+      # Directory structure example:
+      #   amgat/
+      #   ├── config.yaml
+      #   ├── best.ckpt
+      #   ├── hparams.yaml
+      #   └── version_0/  (Lightning logs)
+      #
+      # Model was trained on:
+      #   - Problem: CWCVRP (Capacitated Waste Collection VRP)
+      #   - Instance size: 100 nodes
+      #   - Geographic area: Rio Maior, Portugal
+      #   - Waste type: Plastic recycling
+      #   - Objective weight (gamma): 1.0 (balanced cost/overflow)
+
+    # ---------------------------------------------------------------------
+    # Decoding Strategy (Implicit)
+    # ---------------------------------------------------------------------
+    # Decoding mode is controlled by test_sim command-line arguments:
+    #   - Greedy: Select highest-probability node at each step (deterministic)
+    #   - Sampling: Sample from probability distribution (stochastic)
+    #   - Beam Search: Maintain top-k partial solutions (highest quality)
+    #
+    # Default for simulation: Greedy (fastest, reproducible)
+    #
+    # To override: python main.py test_sim policy=neural strategy=sampling
+    # ---------------------------------------------------------------------
+    # Node Selection Strategy
+    # ---------------------------------------------------------------------
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Pre-filter nodes before neural model inference
+      # Options: mg_lookahead.yaml (predict overflow), mg_last_minute_*.yaml
+      # See: docs/MUST_GO_STRATEGIES.md
+      #
+      # Flow: must_go selector → neural model → route
+      # Example: If 100 bins but only 30 exceed threshold → model sees 30 nodes
+
+    # ---------------------------------------------------------------------
+    # Post-Processing
+    # ---------------------------------------------------------------------
+    - post_processing: []
+      # Optional local search refinement after neural construction
+      # Empty = use raw neural output
+      # Options: ["2opt_intra", "relocate"] (typically 2-5% improvement)
+      #
+      # Recommendation: Empty for speed, ["2opt_intra"] for quality
+
+    # ---------------------------------------------------------------------
+    # Model Loading (Automatic)
+    # ---------------------------------------------------------------------
+    # The simulator automatically:
+    #   1. Reads model_path/config.yaml to determine architecture
+    #   2. Instantiates model (AM, TAM, etc.) with correct dimensions
+    #   3. Loads weights from best.ckpt
+    #   4. Moves model to GPU (if available)
+    #   5. Sets model.eval() mode (disables dropout/batchnorm training behavior)
+    #
+    # No manual configuration required beyond model_path.
+# =============================================================================

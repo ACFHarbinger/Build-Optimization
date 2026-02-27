@@ -2,7 +2,7 @@
 Objective functions for SANS.
 """
 
-from src.constants.routing import MAX_CAPACITY_PERCENT
+from constants.routing import MAX_CAPACITY_PERCENT
 
 from .distance import compute_distance_per_route, compute_sans_route_cost
 from .penalties import (

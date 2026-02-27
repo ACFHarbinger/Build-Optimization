@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.operators.route.swap_star import SwapStar
+    >>> from policies.operators.route.swap_star import SwapStar
     >>> operator = SwapStar(...)
     >>> new_solution = operator.apply(solution)
 

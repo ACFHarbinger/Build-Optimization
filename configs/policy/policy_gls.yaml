@@ -1,0 +1,21 @@
+# Policy Configuration
+# =============================================================================
+# GLS (Guided Local Search) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Augments the objective with adaptive edge-penalty terms.  When local
+#   search stagnates, the edge with highest utility is penalised, making
+#   the current optimum less attractive and guiding the search to new basins.
+# =============================================================================
+
+gls:
+  custom:
+    - lambda_param: 0.3
+    - max_restarts: 500
+    - inner_iterations: 60
+    - n_removal: 3
+    - n_llh: 5
+    - time_limit: 120.0
+    - engine: "custom"
+    - must_go: ["other/mg_lookahead.yaml"]
+    - post_processing: []

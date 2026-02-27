@@ -22,7 +22,7 @@ from typing import Any, Dict, List, Set, Tuple
 
 import numpy as np
 
-from src.tracking.viz_mixin import PolicyVizMixin
+from tracking.viz_mixin import PolicyVizMixin
 
 from ..operators import (
     move_2opt_intra,

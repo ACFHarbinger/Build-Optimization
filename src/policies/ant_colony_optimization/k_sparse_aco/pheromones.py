@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.ant_colony_optimization.k_sparse_aco.pheromones import SparsePheromoneTau
+    >>> from policies.ant_colony_optimization.k_sparse_aco.pheromones import SparsePheromoneTau
     >>> pheromone = SparsePheromoneTau(n_nodes=100, k=25, tau_0=1.0, ...)
     >>> val = pheromone.get(0, 1)
 """

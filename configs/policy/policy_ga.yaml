@@ -1,0 +1,21 @@
+# Policy Configuration
+# =============================================================================
+# GA (Genetic Algorithm) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Population-based evolutionary algorithm with tournament selection,
+#   OX crossover, random relocate mutation, and elitism.
+# =============================================================================
+
+ga:
+  custom:
+    - pop_size: 60
+    - max_generations: 3500
+    - crossover_rate: 0.85
+    - mutation_rate: 0.15
+    - tournament_size: 4
+    - n_removal: 3
+    - time_limit: 120.0
+    - engine: "custom"
+    - must_go: ["other/mg_lookahead.yaml"]
+    - post_processing: []

@@ -1,0 +1,114 @@
+# Policy Configuration
+
+# =============================================================================
+# FA (Firefly Algorithm — Discrete) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Population-based metaheuristic where brighter (higher profit) fireflies
+#   attract dimmer ones. Movement is governed by a favourability score
+#   weighting node profit, insertion willingness, and insertion cost, enabling
+#   targeted path-relinking between route solutions.
+#
+# ALGORITHM:
+#   1. Initialize pop_size fireflies with random feasible routes
+#   2. For each pair (i, j) where profit[j] > profit[i]:
+#      - Swap distance d(i,j) = number of mismatched edges between route sets
+#      - Attractiveness β = β0 * exp(-γ * d²)
+#      - Discrete movement: score each node from j not in i by
+#        α_profit * profit_node + β_will * willingness - γ_cost * insertion_cost
+#      - Insert top-scored nodes into firefly i
+#   3. Random walk: with prob alpha_rnd, randomly relocate one node in firefly i
+#   4. Update global best; repeat for max_iterations or until time_limit
+#
+# KEY FEATURE:
+#   Favourability-guided node extraction decouples raw profit maximisation from
+#   insertion feasibility — γ_cost penalises expensive insertions while
+#   β_will rewards structurally willing positions.
+#
+# TYPICAL USE CASES:
+#   - Small-to-medium instances (10-80 nodes)
+#   - Research benchmarking of swarm methods with attraction mechanics
+#   - Problems with strong profit heterogeneity between nodes
+#
+# PERFORMANCE EXPECTATIONS:
+#   - O(pop_size²) pairs per iteration; keep pop_size ≤ 30 for 60s budget
+#   - Best results when node profits vary widely (high β0)
+#   - alpha_rnd small (<0.3) prevents destructive random walks
+# =============================================================================
+
+fa:
+  custom:
+    # -------------------------------------------------------------------------
+    # Population Parameters
+    # -------------------------------------------------------------------------
+    - pop_size: 20
+      # Number of fireflies (candidate route solutions)
+      # Range: 10-30 (10 = fast, 20 = balanced, 30 = thorough)
+      # Note: Runtime is O(pop_size²); keep ≤ 30 for 60s time budget
+
+    # -------------------------------------------------------------------------
+    # Attractiveness Model
+    # -------------------------------------------------------------------------
+    - beta0: 1.0
+      # Maximum attractiveness coefficient (at zero distance)
+      # Range: 0.5-2.0 (higher → stronger pull toward brighter fireflies)
+
+    - gamma: 0.1
+      # Light absorption coefficient — controls attractiveness decay with distance
+      # β(d) = β0 * exp(-γ * d²)
+      # Range: 0.01-1.0 (0.01 = long-range attraction, 1.0 = local only)
+
+    # -------------------------------------------------------------------------
+    # Favourability Score Weights
+    # -------------------------------------------------------------------------
+    - alpha_profit: 0.5
+      # Profit weight in node favourability score
+      # Higher → prefer high-profit nodes from the brighter firefly
+
+    - beta_will: 0.3
+      # Structural willingness weight (positional compatibility)
+      # Higher → prefer nodes at positions compatible with current route structure
+
+    - gamma_cost: 0.2
+      # Insertion-cost penalty weight
+      # Higher → penalise expensive (long-detour) insertions more strongly
+
+    # Note: alpha_profit + beta_will + gamma_cost should roughly sum to 1.0
+    # -------------------------------------------------------------------------
+    # Random Walk
+    # -------------------------------------------------------------------------
+    - alpha_rnd: 0.2
+      # Probability of random node relocation per firefly per iteration
+      # Range: 0.05-0.5 (0.05 = rare diversification, 0.3 = frequent)
+      # Prevents complete convergence; avoid >0.4 to protect good solutions
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - max_iterations: 100
+      # Maximum FA iterations
+      # Range: 20-300 (50 = quick, 100 = production, 200 = benchmark)
+      # Fewer iterations needed vs. single-solution methods due to population
+
+    - n_removal: 3
+      # Number of nodes to remove in each iteration
+      # Range: 1-10 (1 = slow, 3 = production, 10 = fast)
+
+    - time_limit: 60.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = quick, 60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/firefly_algorithm/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # Pairwise attraction already refines solutions; no post-processing needed
+      # Empty = use FA output directly
+# =============================================================================

@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.simulated_annealing_neighborhood_search.operators.intra_swap import swap_1_route
+    >>> from policies.simulated_annealing_neighborhood_search.operators.intra_swap import swap_1_route
     >>> swap_1_route(routes)
 """
 

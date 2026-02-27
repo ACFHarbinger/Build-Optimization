@@ -12,7 +12,7 @@ import hexaly.optimizer as hx
 import numpy as np
 from numpy.typing import NDArray
 
-from src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 
 def _run_hexaly_optimizer(  # noqa: C901

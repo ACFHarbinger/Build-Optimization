@@ -8,7 +8,7 @@ from typing import Dict, List, Tuple
 import numpy as np
 import pandas as pd
 
-from src.policies.simulated_annealing_neighborhood_search.select import insert_bins, remove_bins_end
+from policies.simulated_annealing_neighborhood_search.select import insert_bins, remove_bins_end
 
 
 def rebalance_solution(

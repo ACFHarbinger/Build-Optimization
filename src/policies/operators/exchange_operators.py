@@ -6,7 +6,7 @@ This module contains advanced inter-route and intra-route operators:
 - Cross-Exchange: Swap segments between routes (λ-interchange)
 - Ejection Chain: Compound displacement for fleet reduction
 
-(Refactored to point to `src.policies.operators.exchange` package)
+(Refactored to point to `policies.operators.exchange` package)
 """
 
 from .exchange import (

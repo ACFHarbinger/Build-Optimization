@@ -12,7 +12,7 @@ Attributes:
     string_removal (function): String removal heuristic.
 
 Example:
-    >>> from src.policies.operators.destroy import random_removal
+    >>> from policies.operators.destroy import random_removal
     >>> routes, removed = random_removal(routes, n=5)
 """
 

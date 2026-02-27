@@ -1,0 +1,69 @@
+# Policy Configuration
+
+# =============================================================================
+# BCP (Branch-Cut-and-Price) Exact Solver Configuration
+# =============================================================================
+# PURPOSE:
+#   Exact optimization using column generation and branch-and-bound.
+#   Guarantees optimal solutions for small instances (≤50 nodes) but may
+#   timeout on larger problems.
+#
+# ALGORITHM:
+#   1. Column Generation: Iteratively generate new routes via pricing problem
+#   2. Cutting Planes: Add valid inequalities to strengthen LP relaxation
+#   3. Branch-and-Bound: Solve to integer optimality
+#
+# BACKEND:
+#   Uses OR-Tools VRP solver with exact mode enabled
+#
+# TYPICAL USE CASES:
+#   - Small instances (20-50 nodes) where optimality proof is required
+#   - Benchmark baseline for neural/metaheuristic comparison
+#   - Academic research requiring provably optimal solutions
+#
+# PERFORMANCE EXPECTATIONS:
+#   - 20 nodes: Optimal in <5 seconds
+#   - 50 nodes: Optimal in 30-300 seconds (highly variable)
+#   - 100+ nodes: Likely timeout (use HGS or ALNS instead)
+#
+# WARNING:
+#   This policy may consume significant memory (>4GB) on large instances.
+#   Monitor RAM usage if running on resource-constrained systems.
+# =============================================================================
+
+bcp:
+  ortools:
+    # ---------------------------------------------------------------------
+    # Infrastructure Settings
+    # ---------------------------------------------------------------------
+    - engine: "ortools"
+      # Execution backend: Google OR-Tools with exact BCP mode
+      # Alternative: "vrpy" (VRPy library, slower but more flexible)
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+      # See: docs/MUST_GO_STRATEGIES.md
+
+    - time_limit: 60
+      # Maximum wall-clock seconds before termination
+      # Range: 30-3600 (30s = quick test, 3600s = thorough search)
+      # Note: BCP may find optimal solution early and stop before time_limit
+
+    - post_processing: []
+      # Route refinement heuristics (not needed for exact solutions)
+      # Always empty for BCP since solutions are already optimal
+
+    # ---------------------------------------------------------------------
+    # Solver Parameters (Implicit)
+    # ---------------------------------------------------------------------
+    # OR-Tools BCP parameters are configured in:
+    #   logic/src/policies/branch_cut_and_price.py
+    #
+    # Key implicit settings:
+    #   - First solution strategy: PATH_CHEAPEST_ARC
+    #   - Local search metaheuristic: GUIDED_LOCAL_SEARCH
+    #   - Solution limit: 1 (stop after first proven optimal)
+    #   - Branching strategy: AUTOMATIC (OR-Tools selects best)
+    #   - Cut generation: Enabled (capacity, subtour elimination)
+# =============================================================================

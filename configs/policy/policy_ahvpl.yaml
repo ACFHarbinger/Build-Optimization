@@ -1,0 +1,137 @@
+# Policy Configuration
+
+# =============================================================================
+# AHVPL (Augmented Hybrid Volleyball Premier League) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Advanced metaheuristic integrating four optimization components into a
+#   unified engine: ACO (initialization), VPL (population management), HGS
+#   (diversity-driven crossover/mutation), and ALNS (deep local search).
+#
+# ALGORITHM:
+#   1. ACO Initialization: Construct diverse initial solutions via pheromone
+#   2. Bi-Criteria Fitness: HGS ranks by profit AND diversity (symmetric diff)
+#   3. HGS Crossover: Ordered Crossover (OX) on giant tour representations
+#   4. ALNS Coaching: Destroy-repair local search on decoded routes
+#   5. HGS Mutation: Optional deeper local search via HGS operators
+#   6. Survivor Selection: Trim population by biased fitness
+#   7. Pheromone Update: Reinforce edges from best solutions
+#   8. Substitution: Replace weakest teams with fresh ACO solutions
+#
+# KEY UPGRADE OVER HVPL:
+#   HGS replaces the simplistic VPL coaching-only loop with:
+#   - Genetic crossover on giant tours for better exploration
+#   - Bi-criteria fitness (profit + diversity) to prevent premature convergence
+#   - HGS local search mutation for deeper intensification
+#
+# TYPICAL USE CASES:
+#   - Large or challenging instances where pure HVPL plateaus
+#   - Production routing where maximum solution quality is needed
+#   - Benchmarking against state-of-the-art metaheuristics
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Better solution quality than HVPL due to HGS diversity management
+#   - Slightly higher runtime per iteration due to crossover + mutation
+#   - Best results with 60-120s time budget
+#
+# REFERENCE:
+#   Hybrid Volleyball Algorithm Research (reports/)
+# =============================================================================
+
+ahvpl:
+  custom:
+    # ---------------------------------------------------------------------
+    # VPL League Parameters
+    # ---------------------------------------------------------------------
+    - n_teams: 10
+      # Number of solutions (teams) in the league population
+      # Range: 5-20 (5 = fast, 10 = balanced, 20 = thorough)
+
+    - max_iterations: 50
+      # Number of league seasons (main loop iterations)
+      # Range: 20-100 (usually time_limit is reached first)
+
+    - sub_rate: 0.2
+      # Fraction of weakest teams replaced per iteration
+      # Range: 0.1-0.5 (0.1 = conservative, 0.3 = aggressive)
+
+    - time_limit: 60
+      # Maximum wall-clock seconds for the full algorithm
+      # Range: 30-300 (60s = production, 120s = thorough)
+
+    # ---------------------------------------------------------------------
+    # HGS Parameters (Diversity Management & Crossover)
+    # ---------------------------------------------------------------------
+    - hgs_elite_size: 5
+      # Number of elite solutions for biased fitness ranking
+      # Range: 3-15 (typically ~50% of n_teams)
+      # Elite solutions get higher diversity preservation
+
+    - hgs_mutation_rate: 0.2
+      # Probability of HGS local search mutation after ALNS coaching
+      # Range: 0.0-0.5 (0.0 = no mutation, 0.3 = frequent)
+
+    - hgs_crossover_rate: 0.7
+      # Probability of applying OX crossover per generation
+      # Range: 0.0-1.0 (0.0 = clone parent, 1.0 = always crossover)
+
+    - hgs_max_vehicles: 0
+      # Maximum vehicles allowed (0 = unlimited, determined by problem)
+      # Set >0 to constrain fleet size
+
+    - hgs_population_size: 50
+      # HGS internal population size for diversity management
+      # Range: 25-100
+
+    # ---------------------------------------------------------------------
+    # ACO Parameters (Initialization & Substitution)
+    # ---------------------------------------------------------------------
+    - aco_n_ants: 10
+      # Number of ants for solution construction
+      # Range: 5-30
+
+    - aco_iterations: 1
+      # ACO iterations per construction call
+      # Range: 1-5 (1 = fast initialization)
+
+    - aco_k_sparse: 10
+      # Number of nearest neighbors in sparse ACO graph
+      # Range: 5-20
+
+    - aco_rho: 0.1
+      # Pheromone evaporation rate
+      # Range: 0.05-0.3
+
+    # ---------------------------------------------------------------------
+    # ALNS Parameters (Coaching & Deep Local Search)
+    # ---------------------------------------------------------------------
+    - alns_iterations: 100
+      # Number of destroy-repair cycles per coaching session
+      # Range: 50-500 (50 = light, 100 = balanced, 500 = deep)
+
+    - alns_start_temp: 100.0
+      # Initial simulated annealing temperature
+      # Range: 50-500
+
+    - alns_cooling_rate: 0.95
+      # Temperature decay per iteration
+      # Range: 0.90-0.99
+
+    - alns_max_removal_pct: 0.2
+      # Maximum fraction of nodes to remove in destroy phase
+      # Range: 0.1-0.4
+
+    # ---------------------------------------------------------------------
+    # Infrastructure Settings
+    # ---------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/augmented_hybrid_volleyball_premier_league/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # ALNS + HGS local search is comprehensive; no further refinement needed
+      # Empty = use AHVPL output directly
+# =============================================================================

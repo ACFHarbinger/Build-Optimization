@@ -13,7 +13,7 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 from scipy.sparse.csgraph import minimum_spanning_tree
 
-from src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 
 def compute_alpha_measures(distance_matrix: np.ndarray) -> np.ndarray:

@@ -11,25 +11,25 @@ from typing import Any, Dict, List, Literal, Optional, Tuple, Type, Union
 
 import numpy as np
 import pandas as pd
-
-from src.configs.policies import SANSConfig
-from src.constants.routing import (
+from constants.routing import (
     DEFAULT_COMBINATION,
     DEFAULT_SHIFT_DURATION,
     DEFAULT_TIME_LIMIT,
     DEFAULT_V_VALUE,
 )
-from src.data.processor import convert_to_dict
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.simulated_annealing_neighborhood_search import (
+from data.processor import convert_to_dict
+from policies.tsp import get_route_cost
+
+from configs.policies import SANSConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.simulated_annealing_neighborhood_search import (
     improved_simulated_annealing,
 )
-from src.policies.simulated_annealing_neighborhood_search.common.routes import create_points
-from src.policies.simulated_annealing_neighborhood_search.common.solution_initialization import (
+from policies.simulated_annealing_neighborhood_search.common.routes import create_points
+from policies.simulated_annealing_neighborhood_search.common.solution_initialization import (
     compute_initial_solution,
 )
-from src.policies.simulated_annealing_neighborhood_search.refinement.route_search import find_solutions
-from src.policies.tsp import get_route_cost
+from policies.simulated_annealing_neighborhood_search.refinement.route_search import find_solutions
 
 from .factory import PolicyRegistry
 

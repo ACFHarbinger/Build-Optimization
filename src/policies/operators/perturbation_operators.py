@@ -9,7 +9,7 @@ Attributes:
     perturb (function): Performs random swaps.
 
 Example:
-    >>> from src.policies.operators import perturbation_operators
+    >>> from policies.operators import perturbation_operators
     >>> perturbation_operators.kick(context, destroy_ratio=0.3)
 """
 

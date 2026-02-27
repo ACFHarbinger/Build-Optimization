@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.operators.destroy.shaw import shaw_removal
+    >>> from policies.operators.destroy.shaw import shaw_removal
     >>> routes, removed = shaw_removal(routes, n_remove=5, dist_matrix=d, ...)
 """
 

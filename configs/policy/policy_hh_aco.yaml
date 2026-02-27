@@ -1,0 +1,127 @@
+# Policy Configuration
+
+# =============================================================================
+# HH-ACO (Hyper-Heuristic Ant Colony Optimization) Configuration
+# =============================================================================
+# PURPOSE:
+#   Meta-level ACO that learns sequences of local search operators rather
+#   than direct routes. Pheromones guide selection of improvement heuristics,
+#   adapting operator choice to problem structure.
+#
+# ALGORITHM:
+#   1. Initialize pheromone matrix for operator transitions
+#   2. Each ant constructs operator sequence (e.g., [swap, 2opt, relocate])
+#   3. Apply sequence to current solution, measure improvement
+#   4. Update pheromones based on solution quality delta
+#   5. Repeat until convergence or time limit
+#
+# KEY DIFFERENCE vs Traditional ACO:
+#   - Traditional ACO: Pheromones on edges (node → node transitions)
+#   - HH-ACO: Pheromones on operators (swap → 2opt transitions)
+#
+# TYPICAL USE CASES:
+#   - Benchmarking novel hyper-heuristic approaches
+#   - Academic research on adaptive operator selection
+#   - Problems where operator synergies matter (VRPTW, multi-objective)
+#
+# NOTE:
+#   Generally slower than HGS/ALNS for same time budget, but can discover
+#   effective operator sequences for new problem variants.
+# =============================================================================
+
+hh_aco:
+  custom:
+    # ---------------------------------------------------------------------
+    # Colony Parameters
+    # ---------------------------------------------------------------------
+    - n_ants: 10
+      # Number of ants (parallel operator sequences) per iteration
+      # Range: 5-50 (5 = fast/unstable, 20 = balanced, 50 = thorough/slow)
+      # Recommendation: 10 for 30s budget, 20 for 120s budget
+
+    # ---------------------------------------------------------------------
+    # Pheromone Influence
+    # ---------------------------------------------------------------------
+    - alpha: 1.0
+      # Pheromone importance weight
+      # Range: 0.5-5.0 (higher = stronger pheromone influence)
+      # alpha=1.0, beta=2.0 → heuristic slightly favored over pheromone
+
+    - beta: 2.0
+      # Heuristic information importance (operator historical performance)
+      # Range: 0.5-5.0 (higher = greedier operator selection)
+
+    # ---------------------------------------------------------------------
+    # Pheromone Update
+    # ---------------------------------------------------------------------
+    - rho: 0.1
+      # Evaporation rate: τ_new = (1 - ρ) * τ_old + Δτ
+      # Range: 0.01-0.5 (0.01 = slow decay, 0.5 = fast decay)
+      # Lower ρ → more memory of historical good sequences
+
+    - tau_0: 1.0
+      # Initial pheromone level on all operator transitions
+      # Range: 0.1-10.0 (affects exploration early on)
+
+    - tau_min: 0.01
+      # Minimum pheromone (prevents stagnation)
+      # Ensures all operators remain selectable
+
+    - tau_max: 10.0
+      # Maximum pheromone (prevents premature convergence)
+      # Caps pheromone accumulation on best transitions
+
+    # ---------------------------------------------------------------------
+    # Execution Control
+    # ---------------------------------------------------------------------
+    - max_iterations: 50
+      # Maximum ACO cycles (each cycle = n_ants sequences evaluated)
+      # Range: 10-200 (10 = quick test, 100 = thorough)
+
+    - time_limit: 30.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = production, 120s = benchmark)
+      # Usually reached before max_iterations
+
+    # ---------------------------------------------------------------------
+    # Operator Sequence Construction
+    # ---------------------------------------------------------------------
+    - sequence_length: 5
+      # Number of operators in each sequence
+      # Range: 2-10 (2 = simple chains, 10 = complex strategies)
+      # Example sequence: [swap, 2opt_intra, relocate, swap_star, 2opt_intra]
+
+    - q0: 0.9
+      # Exploitation vs exploration balance (pseudo-random proportional rule)
+      # Range: 0.5-1.0 (0.5 = exploratory, 1.0 = greedy)
+      # With prob q0: select best operator; otherwise: roulette selection
+
+    # ---------------------------------------------------------------------
+    # Local Search Operators Pool
+    # ---------------------------------------------------------------------
+    - operators: ["swap", "2opt_intra", "relocate", "swap_star", "perturb"]
+      # Available improvement heuristics for sequence construction
+      # Options:
+      #   - swap: Exchange two nodes between routes
+      #   - 2opt_intra: Reverse segment within single route
+      #   - relocate: Move node to different position/route
+      #   - swap_star: Multi-node swap variant
+      #   - perturb: Random perturbation for diversification
+      #
+      # Add/remove operators to customize search behavior
+
+    # ---------------------------------------------------------------------
+    # Infrastructure Settings
+    # ---------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/hyper_heuristic_aco.py
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+      # See: docs/MUST_GO_STRATEGIES.md
+
+    - post_processing: []
+      # Operator sequences already apply local search; no further refinement
+      # Empty = use HH-ACO output directly
+# =============================================================================

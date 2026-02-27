@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.operators.destroy.random import random_removal
+    >>> from policies.operators.destroy.random import random_removal
     >>> routes, removed = random_removal(routes, n_remove=5)
 """
 

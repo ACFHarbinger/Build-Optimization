@@ -2,11 +2,12 @@
 State and Cost utilities for Simulated Annealing.
 """
 
-from src.constants.routing import (
+from constants.routing import (
     MAX_CAPACITY_PERCENT,
     PENALTY_MUST_GO_MISSED,
 )
-from src.policies.simulated_annealing_neighborhood_search.common.distance import (
+
+from policies.simulated_annealing_neighborhood_search.common.distance import (
     compute_total_cost,
 )
 

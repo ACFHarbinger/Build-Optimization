@@ -11,7 +11,7 @@ Attributes:
     greedy_insertion_with_blinks (function): Randomized greedy insertion.
 
 Example:
-    >>> from src.policies.operators import repair_operators
+    >>> from policies.operators import repair_operators
     >>> routes = repair_operators.greedy_insertion(routes, removed, ...)
 """
 

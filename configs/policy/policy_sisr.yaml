@@ -1,0 +1,114 @@
+# Policy Configuration
+
+# =============================================================================
+# SISR (Slack Induction by String Removals) Configuration
+# =============================================================================
+# PURPOSE:
+#   Hybridizes string removal/insertion (from ALNS) with simulated annealing
+#   acceptance criterion. Uses probabilistic "blinking" to escape local optima.
+#   Research-oriented algorithm for exploring SA+ALNS synergies.
+#
+# ALGORITHM:
+#   1. Generate initial solution (greedy construction)
+#   2. Select string to remove (sequence of consecutive route nodes)
+#   3. Remove string, creating partial solution
+#   4. Reinsert removed nodes using best-insertion heuristic
+#   5. Accept/reject via SA probability
+#   6. Occasionally "blink" (random large perturbation)
+#   7. Repeat until time limit or convergence
+#
+# KEY FEATURES:
+#   - String-based operators: Remove/insert node sequences (not single nodes)
+#   - Adaptive string length: Sampled from truncated Poisson distribution
+#   - Blink mechanism: Probabilistic large-scale diversification
+#
+# TYPICAL USE CASES:
+#   - Academic research on destroy-repair operators
+#   - Benchmarking string-based neighborhoods
+#   - Comparison against pure ALNS or SA
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Generally slower than HGS/ALNS for same time budget
+#   - Interesting for specific problem structures (clustered customers)
+#   - Best suited for <100 node instances
+# =============================================================================
+
+sisr:
+  custom:
+    # ---------------------------------------------------------------------
+    # Runtime Control
+    # ---------------------------------------------------------------------
+    - time_limit: 10.0
+      # Maximum wall-clock seconds
+      # Range: 5-60 (10s = quick test, 30s = production, 60s = thorough)
+      # Note: Shorter than other policies due to slower iteration speed
+
+    - max_iterations: 1000
+      # Maximum string removal/insertion cycles
+      # Range: 100-5000 (usually time_limit is reached first)
+
+    # ---------------------------------------------------------------------
+    # Simulated Annealing Temperature
+    # ---------------------------------------------------------------------
+    - start_temp: 100.0
+      # Initial temperature T_0
+      # Range: 50-200 (higher = more exploration early on)
+
+    - cooling_rate: 0.995
+      # Geometric cooling: T_new = cooling_rate * T_old
+      # Range: 0.90-0.999 (0.99 = moderate, 0.999 = very slow)
+
+    # Acceptance: P(accept worse) = exp(-Δcost / T)
+    # Standard SA criterion applied after each string reinsertion
+    # ---------------------------------------------------------------------
+    # String Removal Parameters
+    # ---------------------------------------------------------------------
+    - max_string_len: 10
+      # Maximum number of consecutive nodes to remove
+      # Range: 3-20 (3 = small perturbations, 20 = large disruptions)
+      # Actual length sampled from Poisson(avg_string_len), capped at max_string_len
+
+    - avg_string_len: 3.0
+      # Average string length (Poisson distribution parameter λ)
+      # Range: 1.0-10.0
+      # Example: λ=3 → lengths typically 1-6, occasionally up to max_string_len
+
+    # String selection: Random route, random starting position
+    # Consecutive nodes removed from that position
+    # ---------------------------------------------------------------------
+    # Diversification Mechanism
+    # ---------------------------------------------------------------------
+    - blink_rate: 0.01
+      # Probability of "blinking" (large random perturbation) per iteration
+      # Range: 0.001-0.1 (0.001 = rare, 0.05 = frequent, 0.1 = very frequent)
+      # Blink action: Remove destroy_ratio of all nodes, reinsert randomly
+
+    - destroy_ratio: 0.2
+      # Fraction of nodes to remove during blink
+      # Range: 0.1-0.5 (0.1 = mild blink, 0.5 = severe disruption)
+      # Example: 100-node instance, destroy_ratio=0.2 → remove 20 nodes
+
+    # Blink helps escape deep local optima by introducing large randomness
+    # ---------------------------------------------------------------------
+    # Insertion Strategy (Implicit)
+    # ---------------------------------------------------------------------
+    # After string removal, nodes are reinserted using:
+    #   - Greedy Best Insertion: Try each position, select minimum cost increase
+    #   - Ties broken randomly
+    #
+    # Implemented in: logic/src/policies/stochastic_iterative_solution_refinement.py
+    # ---------------------------------------------------------------------
+    # Infrastructure Settings
+    # ---------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/stochastic_iterative_solution_refinement.py
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+      # See: docs/MUST_GO_STRATEGIES.md
+
+    - post_processing: []
+      # String-based operators provide local search; no further refinement
+      # Empty = use SISR output directly
+# =============================================================================

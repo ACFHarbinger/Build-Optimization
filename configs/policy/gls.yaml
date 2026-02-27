@@ -1,6 +1,0 @@
-# Guided Local Search
-gls:
-  lambda_param: 0.3
-  max_restarts: 100
-  inner_iterations: 40
-  n_removal: 3

@@ -8,8 +8,7 @@ planning cycles.
 """
 
 import numpy as np
-
-from src.constants.routing import MAX_CAPACITY_PERCENT
+from constants.routing import MAX_CAPACITY_PERCENT
 
 
 def should_bin_be_collected(current_fill_level, accumulation_rate):

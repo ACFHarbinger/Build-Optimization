@@ -19,7 +19,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from src.tracking.viz_mixin import PolicyVizMixin
+from tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.destroy_operators import cluster_removal, random_removal, worst_removal
 from ..operators.repair_operators import greedy_insertion, regret_2_insertion
@@ -242,7 +242,7 @@ class GLSSolver(PolicyVizMixin):
     # ------------------------------------------------------------------
 
     def _build_initial_solution(self) -> List[List[int]]:
-        from src.policies.operators.heuristics.initialization import build_nn_routes
+        from policies.operators.heuristics.initialization import build_nn_routes
 
         routes = build_nn_routes(
             nodes=self.nodes,

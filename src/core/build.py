@@ -129,12 +129,9 @@ class Build:
 
     def is_valid(self) -> bool:
         """Check if build respects all constraints."""
-        if self.total_cost > self.budget:
-            return False
-        for item in self.equipped_items:
-            if item.level > self.character_level:
-                return False
-        return True
+        return self.total_cost <= self.budget and all(
+            item.level <= self.character_level for item in self.equipped_items
+        )
 
     # ------------------------------------------------------------------
     # Dunder methods

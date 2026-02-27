@@ -11,7 +11,7 @@ Attributes:
     regret_k_insertion (function): General k-regret insertion.
 
 Example:
-    >>> from src.policies.operators.repair import greedy_insertion
+    >>> from policies.operators.repair import greedy_insertion
     >>> new_routes = greedy_insertion(routes, removed, dist_matrix, wastes, capacity)
 """
 

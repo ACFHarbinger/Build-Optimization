@@ -24,7 +24,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from src.tracking.viz_mixin import PolicyVizMixin
+from tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.destroy_operators import random_removal
 from ..operators.repair_operators import greedy_insertion
@@ -167,7 +167,7 @@ class SLCSolver(PolicyVizMixin):
 
     def _build_random_solution(self) -> List[List[int]]:
         """Order-dependent sequential construction (matches ALNS style)."""
-        from src.policies.operators.heuristics.initialization import build_nn_routes
+        from policies.operators.heuristics.initialization import build_nn_routes
 
         optimized_routes = build_nn_routes(
             nodes=self.nodes,
@@ -203,7 +203,7 @@ class SLCSolver(PolicyVizMixin):
                 mandatory_nodes=self.mandatory_nodes,
             )
             # Apply comprehensive local search
-            from src.policies.local_search.local_search_aco import ACOLocalSearch
+            from policies.local_search.local_search_aco import ACOLocalSearch
 
             ls = ACOLocalSearch(self.dist_matrix, self.wastes, self.capacity, self.R, self.C, self.params)
             return ls.optimize(repaired)
@@ -265,7 +265,7 @@ class SLCSolver(PolicyVizMixin):
                 child_routes.append([n])
 
         # Apply comprehensive local search
-        from src.policies.local_search.local_search_aco import ACOLocalSearch
+        from policies.local_search.local_search_aco import ACOLocalSearch
 
         ls = ACOLocalSearch(self.dist_matrix, self.wastes, self.capacity, self.R, self.C, self.params)
         return ls.optimize(child_routes)

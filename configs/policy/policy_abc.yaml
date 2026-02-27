@@ -1,0 +1,83 @@
+# Policy Configuration
+
+# =============================================================================
+# ABC (Artificial Bee Colony) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Swarm intelligence algorithm modelling the foraging behaviour of a honey
+#   bee colony. Three bee types — Employed, Onlooker, and Scout — cooperatively
+#   exploit and explore routing solutions (food sources).
+#
+# ALGORITHM:
+#   1. Initialize n_sources food sources (routes) via greedy insertion
+#   2. Employed Bee Phase: each source generates a neighbour by randomly
+#      relocating one node; accept if profit improves (greedy selection)
+#   3. Onlooker Bee Phase: roulette-wheel selection proportional to fitness;
+#      selected sources receive the same perturbation treatment
+#   4. Scout Bee Phase: if trial_count[i] > limit, abandon source i and
+#      generate a fresh solution from scratch (random greedy insertion)
+#   5. Track global best; repeat for max_iterations or until time_limit
+#
+# KEY FEATURE:
+#   Scout bees provide diversity by restarting stagnant sources, preventing
+#   premature convergence. The limit parameter controls this balance between
+#   intensification (employed/onlooker) and diversification (scout).
+#
+# TYPICAL USE CASES:
+#   - Small-to-medium instances (10-80 nodes)
+#   - Research benchmarking of bee colony optimisation
+#   - Scenarios where stagnation is a common issue
+#
+# PERFORMANCE EXPECTATIONS:
+#   - Good convergence speed on small instances
+#   - Scout phase adds overhead; larger limit → fewer restarts
+#   - Competitive with FA and SCA on 20-50 node instances
+# =============================================================================
+
+abc:
+  custom:
+    # -------------------------------------------------------------------------
+    # Colony Parameters
+    # -------------------------------------------------------------------------
+    - n_sources: 20
+      # Number of food sources (employed bees / candidate solutions)
+      # Range: 10-50 (10 = fast, 20 = balanced, 50 = thorough)
+      # Also equals the number of employed bees
+
+    - n_removal: 1
+      # Nodes relocated per neighbourhood perturbation (employed/onlooker)
+      # Range: 1-4 (1 = micro perturbation, 3 = moderate shake)
+
+    # -------------------------------------------------------------------------
+    # Scout Bee Trigger
+    # -------------------------------------------------------------------------
+    - limit: 10
+      # Abandonment threshold — max trials without improvement before scouting
+      # Range: 5-50 (5 = aggressive restart, 20 = patient exploitation)
+      # Lower limit → more diversity; higher limit → deeper exploitation
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - max_iterations: 200
+      # Maximum full ABC cycles (employed + onlooker + scout phases)
+      # Range: 50-1000 (100 = quick, 200 = production, 500 = benchmark)
+
+    - time_limit: 60.0
+      # Maximum wall-clock seconds
+      # Range: 10-300 (30s = quick, 60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/artificial_bee_colony/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # Scout + onlooker phases provide diverse coverage; no post-processing
+      # Empty = use ABC output directly
+# =============================================================================

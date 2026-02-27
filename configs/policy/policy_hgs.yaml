@@ -1,0 +1,93 @@
+# HGS Policy Configuration
+
+# =============================================================================
+# HGS (Hybrid Genetic Search) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   State-of-the-art metaheuristic combining genetic algorithm with local
+#   search and Split algorithm. Consistently produces best-known solutions
+#   for CVRP benchmarks. Recommended for production and benchmarking.
+#
+# ALGORITHM:
+#   1. Maintain population of elite and diverse solutions
+#   2. Crossover: OX operator to generate offspring
+#   3. Local Search: 2-opt, relocate, swap on each offspring
+#   4. Split: Optimal route partitioning from giant tour
+#   5. Population Management: Biased fitness + diversity preservation
+#
+# PERFORMANCE:
+#   Often matches or beats commercial solvers (Gurobi, CPLEX) on CVRP.
+#   Published benchmarks show <1% gap on instances up to 500 nodes.
+#
+# REFERENCE:
+#   Vidal et al. (2012) "A hybrid genetic algorithm for multidepot and
+#   periodic vehicle routing problems" Operations Research 60(3):611-624
+#
+# TYPICAL USE CASES:
+#   - Production deployment (60s budget yields excellent solutions)
+#   - Academic benchmarking (compare against published results)
+#   - Large instances (150-500 nodes) where exact methods fail
+# =============================================================================
+
+hgs:
+  custom:
+    # ---------------------------------------------------------------------
+    # Runtime Control
+    # ---------------------------------------------------------------------
+    - time_limit: 60
+      # Maximum wall-clock seconds for optimization
+      # Range: 30-600 (30s = quick, 300s = thorough, 600s = benchmark)
+      # Recommendation: 60s for production, 300s for best-known solutions
+
+    # ---------------------------------------------------------------------
+    # Population Management
+    # ---------------------------------------------------------------------
+    - population_size: 50
+      # Total individuals in genetic pool (elite + diverse)
+      # Range: 25-100
+      # Larger populations → better diversity but slower iterations
+      # Recommendation: 50 for ≤150 nodes, 75 for 150-300 nodes
+
+    - elite_size: 10
+      # Number of top solutions preserved across generations
+      # Range: 5-25 (typically 20% of population_size)
+      # Elite solutions drive intensification (exploitation)
+
+    # ---------------------------------------------------------------------
+    # Genetic Operators
+    # ---------------------------------------------------------------------
+    - mutation_rate: 0.2
+      # Probability of applying random swap/insert after crossover
+      # Range: 0.0-0.5 (0.0 = pure crossover, 0.5 = high randomness)
+      # Recommendation: 0.1-0.2 for CVRP, 0.3-0.4 for VRPTW
+
+    - crossover_rate: 0.7
+      # Probability of applying crossover after mutation
+      # Range: 0.0-1.0 (0.0 = pure mutation, 1.0 = pure crossover)
+      # Recommendation: 0.7 for CVRP, 0.5 for VRPTW
+
+    # Crossover operator: Order Crossover (OX)
+    #   - Preserves relative order from parents
+    #   - Controlled by crossover_rate: 0.95 (hardcoded)
+    #
+    # Local Search (applied to all offspring):
+    #   - 2-opt intra-route
+    #   - Relocate inter-route
+    #   - Swap inter-route
+    #   - CROSS exchange (remove 2 edges, reconnect differently)
+    # ---------------------------------------------------------------------
+    # Infrastructure Settings
+    # ---------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/hybrid_genetic_search.py
+      # Uses PyVRP library (https://pyvrp.org/)
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+      # See: docs/MUST_GO_STRATEGIES.md
+
+    - post_processing: []
+      # HGS local search is comprehensive; external post-processing redundant
+      # Empty = use HGS output directly
+# =============================================================================

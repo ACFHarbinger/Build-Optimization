@@ -11,7 +11,7 @@ Attributes:
     lambda_interchange (function): Generalized exchange operator.
 
 Example:
-    >>> from src.policies.operators.exchange import cross_exchange
+    >>> from policies.operators.exchange import cross_exchange
     >>> improved = cross_exchange(ls, r_a=0, ...)
 """
 

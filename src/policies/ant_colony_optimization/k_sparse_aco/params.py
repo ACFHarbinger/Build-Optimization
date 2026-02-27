@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.ant_colony_optimization.k_sparse_aco.params import ACOParams
+    >>> from policies.ant_colony_optimization.k_sparse_aco.params import ACOParams
     >>> params = ACOParams(n_ants=20, rho=0.1)
 """
 
@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from src.configs.policies import ACOConfig
+    from configs.policies import ACOConfig
 
 
 @dataclass

@@ -8,10 +8,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies import VRPPConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.adapters.factory import PolicyRegistry
-from src.policies.vehicle_routing_problem_with_profits.interface import run_vrpp_optimizer
+from configs.policies import VRPPConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.adapters.factory import PolicyRegistry
+from policies.vehicle_routing_problem_with_profits.interface import run_vrpp_optimizer
 
 
 @PolicyRegistry.register("vrpp")

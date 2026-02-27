@@ -1,3 +1,0 @@
-# Random search baseline
-random:
-  n_samples: 1000

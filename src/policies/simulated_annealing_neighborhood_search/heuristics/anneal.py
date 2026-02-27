@@ -10,12 +10,12 @@ from typing import Dict, List, Tuple
 import numpy as np
 import pandas as pd
 
-from src.policies.simulated_annealing_neighborhood_search.common.check import (
+from policies.simulated_annealing_neighborhood_search.common.check import (
     check_bins_overflowing_feasibility,
     check_solution_admissibility,
 )
-from src.policies.simulated_annealing_neighborhood_search.common.objectives import compute_profit
-from src.policies.simulated_annealing_neighborhood_search.search.random_search import local_search
+from policies.simulated_annealing_neighborhood_search.common.objectives import compute_profit
+from policies.simulated_annealing_neighborhood_search.search.random_search import local_search
 
 
 def run_annealing_loop(

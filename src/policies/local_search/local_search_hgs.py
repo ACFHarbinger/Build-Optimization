@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.local_search.local_search_hgs import HGSLocalSearch
+    >>> from policies.local_search.local_search_hgs import HGSLocalSearch
     >>> ls = HGSLocalSearch(dist_matrix, waste, capacity, R, C, params)
     >>> improved_ind = ls.optimize(individual)
 """

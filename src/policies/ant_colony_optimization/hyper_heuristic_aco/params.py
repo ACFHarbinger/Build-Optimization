@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.ant_colony_optimization.hyper_heuristic_aco.params import HyperACOParams
+    >>> from policies.ant_colony_optimization.hyper_heuristic_aco.params import HyperACOParams
     >>> params = HyperACOParams(n_ants=10, alpha=1.0)
 """
 
@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
-    from src.configs.policies import ACOConfig
+    from configs.policies import ACOConfig
 
 from .hyper_operators import OPERATOR_NAMES
 

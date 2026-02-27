@@ -8,7 +8,7 @@ Attributes:
     PolicyRegistry: The singleton registry class.
 
 Example:
-    >>> from src.policies.adapters.registry import PolicyRegistry
+    >>> from policies.adapters.registry import PolicyRegistry
     >>> @PolicyRegistry.register("my_policy")
     ... class MyPolicy(IPolicy): ...
     >>> policy_cls = PolicyRegistry.get("my_policy")
@@ -16,7 +16,7 @@ Example:
 
 from typing import Callable, Dict, List, Optional, Type
 
-from src.interfaces.policy import IPolicy
+from interfaces.policy import IPolicy
 
 
 # --- Policy Registry ---

@@ -1,7 +1,0 @@
-# Old Bachelor Acceptance
-oba:
-  initial_threshold: 0.0
-  aging_rate: 0.01
-  rejuvenation: 0.5
-  max_iterations: 20000
-  n_removal: 3

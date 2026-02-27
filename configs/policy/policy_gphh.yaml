@@ -1,0 +1,116 @@
+# Policy Configuration
+
+# =============================================================================
+# GPHH (Genetic Programming Hyper-Heuristic) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Evolves a policy tree that selects which Low-Level Heuristic (LLH) to
+#   apply at each step, rather than directly evolving routing solutions.
+#   The GP tree reads problem-state features and outputs an LLH index.
+#   This meta-learning approach adapts operator selection to instance structure.
+#
+# LLH POOL (5 operators, indices 0-4):
+#   L0: random_removal  + greedy_insertion
+#   L1: worst_removal   + regret_2_insertion
+#   L2: cluster_removal + greedy_insertion
+#   L3: worst_removal   + greedy_insertion
+#   L4: random_removal  + regret_2_insertion
+#
+# TERMINAL NODES (features available to GP trees):
+#   - avg_profit:   Mean profit per visited node
+#   - load_factor:  Current route load / vehicle capacity
+#   - route_count:  Number of active routes
+#   - iter_progress: Current iteration / total iterations ∈ [0,1]
+#
+# FUNCTION NODES:
+#   - IF_GT(a, b, L_i, L_j): if a > b then apply LLH L_i else L_j
+#   - MAX_LLH(a, b):         apply whichever of two candidate LLHs performs better
+#
+# ALGORITHM:
+#   1. Initialize GP population: gp_pop_size random policy trees of depth ≤ tree_depth
+#   2. Evaluate each tree: apply its LLH-selection policy for eval_steps on a
+#      routing solution; measure final profit as fitness
+#   3. Evolve GP population: tournament selection + subtree crossover + mutation
+#      (repeat for max_gp_generations)
+#   4. Apply best tree: run best-performing tree for apply_steps iterations
+#      to produce the final routing solution
+#
+# TYPICAL USE CASES:
+#   - Research on hyper-heuristic operator selection policies
+#   - Instances where fixed operator schedules (ALNS weights) are suboptimal
+#   - Academic benchmarking of GP-based routing metaheuristics
+#
+# PERFORMANCE EXPECTATIONS:
+#   - GP evolution overhead: gp_pop_size * eval_steps * max_gp_generations steps
+#   - Reduce gp_pop_size or eval_steps for faster runs
+#   - Best quality emerges when apply_steps > eval_steps (long final application)
+# =============================================================================
+
+gphh:
+  custom:
+    # -------------------------------------------------------------------------
+    # GP Meta-Population
+    # -------------------------------------------------------------------------
+    - gp_pop_size: 20
+      # Number of GP policy trees in the meta-population
+      # Range: 10-50 (10 = fast evolution, 20 = balanced, 50 = thorough)
+
+    - max_gp_generations: 30
+      # GP evolution generations (tree crossover/mutation cycles)
+      # Range: 10-100 (15 = quick, 30 = production, 60 = benchmark)
+
+    - tournament_size: 3
+      # Tournament selection size for GP parent selection
+      # Range: 2-7 (2 = nearly random, 5 = strong selection pressure)
+
+    # -------------------------------------------------------------------------
+    # GP Tree Depth
+    # -------------------------------------------------------------------------
+    - tree_depth: 3
+      # Maximum depth of GP expression trees
+      # Range: 2-5 (2 = simple rules, 3 = moderate, 5 = complex policies)
+      # Deeper trees can express more sophisticated LLH selection logic but
+      # increase search space and risk overfitting to evaluation instance
+
+    # -------------------------------------------------------------------------
+    # Evaluation & Application Budget
+    # -------------------------------------------------------------------------
+    - eval_steps: 50
+      # LLH applications per tree fitness evaluation
+      # Range: 20-200 (20 = noisy estimate, 50 = balanced, 100 = accurate)
+      # Higher eval_steps → better fitness signal but slower evolution
+
+    - apply_steps: 200
+      # LLH applications when running the best tree for final solution
+      # Range: 100-1000 (200 = production, 500 = high-quality benchmark)
+      # Should be ≥ eval_steps for meaningful improvement over evolution phase
+
+    - n_llh: 5
+      # Number of LLHs in the operator pool (fixed — do not change)
+      # Pool: [random+greedy, worst+regret2, cluster+greedy, worst+greedy, random+regret2]
+
+    - n_removal: 2
+      # Nodes removed per LLH destroy step
+      # Range: 1-5 (1 = micro perturbation, 3 = moderate shake)
+
+    # -------------------------------------------------------------------------
+    # Runtime Control
+    # -------------------------------------------------------------------------
+    - time_limit: 60.0
+      # Maximum wall-clock seconds (covers both evolution and application phases)
+      # Range: 30-300 (60s = production, 120s = benchmark)
+
+    # -------------------------------------------------------------------------
+    # Infrastructure Settings
+    # -------------------------------------------------------------------------
+    - engine: "custom"
+      # Execution backend: logic/src/policies/genetic_programming_hyper_heuristic/
+
+    - must_go: ["other/mg_lookahead.yaml"]
+      # Node selection strategy for waste collection problems
+      # Options: mg_lookahead.yaml, mg_last_minute_*.yaml, mg_regular.yaml
+
+    - post_processing: []
+      # GP-evolved operator sequences provide adaptive local search
+      # Empty = use GPHH output directly
+# =============================================================================

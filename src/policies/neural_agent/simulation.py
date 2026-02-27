@@ -5,11 +5,11 @@ Simulator day logic for Neural Agent.
 from __future__ import annotations
 
 import torch
-
-from src.policies.tsp import (
+from policies.tsp import (
     get_route_cost,
 )
-from src.tracking.hooks.attention_hooks import add_attention_hooks
+
+from tracking.hooks.attention_hooks import add_attention_hooks
 
 
 class SimulationMixin:

@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from src.configs.policies.abc import ABCConfig
-from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from src.policies.artificial_bee_colony.params import ABCParams
-from src.policies.artificial_bee_colony.solver import ABCSolver
+from configs.policies.abc import ABCConfig
+from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.artificial_bee_colony.params import ABCParams
+from policies.artificial_bee_colony.solver import ABCSolver
 
 from .factory import PolicyRegistry
 

@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from src.policies.hgs_alns import solve_hgs_alns
+    >>> from policies.hgs_alns import solve_hgs_alns
     >>> result = solve_hgs_alns(problem_instance, config)
 """
 
