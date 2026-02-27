@@ -6,7 +6,7 @@ and implement the same interface for fetching items and synergies.
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List
 
 from src.core.item import Item
 from src.core.synergy import SynergyRule

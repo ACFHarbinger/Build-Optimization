@@ -8,10 +8,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.vns import VNSConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.variable_neighborhood_search.params import VNSParams
-from logic.src.policies.variable_neighborhood_search.solver import VNSSolver
+from src.configs.policies.vns import VNSConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.variable_neighborhood_search.params import VNSParams
+from src.policies.variable_neighborhood_search.solver import VNSSolver
 
 from .factory import PolicyRegistry
 

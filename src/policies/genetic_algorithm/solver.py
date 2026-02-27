@@ -17,7 +17,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.repair_operators import greedy_insertion
 from .params import GAParams
@@ -119,7 +119,7 @@ class GASolver(PolicyVizMixin):
 
     def _init_population(self) -> List[List[List[int]]]:
         """Initialise population with randomised NN solutions."""
-        from logic.src.policies.operators.heuristics.initialization import build_nn_routes
+        from src.policies.operators.heuristics.initialization import build_nn_routes
 
         population = []
         for _ in range(self.params.pop_size):

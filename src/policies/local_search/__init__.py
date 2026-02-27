@@ -11,7 +11,7 @@ Attributes:
     LocalSearch (class): Abstract base class for local search.
 
 Example:
-    >>> from logic.src.policies.local_search import HGSLocalSearch
+    >>> from src.policies.local_search import HGSLocalSearch
     >>> ls = HGSLocalSearch(dist_matrix, waste, capacity, R, C, params)
     >>> optimized_solution = ls.optimize(solution)
 """

@@ -6,10 +6,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.ga import GAConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.genetic_algorithm.params import GAParams
-from logic.src.policies.genetic_algorithm.solver import GASolver
+from src.configs.policies.ga import GAConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.genetic_algorithm.params import GAParams
+from src.policies.genetic_algorithm.solver import GASolver
 
 from .factory import PolicyRegistry
 

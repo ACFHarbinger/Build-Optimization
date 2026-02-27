@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 import gurobipy as gp
 from gurobipy import GRB
 
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from src.tracking.viz_mixin import PolicyStateRecorder
 
 
 def _setup_model(values: Dict[str, Any], env: Optional[gp.Env]) -> gp.Model:

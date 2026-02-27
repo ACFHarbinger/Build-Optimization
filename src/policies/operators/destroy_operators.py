@@ -12,7 +12,7 @@ Attributes:
     string_removal (function): Removes contiguous sequences of nodes.
 
 Example:
-    >>> from logic.src.policies.operators import destroy_operators
+    >>> from src.policies.operators import destroy_operators
     >>> routes, removed = destroy_operators.random_removal(routes, n=5)
 """
 

@@ -9,7 +9,7 @@ Attributes:
     run_k_sparse_aco (function): Helper function to run the solver.
 
 Example:
-    >>> from logic.src.policies.ant_colony_optimization.k_sparse_aco import run_k_sparse_aco
+    >>> from src.policies.ant_colony_optimization.k_sparse_aco import run_k_sparse_aco
     >>> result = run_k_sparse_aco(dist_matrix, wastes, ...)
 """
 

@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.hs import HSConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.harmony_search.params import HSParams
-from logic.src.policies.harmony_search.solver import HSSolver
+from src.configs.policies.hs import HSConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.harmony_search.params import HSParams
+from src.policies.harmony_search.solver import HSSolver
 
 from .factory import PolicyRegistry
 

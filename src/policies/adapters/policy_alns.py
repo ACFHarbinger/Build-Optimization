@@ -8,9 +8,9 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies import ALNSConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.adaptive_large_neighborhood_search.alns import run_alns
+from src.configs.policies import ALNSConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.adaptive_large_neighborhood_search.alns import run_alns
 
 from .factory import PolicyRegistry
 

@@ -8,9 +8,9 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies import ACOConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.ant_colony_optimization.hyper_heuristic_aco import run_hyper_heuristic_aco
+from src.configs.policies import ACOConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.ant_colony_optimization.hyper_heuristic_aco import run_hyper_heuristic_aco
 
 from .factory import PolicyRegistry
 

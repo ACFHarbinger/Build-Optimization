@@ -15,7 +15,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.ant_colony_optimization.hyper_heuristic_aco import HyperHeuristicACO
+    >>> from src.policies.ant_colony_optimization.hyper_heuristic_aco import HyperHeuristicACO
     >>> solver = HyperHeuristicACO(dist_matrix, wastes, capacity, R, C, params)
     >>> best_solution = solver.solve(initial_solution)
 """
@@ -26,7 +26,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from .hyper_operators import (
     HYPER_OPERATORS,

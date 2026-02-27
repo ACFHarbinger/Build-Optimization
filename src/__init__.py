@@ -1,8 +1,8 @@
 # Core domain model
-from src.core.item import Item, Slot, Rarity
 from src.core.build import Build
-from src.core.scoring import score_build, ScoringConfig
-from src.core.synergy import SynergyRule, SynergyEngine
+from src.core.item import Item, Rarity, Slot
+from src.core.scoring import ScoringConfig, score_build
+from src.core.synergy import SynergyEngine, SynergyRule
 
 __all__ = [
     "Item",

@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.operators.route.two_opt_star import move_2opt_star
+    >>> from src.policies.operators.route.two_opt_star import move_2opt_star
     >>> improved = move_2opt_star(ls, u, v, r_u, p_u, r_v, p_v)
 """
 

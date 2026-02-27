@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.operators.destroy.string import string_removal
+    >>> from src.policies.operators.destroy.string import string_removal
     >>> routes, removed = string_removal(routes, n_remove=5, ...)
 """
 

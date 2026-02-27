@@ -16,7 +16,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from ..local_search.local_search_hgs import HGSLocalSearch
 from .evolution import evaluate, ordered_crossover, update_biased_fitness
@@ -137,7 +137,7 @@ class HGSSolver(PolicyVizMixin):
 
 def run_hgs(dist_matrix, wastes, capacity, R, C, values, mandatory_nodes=None, *args):
     """
-    Main HGS entry point with dispatching logic.
+    Main HGS entry point with dispatching
 
     Args:
         dist_matrix: Distance matrix.

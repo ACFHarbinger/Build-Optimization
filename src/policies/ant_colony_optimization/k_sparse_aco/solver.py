@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.ant_colony_optimization.k_sparse_aco.solver import KSparseACOSolver
+    >>> from src.policies.ant_colony_optimization.k_sparse_aco.solver import KSparseACOSolver
     >>> solver = KSparseACOSolver(dist_matrix, wastes, ...)
     >>> result = solver.solve()
 """
@@ -19,7 +19,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from ...local_search.local_search_aco import ACOLocalSearch
 from .construction import SolutionConstructor

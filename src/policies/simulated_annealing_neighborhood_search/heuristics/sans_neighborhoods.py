@@ -3,7 +3,7 @@ Local search neighborhood operators for SANS-style optimization.
 
 Provides standard neighborhood movement procedures adapted for the SANS policy,
 including 2-opt, Or-opt, relocate, and cross-exchange operators. These functions
-return modified copies of the input routes to support probabilistic acceptance logic.
+return modified copies of the input routes to support probabilistic acceptance
 """
 
 import copy

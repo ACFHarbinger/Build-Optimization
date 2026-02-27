@@ -6,29 +6,159 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.9"
 dependencies = [
-    "hydra-core>=1.3",
-    "omegaconf>=2.3",
-    "numpy>=1.24",
-    "requests>=2.28",
-    "beautifulsoup4>=4.12",
-    "pandas>=2.0",
+    "numpy>=1.26.4",
+    "pandas>=2.1.4",
+    "scipy>=1.13.1",
+    "hydra-core>=1.3.0",
+    "hydra-colorlog>=1.2.0",
+    "omegaconf>=2.3.0",
+    "loguru>=0.7.3",
+    "rich>=14.1.0",
+    "tqdm>=4.67.1",
+    "pyyaml>=6.0.2",
+    "python-dotenv>=1.1.1",
+    "pydantic>=2.11.7",
+    "joblib>=1.5.1",
+    "requests>=2.32.5",
+    "beautifulsoup4>=4.12.0",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "ruff>=0.4", "mypy>=1.5"]
+solvers = [
+    "gurobipy>=11.0.3",
+    "hexaly>=14.0.20251008",
+    "ortools>=9.4.1874",
+    "pyvrp>=0.9.1",
+    "alns>=7.0.0",
+    "scikit-learn>=1.5.0",
+]
+ml = ["torch>=2.2.2", "torchrl==0.3.1", "tensordict==0.3.1"]
+gui = ["matplotlib>=3.9.4", "seaborn>=0.13.2", "plotly>=6.3.0"]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.11.0",
+    "pytest>=8.0.0",
+    "pytest-mock>=3.12.0",
+    "ruff>=0.14.3",
+    "black>=24.0.0",
+]
 
 [build-system]
-requires = ["setuptools>=68.0"]
-build-backend = "setuptools.backends._legacy:_Backend"
-
-[tool.ruff]
-line-length = 120
-target-version = "py39"
-
-[tool.ruff.lint]
-select = ["E", "F", "W", "I"]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
 [tool.mypy]
 python_version = "3.9"
-warn_return_any = true
+warn_return_any = false
 warn_unused_configs = true
+ignore_missing_imports = true
+check_untyped_defs = false
+disallow_untyped_defs = false
+explicit_package_bases = true
+files = ["src", "tests"]
+exclude = ["notebooks"]
+
+[tool.uv.sources]
+hexaly = { index = "hexaly_package" }
+
+[[tool.uv.index]]
+name = "hexaly_package"
+url = "https://pip.hexaly.com"
+
+[tool.pyrefly]
+engine = "pylance"
+ai_assisted = true
+venvPath = "."
+venv = ".venv"
+type_checking_mode = "basic"
+include = ["src"]
+ignore = ["**/__init__.py"]
+
+[tool.pyrefly.analysis]
+reportOptionalSubscript = false
+reportOptionalMemberAccess = false
+reportOptionalCall = false
+reportOptionalIterable = false
+reportAttributeAccessIssue = false
+reportGeneralTypeIssues = false
+reportOperatorIssue = false
+reportArgumentType = false
+reportCallIssue = false
+indexing = true
+diagnostic_mode = "workspace"
+
+[tool.ruff]
+src = ["src"]
+line-length = 120
+target-version = "py39"
+exclude = ["notebooks/", "tests/"]
+
+[tool.ruff.lint]
+ignore = ["E501", "E741", "SIM118"]
+select = ["B", "C90", "E", "F", "I", "W", "SIM"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"*.ipynb" = [
+    "E402",
+    "F821",
+    "F404",
+    "W291",
+    "W293",
+    "E741",
+    "E722",
+    "F811",
+    "F401",
+    "F841",
+]
+
+[tool.pytest.ini_options]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*", "*Test"]
+python_functions = ["test_*", "*_test"]
+testpaths = ["tests"]
+addopts = [
+    "-v",
+    "-ra",
+    "--showlocals",
+    "--tb=short",
+    "--color=yes",
+    "--show-capture=all",
+    "--disable-warnings",
+    "--import-mode=importlib",
+]
+markers = [
+    "slow: marks tests as slow",
+    "fast: marks tests as fast running",
+    "unit: marks tests as unit tests",
+    "integration: marks tests as integration tests",
+    "model: marks tests for model functionality",
+    "data: marks tests for data processing",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore::UserWarning",
+    "ignore::FutureWarning",
+]
+log_level = "INFO"
+log_cli = true
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["*/test/*", "*/test_*", "*/__pycache__/*", "setup.py", "conftest.py"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 60
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "def __repr__",
+    "raise NotImplementedError",
+]

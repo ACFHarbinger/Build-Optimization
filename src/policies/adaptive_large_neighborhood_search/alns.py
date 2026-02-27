@@ -17,7 +17,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.destroy_operators import cluster_removal, random_removal, worst_removal
 from ..operators.repair_operators import greedy_insertion, regret_2_insertion

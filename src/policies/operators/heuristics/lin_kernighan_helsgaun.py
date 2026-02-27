@@ -13,7 +13,7 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 from scipy.sparse.csgraph import minimum_spanning_tree
 
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from src.tracking.viz_mixin import PolicyStateRecorder
 
 
 def compute_alpha_measures(distance_matrix: np.ndarray) -> np.ndarray:
@@ -140,7 +140,7 @@ def apply_3opt_move(tour: List[int], i: int, j: int, k: int, case: int) -> List[
         new_tour[j + 1 : k + 1] = new_tour[j + 1 : k + 1][::-1]
 
     # Other cases exist, but for this refinement we stick to the most common symmetric 3-opt
-    # which is equivalent to swapping segments logic.
+    # which is equivalent to swapping segments
 
     return new_tour
 

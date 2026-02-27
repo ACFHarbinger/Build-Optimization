@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.operators.repair.greedy_blink import greedy_insertion_with_blinks
+    >>> from src.policies.operators.repair.greedy_blink import greedy_insertion_with_blinks
     >>> routes = greedy_insertion_with_blinks(routes, removed, dist_matrix, wastes, capacity, blink_rate=0.1)
 """
 

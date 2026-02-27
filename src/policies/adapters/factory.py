@@ -10,8 +10,8 @@ Now also includes the IPolicy interface and PolicyRegistry.
 from typing import Any, Optional
 
 # --- IPolicy Interface ---
-from logic.src.interfaces.adapter import IPolicyAdapter
-from logic.src.policies.adapters.registry import PolicyRegistry
+from src.interfaces.adapter import IPolicyAdapter
+from src.policies.adapters.registry import PolicyRegistry
 
 # Alias for backward compatibility
 IPolicy = IPolicyAdapter
@@ -29,41 +29,41 @@ class PolicyFactory:
         """Import all adapter modules to trigger @PolicyRegistry.register() decorators."""
         if cls._registered:
             return
-        import logic.src.policies.neural_agent as neural_agent  # noqa
-        import logic.src.policies.adapters.policy_neural as policy_neural  # noqa
-        import logic.src.policies.adapters.policy_alns as policy_alns  # noqa
-        import logic.src.policies.adapters.policy_bcp as policy_bcp  # noqa
-        import logic.src.policies.adapters.policy_cvrp as policy_cvrp  # noqa
-        import logic.src.policies.adapters.policy_hgs as policy_hgs  # noqa
-        import logic.src.policies.adapters.policy_hgs_alns as policy_hgs_alns  # noqa
-        import logic.src.policies.adapters.policy_lkh as policy_lkh  # noqa
-        import logic.src.policies.adapters.policy_sans as policy_sans  # noqa
-        import logic.src.policies.adapters.policy_tsp as policy_tsp  # noqa
-        import logic.src.policies.adapters.policy_vrpp as policy_vrpp  # noqa
-        import logic.src.policies.adapters.policy_ks_aco as policy_ks_aco  # noqa
-        import logic.src.policies.adapters.policy_hh_aco as policy_hh_aco  # noqa
-        import logic.src.policies.adapters.policy_sisr as policy_sisr  # noqa
-        import logic.src.policies.adapters.policy_hvpl as policy_hvpl  # noqa
-        import logic.src.policies.adapters.policy_ahvpl as policy_ahvpl  # noqa
-        import logic.src.policies.adapters.policy_qde as policy_qde  # noqa
-        import logic.src.policies.adapters.policy_psoma as policy_psoma  # noqa
-        import logic.src.policies.adapters.policy_abc as policy_abc  # noqa
-        import logic.src.policies.adapters.policy_fa as policy_fa  # noqa
-        import logic.src.policies.adapters.policy_sca as policy_sca  # noqa
-        import logic.src.policies.adapters.policy_hs as policy_hs  # noqa
-        import logic.src.policies.adapters.policy_slc as policy_slc  # noqa
-        import logic.src.policies.adapters.policy_lca as policy_lca  # noqa
-        import logic.src.policies.adapters.policy_gphh as policy_gphh  # noqa
-        import logic.src.policies.adapters.policy_hmm_gd as policy_hmm_gd  # noqa
-        import logic.src.policies.adapters.policy_lahc as policy_lahc  # noqa
-        import logic.src.policies.adapters.policy_rrt as policy_rrt  # noqa
-        import logic.src.policies.adapters.policy_oba as policy_oba  # noqa
-        import logic.src.policies.adapters.policy_gls as policy_gls  # noqa
-        import logic.src.policies.adapters.policy_rts as policy_rts  # noqa
-        import logic.src.policies.adapters.policy_ga as policy_ga  # noqa
-        import logic.src.policies.adapters.policy_sa as policy_sa  # noqa
-        import logic.src.policies.adapters.policy_ils as policy_ils  # noqa
-        import logic.src.policies.adapters.policy_vns as policy_vns  # noqa
+        import src.policies.neural_agent as neural_agent  # noqa
+        import src.policies.adapters.policy_neural as policy_neural  # noqa
+        import src.policies.adapters.policy_alns as policy_alns  # noqa
+        import src.policies.adapters.policy_bcp as policy_bcp  # noqa
+        import src.policies.adapters.policy_cvrp as policy_cvrp  # noqa
+        import src.policies.adapters.policy_hgs as policy_hgs  # noqa
+        import src.policies.adapters.policy_hgs_alns as policy_hgs_alns  # noqa
+        import src.policies.adapters.policy_lkh as policy_lkh  # noqa
+        import src.policies.adapters.policy_sans as policy_sans  # noqa
+        import src.policies.adapters.policy_tsp as policy_tsp  # noqa
+        import src.policies.adapters.policy_vrpp as policy_vrpp  # noqa
+        import src.policies.adapters.policy_ks_aco as policy_ks_aco  # noqa
+        import src.policies.adapters.policy_hh_aco as policy_hh_aco  # noqa
+        import src.policies.adapters.policy_sisr as policy_sisr  # noqa
+        import src.policies.adapters.policy_hvpl as policy_hvpl  # noqa
+        import src.policies.adapters.policy_ahvpl as policy_ahvpl  # noqa
+        import src.policies.adapters.policy_qde as policy_qde  # noqa
+        import src.policies.adapters.policy_psoma as policy_psoma  # noqa
+        import src.policies.adapters.policy_abc as policy_abc  # noqa
+        import src.policies.adapters.policy_fa as policy_fa  # noqa
+        import src.policies.adapters.policy_sca as policy_sca  # noqa
+        import src.policies.adapters.policy_hs as policy_hs  # noqa
+        import src.policies.adapters.policy_slc as policy_slc  # noqa
+        import src.policies.adapters.policy_lca as policy_lca  # noqa
+        import src.policies.adapters.policy_gphh as policy_gphh  # noqa
+        import src.policies.adapters.policy_hmm_gd as policy_hmm_gd  # noqa
+        import src.policies.adapters.policy_lahc as policy_lahc  # noqa
+        import src.policies.adapters.policy_rrt as policy_rrt  # noqa
+        import src.policies.adapters.policy_oba as policy_oba  # noqa
+        import src.policies.adapters.policy_gls as policy_gls  # noqa
+        import src.policies.adapters.policy_rts as policy_rts  # noqa
+        import src.policies.adapters.policy_ga as policy_ga  # noqa
+        import src.policies.adapters.policy_sa as policy_sa  # noqa
+        import src.policies.adapters.policy_ils as policy_ils  # noqa
+        import src.policies.adapters.policy_vns as policy_vns  # noqa
 
         cls._registered = True
 

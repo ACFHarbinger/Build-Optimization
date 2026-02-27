@@ -6,7 +6,7 @@ This is a skeleton implementation — subclass for specific game wikis.
 
 import logging
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 
 from src.core.item import Item
 from src.core.synergy import SynergyRule

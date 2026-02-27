@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.fa import FAConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.firefly_algorithm.params import FAParams
-from logic.src.policies.firefly_algorithm.solver import FASolver
+from src.configs.policies.fa import FAConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.firefly_algorithm.params import FAParams
+from src.policies.firefly_algorithm.solver import FASolver
 
 from .factory import PolicyRegistry
 

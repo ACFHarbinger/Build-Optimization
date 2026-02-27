@@ -9,7 +9,7 @@ Attributes:
     run_hyper_heuristic_aco (function): Runner for Hyper-Heuristic ACO.
 
 Example:
-    >>> from logic.src.policies.ant_colony_optimization import run_k_sparse_aco
+    >>> from src.policies.ant_colony_optimization import run_k_sparse_aco
 """
 
 from .hyper_heuristic_aco import run_hyper_heuristic_aco

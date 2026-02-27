@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.operators.destroy.worst import worst_removal
+    >>> from src.policies.operators.destroy.worst import worst_removal
     >>> routes, removed = worst_removal(routes, n_remove=5, dist_matrix=d)
 """
 

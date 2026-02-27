@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.operators.exchange.lambda_interchange import lambda_interchange
+    >>> from src.policies.operators.exchange.lambda_interchange import lambda_interchange
     >>> improved = lambda_interchange(ls, lambda_max=2)
 """
 

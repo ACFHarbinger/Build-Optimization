@@ -4,8 +4,8 @@ Randomized local search strategy.
 
 import numpy as np
 
-from logic.src.policies.simulated_annealing_neighborhood_search.common.routes import rearrange_part_route
-from logic.src.policies.simulated_annealing_neighborhood_search.operators.move import (
+from src.policies.simulated_annealing_neighborhood_search.common.routes import rearrange_part_route
+from src.policies.simulated_annealing_neighborhood_search.operators.move import (
     move_1_route,
     move_2_routes,
     move_n_2_routes_consecutive,
@@ -13,7 +13,7 @@ from logic.src.policies.simulated_annealing_neighborhood_search.operators.move i
     move_n_route_consecutive,
     move_n_route_random,
 )
-from logic.src.policies.simulated_annealing_neighborhood_search.operators.swap import (
+from src.policies.simulated_annealing_neighborhood_search.operators.swap import (
     swap_1_route,
     swap_2_routes,
     swap_n_2_routes_consecutive,
@@ -21,7 +21,7 @@ from logic.src.policies.simulated_annealing_neighborhood_search.operators.swap i
     swap_n_route_consecutive,
     swap_n_route_random,
 )
-from logic.src.policies.simulated_annealing_neighborhood_search.select import (
+from src.policies.simulated_annealing_neighborhood_search.select import (
     add_bin,
     add_n_bins_consecutive,
     add_n_bins_random,

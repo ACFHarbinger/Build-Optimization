@@ -18,7 +18,7 @@ def build_nn_routes(
     C: float,
 ) -> List[List[int]]:
     """
-    Build geographically compact routes using a Nearest Neighbor logic.
+    Build geographically compact routes using a Nearest Neighbor
 
     Instead of purely random packing, this heuristic randomly selects a "seed"
     node for a new route and then sequentially adds the nearest available node

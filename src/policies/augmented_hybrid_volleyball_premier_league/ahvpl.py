@@ -21,7 +21,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from ..adaptive_large_neighborhood_search.alns import ALNSSolver
 from ..ant_colony_optimization.k_sparse_aco.solver import KSparseACOSolver

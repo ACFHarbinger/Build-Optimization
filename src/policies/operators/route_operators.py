@@ -1,7 +1,7 @@
 """
 Route-based local search operators for HGS.
 
-(Refactored to point to `logic.src.policies.operators.route` package)
+(Refactored to point to `src.policies.operators.route` package)
 """
 
 from .route import (

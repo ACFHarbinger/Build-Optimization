@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 from ortools.constraint_solver import pywrapcp, routing_enums_pb2
 
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from src.tracking.viz_mixin import PolicyStateRecorder
 
 
 def run_bcp_ortools(

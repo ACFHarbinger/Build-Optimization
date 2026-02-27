@@ -8,7 +8,7 @@ import random
 import time
 from typing import Optional
 
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from src.tracking.viz_mixin import PolicyStateRecorder
 
 from ..common.routes import uncross_arcs_in_sans_routes
 from .sans_operators import apply_operator

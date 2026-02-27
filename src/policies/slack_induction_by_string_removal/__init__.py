@@ -11,7 +11,7 @@ Attributes:
     run_sisr (function): Helper function to run the solver.
 
 Example:
-    >>> from logic.src.policies.slack_induction_by_string_removal import run_sisr
+    >>> from src.policies.slack_induction_by_string_removal import run_sisr
     >>> result = run_sisr(dist_matrix, wastes, ...)
 """
 

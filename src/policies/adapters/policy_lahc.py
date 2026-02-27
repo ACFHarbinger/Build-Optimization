@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.lahc import LAHCConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.late_acceptance_hill_climbing.params import LAHCParams
-from logic.src.policies.late_acceptance_hill_climbing.solver import LAHCSolver
+from src.configs.policies.lahc import LAHCConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.late_acceptance_hill_climbing.params import LAHCParams
+from src.policies.late_acceptance_hill_climbing.solver import LAHCSolver
 
 from .factory import PolicyRegistry
 

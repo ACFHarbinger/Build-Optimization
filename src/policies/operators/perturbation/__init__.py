@@ -9,7 +9,7 @@ Attributes:
     perturb (function): Small-scale random changes.
 
 Example:
-    >>> from logic.src.policies.operators.perturbation import kick
+    >>> from src.policies.operators.perturbation import kick
     >>> kick(context, destroy_ratio=0.2)
 """
 

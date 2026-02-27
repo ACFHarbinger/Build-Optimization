@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.slack_induction_by_string_removal.solver import SISRSolver
+    >>> from src.policies.slack_induction_by_string_removal.solver import SISRSolver
     >>> solver = SISRSolver(dist_matrix, wastes, ...)
     >>> result = solver.solve()
 """
@@ -22,7 +22,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.destroy_operators import string_removal
 from ..operators.repair_operators import greedy_insertion_with_blinks
@@ -146,7 +146,7 @@ class SISRSolver(PolicyVizMixin):
 
     def _build_initial_solution(self) -> List[List[int]]:
         """Greedy constructive heuristic."""
-        from logic.src.policies.operators.heuristics.initialization import build_nn_routes
+        from src.policies.operators.heuristics.initialization import build_nn_routes
 
         routes = build_nn_routes(
             nodes=list(self.wastes.keys()),

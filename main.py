@@ -9,12 +9,11 @@ Usage:
 
 import logging
 import time
-from typing import Any, Dict
+from typing import Dict
 
 import hydra
 from omegaconf import DictConfig, OmegaConf
-
-from src.core.scoring import ScoringConfig, score_build
+from src.core.scoring import ScoringConfig
 from src.core.synergy import SynergyEngine, SynergyRule
 from src.pipeline.file_source import FileSource
 from src.pipeline.transforms import deduplicate, filter_by_level
@@ -174,7 +173,7 @@ def main(cfg: DictConfig) -> None:
             print(f"    [{slot.name:>12}] (empty)")
 
     # Show aggregate stats
-    print(f"\n  Total Stats:")
+    print("\n  Total Stats:")
     for stat, value in sorted(best_build.total_stats.items()):
         print(f"    {stat:<20} {value:>8.1f}")
 
@@ -182,7 +181,7 @@ def main(cfg: DictConfig) -> None:
     if cfg.output.get("show_synergies", True) and synergy_engine:
         active = synergy_engine.active_synergies(best_build)
         if active:
-            print(f"\n  Active Synergies:")
+            print("\n  Active Synergies:")
             for syn in active:
                 print(f"    ✦ {syn}")
 

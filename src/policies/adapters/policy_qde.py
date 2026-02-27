@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.qde import QDEConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.quantum_differential_evolution.params import QDEParams
-from logic.src.policies.quantum_differential_evolution.solver import QDESolver
+from src.configs.policies.qde import QDEConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.quantum_differential_evolution.params import QDEParams
+from src.policies.quantum_differential_evolution.solver import QDESolver
 
 from .factory import PolicyRegistry
 

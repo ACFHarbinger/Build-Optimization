@@ -9,10 +9,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.lca import LCAConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.league_championship_algorithm.params import LCAParams
-from logic.src.policies.league_championship_algorithm.solver import LCASolver
+from src.configs.policies.lca import LCAConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.league_championship_algorithm.params import LCAParams
+from src.policies.league_championship_algorithm.solver import LCASolver
 
 from .factory import PolicyRegistry
 

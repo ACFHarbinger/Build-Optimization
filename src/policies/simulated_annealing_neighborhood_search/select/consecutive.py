@@ -4,7 +4,7 @@ Consecutive selection strategies for bin management.
 
 from random import sample as rsample
 
-from logic.src.policies.simulated_annealing_neighborhood_search.common.routes import organize_route
+from src.policies.simulated_annealing_neighborhood_search.common.routes import organize_route
 
 
 def _extract_valid_segment(chosen_route, chosen_n, bins_cannot_removed):

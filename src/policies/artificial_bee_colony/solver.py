@@ -17,7 +17,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from ..operators import (
     greedy_insertion,
@@ -150,7 +150,7 @@ class ABCSolver(PolicyVizMixin):
         """
         Builds a random initial solution applying nearest neighbor ordering.
         """
-        from logic.src.policies.operators.heuristics.initialization import build_nn_routes
+        from src.policies.operators.heuristics.initialization import build_nn_routes
 
         routes = build_nn_routes(
             nodes=self.nodes,
@@ -204,7 +204,7 @@ class ABCSolver(PolicyVizMixin):
                 mandatory_nodes=self.mandatory_nodes,
             )
             # Apply comprehensive local search
-            from logic.src.policies.local_search.local_search_aco import ACOLocalSearch
+            from src.policies.local_search.local_search_aco import ACOLocalSearch
 
             ls = ACOLocalSearch(self.dist_matrix, self.wastes, self.capacity, self.R, self.C, self.params)
             return ls.optimize(repaired)

@@ -8,9 +8,9 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies import SISRConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.slack_induction_by_string_removal import SISRParams, SISRSolver
+from src.configs.policies import SISRConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.slack_induction_by_string_removal import SISRParams, SISRSolver
 
 from .factory import PolicyRegistry
 

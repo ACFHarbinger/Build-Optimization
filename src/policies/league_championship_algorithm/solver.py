@@ -24,7 +24,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.destroy_operators import worst_removal
 from ..operators.repair_operators import greedy_insertion
@@ -153,7 +153,7 @@ class LCASolver(PolicyVizMixin):
         genuinely diverse initial solutions. Uses self.C for the profitability
         check so that economics are consistent with the solver's _evaluate().
         """
-        from logic.src.policies.operators.heuristics.initialization import build_nn_routes
+        from src.policies.operators.heuristics.initialization import build_nn_routes
 
         optimized_routes = build_nn_routes(
             nodes=self.nodes,
@@ -189,7 +189,7 @@ class LCASolver(PolicyVizMixin):
                 mandatory_nodes=self.mandatory_nodes,
             )
             # Apply comprehensive local search
-            from logic.src.policies.local_search.local_search_aco import ACOLocalSearch
+            from src.policies.local_search.local_search_aco import ACOLocalSearch
 
             ls = ACOLocalSearch(self.dist_matrix, self.wastes, self.capacity, self.R, self.C, self.params)
             return ls.optimize(repaired)
@@ -242,7 +242,7 @@ class LCASolver(PolicyVizMixin):
                 )
 
         # Apply comprehensive local search
-        from logic.src.policies.local_search.local_search_aco import ACOLocalSearch
+        from src.policies.local_search.local_search_aco import ACOLocalSearch
 
         ls = ACOLocalSearch(self.dist_matrix, self.wastes, self.capacity, self.R, self.C, self.params)
         return ls.optimize(child)

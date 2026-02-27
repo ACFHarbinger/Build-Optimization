@@ -4,7 +4,7 @@ Branch-Cut-and-Price (BCP) solver dispatcher.
 
 from typing import Optional
 
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from src.tracking.viz_mixin import PolicyStateRecorder
 
 from .gurobi_engine import run_bcp_gurobi
 from .ortools_engine import run_bcp_ortools

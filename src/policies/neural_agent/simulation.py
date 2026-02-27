@@ -6,10 +6,10 @@ from __future__ import annotations
 
 import torch
 
-from logic.src.policies.tsp import (
+from src.policies.tsp import (
     get_route_cost,
 )
-from logic.src.tracking.hooks.attention_hooks import add_attention_hooks
+from src.tracking.hooks.attention_hooks import add_attention_hooks
 
 
 class SimulationMixin:

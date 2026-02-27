@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.operators.move.swap import move_swap
+    >>> from src.policies.operators.move.swap import move_swap
     >>> improved = move_swap(ls, u=1, v=2, r_u=0, p_u=1, r_v=1, p_v=3)
 """
 

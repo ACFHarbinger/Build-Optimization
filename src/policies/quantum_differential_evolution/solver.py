@@ -17,7 +17,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from .params import QDEParams
 
@@ -154,7 +154,7 @@ class QDESolver(PolicyVizMixin):
         if not selected:
             return []
 
-        from logic.src.policies.operators.repair.greedy import greedy_insertion
+        from src.policies.operators.repair.greedy import greedy_insertion
 
         routes = greedy_insertion(
             [],

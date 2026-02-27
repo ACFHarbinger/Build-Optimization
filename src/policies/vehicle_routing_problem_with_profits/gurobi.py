@@ -11,7 +11,7 @@ import numpy as np
 from gurobipy import GRB, quicksum
 from numpy.typing import NDArray
 
-from logic.src.constants.routing import HEURISTICS_RATIO, MIP_GAP, NODEFILE_START_GB
+from src.constants.routing import HEURISTICS_RATIO, MIP_GAP, NODEFILE_START_GB
 
 
 def _run_gurobi_optimizer(  # noqa: C901

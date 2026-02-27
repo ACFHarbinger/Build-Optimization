@@ -19,7 +19,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from src.tracking.viz_mixin import PolicyVizMixin
 
 from .params import SCAParams
 
@@ -163,7 +163,7 @@ class SCASolver(PolicyVizMixin):
         if not selected_nodes:
             return []
 
-        from logic.src.policies.operators.repair.greedy import greedy_insertion
+        from src.policies.operators.repair.greedy import greedy_insertion
 
         routes = greedy_insertion(
             [],

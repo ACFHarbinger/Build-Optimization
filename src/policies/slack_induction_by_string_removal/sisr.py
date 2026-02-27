@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.slack_induction_by_string_removal.sisr import run_sisr
+    >>> from src.policies.slack_induction_by_string_removal.sisr import run_sisr
     >>> result = run_sisr(dist_matrix, wastes, ...)
 """
 

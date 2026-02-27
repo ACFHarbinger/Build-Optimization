@@ -9,12 +9,12 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.ahvpl import AHVPLConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.augmented_hybrid_volleyball_premier_league.ahvpl import (
+from src.configs.policies.ahvpl import AHVPLConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.augmented_hybrid_volleyball_premier_league.ahvpl import (
     AHVPLSolver,
 )
-from logic.src.policies.augmented_hybrid_volleyball_premier_league.params import (
+from src.policies.augmented_hybrid_volleyball_premier_league.params import (
     AHVPLParams,
 )
 

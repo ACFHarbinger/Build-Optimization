@@ -11,7 +11,7 @@ Attributes:
     move_3opt_intra (function): Reconnect three segments within a route.
 
 Example:
-    >>> from logic.src.policies.operators.route import move_2opt_intra
+    >>> from src.policies.operators.route import move_2opt_intra
     >>> improved = move_2opt_intra(ls, u=1, v=2, ...)
 """
 

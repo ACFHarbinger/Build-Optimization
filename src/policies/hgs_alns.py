@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.hgs_alns import solve_hgs_alns
+    >>> from src.policies.hgs_alns import solve_hgs_alns
     >>> result = solve_hgs_alns(problem_instance, config)
 """
 

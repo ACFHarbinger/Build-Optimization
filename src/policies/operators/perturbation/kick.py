@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.operators.perturbation.kick import kick
+    >>> from src.policies.operators.perturbation.kick import kick
     >>> modified = kick(context, destroy_ratio=0.3)
 """
 

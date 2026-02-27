@@ -3,13 +3,6 @@ Tests for solvers — verifies constraint satisfaction and convergence.
 """
 
 import pytest
-
-from src.core.build import Build
-from src.core.item import Item, Rarity, Slot
-from src.core.scoring import ScoringConfig, score_build
-from src.core.synergy import SynergyEngine, SynergyRule
-from src.pipeline.file_source import FileSource
-from src.pipeline.transforms import filter_by_level
 from src.solvers.alns import ALNSSolver
 from src.solvers.ga import GASolver
 from src.solvers.gls import GLSSolver
@@ -22,6 +15,8 @@ from src.solvers.rrt import RRTSolver
 from src.solvers.rts import RTSSolver
 from src.solvers.sa import SASolver
 
+from src.core.build import Build
+from src.core.item import Item, Rarity, Slot
 
 # =============================================================================
 # Fixtures

@@ -6,10 +6,10 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.rts import RTSConfig
-from logic.src.policies.adapters.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.reactive_tabu_search.params import RTSParams
-from logic.src.policies.reactive_tabu_search.solver import RTSSolver
+from src.configs.policies.rts import RTSConfig
+from src.policies.adapters.base_routing_policy import BaseRoutingPolicy
+from src.policies.reactive_tabu_search.params import RTSParams
+from src.policies.reactive_tabu_search.solver import RTSSolver
 
 from .factory import PolicyRegistry
 

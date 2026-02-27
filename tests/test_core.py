@@ -6,9 +6,8 @@ import pytest
 
 from src.core.build import Build
 from src.core.item import Item, Rarity, Slot
-from src.core.scoring import ScoringConfig, score_build
+from src.core.scoring import score_build
 from src.core.synergy import SynergyEngine, SynergyRule
-
 
 # =============================================================================
 # Item Tests
