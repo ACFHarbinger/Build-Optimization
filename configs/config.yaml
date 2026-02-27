@@ -1,0 +1,16 @@
+defaults:
+  - solver: sa
+  - game: rpg
+  - pipeline: file
+
+# General optimization settings
+optimization:
+  budget: 1000.0
+  character_level: 50
+  time_limit: 60.0
+
+# Output settings
+output:
+  verbose: true
+  show_synergies: true
+  compare_baselines: true

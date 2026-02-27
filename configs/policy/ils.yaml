@@ -1,0 +1,6 @@
+# Iterated Local Search
+ils:
+  n_restarts: 4000
+  inner_iterations: 60
+  perturbation_strength: 0.25
+  n_removal: 3

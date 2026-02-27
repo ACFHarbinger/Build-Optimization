@@ -1,0 +1,22 @@
+# RPG game profile
+name: "Fantasy RPG"
+description: "Classic RPG with equipment slots, stat synergies, and budget constraints"
+
+data:
+  items_path: "src/data/sample_games/rpg.json"
+
+scoring:
+  stat_weights:
+    attack: 1.0
+    defense: 0.8
+    speed: 0.6
+    health: 0.7
+    critical_rate: 1.2
+    critical_damage: 1.0
+    magic_power: 0.9
+  synergy_multiplier: 1.5
+  cost_penalty: 0.0
+  slot_bonus: 5.0
+  rarity_bonus: 2.0
+  diminishing_returns: true
+  diminishing_threshold: 200.0

@@ -1,0 +1,23 @@
+# MOBA game profile
+name: "MOBA Arena"
+description: "MOBA with gold budget, item component trees, and power spikes"
+
+data:
+  items_path: "src/data/sample_games/moba.json"
+
+scoring:
+  stat_weights:
+    attack_damage: 1.0
+    ability_power: 1.0
+    armor: 0.7
+    magic_resist: 0.7
+    health: 0.5
+    attack_speed: 0.8
+    critical_chance: 1.1
+    movement_speed: 0.4
+  synergy_multiplier: 1.0
+  cost_penalty: 0.001
+  slot_bonus: 10.0
+  rarity_bonus: 0.0
+  diminishing_returns: false
+  diminishing_threshold: 300.0

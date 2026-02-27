@@ -1,0 +1,82 @@
+{
+  "items": [
+    {"name": "Iron Sword", "slot": "weapon", "stats": {"attack": 35, "speed": 5}, "cost": 80, "rarity": "common", "level": 1, "tags": ["melee", "iron"]},
+    {"name": "Steel Greatsword", "slot": "weapon", "stats": {"attack": 65, "critical_damage": 10}, "cost": 200, "rarity": "uncommon", "level": 10, "tags": ["melee", "steel"]},
+    {"name": "Flame Blade", "slot": "weapon", "stats": {"attack": 85, "magic_power": 30, "critical_rate": 8}, "cost": 450, "rarity": "rare", "level": 20, "tags": ["melee", "fire"]},
+    {"name": "Frostbite Edge", "slot": "weapon", "stats": {"attack": 75, "speed": 15, "defense": 10}, "cost": 380, "rarity": "rare", "level": 18, "tags": ["melee", "ice"]},
+    {"name": "Shadow Dagger", "slot": "weapon", "stats": {"attack": 55, "speed": 25, "critical_rate": 15}, "cost": 350, "rarity": "rare", "level": 15, "tags": ["melee", "shadow", "critical"]},
+    {"name": "Dragon Slayer", "slot": "weapon", "stats": {"attack": 120, "critical_damage": 25, "critical_rate": 10}, "cost": 800, "rarity": "epic", "level": 35, "tags": ["melee", "dragon"]},
+    {"name": "Excalibur", "slot": "weapon", "stats": {"attack": 150, "magic_power": 50, "speed": 20, "critical_rate": 12}, "cost": 1500, "rarity": "legendary", "level": 45, "tags": ["melee", "holy", "legendary_set"]},
+    {"name": "Staff of Arcana", "slot": "weapon", "stats": {"magic_power": 95, "attack": 15}, "cost": 420, "rarity": "rare", "level": 22, "tags": ["magic", "arcane"]},
+
+    {"name": "Leather Cap", "slot": "helmet", "stats": {"defense": 15, "speed": 3}, "cost": 50, "rarity": "common", "level": 1, "tags": ["leather"]},
+    {"name": "Iron Helm", "slot": "helmet", "stats": {"defense": 35, "health": 20}, "cost": 150, "rarity": "uncommon", "level": 8, "tags": ["iron", "heavy"]},
+    {"name": "Mage's Hood", "slot": "helmet", "stats": {"magic_power": 25, "defense": 10}, "cost": 180, "rarity": "uncommon", "level": 10, "tags": ["magic", "arcane"]},
+    {"name": "Dragon Helm", "slot": "helmet", "stats": {"defense": 60, "health": 50, "critical_rate": 5}, "cost": 500, "rarity": "epic", "level": 30, "tags": ["dragon", "heavy"]},
+    {"name": "Crown of Shadows", "slot": "helmet", "stats": {"critical_rate": 12, "speed": 15, "attack": 20}, "cost": 550, "rarity": "epic", "level": 32, "tags": ["shadow", "critical"]},
+    {"name": "Holy Diadem", "slot": "helmet", "stats": {"defense": 45, "magic_power": 40, "health": 80}, "cost": 900, "rarity": "legendary", "level": 42, "tags": ["holy", "legendary_set"]},
+
+    {"name": "Leather Vest", "slot": "chest", "stats": {"defense": 20, "speed": 5}, "cost": 60, "rarity": "common", "level": 1, "tags": ["leather"]},
+    {"name": "Chainmail", "slot": "chest", "stats": {"defense": 50, "health": 30}, "cost": 200, "rarity": "uncommon", "level": 10, "tags": ["iron", "heavy"]},
+    {"name": "Fire Robe", "slot": "chest", "stats": {"magic_power": 40, "defense": 25, "attack": 10}, "cost": 350, "rarity": "rare", "level": 18, "tags": ["fire", "magic"]},
+    {"name": "Shadow Cloak", "slot": "chest", "stats": {"speed": 20, "critical_rate": 10, "defense": 30}, "cost": 400, "rarity": "rare", "level": 20, "tags": ["shadow", "critical"]},
+    {"name": "Dragonscale Armor", "slot": "chest", "stats": {"defense": 80, "health": 60, "attack": 15}, "cost": 700, "rarity": "epic", "level": 35, "tags": ["dragon", "heavy"]},
+    {"name": "Holy Plate", "slot": "chest", "stats": {"defense": 70, "health": 100, "magic_power": 30}, "cost": 1200, "rarity": "legendary", "level": 44, "tags": ["holy", "heavy", "legendary_set"]},
+
+    {"name": "Cloth Gloves", "slot": "gloves", "stats": {"speed": 5, "attack": 5}, "cost": 40, "rarity": "common", "level": 1, "tags": ["cloth"]},
+    {"name": "Iron Gauntlets", "slot": "gloves", "stats": {"defense": 25, "attack": 15}, "cost": 130, "rarity": "uncommon", "level": 8, "tags": ["iron", "heavy"]},
+    {"name": "Flame Gauntlets", "slot": "gloves", "stats": {"attack": 30, "magic_power": 20, "critical_damage": 8}, "cost": 300, "rarity": "rare", "level": 16, "tags": ["fire"]},
+    {"name": "Assassin Gloves", "slot": "gloves", "stats": {"speed": 18, "critical_rate": 12, "critical_damage": 15}, "cost": 380, "rarity": "rare", "level": 20, "tags": ["shadow", "critical"]},
+    {"name": "Dragon Claws", "slot": "gloves", "stats": {"attack": 40, "defense": 35, "critical_rate": 8}, "cost": 520, "rarity": "epic", "level": 30, "tags": ["dragon"]},
+    {"name": "Holy Gauntlets", "slot": "gloves", "stats": {"defense": 30, "attack": 35, "magic_power": 25, "health": 40}, "cost": 850, "rarity": "legendary", "level": 43, "tags": ["holy", "legendary_set"]},
+
+    {"name": "Sandals", "slot": "boots", "stats": {"speed": 10}, "cost": 30, "rarity": "common", "level": 1, "tags": ["cloth"]},
+    {"name": "Iron Boots", "slot": "boots", "stats": {"defense": 20, "speed": 5, "health": 15}, "cost": 120, "rarity": "uncommon", "level": 6, "tags": ["iron", "heavy"]},
+    {"name": "Wind Runners", "slot": "boots", "stats": {"speed": 30, "critical_rate": 5}, "cost": 280, "rarity": "rare", "level": 15, "tags": ["wind"]},
+    {"name": "Shadow Steps", "slot": "boots", "stats": {"speed": 25, "critical_rate": 10, "attack": 10}, "cost": 350, "rarity": "rare", "level": 18, "tags": ["shadow", "critical"]},
+    {"name": "Dragon Greaves", "slot": "boots", "stats": {"defense": 45, "speed": 15, "health": 30}, "cost": 480, "rarity": "epic", "level": 28, "tags": ["dragon", "heavy"]},
+    {"name": "Holy Sabatons", "slot": "boots", "stats": {"defense": 35, "speed": 20, "health": 50, "magic_power": 15}, "cost": 750, "rarity": "legendary", "level": 40, "tags": ["holy", "heavy", "legendary_set"]},
+
+    {"name": "Copper Ring", "slot": "ring_1", "stats": {"attack": 5, "defense": 3}, "cost": 25, "rarity": "common", "level": 1, "tags": ["basic"]},
+    {"name": "Ruby Ring", "slot": "ring_1", "stats": {"attack": 20, "critical_rate": 5}, "cost": 180, "rarity": "uncommon", "level": 10, "tags": ["fire"]},
+    {"name": "Sapphire Ring", "slot": "ring_1", "stats": {"magic_power": 25, "health": 15}, "cost": 200, "rarity": "uncommon", "level": 12, "tags": ["ice"]},
+    {"name": "Shadow Band", "slot": "ring_1", "stats": {"critical_rate": 10, "critical_damage": 12, "speed": 8}, "cost": 350, "rarity": "rare", "level": 20, "tags": ["shadow", "critical"]},
+    {"name": "Dragon Ring", "slot": "ring_1", "stats": {"attack": 30, "defense": 20, "health": 25}, "cost": 450, "rarity": "epic", "level": 28, "tags": ["dragon"]},
+
+    {"name": "Silver Ring", "slot": "ring_2", "stats": {"defense": 8, "health": 10}, "cost": 40, "rarity": "common", "level": 1, "tags": ["basic"]},
+    {"name": "Emerald Ring", "slot": "ring_2", "stats": {"health": 30, "defense": 12}, "cost": 190, "rarity": "uncommon", "level": 10, "tags": ["nature"]},
+    {"name": "Ring of Flames", "slot": "ring_2", "stats": {"magic_power": 20, "attack": 15, "critical_damage": 8}, "cost": 320, "rarity": "rare", "level": 18, "tags": ["fire"]},
+    {"name": "Phantom Ring", "slot": "ring_2", "stats": {"speed": 12, "critical_rate": 8, "attack": 18}, "cost": 380, "rarity": "rare", "level": 22, "tags": ["shadow"]},
+    {"name": "Ring of the Dragon", "slot": "ring_2", "stats": {"attack": 25, "defense": 15, "health": 35, "critical_rate": 5}, "cost": 500, "rarity": "epic", "level": 30, "tags": ["dragon"]},
+
+    {"name": "Wooden Amulet", "slot": "amulet", "stats": {"health": 15, "defense": 5}, "cost": 30, "rarity": "common", "level": 1, "tags": ["nature"]},
+    {"name": "Fire Pendant", "slot": "amulet", "stats": {"magic_power": 30, "attack": 10}, "cost": 220, "rarity": "uncommon", "level": 12, "tags": ["fire"]},
+    {"name": "Amulet of Shadows", "slot": "amulet", "stats": {"critical_rate": 10, "critical_damage": 15, "speed": 10}, "cost": 400, "rarity": "rare", "level": 22, "tags": ["shadow", "critical"]},
+    {"name": "Dragon Pendant", "slot": "amulet", "stats": {"attack": 35, "defense": 25, "health": 40}, "cost": 550, "rarity": "epic", "level": 30, "tags": ["dragon"]},
+    {"name": "Holy Medallion", "slot": "amulet", "stats": {"magic_power": 45, "health": 60, "defense": 30}, "cost": 800, "rarity": "legendary", "level": 40, "tags": ["holy", "legendary_set"]},
+
+    {"name": "Buckler", "slot": "accessory_1", "stats": {"defense": 15, "health": 10}, "cost": 50, "rarity": "common", "level": 1, "tags": ["shield"]},
+    {"name": "Ice Crystal", "slot": "accessory_1", "stats": {"magic_power": 25, "defense": 8}, "cost": 200, "rarity": "uncommon", "level": 10, "tags": ["ice"]},
+    {"name": "Phoenix Feather", "slot": "accessory_1", "stats": {"attack": 20, "magic_power": 20, "health": 25}, "cost": 380, "rarity": "rare", "level": 20, "tags": ["fire"]},
+    {"name": "Dragon Scale", "slot": "accessory_1", "stats": {"defense": 40, "health": 50}, "cost": 450, "rarity": "epic", "level": 28, "tags": ["dragon"]},
+
+    {"name": "Lucky Charm", "slot": "accessory_2", "stats": {"critical_rate": 5, "speed": 5}, "cost": 40, "rarity": "common", "level": 1, "tags": ["basic"]},
+    {"name": "War Horn", "slot": "accessory_2", "stats": {"attack": 18, "speed": 10}, "cost": 160, "rarity": "uncommon", "level": 8, "tags": ["melee"]},
+    {"name": "Shadow Emblem", "slot": "accessory_2", "stats": {"critical_rate": 12, "critical_damage": 10, "speed": 8}, "cost": 350, "rarity": "rare", "level": 18, "tags": ["shadow", "critical"]},
+    {"name": "Dragon Heart", "slot": "accessory_2", "stats": {"health": 60, "defense": 30, "attack": 20}, "cost": 520, "rarity": "epic", "level": 32, "tags": ["dragon"]}
+  ],
+  "synergies": [
+    {"name": "Fire Mastery (2pc)", "tag": "fire", "threshold": 2, "bonus_stats": {"attack": 15, "magic_power": 15}, "description": "Equipping 2 fire items grants bonus attack and magic power."},
+    {"name": "Fire Mastery (3pc)", "tag": "fire", "threshold": 3, "bonus_stats": {"attack": 30, "magic_power": 30, "critical_rate": 5}, "description": "Equipping 3 fire items grants major offensive bonuses."},
+    {"name": "Shadow Strike (2pc)", "tag": "shadow", "threshold": 2, "bonus_stats": {"critical_rate": 8, "speed": 10}, "description": "2 shadow items increase crit and speed."},
+    {"name": "Shadow Strike (4pc)", "tag": "shadow", "threshold": 4, "bonus_stats": {"critical_rate": 15, "critical_damage": 25, "speed": 15}, "description": "4 shadow items make you a critical strike machine."},
+    {"name": "Critical Master (3pc)", "tag": "critical", "threshold": 3, "bonus_stats": {"critical_rate": 10, "critical_damage": 20}, "description": "3 critical items amplify your crits."},
+    {"name": "Dragon's Wrath (2pc)", "tag": "dragon", "threshold": 2, "bonus_stats": {"attack": 20, "defense": 15}, "description": "2 dragon items grant attack and defense."},
+    {"name": "Dragon's Wrath (4pc)", "tag": "dragon", "threshold": 4, "bonus_stats": {"attack": 40, "defense": 30, "health": 50}, "description": "4 dragon items grant massive stat bonuses."},
+    {"name": "Holy Radiance (3pc)", "tag": "legendary_set", "threshold": 3, "bonus_stats": {"attack": 25, "defense": 25, "health": 50, "magic_power": 25}, "description": "3 legendary set pieces grant holy radiance."},
+    {"name": "Holy Radiance (5pc)", "tag": "legendary_set", "threshold": 5, "bonus_stats": {"attack": 50, "defense": 50, "health": 100, "magic_power": 50, "critical_rate": 10}, "description": "5 legendary set pieces grant divine power."},
+    {"name": "Iron Wall (2pc)", "tag": "heavy", "threshold": 2, "bonus_stats": {"defense": 20, "health": 30}, "description": "2 heavy armor pieces boost defense."},
+    {"name": "Iron Wall (4pc)", "tag": "heavy", "threshold": 4, "bonus_stats": {"defense": 45, "health": 60}, "description": "4 heavy armor pieces make you a fortress."},
+    {"name": "Ice Shield (2pc)", "tag": "ice", "threshold": 2, "bonus_stats": {"defense": 15, "magic_power": 10}, "description": "2 ice items grant defensive magic."}
+  ]
+}

@@ -1,0 +1,12 @@
+# API-based data source
+source:
+  type: api
+  base_url: ""
+  api_key: null
+  timeout: 30
+  cache_ttl: 3600
+
+transforms:
+  - filter_by_level
+  - deduplicate
+  - normalize_stats

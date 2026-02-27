@@ -1,0 +1,9 @@
+# Adaptive Large Neighborhood Search
+alns:
+  max_iterations: 5000
+  n_removal: 3
+  segment_size: 100
+  reaction_factor: 0.1
+  sigma1: 33.0
+  sigma2: 9.0
+  sigma3: 13.0

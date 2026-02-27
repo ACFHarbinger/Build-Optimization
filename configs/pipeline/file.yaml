@@ -1,0 +1,9 @@
+# File-based data source
+source:
+  type: file
+  items_path: ${game.data.items_path}
+  synergies_path: null
+
+transforms:
+  - filter_by_level
+  - deduplicate

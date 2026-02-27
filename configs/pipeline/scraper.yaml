@@ -1,0 +1,10 @@
+# Web scraper data source
+source:
+  type: scraper
+  base_url: ""
+  rate_limit: 1.0
+  cache_dir: ".cache/scraper"
+
+transforms:
+  - filter_by_level
+  - deduplicate
