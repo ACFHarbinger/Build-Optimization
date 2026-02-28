@@ -1,22 +1,17 @@
 """
-Quantum-Inspired Differential Evolution (QDE) for VRPP.
+Quantum-Inspired Differential Evolution (QDE) for Build Optimization.
 
 Represents each candidate as a quantum amplitude vector q ∈ [0,1]^N.
-Standard DE mutation / crossover operates in this continuous space; the
-trial vector is collapsed to a discrete routing solution by ranking node
-amplitudes and calling greedy_insertion.
-
-Reference:
-    Survey §"Differential Evolution" — quantum-inspired representation for discrete OP.
+The trial vector is collapsed to a discrete build via ranking and greedy insertion.
 """
 
-import copy
 import random
 import time
-from typing import Dict, List, Optional, Tuple
+from typing import Tuple
 
 import numpy as np
 
+from core.problem import BuildProblem
 from tracking.viz_mixin import PolicyVizMixin
 
 from .params import QDEParams
@@ -24,55 +19,38 @@ from .params import QDEParams
 
 class QDESolver(PolicyVizMixin):
     """
-    Quantum-Inspired Differential Evolution solver for VRPP.
+    Quantum-Inspired Differential Evolution solver for Build Optimization.
     """
 
     def __init__(
         self,
-        dist_matrix: np.ndarray,
-        wastes: Dict[int, float],
-        capacity: float,
-        R: float,
-        C: float,
+        problem: BuildProblem,
+        budget: float,
         params: QDEParams,
-        mandatory_nodes: Optional[List[int]] = None,
     ):
-        self.dist_matrix = dist_matrix
-        self.wastes = wastes
-        self.capacity = capacity
-        self.R = R
-        self.C = C
+        self.problem = problem
+        self.budget = budget
         self.params = params
-        self.mandatory_nodes = mandatory_nodes or []
-        self.n_nodes = len(dist_matrix) - 1  # Exclude depot
-        self.nodes = list(range(1, self.n_nodes + 1))
 
-    # ------------------------------------------------------------------
-    # Public interface
-    # ------------------------------------------------------------------
-
-    def solve(self) -> Tuple[List[List[int]], float, float]:
+    def solve(self) -> Tuple[np.ndarray, float]:
         """
-        Run QDE and return the best solution found.
+        Run QDE and return the best build found.
 
         Returns:
-            Tuple of (routes, profit, cost).
+            Tuple of (best_build, best_score).
         """
-        if self.n_nodes == 0:
-            return [], 0.0, 0.0
-
         start = time.time()
         pop_size = self.params.pop_size
+        num_slots = self.problem.num_slots
 
-        # Initialise population: amplitude vectors ∈ [0,1]^N
-        population = [np.random.uniform(0.0, 1.0, self.n_nodes) for _ in range(pop_size)]
-        routes_pop = [self._collapse(amp) for amp in population]
-        profits = [self._evaluate(r) for r in routes_pop]
+        # Initialise population: amplitude vectors ∈ [0,1]^num_slots
+        population = [np.random.uniform(0.0, 1.0, num_slots) for _ in range(pop_size)]
+        builds_pop = [self._collapse(amp) for amp in population]
+        scores = [self.problem.evaluate(b) for b in builds_pop]
 
-        best_idx = int(np.argmax(profits))
-        best_routes = copy.deepcopy(routes_pop[best_idx])
-        best_profit = profits[best_idx]
-        best_cost = self._cost(best_routes)
+        best_idx = int(np.argmax(scores))
+        best_build = builds_pop[best_idx].copy()
+        best_score = scores[best_idx]
 
         for iteration in range(self.params.max_iterations):
             if time.time() - start > self.params.time_limit:
@@ -89,117 +67,75 @@ class QDESolver(PolicyVizMixin):
                 )
 
                 # --- Crossover (binomial) ---
-                j_rand = random.randint(0, self.n_nodes - 1)
+                j_rand = random.randint(0, num_slots - 1)
                 trial = np.where(
-                    (np.random.uniform(0.0, 1.0, self.n_nodes) < self.params.CR) | (np.arange(self.n_nodes) == j_rand),
+                    (np.random.uniform(0.0, 1.0, num_slots) < self.params.CR) | (np.arange(num_slots) == j_rand),
                     mutant,
                     population[i],
                 )
 
-                # --- Collapse → discrete routes ---
-                trial_routes = self._collapse(trial)
-                trial_profit = self._evaluate(trial_routes)
+                # --- Collapse → discrete build ---
+                trial_build = self._collapse(trial)
+                trial_score = self.problem.evaluate(trial_build)
 
                 # --- Greedy selection ---
-                if trial_profit >= profits[i]:
+                if trial_score >= scores[i]:
                     population[i] = trial
-                    routes_pop[i] = trial_routes
-                    profits[i] = trial_profit
+                    builds_pop[i] = trial_build
+                    scores[i] = trial_score
 
-                    if trial_profit > best_profit:
-                        best_routes = copy.deepcopy(trial_routes)
-                        best_profit = trial_profit
-                        best_cost = self._cost(best_routes)
+                    if trial_score > best_score:
+                        best_build = trial_build.copy()
+                        best_score = trial_score
 
             self._viz_record(
                 iteration=iteration,
-                best_profit=best_profit,
-                best_cost=best_cost,
+                best_profit=best_score,  # legacy name
+                best_cost=-best_score,
                 population_size=pop_size,
             )
 
-        return best_routes, best_profit, best_cost
+        return best_build, best_score
 
-    # ------------------------------------------------------------------
-    # Private helpers
-    # ------------------------------------------------------------------
-
-    def _collapse(self, amplitudes: np.ndarray) -> List[List[int]]:
+    def _collapse(self, amplitudes: np.ndarray) -> np.ndarray:
         """
-        Collapse amplitude vector to a discrete routing solution.
-
-        Nodes are ranked by amplitude (descending).  Mandatory nodes are
-        always included.  Optional nodes are added in amplitude order until
-        capacity would be exceeded, at which point they are skipped.
-
-        Args:
-            amplitudes: Amplitude vector of length n_nodes.
-
-        Returns:
-            Routes built by greedy_insertion.
+        Collapse amplitude vector to a discrete build.
+        Slots are processed in order of their amplitudes.
         """
-        ranked = sorted(range(self.n_nodes), key=lambda j: amplitudes[j], reverse=True)
+        ranked_slots = np.argsort(amplitudes)[::-1]
 
-        selected: List[int] = []
-        mandatory_set = set(self.mandatory_nodes)
-        total_load = 0.0
+        build = np.full(self.problem.num_slots, -1, dtype=int)
 
-        for j in ranked:
-            node = j + 1  # 1-based index (depot is 0)
-            waste = self.wastes.get(node, 0.0)
-            if node in mandatory_set or total_load + waste <= self.capacity:
-                selected.append(node)
-                total_load += waste
+        # We use greedy_insertion logic but restricted to the ranked slots?
+        # Actually, let's just use the greedy_insertion directly on a partial build
+        # where we decide which slots to prioritize.
 
-        if not selected:
-            return []
+        # Simplified: just run greedy_insertion. The amplitudes could be used to
+        # weight the items in the greedy step, but that's complex.
+        # For now, let's just use the amplitudes as a seed for a randomized greedy?
+        # Or better: construct build by iterating through ranked slots and picking best item.
 
-        from policies.operators.repair.greedy import greedy_insertion
-
-        routes = greedy_insertion(
-            [],
-            selected,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-            expand_pool=False,
-        )
-        return routes
-
-    def _evaluate(self, routes: List[List[int]]) -> float:
-        """
-        Compute net profit for a set of routes.
-
-        Args:
-            routes: List of routes (each a list of node indices).
-
-        Returns:
-            Net profit (revenue − travel cost).
-        """
-        if not routes:
-            return 0.0
-        rev = sum(self.wastes.get(n, 0.0) * self.R for r in routes for n in r)
-        cost = self._cost(routes)
-        return rev - cost * self.C
-
-    def _cost(self, routes: List[List[int]]) -> float:
-        """
-        Compute total routing distance.
-
-        Args:
-            routes: List of routes.
-
-        Returns:
-            Total distance.
-        """
-        total = 0.0
-        for route in routes:
-            if not route:
+        current_cost = 0.0
+        for slot in ranked_slots:
+            # Pick best item for this slot that fits in budget
+            item_indices = np.where(self.problem.slot_ids == slot)[0]
+            if len(item_indices) == 0:
                 continue
-            total += self.dist_matrix[0][route[0]]
-            for k in range(len(route) - 1):
-                total += self.dist_matrix[route[k]][route[k + 1]]
-            total += self.dist_matrix[route[-1]][0]
-        return total
+
+            best_item = -1
+            best_val = -1e9
+
+            for item_idx in item_indices:
+                cost = self.problem.costs[item_idx]
+                if current_cost + cost <= self.budget:
+                    # Score = yield / cost (simple greedy proxy)
+                    score = self.problem.yields[item_idx] / (cost + 1e-6)
+                    if score > best_val:
+                        best_val = score
+                        best_item = item_idx
+
+            if best_item != -1:
+                build[slot] = best_item
+                current_cost += self.problem.costs[best_item]
+
+        return build

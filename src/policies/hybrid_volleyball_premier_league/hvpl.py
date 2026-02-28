@@ -1,17 +1,16 @@
 """
-Hybrid Volleyball Premier League (HVPL) Solver.
+Hybrid Volleyball Premier League (HVPL) Solver for Build Optimization.
 
-Combines Ant Colony Optimization (ACO) for construction and global guidance
-with Adaptive Large Neighborhood Search (ALNS) for local improvement (Coaching),
-within a population-based framework (Leagues).
+Combines ACO for construction and global guidance with
+ALNS (Coaching) for local improvement, within a population-based framework.
 """
 
-import copy
 import time
-from typing import Dict, List, Optional, Tuple
+from typing import List, Tuple
 
 import numpy as np
 
+from core.problem import BuildProblem
 from tracking.viz_mixin import PolicyVizMixin
 
 from ..adaptive_large_neighborhood_search.alns import ALNSSolver
@@ -21,132 +20,113 @@ from .params import HVPLParams
 
 class HVPLSolver(PolicyVizMixin):
     """
-    Hybrid Volleyball Premier League solver for VRP variants.
+    Hybrid Volleyball Premier League solver for Build Optimization.
     """
 
     def __init__(
         self,
-        dist_matrix: np.ndarray,
-        wastes: Dict[int, float],
-        capacity: float,
-        R: float,
-        C: float,
+        problem: BuildProblem,
+        budget: float,
         params: HVPLParams,
-        mandatory_nodes: Optional[List[int]] = None,
     ):
-        self.dist_matrix = dist_matrix
-        self.wastes = wastes
-        self.capacity = capacity
-        self.R = R
-        self.C = C
+        self.problem = problem
+        self.budget = budget
         self.params = params
-        self.mandatory_nodes = mandatory_nodes
 
         # Initialize ACO components for constructor and pheromones
-        # We reuse KSparseACOSolver initialization logic
-        self.aco_internal = KSparseACOSolver(dist_matrix, wastes, capacity, R, C, params.aco_params, mandatory_nodes)
+        self.aco_internal = KSparseACOSolver(
+            problem=problem,
+            budget=budget,
+            params=params.aco_params,
+        )
         self.pheromone = self.aco_internal.pheromone
         self.constructor = self.aco_internal.constructor
 
         # Initialize ALNS solver for the "Coaching" phase
-        self.coaching_solver = ALNSSolver(dist_matrix, wastes, capacity, R, C, params.alns_params, mandatory_nodes)
+        self.coaching_solver = ALNSSolver(
+            problem=problem,
+            budget=budget,
+            params=params.alns_params,
+        )
 
-    def solve(self) -> Tuple[List[List[int]], float, float]:
+    def solve(self) -> Tuple[np.ndarray, float]:
         """
         Run the HVPL algorithm.
+
+        Returns:
+            Tuple of (best_build, best_score).
         """
         start_time = time.time()
 
         # 1. Initialization: Create the initial population (Teams)
-        population: List[Tuple[List[List[int]], float, float]] = []
+        # Each team is (build, score)
+        population: List[Tuple[np.ndarray, float]] = []
         for _ in range(self.params.n_teams):
-            routes = self.constructor.construct()
-            cost = self._calculate_cost(routes)
-            # Profit calculation
-            rev = sum(self.wastes.get(n, 0) * self.R for r in routes for n in r)
-            profit = rev - cost * self.C
-            population.append((routes, profit, cost))
+            build = self.constructor.construct()
+            score = self.problem.evaluate(build)
+            population.append((build, score))
 
-        best_routes, best_profit, best_cost = self._get_best(population)
+        best_build, best_score = self._get_best(population)
 
         # 2. League Season Iterations
-        for _iteration in range(self.params.max_iterations):
+        for iteration in range(self.params.max_iterations):
             if time.time() - start_time > self.params.time_limit:
                 break
 
             # 3. Coaching Phase: Apply ALNS to each team
             new_population = []
-            for routes, _profit, _cost in population:
+            for build, _score in population:
                 # Coaching session (ALNS solve)
-                c_routes, c_profit, c_cost = self.coaching_solver.solve(initial_solution=routes)
-                new_population.append((c_routes, c_profit, c_cost))
+                c_build, c_score = self.coaching_solver.solve(initial_solution=build)
+                new_population.append((c_build, c_score))
 
             population = new_population
 
             # 4. Global Competition: Update best-so-far
-            iter_best_routes, iter_best_profit, iter_best_cost = self._get_best(population)
-            if iter_best_profit > best_profit:
-                best_routes = copy.deepcopy(iter_best_routes)
-                best_profit = iter_best_profit
-                best_cost = iter_best_cost
+            iter_best_build, iter_best_score = self._get_best(population)
+            if iter_best_score > best_score:
+                best_build = iter_best_build.copy()
+                best_score = iter_best_score
 
             # 5. Pheromone Update: Global guidance
-            # Deposit pheromones on the best team's edges
-            self._update_pheromones(best_routes, best_cost)
+            self._update_pheromones(best_build, best_score)
 
             self._viz_record(
-                iteration=_iteration,
-                best_profit=best_profit,
-                best_cost=best_cost,
-                iter_best_profit=iter_best_profit,
+                iteration=iteration,
+                best_profit=best_score,
+                best_cost=-best_score,
+                iter_best_profit=iter_best_score,
                 population_size=len(population),
             )
 
             # 6. Substitution Phase: Replace weakest teams
-            # Sort by profit (higher is better)
+            # Sort by score (higher is better)
             population.sort(key=lambda x: x[1], reverse=True)
             n_sub = int(self.params.n_teams * self.params.sub_rate)
 
             for i in range(self.params.n_teams - n_sub, self.params.n_teams):
                 # Replace with a new solution generated with updated pheromones
-                s_routes = self.constructor.construct()
-                s_cost = self._calculate_cost(s_routes)
-                s_rev = sum(self.wastes.get(n, 0) * self.R for r in s_routes for n in r)
-                s_profit = s_rev - s_cost * self.C
-                population[i] = (s_routes, s_profit, s_cost)
+                s_build = self.constructor.construct()
+                s_score = self.problem.evaluate(s_build)
+                population[i] = (s_build, s_score)
 
-        return best_routes, best_profit, best_cost
+        return best_build, best_score
 
-    def _get_best(self, population: List[Tuple[List[List[int]], float, float]]) -> Tuple[List[List[int]], float, float]:
-        """Get the highest-profit solution from the population."""
-        return max(population, key=lambda x: x[1])
+    def _get_best(self, population: List[Tuple[np.ndarray, float]]) -> Tuple[np.ndarray, float]:
+        """Get the highest-score solution from the population."""
+        best_idx = int(np.argmax([p[1] for p in population]))
+        return population[best_idx][0].copy(), population[best_idx][1]
 
-    def _update_pheromones(self, routes: List[List[int]], cost: float) -> None:
+    def _update_pheromones(self, best_build: np.ndarray, best_score: float) -> None:
         """ACS style global pheromone update."""
-        if not routes or cost <= 0:
+        if best_build is None or best_score <= 0:
             return
 
         # Evaporate
         self.pheromone.evaporate_all(self.params.aco_params.rho)
 
         # Deposit
-        delta = self.params.aco_params.elitist_weight / cost
-        for route in routes:
-            if not route:
-                continue
-            self.pheromone.update_edge(0, route[0], delta, evaporate=False)
-            for k in range(len(route) - 1):
-                self.pheromone.update_edge(route[k], route[k + 1], delta, evaporate=False)
-            self.pheromone.update_edge(route[-1], 0, delta, evaporate=False)
-
-    def _calculate_cost(self, routes: List[List[int]]) -> float:
-        """Calculate total routing distance."""
-        total = 0.0
-        for route in routes:
-            if not route:
-                continue
-            total += self.dist_matrix[0][route[0]]
-            for k in range(len(route) - 1):
-                total += self.dist_matrix[route[k]][route[k + 1]]
-            total += self.dist_matrix[route[-1]][0]
-        return total
+        delta = self.params.aco_params.elitist_weight * best_score
+        for slot_idx, item_idx in enumerate(best_build):
+            if item_idx != -1:
+                self.pheromone.update_edge(slot_idx, item_idx, delta, evaporate=False)

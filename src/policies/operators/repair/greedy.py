@@ -1,117 +1,66 @@
 """
 Greedy Insertion Operator Module.
 
-This module implements the greedy insertion heuristic, which iteratively inserts
-unassigned nodes into the position that minimizes the immediate cost increase.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.repair.greedy import greedy_insertion
-    >>> routes = greedy_insertion(routes, removed, dist_matrix, wastes, capacity)
+Inserts items greedily based on the best immediate score improvement.
 """
 
-from typing import Dict, List, Optional
+from typing import Optional
 
 import numpy as np
 
+from core.problem import BuildProblem
 
-def greedy_insertion(
-    routes: List[List[int]],
-    removed_nodes: List[int],
-    dist_matrix: np.ndarray,
-    wastes: Dict[int, float],
-    capacity: float,
-    R: Optional[float] = None,
-    mandatory_nodes: Optional[List[int]] = None,
-    cost_unit: float = 1.0,
-    expand_pool: bool = True,
-) -> List[List[int]]:
+
+def greedy_insertion(build: np.ndarray, budget: float, problem: Optional[BuildProblem]) -> np.ndarray:
     """
-    Insert removed nodes into their best (cheapest) positions greedily.
-
-    Iterates through all unassigned nodes and all possible insertion positions,
-    finding the globally cheapest insertion and applying it. Repeats until all
-    nodes are inserted OR skipping occurs based on profitability (VRPP).
+    Greedy insertion for Build Optimization. Inserts the items that
+    provide the best immediate score increase without exceeding the budget.
 
     Args:
-        routes: Partial routes.
-        removed_nodes: List of unassigned node indices.
-        dist_matrix: Distance matrix.
-        wastes: waste look-up.
-        capacity: Vehicle capacity.
-        R: Revenue multiplier (Optional). If provided, insertion is skipped if cost > revenue.
-        mandatory_nodes: List of mandatory node indices.
-        cost_unit: Cost per distance unit.
+        build: Current build array.
+        budget: Maximum cost allowed.
+        problem: BuildProblem context.
 
     Returns:
-        List[List[int]]: New routes after insertion.
+        np.ndarray: Modified build array.
     """
-    mandatory_nodes_set = set(mandatory_nodes) if mandatory_nodes else set()
-    # Calculate current loads and track visited nodes
-    loads = []
-    visited = set()
-    for route in routes:
-        loads.append(sum(wastes.get(node, 0) for node in route))
-        visited.update(route)
+    if problem is None:
+        return build
 
-    if expand_pool:
-        # All unvisited nodes (including those previously removed) are candidates
-        n_nodes = len(dist_matrix) - 1
-        unassigned = list(set(range(1, n_nodes + 1)) - visited)
-    else:
-        unassigned = list(removed_nodes)
+    new_build = build.copy()
+    empty_slots = np.where(new_build == -1)[0]
 
-    while unassigned:
-        best_cost = float("inf")
-        best_node = -1
-        best_route_idx = -1
-        best_pos = -1
+    # Calculate current cost
+    current_items = new_build[new_build != -1]
+    current_cost = np.sum(problem.costs[current_items]) if len(current_items) > 0 else 0.0
 
-        for node in unassigned:
-            node_waste = wastes.get(node, 0)
-            revenue = node_waste * R if R is not None else float("inf")
-            is_mandatory = node in mandatory_nodes_set
+    # Greedily fill empty slots
+    for slot in empty_slots:
+        best_score = float("-inf")
+        best_item = -1
 
-            for i, route in enumerate(routes):
-                if loads[i] + node_waste > capacity:
-                    continue
+        # Test all possible items
+        for item in range(problem.num_items):
+            if item in new_build:
+                continue
 
-                for pos in range(len(route) + 1):
-                    # Cost increase: d(i-1, node) + d(node, i) - d(i-1, i)
-                    prev = route[pos - 1] if pos > 0 else 0
-                    nxt = route[pos] if pos < len(route) else 0
+            item_cost = problem.costs[item]
+            if current_cost + item_cost > budget:
+                continue
 
-                    cost = dist_matrix[prev, node] + dist_matrix[node, nxt] - dist_matrix[prev, nxt]
+            # Temporarily place item and check score
+            new_build[slot] = item
+            score = problem.evaluate(new_build)
+            if score > best_score:
+                best_score = score
+                best_item = item
 
-                    if cost < best_cost:
-                        # VRPP check: skip if cost * cost_unit > revenue and not mandatory
-                        if R is not None and cost * cost_unit > revenue and not is_mandatory:
-                            continue
-
-                        best_cost = cost
-                        best_node = node
-                        best_route_idx = i
-                        best_pos = pos
-
-        if best_node != -1:
-            routes[best_route_idx].insert(best_pos, best_node)
-            loads[best_route_idx] += wastes.get(best_node, 0)
-            unassigned.remove(best_node)
+        # Commit the best item if found
+        if best_item != -1:
+            new_build[slot] = best_item
+            current_cost += problem.costs[best_item]
         else:
-            # If no feasible insertions are found, we must handle any remaining mandatory nodes
-            # by creating new routes if necessary, but ALNS usually relies on destroy/repair loops.
-            # For VRPP, we allow skipping non-mandatory nodes.
-            # If there are remaining mandatory nodes, we should probably try to create new routes.
-            mandatory_remaining = [n for n in unassigned if n in mandatory_nodes_set]
-            if mandatory_remaining:
-                node = mandatory_remaining[0]
-                routes.append([node])
-                loads.append(wastes.get(node, 0))
-                unassigned.remove(node)
-            else:
-                # No more mandatory nodes and no more profitable/feasible insertions
-                break
+            # Revert if no item could be placed due to budget constraints
+            new_build[slot] = -1
 
-    return routes
+    return new_build

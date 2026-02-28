@@ -55,7 +55,7 @@ class MVMoE_POMO(POMO):
             augment_fn: Augmentation function.
             first_aug_identity: Whether first augmentation is identity.
             num_starts: Number of multi-start nodes.
-            **kwargs: Passed to POMO (and REINFORCE/RL4COLitModule).
+            **kwargs: Passed to POMO (and REINFORCE/LitModule).
         """
         if moe_kwargs is None:
             moe_kwargs = DEFAULT_MOE_KWARGS

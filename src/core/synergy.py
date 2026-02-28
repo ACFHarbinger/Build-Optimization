@@ -6,7 +6,7 @@ of items (identified by tags). This mirrors set bonuses in RPGs/ARPGs.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from .build import Build
 
@@ -59,8 +59,8 @@ class SynergyEngine:
 
     def __init__(
         self,
-        rules: List[SynergyRule] = None,
-        tiered: List[SynergyTier] = None,
+        rules: Optional[List[SynergyRule]] = None,
+        tiered: Optional[List[SynergyTier]] = None,
     ) -> None:
         self.rules: List[SynergyRule] = rules or []
         self.tiered: List[SynergyTier] = tiered or []

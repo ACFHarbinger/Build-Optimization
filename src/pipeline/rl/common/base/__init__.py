@@ -2,6 +2,6 @@
 RL Base Components.
 """
 
-from .module import RL4COLitModule
+from .module import LitModule
 
-__all__ = ["RL4COLitModule"]
+__all__ = ["LitModule"]

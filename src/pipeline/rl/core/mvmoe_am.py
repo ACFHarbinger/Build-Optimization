@@ -48,7 +48,7 @@ class MVMoE_AM(REINFORCE):
                     with MoE kwargs.
             moe_kwargs: MoE configuration for encoder and decoder.
             baseline: Baseline type (default "rollout").
-            **kwargs: Passed to REINFORCE/RL4COLitModule.
+            **kwargs: Passed to REINFORCE/LitModule.
         """
         if moe_kwargs is None:
             moe_kwargs = DEFAULT_MOE_KWARGS

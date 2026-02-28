@@ -1,84 +1,59 @@
 """
-Iterated Local Search (ILS) for VRPP.
+Iterated Local Search (ILS) for Build Optimization.
 
 ILS alternates between a local search descent phase and a perturbation phase.
-The descent phase applies destroy/repair LLHs until no improvement is found.
-The perturbation phase randomly disrupts the current solution to escape the
-local optimum.  If the perturbed + re-optimised solution beats the incumbent,
-it replaces the current solution (hill-climbing acceptance).
-
-Reference:
-    Lourenço, Martin & Stützle, "Iterated Local Search", 2003.
 """
 
-import copy
 import random
 import time
-from typing import Dict, List, Optional, Tuple
+from typing import Tuple
 
 import numpy as np
 
+from core.problem import BuildProblem
 from tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.destroy_operators import cluster_removal, random_removal, worst_removal
-from ..operators.repair_operators import greedy_insertion, regret_2_insertion
+from ..operators.repair_operators import greedy_blink_insertion, greedy_insertion, regret_2_insertion
 from .params import ILSParams
 
 
 class ILSSolver(PolicyVizMixin):
     """
-    Iterated Local Search solver for VRPP.
+    Iterated Local Search solver for Build Optimization.
     """
 
     def __init__(
         self,
-        dist_matrix: np.ndarray,
-        wastes: Dict[int, float],
-        capacity: float,
-        R: float,
-        C: float,
+        problem: BuildProblem,
+        budget: float,
         params: ILSParams,
-        mandatory_nodes: Optional[List[int]] = None,
     ):
-        self.dist_matrix = dist_matrix
-        self.wastes = wastes
-        self.capacity = capacity
-        self.R = R
-        self.C = C
+        self.problem = problem
+        self.budget = budget
         self.params = params
-        self.mandatory_nodes = mandatory_nodes or []
-        self.n_nodes = len(dist_matrix) - 1
-        self.nodes = list(range(1, self.n_nodes + 1))
 
         self._llh_pool = [
-            self._llh0,
-            self._llh1,
-            self._llh2,
-            self._llh3,
-            self._llh4,
+            self._llh_greedy,
+            self._llh_regret,
+            self._llh_blink,
         ]
 
-    # ------------------------------------------------------------------
-    # Public interface
-    # ------------------------------------------------------------------
-
-    def solve(self) -> Tuple[List[List[int]], float, float]:
+    def solve(self) -> Tuple[np.ndarray, float]:
         """
         Run Iterated Local Search.
 
         Returns:
-            Tuple of (routes, profit, cost).
+            Tuple of (best_build, best_score).
         """
-        if self.n_nodes == 0:
-            return [], 0.0, 0.0
-
         start = time.time()
 
         # Initial solution
-        routes = self._build_initial_solution()
-        profit = self._evaluate(routes)
-        best_routes = copy.deepcopy(routes)
-        best_profit = profit
+        current_build = self.problem.greedy_solution()
+        current_score = self.problem.evaluate(current_build)
+
+        best_build = current_build.copy()
+        best_score = current_score
 
         for restart in range(self.params.n_restarts):
             if time.time() - start > self.params.time_limit:
@@ -93,163 +68,48 @@ class ILSSolver(PolicyVizMixin):
                 improved = False
                 inner_count += 1
 
-                llh_idx = random.randint(0, self.params.n_llh - 1)
-                llh = self._llh_pool[llh_idx]
-
+                llh = random.choice(self._llh_pool)
                 try:
-                    new_routes = llh(copy.deepcopy(routes), self.params.n_removal)
-                    new_profit = self._evaluate(new_routes)
+                    new_build = llh(current_build)
+                    new_score = self.problem.evaluate(new_build)
+
+                    if new_score > current_score + 1e-6:
+                        current_build = new_build
+                        current_score = new_score
+                        improved = True
+
+                        if current_score > best_score:
+                            best_build = current_build.copy()
+                            best_score = current_score
                 except Exception:
                     continue
 
-                if new_profit > profit:
-                    routes = new_routes
-                    profit = new_profit
-                    improved = True
-
-                    if profit > best_profit:
-                        best_routes = copy.deepcopy(routes)
-                        best_profit = profit
-
             # === Perturbation phase ===
-            perturbed = self._perturb(copy.deepcopy(routes))
-            perturbed_profit = self._evaluate(perturbed)
-
-            # Hill-climbing acceptance: accept perturbation as starting point
-            # if it leads to better results after another descent
-            routes = perturbed
-            profit = perturbed_profit
+            current_build = self._perturb(current_build)
+            current_score = self.problem.evaluate(current_build)
 
             self._viz_record(
                 iteration=restart,
-                best_profit=best_profit,
-                best_cost=self._cost(best_routes),
+                best_profit=best_score,  # legacy name
+                best_cost=-best_score,
             )
 
-        best_cost = self._cost(best_routes)
-        return best_routes, best_profit, best_cost
+        return best_build, best_score
 
-    # ------------------------------------------------------------------
-    # Perturbation
-    # ------------------------------------------------------------------
-
-    def _perturb(self, routes: List[List[int]]) -> List[List[int]]:
+    def _perturb(self, build: np.ndarray) -> np.ndarray:
         """Apply strong perturbation to escape local optimum."""
-        flat = [n for r in routes for n in r]
-        if len(flat) < 4:
-            return routes
+        n_remove = max(1, int(self.problem.num_slots * self.params.perturbation_strength))
+        partial = random_removal(build, n_remove, self.problem)
+        return greedy_insertion(partial, self.budget, self.problem)
 
-        n_remove = max(2, int(len(flat) * self.params.perturbation_strength))
+    def _llh_greedy(self, build: np.ndarray) -> np.ndarray:
+        partial = random_removal(build, self.params.n_removal, self.problem)
+        return greedy_insertion(partial, self.budget, self.problem)
 
-        # Random removal of a large chunk
-        partial, removed = random_removal(routes, n_remove)
+    def _llh_regret(self, build: np.ndarray) -> np.ndarray:
+        partial = worst_removal(build, self.params.n_removal, self.problem)
+        return regret_2_insertion(partial, self.budget, self.problem)
 
-        # Reinsert removed nodes
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    # ------------------------------------------------------------------
-    # LLH pool
-    # ------------------------------------------------------------------
-
-    def _llh0(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh1(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh2(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = cluster_removal(routes, n, self.dist_matrix, self.nodes)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh3(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh4(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    # ------------------------------------------------------------------
-    # Helpers
-    # ------------------------------------------------------------------
-
-    def _build_initial_solution(self) -> List[List[int]]:
-        from policies.operators.heuristics.initialization import build_nn_routes
-
-        routes = build_nn_routes(
-            nodes=self.nodes,
-            mandatory_nodes=self.mandatory_nodes,
-            wastes=self.wastes,
-            capacity=self.capacity,
-            dist_matrix=self.dist_matrix,
-            R=self.R,
-            C=self.C,
-        )
-        return routes
-
-    def _evaluate(self, routes: List[List[int]]) -> float:
-        if not routes:
-            return 0.0
-        rev = sum(self.wastes.get(n, 0.0) * self.R for r in routes for n in r)
-        return rev - self._cost(routes) * self.C
-
-    def _cost(self, routes: List[List[int]]) -> float:
-        total = 0.0
-        for route in routes:
-            if not route:
-                continue
-            total += self.dist_matrix[0][route[0]]
-            for k in range(len(route) - 1):
-                total += self.dist_matrix[route[k]][route[k + 1]]
-            total += self.dist_matrix[route[-1]][0]
-        return total
+    def _llh_blink(self, build: np.ndarray) -> np.ndarray:
+        partial = cluster_removal(build, self.params.n_removal, self.problem)
+        return greedy_blink_insertion(partial, self.budget, self.problem)

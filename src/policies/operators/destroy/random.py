@@ -1,55 +1,32 @@
 """
 Random Removal Operator Module.
 
-This module implements the random removal heuristic, which simply removes
-a specified number of nodes chosen uniformly at random.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.destroy.random import random_removal
-    >>> routes, removed = random_removal(routes, n_remove=5)
+This module implements the random removal heuristic for Build Optimization.
 """
 
-import random
-from typing import List, Tuple
+from typing import Optional
+
+import numpy as np
+
+from core.problem import BuildProblem
 
 
-def random_removal(routes: List[List[int]], n_remove: int) -> Tuple[List[List[int]], List[int]]:
+def random_removal(build: np.ndarray, n_remove: int, problem: Optional[BuildProblem]) -> np.ndarray:
     """
-    Remove nodes randomly from the solution.
-
-    Selects `n_remove` nodes uniformly at random from the current routes
-    and removes them.
+    Remove items randomly from the build.
 
     Args:
-        routes: The current solution (list of routes).
-        n_remove: Number of nodes to remove.
+        build: Current build array.
+        n_remove: Number of items to remove.
+        problem: Optional BuildProblem context (unused here).
 
     Returns:
-        Tuple[List[List[int]], List[int]]: A tuple containing the
-        modified routes (with nodes removed) and a list of removed node IDs.
+        np.ndarray: Modified build array.
     """
-    removed = []
-    # Flatten
-    all_nodes = []
-    for r_idx, r in enumerate(routes):
-        for n_idx, node in enumerate(r):
-            all_nodes.append((r_idx, n_idx, node))
-
-    if n_remove >= len(all_nodes):
-        return [[]], [n for _, _, n in all_nodes]
-
-    targets = random.sample(all_nodes, n_remove)
-
-    # Sort targets by r_idx, n_idx desc to pop safely
-    targets.sort(key=lambda x: (x[0], x[1]), reverse=True)
-
-    for r_idx, n_idx, node in targets:
-        routes[r_idx].pop(n_idx)
-        removed.append(node)
-
-    # Clean empty routes
-    routes = [r for r in routes if r]
-    return routes, removed
+    new_build = build.copy()
+    filled_slots = np.where(new_build != -1)[0]
+    if len(filled_slots) > 0:
+        n_remove = min(n_remove, len(filled_slots))
+        remove_slots = np.random.choice(filled_slots, size=n_remove, replace=False)
+        new_build[remove_slots] = -1
+    return new_build

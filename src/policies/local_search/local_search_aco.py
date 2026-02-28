@@ -1,19 +1,12 @@
 """
-ACO Local Search Module.
+ACO Local Search Module for Build Optimization.
 
-This module provides the local search implementation specifically for
-Ant Colony Optimization (ACO). It focuses on 2-opt refinement.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.local_search.local_search_aco import ACOLocalSearch
-    >>> ls = ACOLocalSearch(dist_matrix, waste, capacity, R, C, params)
-    >>> optimized_routes = ls.optimize(routes)
+Implements local refinement for ACO-generated builds.
 """
 
-from typing import List
+from typing import Tuple
+
+import numpy as np
 
 from .local_search_base import LocalSearch
 
@@ -21,23 +14,15 @@ from .local_search_base import LocalSearch
 class ACOLocalSearch(LocalSearch):
     """
     Local Search module for K-Sparse ACO.
-    Implements 2-opt local search refinement.
     """
 
-    def optimize(self, solution: List[List[int]]) -> List[List[int]]:
+    def optimize(self, build: np.ndarray) -> Tuple[np.ndarray, float]:
         """
-        Apply full set of local search operators to the solution.
+        Refine a build using small perturbations.
 
-        Args:
-            solution: List of routes, where each route is a list of node indices.
-
-        Returns:
-            List of optimized routes.
+        Note: Currently a placeholder that returns the build as is,
+        can be expanded with item swaps/replacements if needed.
         """
-        # Create a deep copy of routes to modify
-        self.routes = [r[:] for r in solution]
-
-        # Run optimization
-        self._optimize_internal()
-
-        return self.routes
+        # Placeholder for building-specific local search refinement
+        score = self.problem.evaluate(build)
+        return build.copy(), score

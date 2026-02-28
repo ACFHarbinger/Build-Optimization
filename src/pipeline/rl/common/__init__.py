@@ -5,7 +5,7 @@ This package contains training utilities and common components
 like epoch preparation, dataset regeneration, and training hooks.
 """
 
-from pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.common.base import LitModule
 from pipeline.rl.common.baselines import (
     BASELINE_REGISTRY,
     Baseline,
@@ -24,7 +24,7 @@ from pipeline.rl.common.reward_scaler_batch import BatchRewardScaler
 from pipeline.rl.common.trainer import WSTrainer
 
 __all__ = [
-    "RL4COLitModule",
+    "LitModule",
     "Baseline",
     "NoBaseline",
     "ExponentialBaseline",

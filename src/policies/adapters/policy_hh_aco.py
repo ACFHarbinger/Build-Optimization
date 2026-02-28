@@ -1,34 +1,24 @@
 """
-Hyper-ACO Policy Adapter.
-
-Adapts the Hyper-Heuristic ACO solver to the common policy interface.
+Hyper-ACO (Hyper-Heuristic ACO) Policy Adapter.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Optional, Tuple, Type, Union
 
 import numpy as np
 
 from configs.policies import ACOConfig
-from policies.adapters.base_routing_policy import BaseRoutingPolicy
-from policies.ant_colony_optimization.hyper_heuristic_aco import run_hyper_heuristic_aco
+from policies.adapters.base_build_policy import BaseBuildPolicy
+from policies.ant_colony_optimization.hyper_heuristic_aco.hyper_aco import HyperHeuristicACO
+from policies.ant_colony_optimization.hyper_heuristic_aco.params import HyperACOParams
 
 from .factory import PolicyRegistry
 
 
 @PolicyRegistry.register("hyper_aco")
-class HyperACOPolicy(BaseRoutingPolicy):
-    """
-    Hyper-Heuristic ACO policy class.
-
-    Uses ACO to construct sequences of local search operators.
-    """
+class HyperACOPolicy(BaseBuildPolicy):
+    """Hyper-Heuristic ACO policy adapter."""
 
     def __init__(self, config: Optional[Union[ACOConfig, Dict[str, Any]]] = None):
-        """Initialize Hyper-ACO policy with optional config.
-
-        Args:
-            config: ACOConfig dataclass, raw dict from YAML, or None.
-        """
         super().__init__(config)
 
     @classmethod
@@ -36,34 +26,22 @@ class HyperACOPolicy(BaseRoutingPolicy):
         return ACOConfig
 
     def _get_config_key(self) -> str:
-        """Return config key for Hyper-ACO."""
         return "hyper_aco"
 
     def _run_solver(
         self,
-        sub_dist_matrix: np.ndarray,
-        sub_wastes: Dict[int, float],
-        capacity: float,
-        revenue: float,
-        cost_unit: float,
+        problem: Any,  # BuildProblem
+        budget: float,
         values: Dict[str, Any],
-        mandatory_nodes: List[int],
         **kwargs: Any,
-    ) -> Tuple[List[List[int]], float, float]:
-        """
-        Run Hyper-ACO solver.
+    ) -> Tuple[np.ndarray, float]:
+        params = HyperACOParams.from_dict(values)
 
-        Returns:
-            Tuple of (routes, profit, solver_cost)
-        """
-        routes, profit, solver_cost = run_hyper_heuristic_aco(
-            sub_dist_matrix,
-            sub_wastes,
-            capacity,
-            revenue,
-            cost_unit,
-            values,
-            mandatory_nodes=mandatory_nodes,
+        solver = HyperHeuristicACO(
+            problem=problem,
+            budget=budget,
+            params=params,
         )
 
-        return routes, profit, solver_cost
+        initial_build = problem.greedy_solution()
+        return solver.solve(initial_build)

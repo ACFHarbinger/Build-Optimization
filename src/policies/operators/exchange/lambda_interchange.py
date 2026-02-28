@@ -1,65 +1,46 @@
 """
-Lambda-Interchange Operator Module.
+Lambda Interchange Operator.
 
-This module implements a wrapper for the Lambda-Interchange neighborhood search,
-which systematically explores cross-exchange moves between all pairs of routes
-with segment lengths up to a specified maximum (lambda_max).
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.exchange.lambda_interchange import lambda_interchange
-    >>> improved = lambda_interchange(ls, lambda_max=2)
+Swap up to lambda items between the build and the global pool.
 """
 
-from typing import Any
+import random
+from typing import Optional
 
-from .cross import cross_exchange
+import numpy as np
+
+from core.problem import BuildProblem
 
 
 def lambda_interchange(
-    ls: Any,
-    lambda_max: int = 2,
-) -> bool:
+    build: np.ndarray, problem: Optional[BuildProblem], budget: float, max_lambda: int = 2
+) -> np.ndarray:
     """
-    λ-Interchange neighborhood search.
-
-    Systematically explores cross-exchange moves with segments up to
-    length λ. This is a wrapper that explores the full neighborhood.
-
-    Args:
-        ls: LocalSearch instance.
-        lambda_max: Maximum segment length to exchange.
-
-    Returns:
-        bool: True if any improving move was found.
+    Exchange up to 'lambda' items currently in the build with items outside.
     """
-    improved = False
+    if problem is None:
+        return build
 
-    for r_a in range(len(ls.routes)):
-        for r_b in range(r_a + 1, len(ls.routes)):
-            route_a = ls.routes[r_a]
-            route_b = ls.routes[r_b]
+    new_build = build.copy()
+    filled_slots = list(np.where(new_build != -1)[0])
 
-            for seg_a_len in range(lambda_max + 1):
-                for seg_b_len in range(lambda_max + 1):
-                    if seg_a_len == 0 and seg_b_len == 0:
-                        continue
+    current_items = set(new_build[filled_slots])
+    available_items = list(set(range(problem.num_items)) - current_items)
 
-                    for seg_a_start in range(max(1, len(route_a) - seg_a_len + 1)):
-                        for seg_b_start in range(max(1, len(route_b) - seg_b_len + 1)):
-                            if cross_exchange(
-                                ls,
-                                r_a,
-                                seg_a_start,
-                                seg_a_len,
-                                r_b,
-                                seg_b_start,
-                                seg_b_len,
-                            ):
-                                improved = True
-                                # Restart search after improvement
-                                return True
+    k = random.randint(
+        1, min(max_lambda, len(filled_slots), len(available_items)) if len(filled_slots) > 0 and available_items else 0
+    )
+    if k == 0:
+        return new_build
 
-    return improved
+    slots_to_swap = random.sample(filled_slots, k)
+    items_to_insert = random.sample(available_items, k)
+
+    for i in range(k):
+        new_build[slots_to_swap[i]] = items_to_insert[i]
+
+    current_cost = sum(problem.costs[i] for i in new_build if i != -1)
+    if current_cost > budget:
+        return build.copy()  # Revert entire operation if over budget
+
+    return new_build

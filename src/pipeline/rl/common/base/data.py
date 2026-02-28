@@ -1,5 +1,5 @@
 """
-Data logic for RL4COLitModule.
+Data logic for LitModule.
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ logger = get_pylogger(__name__)
 
 
 class DataMixin:
-    """Mixin for data loading logic."""
+    """Mixin for data loading"""
 
     def __init__(self):
         """Initialize Class.

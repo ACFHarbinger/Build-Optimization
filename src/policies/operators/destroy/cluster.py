@@ -1,84 +1,48 @@
 """
 Cluster Removal Operator Module.
 
-This module implements the cluster removal heuristic, which removes a cluster of
-nodes based on spatial proximity, effectively acting as a variant of Shaw removal.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.destroy.cluster import cluster_removal
-    >>> routes, removed = cluster_removal(routes, n_remove=5, dist_matrix=d, nodes=all_nodes)
+Removes items that have similar costs, acting as a "cluster" in the stat space.
 """
 
-import random
-from typing import List, Tuple
+from typing import Optional
 
 import numpy as np
 
-from .random import random_removal
+from core.problem import BuildProblem
 
 
-def cluster_removal(
-    routes: List[List[int]], n_remove: int, dist_matrix: np.ndarray, nodes: List[int]
-) -> Tuple[List[List[int]], List[int]]:
+def cluster_removal(build: np.ndarray, n_remove: int, problem: Optional[BuildProblem]) -> np.ndarray:
     """
-    Remove a cluster of nodes based on spatial proximity (Shaw Removal variant).
+    Remove items that have similar costs (clustered together in cost space).
 
     Args:
-        routes (List[List[int]]): Current routes.
-        n_remove (int): Number of nodes to remove.
-        dist_matrix (np.ndarray): Distance matrix.
-        nodes (List[int]): List of all node IDs.
+        build: Current build array.
+        n_remove: Number of items to remove.
+        problem: BuildProblem context.
 
     Returns:
-        Tuple[List[List[int]], List[int]]: Partial routes and list of removed node IDs.
+        np.ndarray: Modified build array.
     """
-    # Pick a random node, remove it and its k nearest neighbors
-    if not any(routes):
-        return routes, []
+    new_build = build.copy()
+    filled_slots = np.where(new_build != -1)[0]
 
-    # Pick seed
-    seed_route_idx = random.randint(0, len(routes) - 1)
-    if not routes[seed_route_idx]:
-        return random_removal(routes, n_remove)
+    if len(filled_slots) <= n_remove:
+        new_build[filled_slots] = -1
+        return new_build
 
-    seed_node = random.choice(routes[seed_route_idx])
+    # Select a target slot to form cluster around
+    target_slot = np.random.choice(filled_slots)
+    target_item = new_build[target_slot]
+    target_cost = problem.costs[target_item]
 
-    removed = [seed_node]
+    # Calculate difference in cost for all filled items
+    items = new_build[filled_slots]
+    costs = problem.costs[items]
+    diffs = np.abs(costs - target_cost)
 
-    # Get all nodes current pos
-    node_map = {}
-    for r_idx, r in enumerate(routes):
-        for n_idx, node in enumerate(r):
-            node_map[node] = (r_idx, n_idx)
+    # Sort by diff and remove the closest ones
+    closest_indices = np.argsort(diffs)[:n_remove]
+    remove_slots = filled_slots[closest_indices]
 
-    # Find neighbors
-    candidates = []
-    for v in nodes:
-        if v == seed_node or v not in node_map:
-            continue
-        dist = dist_matrix[seed_node][v]
-        candidates.append((v, dist))
-
-    candidates.sort(key=lambda x: x[1])
-
-    target_nodes = [x[0] for x in candidates[: n_remove - 1]]
-    removed.extend(target_nodes)
-
-    # Now remove them from routes
-    to_remove_locs = []
-    for node in removed:
-        if node in node_map:
-            to_remove_locs.append((*node_map[node], node))
-
-    to_remove_locs.sort(key=lambda x: (x[0], x[1]), reverse=True)
-
-    final_removed = []
-    for r_idx, n_idx, node in to_remove_locs:
-        routes[r_idx].pop(n_idx)
-        final_removed.append(node)
-
-    routes = [r for r in routes if r]
-    return routes, final_removed
+    new_build[remove_slots] = -1
+    return new_build

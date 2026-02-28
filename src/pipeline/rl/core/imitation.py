@@ -12,7 +12,7 @@ import torch
 from tensordict import TensorDict
 from utils.data.rl_utils import safe_td_copy
 
-from pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.common.base import LitModule
 from pipeline.rl.core.losses import (
     js_divergence_loss,
     kl_divergence_loss,
@@ -22,7 +22,7 @@ from pipeline.rl.core.losses import (
 )
 
 
-class ImitationLearning(RL4COLitModule):
+class ImitationLearning(LitModule):
     """
     Imitation Learning / Supervised Learning.
 
@@ -49,7 +49,7 @@ class ImitationLearning(RL4COLitModule):
             policy_config: Expert policy configuration object (HGSConfig, ALNSConfig, etc.).
             env_name: Environment name for the expert policy.
             loss_fn: Name of loss function to use ('nll', 'kl', 'js', etc.).
-            **kwargs: Arguments passed to RL4COLitModule.
+            **kwargs: Arguments passed to LitModule.
         """
         # Baseline is not used in IL, but we keep the structure
         kwargs["baseline"] = "none"

@@ -1,89 +1,64 @@
 """
-Reactive Tabu Search (RTS) for VRPP.
+Reactive Tabu Search (RTS) for Build Optimization.
 
-Tabu Search uses short-term memory to forbid recently visited moves,
-preventing cyclical revisitation.  Reactive Tabu Search enhances this
-with hash-based cycle detection: when configuration hashes repeat,
-the tabu tenure is increased to amplify diversification; during long
-non-cycling periods, tenure contracts for intensive exploitation.
-
-Reference:
-    Battiti & Tecchiolli, "The Reactive Tabu Search", 1994.
+Uses hash-based cycle detection to dynamically adjust tabu tenure.
 """
 
-import copy
 import random
 import time
 from collections import deque
-from typing import Deque, Dict, List, Optional, Tuple
+from typing import Deque, Dict, Tuple
 
 import numpy as np
 
+from core.problem import BuildProblem
 from tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.destroy_operators import cluster_removal, random_removal, worst_removal
-from ..operators.repair_operators import greedy_insertion, regret_2_insertion
+from ..operators.repair_operators import greedy_blink_insertion, greedy_insertion, regret_2_insertion
 from .params import RTSParams
 
 
 class RTSSolver(PolicyVizMixin):
     """
-    Reactive Tabu Search solver for VRPP.
+    Reactive Tabu Search solver for Build Optimization.
     """
 
     def __init__(
         self,
-        dist_matrix: np.ndarray,
-        wastes: Dict[int, float],
-        capacity: float,
-        R: float,
-        C: float,
+        problem: BuildProblem,
+        budget: float,
         params: RTSParams,
-        mandatory_nodes: Optional[List[int]] = None,
     ):
-        self.dist_matrix = dist_matrix
-        self.wastes = wastes
-        self.capacity = capacity
-        self.R = R
-        self.C = C
+        self.problem = problem
+        self.budget = budget
         self.params = params
-        self.mandatory_nodes = mandatory_nodes or []
-        self.n_nodes = len(dist_matrix) - 1
-        self.nodes = list(range(1, self.n_nodes + 1))
 
         self._llh_pool = [
-            self._llh0,
-            self._llh1,
-            self._llh2,
-            self._llh3,
-            self._llh4,
+            self._llh_greedy,
+            self._llh_regret,
+            self._llh_blink,
         ]
 
-    # ------------------------------------------------------------------
-    # Public interface
-    # ------------------------------------------------------------------
-
-    def solve(self) -> Tuple[List[List[int]], float, float]:
+    def solve(self) -> Tuple[np.ndarray, float]:
         """
         Run Reactive Tabu Search.
 
         Returns:
-            Tuple of (routes, profit, cost).
+            Tuple of (best_build, best_score).
         """
-        if self.n_nodes == 0:
-            return [], 0.0, 0.0
-
         start = time.time()
 
-        routes = self._build_initial_solution()
-        profit = self._evaluate(routes)
-        best_routes = copy.deepcopy(routes)
-        best_profit = profit
+        current_build = self.problem.greedy_solution()
+        current_score = self.problem.evaluate(current_build)
+
+        best_build = current_build.copy()
+        best_score = current_score
 
         tenure = self.params.initial_tenure
-        # Tabu list: deque of (llh_idx, solution_hash) pairs
-        tabu_list: Deque[Tuple[int, int]] = deque(maxlen=self.params.max_tenure)
-        # Hash history for cycle detection
+        # Tabu list: deque of solution hashes
+        tabu_list: Deque[int] = deque(maxlen=self.params.max_tenure)
+        # Hash history for cycle detection: hash -> last_seen_iteration
         hash_history: Dict[int, int] = {}
         no_repeat_count = 0
 
@@ -91,185 +66,86 @@ class RTSSolver(PolicyVizMixin):
             if time.time() - start > self.params.time_limit:
                 break
 
-            # Try all LLHs and pick best non-tabu (or aspiration override)
+            # Try a subset of LLHs or all if pool is small
             best_candidate = None
-            best_cand_profit = float("-inf")
-            best_cand_llh = -1
+            best_cand_score = -float("inf")
 
-            for llh_idx in range(self.params.n_llh):
+            # We sample a few neighbors to find the "best" move
+            for _ in range(5):
+                llh = random.choice(self._llh_pool)
                 try:
-                    cand = self._llh_pool[llh_idx](copy.deepcopy(routes), self.params.n_removal)
-                    cand_profit = self._evaluate(cand)
+                    cand = llh(current_build)
+                    cand_score = self.problem.evaluate(cand)
+                    cand_hash = hash(cand.tobytes())
+
+                    is_tabu = cand_hash in tabu_list
+
+                    # Aspiration criterion: accept tabu if it's better than global best
+                    if is_tabu and cand_score <= best_score:
+                        continue
+
+                    if cand_score > best_cand_score:
+                        best_candidate = cand
+                        best_cand_score = cand_score
                 except Exception:
                     continue
-
-                cand_hash = self._hash_routes(cand)
-                is_tabu = any(h == cand_hash for _, h in tabu_list)
-
-                # Aspiration: override tabu if globally best
-                if is_tabu and cand_profit <= best_profit:
-                    continue
-
-                if cand_profit > best_cand_profit:
-                    best_candidate = cand
-                    best_cand_profit = cand_profit
-                    best_cand_llh = llh_idx
 
             if best_candidate is None:
-                # All moves tabu — force a random one
-                llh_idx = random.randint(0, self.params.n_llh - 1)
+                # Diversify: force a random move even if it's potentially tabu
+                llh = random.choice(self._llh_pool)
                 try:
-                    best_candidate = self._llh_pool[llh_idx](copy.deepcopy(routes), self.params.n_removal)
-                    best_cand_profit = self._evaluate(best_candidate)
-                    best_cand_llh = llh_idx
+                    best_candidate = llh(current_build)
+                    best_cand_score = self.problem.evaluate(best_candidate)
                 except Exception:
                     continue
 
-            # Move to best candidate
-            routes = best_candidate
-            profit = best_cand_profit
-            sol_hash = self._hash_routes(routes)
+            if best_candidate is not None:
+                current_build = best_candidate
+                current_score = best_cand_score
+                sol_hash = hash(current_build.tobytes())
 
-            # Add to tabu list
-            tabu_list.append((best_cand_llh, sol_hash))
-            # Trim to current tenure
-            while len(tabu_list) > tenure:
-                tabu_list.popleft()
+                # Add to tabu list
+                tabu_list.append(sol_hash)
+                # Trim to current tenure
+                while len(tabu_list) > tenure:
+                    tabu_list.popleft()
 
-            # Update global best
-            if profit > best_profit:
-                best_routes = copy.deepcopy(routes)
-                best_profit = profit
+                # Update global best
+                if current_score > best_score:
+                    best_build = current_build.copy()
+                    best_score = current_score
 
-            # Reactive tenure adjustment via cycle detection
-            if sol_hash in hash_history:
-                # Cycle detected — increase tenure
-                tenure = min(
-                    self.params.max_tenure,
-                    int(tenure * self.params.tenure_increase),
-                )
-                no_repeat_count = 0
-            else:
-                no_repeat_count += 1
-                if no_repeat_count > 2 * tenure:
-                    # Long non-cycling — decrease tenure
-                    tenure = max(
-                        self.params.min_tenure,
-                        int(tenure * self.params.tenure_decrease),
-                    )
+                # Reactive tenure adjustment
+                if sol_hash in hash_history:
+                    # Cycle detected - increase tenure
+                    tenure = min(self.params.max_tenure, int(tenure * self.params.tenure_increase) + 1)
                     no_repeat_count = 0
+                else:
+                    no_repeat_count += 1
+                    if no_repeat_count > 2 * tenure:
+                        # Long non-cycling - decrease tenure
+                        tenure = max(self.params.min_tenure, int(tenure * self.params.tenure_decrease))
+                        no_repeat_count = 0
 
-            hash_history[sol_hash] = iteration
+                hash_history[sol_hash] = iteration
 
             self._viz_record(
                 iteration=iteration,
-                best_profit=best_profit,
-                best_cost=self._cost(best_routes),
+                best_profit=best_score,
+                best_cost=-best_score,
                 tenure=tenure,
             )
 
-        best_cost = self._cost(best_routes)
-        return best_routes, best_profit, best_cost
+        return best_build, best_score
 
-    # ------------------------------------------------------------------
-    # LLH pool
-    # ------------------------------------------------------------------
+    def _llh_greedy(self, build: np.ndarray) -> np.ndarray:
+        partial = random_removal(build, self.params.n_removal, self.problem)
+        return greedy_insertion(partial, self.budget, self.problem)
 
-    def _llh0(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
+    def _llh_regret(self, build: np.ndarray) -> np.ndarray:
+        partial = worst_removal(build, self.params.n_removal, self.problem)
+        return regret_2_insertion(partial, self.budget, self.problem)
 
-    def _llh1(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh2(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = cluster_removal(routes, n, self.dist_matrix, self.nodes)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh3(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh4(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    # ------------------------------------------------------------------
-    # Helpers
-    # ------------------------------------------------------------------
-
-    def _hash_routes(self, routes: List[List[int]]) -> int:
-        """Compute a hash of the route configuration for cycle detection."""
-        return hash(tuple(tuple(r) for r in routes))
-
-    def _build_initial_solution(self) -> List[List[int]]:
-        from policies.operators.heuristics.initialization import build_nn_routes
-
-        routes = build_nn_routes(
-            nodes=self.nodes,
-            mandatory_nodes=self.mandatory_nodes,
-            wastes=self.wastes,
-            capacity=self.capacity,
-            dist_matrix=self.dist_matrix,
-            R=self.R,
-            C=self.C,
-        )
-        return routes
-
-    def _evaluate(self, routes: List[List[int]]) -> float:
-        if not routes:
-            return 0.0
-        rev = sum(self.wastes.get(n, 0.0) * self.R for r in routes for n in r)
-        return rev - self._cost(routes) * self.C
-
-    def _cost(self, routes: List[List[int]]) -> float:
-        total = 0.0
-        for route in routes:
-            if not route:
-                continue
-            total += self.dist_matrix[0][route[0]]
-            for k in range(len(route) - 1):
-                total += self.dist_matrix[route[k]][route[k + 1]]
-            total += self.dist_matrix[route[-1]][0]
-        return total
+    def _llh_blink(self, build: np.ndarray) -> np.ndarray:
+        partial = cluster_removal(build, self.params.n_removal, self.problem)
+        return greedy_blink_insertion(partial, self.budget, self.problem)

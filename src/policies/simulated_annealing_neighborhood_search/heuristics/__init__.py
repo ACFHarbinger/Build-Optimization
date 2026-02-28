@@ -1,3 +1,0 @@
-"""
-Metaheuristic algorithms (SA, SANS).
-"""

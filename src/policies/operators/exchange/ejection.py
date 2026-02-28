@@ -1,158 +1,55 @@
 """
-Ejection Chain Operator Module.
+Ejection Chain Operator.
 
-This module implements the Ejection Chain operator, which is primarily used for
-fleet minimization by attempting to empty a route and eject its customers into
-other routes, potentially triggering a chain of displacements.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.exchange.ejection import ejection_chain
-    >>> success = ejection_chain(ls, source_route=0, max_depth=5)
+Compound displacement.
 """
 
-from typing import Any, List, Optional, Tuple
+import random
+from typing import Optional
+
+import numpy as np
+
+from core.problem import BuildProblem
 
 
-def ejection_chain(
-    ls: Any,
-    source_route: int,
-    max_depth: int = 5,
-) -> bool:
+def ejection_chain(build: np.ndarray, problem: Optional[BuildProblem], budget: float, max_depth: int = 3) -> np.ndarray:
     """
-    Ejection Chain: Compound displacement for fleet reduction.
-
-    Attempts to empty a route by ejecting its customers into other routes.
-    When a target route is full, it triggers a chain of ejections.
-
-    This operator is primarily used for fleet size minimization.
-
-    Args:
-        ls: LocalSearch instance.
-        source_route: Index of route to empty.
-        max_depth: Maximum chain depth before giving up.
-
-    Returns:
-        bool: True if the source route was successfully emptied.
+    Perform a chain of ejections and insertions.
     """
-    if source_route >= len(ls.routes) or not ls.routes[source_route]:
-        return False
+    if problem is None:
+        return build
 
-    # Try to empty the source route
-    route = ls.routes[source_route]
-    nodes_to_eject = route[:]
+    new_build = build.copy()
+    filled_slots = np.where(new_build != -1)[0]
+    if len(filled_slots) == 0:
+        return new_build
 
-    # Track successful insertions
-    ejection_log: List[Tuple[int, int, int]] = []  # (node, target_route, position)
+    current_items = set(new_build[filled_slots])
+    available_items = list(set(range(problem.num_items)) - current_items)
+    if not available_items:
+        return new_build
 
-    for node in nodes_to_eject:
-        inserted = _try_insert_with_chain(ls, node, source_route, max_depth, ejection_log)
-        if not inserted:
-            # Rollback all insertions
-            _rollback_ejections(ls, ejection_log, source_route)
-            return False
+    # We need a max_depth value
+    depth = random.randint(1, max_depth)
+    for _ in range(depth):
+        slot_to_vacate = random.choice(filled_slots)
+        item_to_insert = random.choice(available_items)
 
-    # All nodes successfully ejected
-    if ls.routes[source_route]:
-        ls.routes[source_route] = []
-    ls._update_map(set(range(len(ls.routes))))
-    return True
+        # Eject and insert
+        ejected_item = new_build[slot_to_vacate]
+        new_build[slot_to_vacate] = item_to_insert
 
+        # Maintain available list
+        available_items.remove(item_to_insert)
+        if ejected_item != -1:
+            available_items.append(ejected_item)
 
-def _try_insert_with_chain(
-    ls: Any,
-    node: int,
-    excluded_route: int,
-    depth: int,
-    log: List[Tuple[int, int, int]],
-) -> bool:
-    """Try to insert a node, potentially triggering chain ejections."""
-    if depth <= 0:
-        return False
+        current_cost = sum(problem.costs[i] for i in new_build if i != -1)
+        if current_cost > budget:
+            # Revert if over budget
+            new_build[slot_to_vacate] = ejected_item
+            available_items.remove(ejected_item)
+            available_items.append(item_to_insert)
+            break
 
-    node_waste = ls.waste.get(node, 0)
-
-    # Find best insertion
-    best_cost = float("inf")
-    best_insertion: Optional[Tuple[int, int]] = None
-
-    for r_idx, route in enumerate(ls.routes):
-        if r_idx == excluded_route:
-            continue
-
-        load = ls._calc_load_fresh(route)
-        if load + node_waste > ls.Q:
-            continue
-
-        for pos in range(len(route) + 1):
-            prev = route[pos - 1] if pos > 0 else 0
-            nxt = route[pos] if pos < len(route) else 0
-            cost = ls.d[prev, node] + ls.d[node, nxt] - ls.d[prev, nxt]
-
-            if cost < best_cost:
-                best_cost = cost
-                best_insertion = (r_idx, pos)
-
-    if best_insertion is not None:
-        r, p = best_insertion
-        ls.routes[r].insert(p, node)
-        log.append((node, r, p))
-        return True
-
-    # No direct insertion possible - try ejection chain
-    for r_idx, route in enumerate(ls.routes):
-        if r_idx == excluded_route or not route:
-            continue
-
-        # Try ejecting a node from this route
-        for eject_pos, eject_node in enumerate(route):
-            eject_waste = ls.waste.get(eject_node, 0)
-            load = ls._calc_load_fresh(route)
-
-            # Check if we can fit the new node after ejection
-            if load - eject_waste + node_waste > ls.Q:
-                continue
-
-            # Eject and try to reinsert recursively
-            route.pop(eject_pos)
-
-            # Insert new node
-            best_pos = 0
-            best_ins_cost = float("inf")
-            for pos in range(len(route) + 1):
-                prev = route[pos - 1] if pos > 0 else 0
-                nxt = route[pos] if pos < len(route) else 0
-                cost = ls.d[prev, node] + ls.d[node, nxt] - ls.d[prev, nxt]
-                if cost < best_ins_cost:
-                    best_ins_cost = cost
-                    best_pos = pos
-
-            route.insert(best_pos, node)
-            log.append((node, r_idx, best_pos))
-
-            # Now try to insert ejected node
-            if _try_insert_with_chain(ls, eject_node, excluded_route, depth - 1, log):
-                return True
-
-            # Rollback
-            route.pop(best_pos)
-            route.insert(eject_pos, eject_node)
-            log.pop()
-
-    return False
-
-
-def _rollback_ejections(
-    ls: Any,
-    log: List[Tuple[int, int, int]],
-    source_route: int,
-) -> None:
-    """Rollback ejection chain insertions."""
-    for node, r_idx, pos in reversed(log):
-        if r_idx < len(ls.routes) and pos < len(ls.routes[r_idx]) and ls.routes[r_idx][pos] == node:
-            ls.routes[r_idx].pop(pos)
-            # Put back in source route
-            ls.routes[source_route].append(node)
-    log.clear()
+    return new_build

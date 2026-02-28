@@ -182,7 +182,7 @@ class AdaptiveImitation(REINFORCE):
         td: TensorDict,
         out: dict,
         batch_idx: int,
-        env: Any = None,  # Accept env to match RL4COLitModule.shared_step
+        env: Any = None,  # Accept env to match LitModule.shared_step
     ) -> torch.Tensor:
         """
         Compute Combined Loss: RL + IL.

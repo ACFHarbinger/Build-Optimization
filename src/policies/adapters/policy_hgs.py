@@ -1,35 +1,24 @@
 """
-HGS Policy Adapter.
-
-Adapts the Hybrid Genetic Search (HGS) logic to the common policy interface.
-Now agnostic to bin selection.
+HGS (Hybrid Genetic Search) Policy Adapter.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies import HGSConfig
-from policies.adapters.base_routing_policy import BaseRoutingPolicy
-from policies.hybrid_genetic_search import run_hgs
+from configs.policies.hgs import HGSConfig
+from policies.adapters.base_build_policy import BaseBuildPolicy
+from policies.hybrid_genetic_search.hgs import HGSSolver
+from policies.hybrid_genetic_search.params import HGSParams
 
 from .factory import PolicyRegistry
 
 
 @PolicyRegistry.register("hgs")
-class HGSPolicy(BaseRoutingPolicy):
-    """
-    Hybrid Genetic Search policy class.
-
-    Visits pre-selected 'must_go' bins using evolutionary optimization.
-    """
+class HGSPolicy(BaseBuildPolicy):
+    """HGS policy adapter."""
 
     def __init__(self, config: Optional[Union[HGSConfig, Dict[str, Any]]] = None):
-        """Initialize HGS policy with optional config.
-
-        Args:
-            config: HGSConfig dataclass, raw dict from YAML, or None.
-        """
         super().__init__(config)
 
     @classmethod
@@ -37,33 +26,21 @@ class HGSPolicy(BaseRoutingPolicy):
         return HGSConfig
 
     def _get_config_key(self) -> str:
-        """Return config key for HGS."""
         return "hgs"
 
     def _run_solver(
         self,
-        sub_dist_matrix: np.ndarray,
-        sub_wastes: Dict[int, float],
-        capacity: float,
-        revenue: float,
-        cost_unit: float,
+        problem: Any,  # BuildProblem
+        budget: float,
         values: Dict[str, Any],
-        mandatory_nodes: List[int],
         **kwargs: Any,
-    ) -> Tuple[List[List[int]], float, float]:
-        """
-        Run HGS solver.
+    ) -> Tuple[np.ndarray, float]:
+        params = HGSParams.from_dict(values)
 
-        Returns:
-            Tuple of (routes, profit, solver_cost)
-        """
-        routes, profit, solver_cost = run_hgs(
-            sub_dist_matrix,
-            sub_wastes,
-            capacity,
-            revenue,
-            cost_unit,
-            values,
-            mandatory_nodes=mandatory_nodes,
+        solver = HGSSolver(
+            problem=problem,
+            budget=budget,
+            params=params,
         )
-        return routes, profit, solver_cost
+
+        return solver.solve()

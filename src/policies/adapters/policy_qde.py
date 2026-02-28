@@ -1,16 +1,13 @@
 """
-QDE Policy Adapter.
-
-Adapts the Quantum-Inspired Differential Evolution (QDE) logic to the
-agnostic BaseRoutingPolicy interface.
+QDE (Quantum-Inspired Differential Evolution) Policy Adapter.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Optional, Tuple, Type, Union
 
 import numpy as np
 
 from configs.policies.qde import QDEConfig
-from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.adapters.base_build_policy import BaseBuildPolicy
 from policies.quantum_differential_evolution.params import QDEParams
 from policies.quantum_differential_evolution.solver import QDESolver
 
@@ -18,12 +15,8 @@ from .factory import PolicyRegistry
 
 
 @PolicyRegistry.register("qde")
-class QDEPolicy(BaseRoutingPolicy):
-    """
-    QDE policy class.
-
-    Visits bins using Quantum-Inspired Differential Evolution.
-    """
+class QDEPolicy(BaseBuildPolicy):
+    """QDE policy adapter."""
 
     def __init__(self, config: Optional[Union[QDEConfig, Dict[str, Any]]] = None):
         super().__init__(config)
@@ -37,33 +30,23 @@ class QDEPolicy(BaseRoutingPolicy):
 
     def _run_solver(
         self,
-        sub_dist_matrix: np.ndarray,
-        sub_wastes: Dict[int, float],
-        capacity: float,
-        revenue: float,
-        cost_unit: float,
+        problem: Any,  # BuildProblem
+        budget: float,
         values: Dict[str, Any],
-        mandatory_nodes: List[int],
         **kwargs: Any,
-    ) -> Tuple[List[List[int]], float, float]:
+    ) -> Tuple[np.ndarray, float]:
         params = QDEParams(
             pop_size=int(values.get("pop_size", 20)),
             F=float(values.get("F", 0.5)),
-            CR=float(values.get("CR", 0.7)),
-            max_iterations=int(values.get("max_iterations", 200)),
+            CR=float(values.get("CR", 0.9)),
+            max_iterations=int(values.get("max_iterations", 100)),
             time_limit=float(values.get("time_limit", 60.0)),
-            n_removal=int(values.get("n_removal", 2)),
         )
 
         solver = QDESolver(
-            sub_dist_matrix,
-            sub_wastes,
-            capacity,
-            revenue,
-            cost_unit,
-            params,
-            mandatory_nodes,
+            problem=problem,
+            budget=budget,
+            params=params,
         )
 
-        routes, profit, cost = solver.solve()
-        return routes, profit, cost
+        return solver.solve()

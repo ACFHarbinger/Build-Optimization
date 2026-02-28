@@ -1,5 +1,5 @@
 """
-GP Tree definitions for the Genetic Programming Hyper-Heuristic (GPHH) solver.
+GP Tree definitions for the Genetic Programming Hyper-Heuristic (GPHH) solver for Build Optimization.
 """
 
 import random
@@ -50,7 +50,8 @@ class FunctionNode:
 
 GPNode = Union[TerminalNode, FunctionNode]
 
-_TERMINALS = ["avg_node_profit", "load_factor", "route_count", "iter_progress"]
+# Features for Build Optimization
+_TERMINALS = ["avg_item_score", "budget_ratio", "fill_ratio", "iter_progress"]
 _FUNCTIONS = ["IF_GT", "MAX_LLH"]
 
 

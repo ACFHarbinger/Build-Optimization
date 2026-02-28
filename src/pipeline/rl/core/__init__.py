@@ -2,10 +2,7 @@
 RL Pipeline module for WSmart-Route.
 """
 
-from pipeline.rl.meta.hrl import HRLModule
-from pipeline.rl.meta.module import MetaRLModule
-
-from pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.common.base import LitModule
 from pipeline.rl.common.baselines import (
     BASELINE_REGISTRY,
     Baseline,
@@ -34,7 +31,7 @@ from pipeline.rl.core.sapo import SAPO
 from pipeline.rl.core.symnco import SymNCO
 
 __all__ = [
-    "RL4COLitModule",
+    "LitModule",
     "Baseline",
     "NoBaseline",
     "ExponentialBaseline",
@@ -55,8 +52,6 @@ __all__ = [
     "AdaptiveImitation",
     "DRGRPO",
     "ImitationLearning",
-    "MetaRLModule",
-    "HRLModule",
     "POMO",
     "SymNCO",
     "MVMoE_POMO",

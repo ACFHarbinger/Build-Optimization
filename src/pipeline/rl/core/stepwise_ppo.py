@@ -12,10 +12,10 @@ from tensordict import TensorDict
 from torch import nn
 from torch.utils.data import DataLoader
 
-from pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.common.base import LitModule
 
 
-class StepwisePPO(RL4COLitModule):
+class StepwisePPO(LitModule):
     """
     Stepwise Proximal Policy Optimization (StepwisePPO).
 
@@ -50,7 +50,7 @@ class StepwisePPO(RL4COLitModule):
             mini_batch_size: Batch size for PPO updates.
             gamma: Discount factor.
             gae_lambda: GAE lambda parameter.
-            **kwargs: Arguments for RL4COLitModule.
+            **kwargs: Arguments for LitModule.
         """
         super().__init__(**kwargs)
         self.critic = critic

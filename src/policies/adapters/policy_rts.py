@@ -2,12 +2,12 @@
 RTS (Reactive Tabu Search) Policy Adapter.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Optional, Tuple, Type, Union
 
 import numpy as np
 
 from configs.policies.rts import RTSConfig
-from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.adapters.base_build_policy import BaseBuildPolicy
 from policies.reactive_tabu_search.params import RTSParams
 from policies.reactive_tabu_search.solver import RTSSolver
 
@@ -15,8 +15,8 @@ from .factory import PolicyRegistry
 
 
 @PolicyRegistry.register("rts")
-class RTSPolicy(BaseRoutingPolicy):
-    """Reactive Tabu Search policy class."""
+class RTSPolicy(BaseBuildPolicy):
+    """Reactive Tabu Search policy adapter."""
 
     def __init__(self, config: Optional[Union[RTSConfig, Dict[str, Any]]] = None):
         super().__init__(config)
@@ -30,35 +30,26 @@ class RTSPolicy(BaseRoutingPolicy):
 
     def _run_solver(
         self,
-        sub_dist_matrix: np.ndarray,
-        sub_wastes: Dict[int, float],
-        capacity: float,
-        revenue: float,
-        cost_unit: float,
+        problem: Any,  # BuildProblem
+        budget: float,
         values: Dict[str, Any],
-        mandatory_nodes: List[int],
         **kwargs: Any,
-    ) -> Tuple[List[List[int]], float, float]:
+    ) -> Tuple[np.ndarray, float]:
         params = RTSParams(
-            initial_tenure=int(values.get("initial_tenure", 7)),
-            min_tenure=int(values.get("min_tenure", 3)),
-            max_tenure=int(values.get("max_tenure", 20)),
-            tenure_increase=float(values.get("tenure_increase", 1.5)),
-            tenure_decrease=float(values.get("tenure_decrease", 0.9)),
             max_iterations=int(values.get("max_iterations", 500)),
+            initial_tenure=int(values.get("initial_tenure", 5)),
+            min_tenure=int(values.get("min_tenure", 2)),
+            max_tenure=int(values.get("max_tenure", 50)),
+            tenure_increase=float(values.get("tenure_increase", 1.2)),
+            tenure_decrease=float(values.get("tenure_decrease", 0.9)),
             n_removal=int(values.get("n_removal", 2)),
-            n_llh=int(values.get("n_llh", 5)),
             time_limit=float(values.get("time_limit", 60.0)),
         )
 
         solver = RTSSolver(
-            sub_dist_matrix,
-            sub_wastes,
-            capacity,
-            revenue,
-            cost_unit,
-            params,
-            mandatory_nodes,
+            problem=problem,
+            budget=budget,
+            params=params,
         )
 
         return solver.solve()

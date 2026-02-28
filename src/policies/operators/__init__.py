@@ -35,8 +35,9 @@ from .perturbation_operators import kick, perturb
 
 # Repair operators
 from .repair_operators import (
+    greedy_blink_insertion,
     greedy_insertion,
-    greedy_insertion_with_blinks,
+    random_insertion,
     regret_2_insertion,
     regret_k_insertion,
 )
@@ -79,7 +80,8 @@ __all__ = [
     "greedy_insertion",
     "regret_2_insertion",
     "regret_k_insertion",
-    "greedy_insertion_with_blinks",
+    "greedy_blink_insertion",
+    "random_insertion",
     # Exchange
     "move_or_opt",
     "cross_exchange",

@@ -8,7 +8,10 @@ Example:
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, List, Tuple
+from typing import TYPE_CHECKING, Any, Tuple
+
+if TYPE_CHECKING:
+    from core.build import Build
 
 
 class IPolicyAdapter(ABC):
@@ -19,14 +22,14 @@ class IPolicyAdapter(ABC):
     """
 
     @abstractmethod
-    def execute(self, **kwargs: Any) -> Tuple[List[int], float, Any]:
+    def execute(self, **kwargs: Any) -> Tuple["Build", float, Any]:
         """
-        Execute the policy to generate a route.
+        Execute the policy to generate a build.
 
         Args:
             **kwargs: Context dictionary containing simulation state.
 
         Returns:
-            Tuple[List[int], float, Any]: (tour, cost, additional_output)
+            Tuple[Build, float, Any]: (best_build, best_score, additional_output)
         """
         pass

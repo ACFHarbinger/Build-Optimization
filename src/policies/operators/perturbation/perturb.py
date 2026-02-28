@@ -1,73 +1,42 @@
 """
-Perturb Operator Module.
+Perturb Operator.
 
-This module implements the 'perturb' operator, which performs a series of random
-swaps to shake up the current solution and escape local optima.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.perturbation.perturb import perturb
-    >>> changed = perturb(context, k=5)
+Applies a minor random mutation.
 """
 
 import random
-from typing import Any
+from typing import Optional
+
+import numpy as np
+
+from core.problem import BuildProblem
 
 
-def perturb(ctx: Any, k: int = 3) -> bool:
+def perturb(build: np.ndarray, problem: Optional[BuildProblem], budget: float) -> np.ndarray:
     """
-    Perturbation operator: perform k random swaps to escape local optima.
-
-    Attempts to perform `k` random swaps between nodes. Swaps are forced
-    even if they don't improve the objective, provided they are feasible.
-
-    Args:
-        ctx: Context object with routes, node_map, wastes, capacity, etc.
-        k: Number of swaps to perform (default: 3).
-
-    Returns:
-        bool: True if any swap was performed, False otherwise.
+    Swap one item in the build with one outside it.
     """
-    all_nodes = list(ctx.node_map.keys())
-    if len(all_nodes) < 2:
-        return False
+    if problem is None:
+        return build
 
-    performed = False
-    for _ in range(k):
-        if len(all_nodes) < 2:
-            break
-        u, v = random.sample(all_nodes, 2)
-        u_loc = ctx.node_map.get(u)
-        v_loc = ctx.node_map.get(v)
-        if not u_loc or not v_loc:
-            continue
+    new_build = build.copy()
+    filled_slots = np.where(new_build != -1)[0]
 
-        r_u, p_u = u_loc
-        r_v, p_v = v_loc
+    if len(filled_slots) == 0:
+        return new_build
 
-        # Force swap regardless of improvement
-        if r_u == r_v:
-            # Same route swap
-            if abs(p_u - p_v) > 1:
-                ctx.routes[r_u][p_u], ctx.routes[r_v][p_v] = (
-                    ctx.routes[r_v][p_v],
-                    ctx.routes[r_u][p_u],
-                )
-                ctx._update_map({r_u})
-                performed = True
-        else:
-            # Inter-route swap
-            dem_u = ctx.wastes.get(u, 0)
-            dem_v = ctx.wastes.get(v, 0)
-            if (
-                ctx._get_load_cached(r_u) - dem_u + dem_v <= ctx.Q
-                and ctx._get_load_cached(r_v) - dem_v + dem_u <= ctx.Q
-            ):
-                ctx.routes[r_u][p_u] = v
-                ctx.routes[r_v][p_v] = u
-                ctx._update_map({r_u, r_v})
-                performed = True
+    current_items = set(new_build[filled_slots])
+    available_items = list(set(range(problem.num_items)) - current_items)
+    if not available_items:
+        return new_build
 
-    return performed
+    slot_to_vacate = random.choice(filled_slots)
+    item_to_insert = random.choice(available_items)
+    ejected_item = new_build[slot_to_vacate]
+
+    new_build[slot_to_vacate] = item_to_insert
+
+    if sum(problem.costs[i] for i in new_build if i != -1) > budget:
+        new_build[slot_to_vacate] = ejected_item
+
+    return new_build

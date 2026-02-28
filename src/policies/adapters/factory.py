@@ -13,6 +13,9 @@ from typing import Any, Optional
 from interfaces.adapter import IPolicyAdapter
 from policies.adapters.registry import PolicyRegistry
 
+# Alias for backward compatibility
+IPolicy = IPolicyAdapter
+
 
 class PolicyFactory:
     """
@@ -30,10 +33,12 @@ class PolicyFactory:
         import policies.adapters.policy_neural as policy_neural  # noqa
         import policies.adapters.policy_alns as policy_alns  # noqa
         import policies.adapters.policy_bcp as policy_bcp  # noqa
+        import policies.adapters.policy_cvrp as policy_cvrp  # noqa
         import policies.adapters.policy_hgs as policy_hgs  # noqa
         import policies.adapters.policy_hgs_alns as policy_hgs_alns  # noqa
         import policies.adapters.policy_lkh as policy_lkh  # noqa
         import policies.adapters.policy_sans as policy_sans  # noqa
+        import policies.adapters.policy_tsp as policy_tsp  # noqa
         import policies.adapters.policy_vrpp as policy_vrpp  # noqa
         import policies.adapters.policy_ks_aco as policy_ks_aco  # noqa
         import policies.adapters.policy_hh_aco as policy_hh_aco  # noqa
@@ -69,7 +74,7 @@ class PolicyFactory:
         engine: Optional[str] = None,
         threshold: Optional[float] = None,
         **kwargs: Any,
-    ) -> IPolicyAdapter:
+    ) -> IPolicy:
         """
         Create and return the appropriate PolicyAdapter for the given parameters.
 

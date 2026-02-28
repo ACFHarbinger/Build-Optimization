@@ -3,7 +3,7 @@ Dataset classes for WSmart-Route.
 """
 
 # Import from utils.data.td_utils, not from a local td_utils
-from logic.utils.data.td_utils import td_kwargs, tensordict_collate_fn
+from utils.data.td_utils import td_kwargs, tensordict_collate_fn
 
 from .pytorch.baseline_dataset import BaselineDataset
 from .pytorch.extra_key_dataset import ExtraKeyDataset

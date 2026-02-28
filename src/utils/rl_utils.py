@@ -5,8 +5,9 @@ Reinforcement Learning utilities for WSmart-Route.
 from typing import Any
 
 import torch
-from logic.interfaces import ITensorDictLike, ITraversable
 from tensordict import TensorDict
+
+from interfaces import ITensorDictLike, ITraversable
 
 
 def _internal_safe_copy(obj: object, visited: set):

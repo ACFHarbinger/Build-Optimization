@@ -1,51 +1,27 @@
 """
-2-opt Intra-Route Operator Module.
+Two Opt Intra Operator.
 
-This module implements the 2-opt intra-route operator, which reverses a segment
-of a route to eliminate crossing edges and reduce total tour length.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.route.two_opt_intra import move_2opt_intra
-    >>> improved = move_2opt_intra(ls, u, v, r_u, p_u, r_v, p_v)
+Reverses a segment of the build array.
 """
 
+import random
+from typing import Optional
 
-def move_2opt_intra(ls, u: int, v: int, r_u: int, p_u: int, r_v: int, p_v: int) -> bool:
+import numpy as np
+
+from core.problem import BuildProblem
+
+
+def move_2opt_intra(build: np.ndarray, problem: Optional[BuildProblem] = None, max_len: int = 4) -> np.ndarray:
     """
-    2-opt intra-route operator: reverse a segment within a route.
-
-    Reverses the segment between positions p_u+1 and p_v (inclusive)
-    in route r_u. Only applies the move if it reduces total cost.
-
-    Args:
-        ls: LocalSearch instance containing routes and distance matrix.
-        u: Start node of the segment (edge u->next_u broken).
-        v: End node of the segment (edge v->next_v broken).
-        r_u: Index of the route (must equal r_v for intra-route).
-        p_u: Position of u in the route.
-        r_v: Index of the route (unused but required for signature).
-        p_v: Position of v in the route.
-
-    Returns:
-        bool: True if the reversal was applied (improving), False otherwise.
+    Reverse a contiguous segment of slots.
     """
-    if p_u >= p_v:
-        return False
-    if p_u + 1 == p_v:
-        return False
+    new_build = build.copy()
+    if len(new_build) < 2:
+        return new_build
 
-    route = ls.routes[r_u]
-    u_next = route[p_u + 1]
-    v_next = route[p_v + 1] if p_v < len(route) - 1 else 0
+    seg_len = random.randint(2, min(max_len, len(new_build)))
+    start_idx = random.randint(0, len(new_build) - seg_len)
 
-    delta = -ls.d[u, u_next] - ls.d[v, v_next] + ls.d[u, v] + ls.d[u_next, v_next]
-
-    if delta * ls.C < -1e-4:
-        segment = route[p_u + 1 : p_v + 1]
-        route[p_u + 1 : p_v + 1] = segment[::-1]
-        ls._update_map({r_u})
-        return True
-    return False
+    new_build[start_idx : start_idx + seg_len] = new_build[start_idx : start_idx + seg_len][::-1]
+    return new_build

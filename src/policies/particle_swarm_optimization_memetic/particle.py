@@ -2,23 +2,22 @@
 Particle class for the Particle Swarm Optimization Memetic Algorithm (PSOMA).
 """
 
-import copy
-from typing import List
+import numpy as np
 
 
 class PSOMAParticle:
     """
-    A single PSO particle representing a routing solution.
+    A single PSO particle representing a build solution.
 
     Attributes:
-        routes: Current route set.
-        profit: Objective value of current position.
-        pbest_routes: Personal best route set.
-        pbest_profit: Objective value of personal best.
+        build: Current item-slot allocation array.
+        score: Objective value of current position.
+        pbest_build: Personal best build.
+        pbest_score: Objective value of personal best.
     """
 
-    def __init__(self, routes: List[List[int]], profit: float):
-        self.routes = routes
-        self.profit = profit
-        self.pbest_routes = copy.deepcopy(routes)
-        self.pbest_profit = profit
+    def __init__(self, build: np.ndarray, score: float):
+        self.build = build.copy()
+        self.score = score
+        self.pbest_build = build.copy()
+        self.pbest_score = score

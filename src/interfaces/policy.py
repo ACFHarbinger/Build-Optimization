@@ -16,7 +16,7 @@ from tensordict import TensorDict
 class IPolicy(Protocol):
     """
     Protocol for RL Policies.
-    Matches the interface expected by RL4COLitModule and StepwisePPO.
+    Matches the interface expected by LitModule and StepwisePPO.
     """
 
     encoder: Optional[torch.nn.Module]

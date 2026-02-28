@@ -1,85 +1,44 @@
 """
-Kick Operator Module.
+Kick Perturbation Operator.
 
-This module implements the 'kick' operator, which destroys a significant portion
-of the current solution and then repairs it using a greedy heuristic. This is
-typically used to escape deep local optima.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.perturbation.kick import kick
-    >>> modified = kick(context, destroy_ratio=0.3)
+Applies a large random perturbation to escape local optima.
 """
 
 import random
-from typing import Any
+from typing import Optional
+
+import numpy as np
+
+from core.problem import BuildProblem
 
 
-def kick(ctx: Any, destroy_ratio: float = 0.2) -> bool:
+def kick(build: np.ndarray, problem: Optional[BuildProblem], budget: float, strength: float = 0.3) -> np.ndarray:
     """
-    Kick operator: destroy a portion of the solution and repair.
-
-    Removes random nodes and reinserts them greedily.
-
-    Args:
-        ctx: Context object with routes, node_map, wastes, capacity, etc.
-        destroy_ratio: Fraction of nodes to remove (default: 0.2).
-
-    Returns:
-        bool: True if the operation was performed, False otherwise.
+    Destroy and reconstruct a portion of the build randomly.
     """
-    all_nodes = list(ctx.node_map.keys())
-    n_remove = max(1, int(len(all_nodes) * destroy_ratio))
-    if len(all_nodes) < 2:
-        return False
+    if problem is None:
+        return build
 
-    # Select nodes to remove
-    removed_nodes = random.sample(all_nodes, min(n_remove, len(all_nodes)))
+    new_build = build.copy()
+    filled_slots = np.where(new_build != -1)[0]
 
-    # Remove nodes from routes
-    for node in removed_nodes:
-        loc = ctx.node_map.get(node)
-        if loc:
-            ri, pi = loc
-            if pi < len(ctx.routes[ri]) and ctx.routes[ri][pi] == node:
-                ctx.routes[ri].pop(pi)
+    if len(filled_slots) == 0:
+        return new_build
 
-    # Remove empty routes
-    ctx.routes = [r for r in ctx.routes if r]
+    n_remove = max(1, int(len(filled_slots) * strength))
+    remove_slots = random.sample(list(filled_slots), n_remove)
+    new_build[remove_slots] = -1
 
-    # Rebuild structures after removal
-    ctx._build_structures()
+    current_items = set(new_build[new_build != -1])
+    available_items = list(set(range(problem.num_items)) - current_items)
 
-    # Greedy reinsertion
-    for node in removed_nodes:
-        best_cost = float("inf")
-        best_ri = -1
-        best_pos = -1
+    for slot in remove_slots:
+        if not available_items:
+            break
 
-        for ri, route in enumerate(ctx.routes):
-            current_load = ctx._get_load_cached(ri)
-            node_waste = ctx.wastes.get(node, 0)
-            if current_load + node_waste > ctx.Q:
-                continue
+        insert_item = random.choice(available_items)
+        if problem.costs[insert_item] + sum(problem.costs[i] for i in new_build if i != -1) <= budget:
+            new_build[slot] = insert_item
+            available_items.remove(insert_item)
 
-            # Try inserting at each position
-            for pos in range(len(route) + 1):
-                prev = route[pos - 1] if pos > 0 else 0
-                nxt = route[pos] if pos < len(route) else 0
-                cost = ctx.d[prev, node] + ctx.d[node, nxt] - ctx.d[prev, nxt]
-                if cost < best_cost:
-                    best_cost = cost
-                    best_ri = ri
-                    best_pos = pos
-
-        if best_ri >= 0:
-            ctx.routes[best_ri].insert(best_pos, node)
-        else:
-            # Create new route
-            ctx.routes.append([node])
-
-    # Rebuild structures after reinsertion
-    ctx._build_structures()
-    return True
+    return new_build

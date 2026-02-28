@@ -1,191 +1,82 @@
 """
-Regret Insertion Operator Module.
+Regret-Based Insertion Operator Module.
 
-This module implements the Regret-k insertion heuristic for VRP repair.
-It calculates a regret value for each unassigned node based on the cost difference
-between its best and k-th best insertion positions.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.repair.regret import RegretInsertion
-    >>> operator = RegretInsertion(k=2)
-    >>> new_routes = operator.repair(destroyed_routes, unassigned_nodes)
+Inserts items based on regret (the difference between the best and second best insertions).
 """
 
-from typing import Dict, List, Optional
+from typing import Optional
 
 import numpy as np
 
+from core.problem import BuildProblem
 
-def regret_2_insertion(
-    routes: List[List[int]],
-    removed_nodes: List[int],
-    dist_matrix: np.ndarray,
-    wastes: Dict[int, float],
-    capacity: float,
-    R: Optional[float] = None,
-    mandatory_nodes: Optional[List[int]] = None,
-    cost_unit: float = 1.0,
-) -> List[List[int]]:
+
+def regret_2_insertion(build: np.ndarray, budget: float, problem: Optional[BuildProblem]) -> np.ndarray:
     """
-    Insert removed nodes based on the regret-2 criterion.
-    Regret-2 Insertion Heuristic.
-
-    Prioritizes inserting nodes that would be much more expensive to insert
-    later (high regret = cost difference between best and 2nd best option).
-
-    Args:
-        routes: Partial routes.
-        removed_nodes: Nodes to be re-inserted.
-        dist_matrix: Distance matrix.
-        wastes: waste look-up.
-        capacity: Vehicle capacity.
-        R: Revenue multiplier (Optional).
-        mandatory_nodes: Optional list of mandatory node indices.
-
-    Returns:
-        List[List[int]]: New routes after insertion.
+    2-regret insertion for Build Optimization.
     """
-    return regret_k_insertion(
-        routes,
-        removed_nodes,
-        dist_matrix,
-        wastes,
-        capacity,
-        k=2,
-        R=R,
-        mandatory_nodes=mandatory_nodes,
-        cost_unit=cost_unit,
-    )
+    if problem is None:
+        return build
+    return regret_k_insertion(build, budget, problem, k=2)
 
 
-def regret_k_insertion(  # noqa: C901
-    routes: List[List[int]],
-    removed_nodes: List[int],
-    dist_matrix: np.ndarray,
-    wastes: Dict[int, float],
-    capacity: float,
-    k: int = 2,
-    R: Optional[float] = None,
-    mandatory_nodes: Optional[List[int]] = None,
-    cost_unit: float = 1.0,
-) -> List[List[int]]:
+def regret_k_insertion(build: np.ndarray, budget: float, problem: Optional[BuildProblem], k: int) -> np.ndarray:
     """
-    Insert removed nodes using the regret-k heuristic.
-
-    Computes the 'regret' for each unassigned node, defined as the difference
-    between the cost of the best insertion and the k-th best insertion. Node
-    with the maximum regret is inserted first into its best position.
-
-    Args:
-        routes: Partial routes.
-        removed_nodes: Nodes to be re-inserted.
-        dist_matrix: Distance matrix.
-        wastes: waste look-up.
-        capacity: Vehicle capacity.
-        k: Regret degree (2, 3, etc.).
-        R: Revenue multiplier (Optional).
-        mandatory_nodes: Optional list of mandatory node indices.
-
-    Returns:
-        List[List[int]]: New routes after insertion.
+    Regret-based insertion strategy. Evaluates the difference
+    between the best item insertion and the k-th best item.
     """
-    mandatory_nodes_set = set(mandatory_nodes) if mandatory_nodes else set()
-    # Calculate current loads and track visited
-    loads = []
-    visited = set()
-    for route in routes:
-        loads.append(sum(wastes.get(node, 0) for node in route))
-        visited.update(route)
+    if problem is None:
+        return build
 
-    # All unvisited nodes (including those previously removed) are candidates
-    n_nodes = len(dist_matrix) - 1
-    unassigned = list(set(range(1, n_nodes + 1)) - visited)
+    new_build = build.copy()
+    empty_slots = np.where(new_build == -1)[0]
 
-    while unassigned:
-        all_candidates = []
-        unprofitable_nodes = []
+    current_items = new_build[new_build != -1]
+    current_cost = np.sum(problem.costs[current_items]) if len(current_items) > 0 else 0.0
 
-        for node in unassigned:
-            waste = wastes.get(node, 0)
-            node_options = []
+    while len(empty_slots) > 0:
+        best_regret = float("-inf")
+        best_item_overall = -1
+        best_slot_overall = -1
 
-            for r_idx, route in enumerate(routes):
-                if loads[r_idx] + waste > capacity:
+        for slot in empty_slots:
+            item_scores = []
+
+            for item in range(problem.num_items):
+                if item in new_build:
                     continue
 
-                for pos in range(len(route) + 1):
-                    prev = route[pos - 1] if pos > 0 else 0
-                    nxt = route[pos] if pos < len(route) else 0
-                    cost = dist_matrix[prev, node] + dist_matrix[node, nxt] - dist_matrix[prev, nxt]
-                    node_options.append((cost, r_idx, pos))
-
-            # New route option
-            new_cost = dist_matrix[0][node] + dist_matrix[node][0]
-            node_options.append((new_cost, len(routes), 0))
-
-            # Sort options by cost
-            node_options.sort(key=lambda x: x[0])
-
-            # VRPP Logic
-            best_cost = node_options[0][0]
-            if R is not None:
-                revenue = waste * R
-                if best_cost * cost_unit > revenue and node not in mandatory_nodes_set:
-                    unprofitable_nodes.append(node)
+                item_cost = problem.costs[item]
+                if current_cost + item_cost > budget:
                     continue
 
-            # Calculate regret
-            if len(node_options) >= k:
-                # Regret = cost_at_k - cost_at_1
-                regret = node_options[k - 1][0] - node_options[0][0]
-            elif len(node_options) > 1:
-                # If fewer than k options, regret is diff between last and first
-                regret = node_options[-1][0] - node_options[0][0]
-            else:
-                # Only one option (or none), max priority
-                regret = float("inf")
+                new_build[slot] = item
+                score = problem.evaluate(new_build)
+                item_scores.append((score, item))
 
-            best_option = node_options[0] if node_options else (float("inf"), -1, -1)
-            all_candidates.append((regret, node, best_option))
+            new_build[slot] = -1
 
-        # Remove unprofitable nodes from unassigned
-        for node in unprofitable_nodes:
-            unassigned.remove(node)
-
-        if not all_candidates:
-            # No feasible/profitable insertions left
-            # For remaining mandatory nodes, we'll hit this break and need to handle them
-            mandatory_remaining = [n for n in unassigned if n in mandatory_nodes_set]
-            if mandatory_remaining:
-                node = mandatory_remaining[0]
-                routes.append([node])
-                loads.append(wastes.get(node, 0))
-                unassigned.remove(node)
+            if not item_scores:
                 continue
+
+            item_scores.sort(key=lambda x: x[0], reverse=True)
+
+            if len(item_scores) == 1:
+                regret = item_scores[0][0]
             else:
-                break
+                k_idx = min(k - 1, len(item_scores) - 1)
+                regret = item_scores[0][0] - item_scores[k_idx][0]
 
-        # Pick node with max regret
-        all_candidates.sort(key=lambda x: x[0], reverse=True)
-        _, best_node, (cost, r_idx, pos) = all_candidates[0]
+            if regret > best_regret:
+                best_regret = regret
+                best_item_overall = item_scores[0][1]
+                best_slot_overall = slot
 
-        if r_idx == -1:
-            # Cannot insert node anywhere
-            unassigned.remove(best_node)
-            continue
-
-        # Apply insertion
-        waste = wastes.get(best_node, 0)
-        if r_idx == len(routes):
-            routes.append([best_node])
-            loads.append(waste)
+        if best_item_overall != -1:
+            new_build[best_slot_overall] = best_item_overall
+            current_cost += problem.costs[best_item_overall]
+            empty_slots = np.where(new_build == -1)[0]
         else:
-            routes[r_idx].insert(pos, best_node)
-            loads[r_idx] += waste
+            break
 
-        unassigned.remove(best_node)
-
-    return routes
+    return new_build

@@ -5,9 +5,9 @@ Dataset optimized for fast instantiation.
 from typing import Any
 
 import torch
-from logic.utils.data.td_utils import td_kwargs
 from tensordict.tensordict import TensorDict
 from torch.utils.data import Dataset
+from utils.data.td_utils import td_kwargs
 
 
 class TensorDictDatasetFastGeneration(Dataset):

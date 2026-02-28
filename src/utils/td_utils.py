@@ -6,9 +6,10 @@ from typing import Any, Dict, Union, cast
 
 import tensordict
 import torch
-from logic.interfaces import ITraversable
 from packaging import version
 from tensordict.tensordict import TensorDict
+
+from interfaces import ITraversable
 
 # Version check for tensordict
 td_kwargs: Dict[str, Any] = (

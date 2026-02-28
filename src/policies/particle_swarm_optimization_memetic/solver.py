@@ -1,27 +1,21 @@
 """
-Particle Swarm Optimization Memetic Algorithm (PSOMA) for VRPP.
+Particle Swarm Optimization Memetic Algorithm (PSOMA) for Build Optimization.
 
-Particles navigate the discrete routing space via swap-based velocity.
-A low inertia weight (ω≈0.4) forces intensive local exploitation.  A
-periodic memetic step applies worst-removal + greedy-insertion local
-search to each particle, analogous to the genetic operators described in
-the survey.
-
-Reference:
-    Survey §"Particle Swarm Optimization" — PSOMA with 0.016% optimality gap.
+Particles navigate the discrete item-slot space via probabilistic updates
+toward personal and global bests. A memetic step applies periodic
+local search to improve solution quality.
 """
 
-import contextlib
-import copy
 import random
 import time
-from typing import Dict, List, Optional, Tuple
+from typing import List, Tuple
 
 import numpy as np
 
+from core.problem import BuildProblem
 from tracking.viz_mixin import PolicyVizMixin
 
-from ..operators.destroy_operators import worst_removal
+from ..operators.destroy_operators import random_removal
 from ..operators.repair_operators import greedy_insertion
 from .params import PSOMAParams
 from .particle import PSOMAParticle
@@ -29,270 +23,127 @@ from .particle import PSOMAParticle
 
 class PSOMAsSolver(PolicyVizMixin):
     """
-    PSOMA solver for VRPP — PSO with memetic local-search steps.
+    PSOMA solver for Build Optimization — PSO with memetic local-search steps.
     """
 
     def __init__(
         self,
-        dist_matrix: np.ndarray,
-        wastes: Dict[int, float],
-        capacity: float,
-        R: float,
-        C: float,
+        problem: BuildProblem,
+        budget: float,
         params: PSOMAParams,
-        mandatory_nodes: Optional[List[int]] = None,
     ):
-        self.dist_matrix = dist_matrix
-        self.wastes = wastes
-        self.capacity = capacity
-        self.R = R
-        self.C = C
+        self.problem = problem
+        self.budget = budget
         self.params = params
-        self.mandatory_nodes = mandatory_nodes or []
-        self.n_nodes = len(dist_matrix) - 1
-        self.nodes = list(range(1, self.n_nodes + 1))
 
-    # ------------------------------------------------------------------
-    # Public interface
-    # ------------------------------------------------------------------
-
-    def solve(self) -> Tuple[List[List[int]], float, float]:
+    def solve(self) -> Tuple[np.ndarray, float]:
         """
         Run PSOMA optimisation.
 
         Returns:
-            Tuple of (routes, profit, cost).
+            Tuple of (best_build, best_score).
         """
-        if self.n_nodes == 0:
-            return [], 0.0, 0.0
-
         start = time.time()
 
         # Initialise swarm
         swarm = self._init_swarm()
-        gbest_routes, gbest_profit = self._global_best(swarm)
-        gbest_cost = self._cost(gbest_routes)
+        gbest_build, gbest_score = self._global_best(swarm)
 
         for iteration in range(self.params.max_iterations):
             if time.time() - start > self.params.time_limit:
                 break
 
             for particle in swarm:
-                # Velocity / position update via probabilistic segment adoption
-                particle.routes = self._update_position(
-                    particle.routes,
-                    particle.pbest_routes,
-                    gbest_routes,
+                # Velocity / position update via probabilistic slot adoption
+                particle.build = self._update_position(
+                    particle.build,
+                    particle.pbest_build,
+                    gbest_build,
                 )
-                particle.profit = self._evaluate(particle.routes)
+
+                # Ensure feasibility
+                if not self.problem.is_feasible(particle.build):
+                    particle.build = self.problem.random_solution()
+
+                particle.score = self.problem.evaluate(particle.build)
 
                 # Update personal best
-                if particle.profit > particle.pbest_profit:
-                    particle.pbest_routes = copy.deepcopy(particle.routes)
-                    particle.pbest_profit = particle.profit
+                if particle.score > particle.pbest_score:
+                    particle.pbest_build = particle.build.copy()
+                    particle.pbest_score = particle.score
 
             # Global best update
             for particle in swarm:
-                if particle.profit > gbest_profit:
-                    gbest_routes = copy.deepcopy(particle.routes)
-                    gbest_profit = particle.profit
-                    gbest_cost = self._cost(gbest_routes)
+                if particle.score > gbest_score:
+                    gbest_build = particle.build.copy()
+                    gbest_score = particle.score
 
             # Memetic step: periodic local search on every particle
             if (iteration + 1) % self.params.local_search_freq == 0:
                 for particle in swarm:
-                    ls_routes = self._local_search(particle.routes)
-                    ls_profit = self._evaluate(ls_routes)
-                    if ls_profit > particle.profit:
-                        particle.routes = ls_routes
-                        particle.profit = ls_profit
-                        if ls_profit > particle.pbest_profit:
-                            particle.pbest_routes = copy.deepcopy(ls_routes)
-                            particle.pbest_profit = ls_profit
-                        if ls_profit > gbest_profit:
-                            gbest_routes = copy.deepcopy(ls_routes)
-                            gbest_profit = ls_profit
-                            gbest_cost = self._cost(gbest_routes)
+                    ls_build = self._local_search(particle.build)
+                    ls_score = self.problem.evaluate(ls_build)
+                    if ls_score > particle.score:
+                        particle.build = ls_build
+                        particle.score = ls_score
+                        if ls_score > particle.pbest_score:
+                            particle.pbest_build = ls_build.copy()
+                            particle.pbest_score = ls_score
+                        if ls_score > gbest_score:
+                            gbest_build = ls_build.copy()
+                            gbest_score = ls_score
 
             self._viz_record(
                 iteration=iteration,
-                best_profit=gbest_profit,
-                best_cost=gbest_cost,
+                best_profit=gbest_score,  # legacy name
+                best_cost=-gbest_score,
                 swarm_size=len(swarm),
             )
 
-        return gbest_routes, gbest_profit, gbest_cost
-
-    # ------------------------------------------------------------------
-    # Private helpers
-    # ------------------------------------------------------------------
+        return gbest_build, gbest_score
 
     def _init_swarm(self) -> List[PSOMAParticle]:
         """Initialise swarm with random feasible solutions."""
         swarm = []
         for _ in range(self.params.pop_size):
-            routes = self._build_random_solution()
-            profit = self._evaluate(routes)
-            swarm.append(PSOMAParticle(routes, profit))
+            build = self.problem.random_solution()
+            score = self.problem.evaluate(build)
+            swarm.append(PSOMAParticle(build, score))
         return swarm
 
-    def _build_random_solution(self) -> List[List[int]]:
-        """Order-dependent sequential construction (matches ALNS style)."""
-        from policies.operators.heuristics.initialization import build_nn_routes
-
-        optimized_routes = build_nn_routes(
-            nodes=self.nodes,
-            mandatory_nodes=self.mandatory_nodes,
-            wastes=self.wastes,
-            capacity=self.capacity,
-            dist_matrix=self.dist_matrix,
-            R=self.R,
-            C=self.C,
-        )
-        return optimized_routes
-
-    def _global_best(self, swarm: List[PSOMAParticle]) -> Tuple[List[List[int]], float]:
-        """Return (routes, profit) of best particle."""
-        best = max(swarm, key=lambda p: p.profit)
-        return copy.deepcopy(best.routes), best.profit
+    def _global_best(self, swarm: List[PSOMAParticle]) -> Tuple[np.ndarray, float]:
+        """Return (build, score) of best particle."""
+        best = max(swarm, key=lambda p: p.score)
+        return best.build.copy(), best.score
 
     def _update_position(
         self,
-        current: List[List[int]],
-        pbest: List[List[int]],
-        gbest: List[List[int]],
-    ) -> List[List[int]]:
+        current: np.ndarray,
+        pbest: np.ndarray,
+        gbest: np.ndarray,
+    ) -> np.ndarray:
         """
-        Update particle position via OX crossover toward pbest and gbest.
+        Update particle position by moving toward pbest and gbest.
+        For discrete builds, we adopt values from pbest or gbest with some probability.
         """
-        routes = copy.deepcopy(current)
+        new_build = current.copy()
+        for slot in range(self.problem.num_slots):
+            r = random.random()
+            # Cognitive attraction
+            if r < self.params.c1 * random.random():
+                new_build[slot] = pbest[slot]
+            # Social attraction
+            elif r < self.params.c2 * random.random():
+                new_build[slot] = gbest[slot]
+            # Probabilistic decay / inertia is implicitly handled by not changing slot if r is high
 
-        # Cognitive component: crossover with pbest
-        if random.random() < self.params.c1 * random.random() and pbest:
-            routes = self._crossover(routes, pbest)
+        return new_build
 
-        # Social component: crossover with gbest
-        if random.random() < self.params.c2 * random.random() and gbest:
-            routes = self._crossover(routes, gbest)
-
-        # Inertia: with prob (1-omega) randomly relocate one node
-        if random.random() > self.params.omega:
-            routes = self._random_relocate(routes)
-
-        # 2-opt local search after every position update
-        from policies.local_search.local_search_aco import ACOLocalSearch
-
-        ls = ACOLocalSearch(self.dist_matrix, self.wastes, self.capacity, self.R, self.C, self.params)
-        return ls.optimize(routes)
-
-    def _crossover(self, base_routes: List[List[int]], guide_routes: List[List[int]]) -> List[List[int]]:
+    def _local_search(self, build: np.ndarray) -> np.ndarray:
         """
-        OX crossover: inject a random segment from guide into base preserving order.
+        Memetic local search: random-removal + greedy-insertion.
         """
-        winner_flat = [n for r in guide_routes for n in r]
-        loser_flat = [n for r in base_routes for n in r]
-
-        if len(winner_flat) < 2:
-            return copy.deepcopy(base_routes)
-
-        a = random.randint(0, len(winner_flat) - 1)
-        b = random.randint(a, min(a + max(1, len(winner_flat) // 3), len(winner_flat)))
-        segment = winner_flat[a:b]
-        segment_set = set(segment)
-
-        remaining = [n for n in loser_flat if n not in segment_set]
-        insert_pos = min(a, len(remaining))
-        child_flat = remaining[:insert_pos] + segment + remaining[insert_pos:]
-
-        child_routes: List[List[int]] = []
-        curr_route: List[int] = []
-        load = 0.0
-        for node in child_flat:
-            waste = self.wastes.get(node, 0.0)
-            if load + waste <= self.capacity:
-                curr_route.append(node)
-                load += waste
-            else:
-                if curr_route:
-                    child_routes.append(curr_route)
-                curr_route = [node]
-                load = waste
-        if curr_route:
-            child_routes.append(curr_route)
-
-        visited = {n for r in child_routes for n in r}
-        for n in self.mandatory_nodes:
-            if n not in visited:
-                child_routes.append([n])
-
-        return child_routes
-
-    def _random_relocate(self, routes: List[List[int]]) -> List[List[int]]:
-        """
-        Randomly remove one node and reinsert it at a random position.
-
-        Args:
-            routes: Current routes.
-
-        Returns:
-            Perturbed routes.
-        """
-        flat = [n for r in routes for n in r]
-        if not flat:
-            return routes
-        node = random.choice(flat)
-        new_routes = [[n for n in r if n != node] for r in routes]
-        new_routes = [r for r in new_routes if r]
-        with contextlib.suppress(Exception):
-            new_routes = greedy_insertion(
-                new_routes,
-                [node],
-                self.dist_matrix,
-                self.wastes,
-                self.capacity,
-                R=self.R,
-                mandatory_nodes=self.mandatory_nodes,
-            )
-        return new_routes
-
-    def _local_search(self, routes: List[List[int]]) -> List[List[int]]:
-        """
-        Memetic local search: worst-removal + greedy-insertion + ACO.
-        """
-        n = max(3, self.params.n_removal)
-        try:
-            partial, removed = worst_removal(routes, n, self.dist_matrix)
-            repaired = greedy_insertion(
-                partial,
-                removed,
-                self.dist_matrix,
-                self.wastes,
-                self.capacity,
-                R=self.R,
-                mandatory_nodes=self.mandatory_nodes,
-            )
-            from policies.local_search.local_search_aco import ACOLocalSearch
-
-            ls = ACOLocalSearch(self.dist_matrix, self.wastes, self.capacity, self.R, self.C, self.params)
-            return ls.optimize(repaired)
-        except Exception:
-            return copy.deepcopy(routes)
-
-    def _evaluate(self, routes: List[List[int]]) -> float:
-        """Net profit for a set of routes."""
-        if not routes:
-            return 0.0
-        rev = sum(self.wastes.get(n, 0.0) * self.R for r in routes for n in r)
-        return rev - self._cost(routes) * self.C
-
-    def _cost(self, routes: List[List[int]]) -> float:
-        """Total routing distance."""
-        total = 0.0
-        for route in routes:
-            if not route:
-                continue
-            total += self.dist_matrix[0][route[0]]
-            for k in range(len(route) - 1):
-                total += self.dist_matrix[route[k]][route[k + 1]]
-            total += self.dist_matrix[route[-1]][0]
-        return total
+        n = self.params.n_removal
+        partial = random_removal(build, n, self.problem)
+        repaired = greedy_insertion(partial, self.budget, self.problem)
+        return repaired

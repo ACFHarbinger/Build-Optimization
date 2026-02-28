@@ -25,7 +25,7 @@ class ABCParams:
     """
 
     n_sources: int = 20
-    limit: int = 10
-    max_iterations: int = 200
-    n_removal: int = 1
+    max_iterations: int = 100
+    limit: int = 20
+    n_removal: int = 2
     time_limit: float = 60.0

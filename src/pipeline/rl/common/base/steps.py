@@ -1,5 +1,5 @@
 """
-Training/Validation step logic for RL4COLitModule.
+Training/Validation step logic for LitModule.
 """
 
 from __future__ import annotations

@@ -12,16 +12,16 @@ from __future__ import annotations
 from typing import Any, Optional, cast
 
 import torch
-from envs.base import RL4COEnvBase
 from models.common.autoregressive.constructive import ConstructivePolicy
 from tensordict import TensorDict
 from torch import nn
 
+from envs.base import RL4COEnvBase
 from interfaces.env import IEnv
-from pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.common.base import LitModule
 
 
-class A2C(RL4COLitModule):
+class A2C(LitModule):
     """
     Advantage Actor-Critic (A2C) algorithm.
 
@@ -71,7 +71,7 @@ class A2C(RL4COLitModule):
             entropy_coef: Entropy regularization coefficient.
             value_loss_coef: Critic loss coefficient.
             normalize_advantage: Whether to normalize advantages.
-            **kwargs: Additional args passed to RL4COLitModule.
+            **kwargs: Additional args passed to LitModule.
         """
         # A2C uses critic baseline
         kwargs["baseline"] = "critic"

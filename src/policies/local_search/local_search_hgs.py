@@ -1,28 +1,20 @@
 """
-HGS Local Search Module.
+HGS Local Search Module for Build Optimization.
 
-This module provides the local search implementation specifically for
-Hybrid Genetic Search (HGS). It applies operators to HGS 'Individual' objects.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.local_search.local_search_hgs import HGSLocalSearch
-    >>> ls = HGSLocalSearch(dist_matrix, waste, capacity, R, C, params)
-    >>> improved_ind = ls.optimize(individual)
+Applies local refinement to HGS Individuals (builds).
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Any, Tuple
 
 import numpy as np
 
 from .local_search_base import LocalSearch
 
 if TYPE_CHECKING:
-    from ..hybrid_genetic_search import HGSParams, Individual
+    from ..hybrid_genetic_search.individual import Individual
+    from ..hybrid_genetic_search.params import HGSParams
 
 
 class HGSLocalSearch(LocalSearch):
@@ -32,48 +24,32 @@ class HGSLocalSearch(LocalSearch):
 
     def __init__(
         self,
-        dist_matrix: np.ndarray,
-        waste: Dict[int, float],
-        capacity: float,
-        R: float,
-        C: float,
-        params: "HGSParams",
+        problem: Any,
+        budget: float,
+        params: HGSParams,
     ):
+        super().__init__(problem, budget, params)
+
+    def optimize(self, build: np.ndarray) -> Tuple[np.ndarray, float]:
         """
-        Initialize HGS Local Search.
-
-        Args:
-            dist_matrix: Distance matrix.
-            waste: Dictionary of waste amounts for each node.
-            capacity: Vehicle capacity.
-            R: Parameter R.
-            C: Parameter C.
-            params: HGS parameters.
+        Refine a build using local search.
         """
-        super().__init__(dist_matrix, waste, capacity, R, C, params)
+        # In build optimization, HGS local search refines the discrete selection.
+        # This is a simplified version that ensures score is updated.
+        new_build = build.copy()
 
-    def optimize(self, solution: "Individual") -> "Individual":
+        # Optional: Apply some hill climbing or swaps here.
+        # For now, it's a placeholder that evaluates the build.
+
+        score = self.problem.evaluate(new_build)
+        return new_build, score
+
+    def optimize_individual(self, individual: Individual) -> Individual:
         """
-        Iteratively improve an individual using local search operators.
+        Refine an individual's build using local search.
         """
-        if not solution.routes:
-            return solution
-
-        self.routes = [r[:] for r in solution.routes]
-
-        # Run optimization
-        self._optimize_internal()
-
-        solution.routes = self.routes
-        new_gt = []
-        for r in self.routes:
-            new_gt.extend(r)
-
-        # Preserve all nodes in giant_tour for genetic consistency (OX crossover)
-        # Append any nodes that are NOT in the current routes to the end of giant_tour
-        visited_set = set(new_gt)
-        missing_nodes = [node for node in solution.giant_tour if node not in visited_set]
-        new_gt.extend(missing_nodes)
-
-        solution.giant_tour = new_gt
-        return solution
+        new_build, score = self.optimize(individual.build)
+        individual.build = new_build
+        individual.score = score
+        individual.is_feasible = self.problem.is_feasible(new_build)
+        return individual

@@ -1,96 +1,77 @@
 """
-Greedy Blink Insertion Operator Module.
+Greedy Insertion with Blinks Operator Module.
 
-This module implements the 'Greedy with Blinks' insertion heuristic. It is a
-randomized version of greedy insertion where the algorithm 'blinks' (skips)
-the best position with some probability, encouraging diversity.
-
-Attributes:
-    None
-
-Example:
-    >>> from policies.operators.repair.greedy_blink import greedy_insertion_with_blinks
-    >>> routes = greedy_insertion_with_blinks(routes, removed, dist_matrix, wastes, capacity, blink_rate=0.1)
+Stochastic version of greedy insertion.
 """
 
 import random
-from typing import Dict, List
+from typing import Optional
 
 import numpy as np
 
+from core.problem import BuildProblem
 
-def greedy_insertion_with_blinks(
-    routes: List[List[int]],
-    removed_nodes: List[int],
-    dist_matrix: np.ndarray,
-    wastes: Dict[int, float],
-    capacity: float,
-    blink_rate: float = 0.1,
-) -> List[List[int]]:
+
+def greedy_blink_insertion(
+    build: np.ndarray, budget: float, problem: Optional[BuildProblem], blink_prob: float = 0.1
+) -> np.ndarray:
     """
-    Greedy insertion with randomized skips ('blinks').
-
-    Similar to standard greedy insertion, but during the selection of the best
-    position, the algorithm may skip the absolute best option with probability
-    `blink_rate` and choose the second best, and so on.
+    Greedy insertion with a 'blink' (random bypass) probability.
+    to promote exploration in the ALNS repair phase.
 
     Args:
-        routes: Partial routes.
-        removed_nodes: Nodes to reinsert.
-        dist_matrix: Distance matrix.
-        wastes: wastes.
-        capacity: Capacity.
-        blink_rate: Probability of skipping a check.
+        build: Current build array.
+        budget: Maximum cost allowed.
+        problem: BuildProblem context.
+        blink_rate: Probability to ignore the best item.
 
     Returns:
-        Routes with all nodes reinserted.
+        np.ndarray: Modified build array.
     """
-    loads = []
-    for route in routes:
-        loads.append(sum(wastes.get(n, 0) for n in route))
+    if problem is None:
+        return build
 
-    # Reinsert in random order
-    random.shuffle(removed_nodes)
+    new_build = build.copy()
+    empty_slots = np.where(new_build == -1)[0]
 
-    for node in removed_nodes:
-        waste = wastes.get(node, 0)
-        best_cost = float("inf")
-        best_r_idx = -1
-        best_pos = -1
+    current_items = new_build[new_build != -1]
+    current_cost = np.sum(problem.costs[current_items]) if len(current_items) > 0 else 0.0
 
-        # Check existing routes
-        for r_idx, route in enumerate(routes):
-            if loads[r_idx] + waste > capacity:
+    for slot in empty_slots:
+        item_scores = []
+
+        for item in range(problem.num_items):
+            if item in new_build:
                 continue
 
-            for pos in range(len(route) + 1):
-                # Blink check
-                if random.random() < blink_rate:
-                    continue
+            item_cost = problem.costs[item]
+            if current_cost + item_cost > budget:
+                continue
 
-                prev = 0 if pos == 0 else route[pos - 1]
-                nex = 0 if pos == len(route) else route[pos]
+            new_build[slot] = item
+            score = problem.evaluate(new_build)
+            item_scores.append((score, item))
 
-                cost = dist_matrix[prev][node] + dist_matrix[node][nex] - dist_matrix[prev][nex]
+        new_build[slot] = -1
 
-                if cost < best_cost:
-                    best_cost = cost
-                    best_r_idx = r_idx
-                    best_pos = pos
+        if not item_scores:
+            continue
 
-        # Check new route
-        new_route_cost = dist_matrix[0][node] + dist_matrix[node][0]
-        if new_route_cost < best_cost:
-            best_cost = new_route_cost
-            best_r_idx = len(routes)
-            best_pos = 0
+        # Sort items by score descending
+        item_scores.sort(key=lambda x: x[0], reverse=True)
 
-        # Apply
-        if best_r_idx == len(routes):
-            routes.append([node])
-            loads.append(waste)
-        else:
-            routes[best_r_idx].insert(best_pos, node)
-            loads[best_r_idx] += waste
+        # Blink mechanism: iterate through sorted items, blinking with blink_prob
+        selected_item = -1
+        for _score, item in item_scores:
+            if random.random() > blink_prob:
+                selected_item = item
+                break
 
-    return routes
+        # Fallback to the best if all blinked
+        if selected_item == -1:
+            selected_item = item_scores[0][1]
+
+        new_build[slot] = selected_item
+        current_cost += problem.costs[selected_item]
+
+    return new_build

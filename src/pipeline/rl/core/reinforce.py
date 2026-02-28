@@ -15,10 +15,10 @@ from tensordict import TensorDict
 if TYPE_CHECKING:
     from interfaces.env import IEnv
 
-from pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.common.base import LitModule
 
 
-class REINFORCE(RL4COLitModule):
+class REINFORCE(LitModule):
     """
     REINFORCE with baseline.
 
@@ -44,7 +44,7 @@ class REINFORCE(RL4COLitModule):
         Args:
             entropy_weight: Weight for entropy bonus in loss.
             max_grad_norm: Maximum gradient norm for clipping.
-            **kwargs: Arguments passed to RL4COLitModule.
+            **kwargs: Arguments passed to LitModule.
         """
         super().__init__(**kwargs)
         self.entropy_weight = entropy_weight

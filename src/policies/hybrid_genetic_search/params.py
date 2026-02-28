@@ -5,10 +5,10 @@ Configuration parameters for Hybrid Genetic Search.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict
 
 if TYPE_CHECKING:
-    from configs.policies import HGSConfig
+    pass
 
 
 @dataclass
@@ -33,21 +33,14 @@ class HGSParams:
     max_vehicles: int = 0
 
     @classmethod
-    def from_config(cls, config: HGSConfig) -> HGSParams:
-        """Create HGSParams from a HGSConfig dataclass.
-
-        Args:
-            config: HGSConfig dataclass with solver parameters.
-
-        Returns:
-            HGSParams instance with values from config.
-        """
+    def from_dict(cls, data: Dict[str, Any]) -> HGSParams:
+        """Create HGSParams from a dictionary."""
         return cls(
-            time_limit=config.time_limit,
-            population_size=config.population_size,
-            elite_size=config.elite_size,
-            mutation_rate=config.mutation_rate,
-            crossover_rate=config.crossover_rate,
-            n_generations=config.n_generations,
-            max_vehicles=config.max_vehicles,
+            time_limit=float(data.get("time_limit", 60.0)),
+            population_size=int(data.get("population_size", 50)),
+            elite_size=int(data.get("elite_size", 10)),
+            mutation_rate=float(data.get("mutation_rate", 0.2)),
+            crossover_rate=float(data.get("crossover_rate", 0.7)),
+            n_generations=int(data.get("n_generations", 100)),
+            max_vehicles=int(data.get("max_vehicles", 0)),
         )

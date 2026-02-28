@@ -1,83 +1,62 @@
 """
-Simulated Annealing (SA) for VRPP.
+Simulated Annealing (SA) for Build Optimization.
 
 Classic meta-heuristic drawing analogy from metallurgical annealing.
 Non-improving moves are accepted with Boltzmann probability
-exp(Δprofit / T), where T is a temperature parameter that decays
+exp(Δscore / T), where T is a temperature parameter that decays
 geometrically via T *= alpha.
-
-Reference:
-    Kirkpatrick, Gelatt & Vecchi, "Optimization by Simulated Annealing", 1983.
 """
 
-import copy
 import math
 import random
 import time
-from typing import Dict, List, Optional, Tuple
+from typing import Tuple
 
 import numpy as np
 
+from core.problem import BuildProblem
 from tracking.viz_mixin import PolicyVizMixin
 
-from ..operators.destroy_operators import cluster_removal, random_removal, worst_removal
-from ..operators.repair_operators import greedy_insertion, regret_2_insertion
 from .params import SAParams
 
 
 class SASolver(PolicyVizMixin):
     """
-    Simulated Annealing solver for VRPP.
+    Simulated Annealing solver for Build Optimization.
     """
 
     def __init__(
         self,
-        dist_matrix: np.ndarray,
-        wastes: Dict[int, float],
-        capacity: float,
-        R: float,
-        C: float,
+        problem: BuildProblem,
+        budget: float,
         params: SAParams,
-        mandatory_nodes: Optional[List[int]] = None,
     ):
-        self.dist_matrix = dist_matrix
-        self.wastes = wastes
-        self.capacity = capacity
-        self.R = R
-        self.C = C
+        self.problem = problem
+        self.budget = budget
         self.params = params
-        self.mandatory_nodes = mandatory_nodes or []
-        self.n_nodes = len(dist_matrix) - 1
-        self.nodes = list(range(1, self.n_nodes + 1))
 
-        self._llh_pool = [
-            self._llh0,
-            self._llh1,
-            self._llh2,
-            self._llh3,
-            self._llh4,
-        ]
+        # Use standard build operators: random removal and greedy insertion
+        from ..operators.destroy_operators import random_removal
+        from ..operators.repair_operators import greedy_insertion
 
-    # ------------------------------------------------------------------
-    # Public interface
-    # ------------------------------------------------------------------
+        self.destroy_op = random_removal
+        self.repair_op = greedy_insertion
 
-    def solve(self) -> Tuple[List[List[int]], float, float]:
+    def solve(self) -> Tuple[np.ndarray, float]:
         """
         Run simulated annealing.
 
         Returns:
-            Tuple of (routes, profit, cost).
+            Tuple of (build, score).
         """
-        if self.n_nodes == 0:
-            return [], 0.0, 0.0
-
         start = time.time()
 
-        routes = self._build_initial_solution()
-        profit = self._evaluate(routes)
-        best_routes = copy.deepcopy(routes)
-        best_profit = profit
+        # Initial solution
+        current_build = self.problem.greedy_solution()
+        current_score = self.problem.evaluate(current_build)
+
+        best_build = current_build.copy()
+        best_score = current_score
 
         T = self.params.initial_temp
 
@@ -85,18 +64,24 @@ class SASolver(PolicyVizMixin):
             if time.time() - start > self.params.time_limit:
                 break
 
-            llh_idx = random.randint(0, self.params.n_llh - 1)
-            llh = self._llh_pool[llh_idx]
-
+            # Perturb: small destroy and repair
             try:
-                new_routes = llh(copy.deepcopy(routes), self.params.n_removal)
-                new_profit = self._evaluate(new_routes)
+                # Remove n_removal items
+                partial_build = self.destroy_op(current_build, self.params.n_removal, self.problem)
+
+                # Repair
+                new_build = self.repair_op(partial_build, self.budget, self.problem)
+
+                if not self.problem.is_feasible(new_build):
+                    continue
+
+                new_score = self.problem.evaluate(new_build)
             except Exception:
                 continue
 
-            delta = new_profit - profit
+            delta = new_score - current_score
 
-            # Boltzmann acceptance
+            # Boltzmann acceptance (for maximization)
             if delta >= 0:
                 accept = True
             elif T > 1e-10:
@@ -105,121 +90,21 @@ class SASolver(PolicyVizMixin):
                 accept = False
 
             if accept:
-                routes = new_routes
-                profit = new_profit
+                current_build = new_build
+                current_score = new_score
 
-                if profit > best_profit:
-                    best_routes = copy.deepcopy(routes)
-                    best_profit = profit
+                if current_score > best_score:
+                    best_build = current_build.copy()
+                    best_score = current_score
 
             # Geometric cooling
             T = max(self.params.min_temp, T * self.params.alpha)
 
             self._viz_record(
                 iteration=iteration,
-                best_profit=best_profit,
-                best_cost=self._cost(best_routes),
+                best_profit=best_score,  # viz record legacy names
+                best_cost=-best_score,
                 temperature=T,
             )
 
-        best_cost = self._cost(best_routes)
-        return best_routes, best_profit, best_cost
-
-    # ------------------------------------------------------------------
-    # LLH pool
-    # ------------------------------------------------------------------
-
-    def _llh0(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh1(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh2(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = cluster_removal(routes, n, self.dist_matrix, self.nodes)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh3(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh4(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    # ------------------------------------------------------------------
-    # Helpers
-    # ------------------------------------------------------------------
-
-    def _build_initial_solution(self) -> List[List[int]]:
-        from policies.operators.heuristics.initialization import build_nn_routes
-
-        routes = build_nn_routes(
-            nodes=self.nodes,
-            mandatory_nodes=self.mandatory_nodes,
-            wastes=self.wastes,
-            capacity=self.capacity,
-            dist_matrix=self.dist_matrix,
-            R=self.R,
-            C=self.C,
-        )
-        return routes
-
-    def _evaluate(self, routes: List[List[int]]) -> float:
-        if not routes:
-            return 0.0
-        rev = sum(self.wastes.get(n, 0.0) * self.R for r in routes for n in r)
-        return rev - self._cost(routes) * self.C
-
-    def _cost(self, routes: List[List[int]]) -> float:
-        total = 0.0
-        for route in routes:
-            if not route:
-                continue
-            total += self.dist_matrix[0][route[0]]
-            for k in range(len(route) - 1):
-                total += self.dist_matrix[route[k]][route[k + 1]]
-            total += self.dist_matrix[route[-1]][0]
-        return total
+        return best_build, best_score

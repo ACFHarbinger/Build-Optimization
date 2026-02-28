@@ -17,10 +17,10 @@ from torch import nn
 from utils.data.rl_utils import safe_td_copy
 
 from interfaces import ITraversable
-from pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.common.base import LitModule
 
 
-class PPO(RL4COLitModule):
+class PPO(LitModule):
     """
     Proximal Policy Optimization (PPO).
 
@@ -56,7 +56,7 @@ class PPO(RL4COLitModule):
             entropy_weight: Weight for entropy bonus.
             max_grad_norm: Maximum gradient norm for clipping.
             mini_batch_size: Mini-batch size (int or fraction of batch).
-            **kwargs: Arguments passed to RL4COLitModule.
+            **kwargs: Arguments passed to LitModule.
         """
         super().__init__(**kwargs)
         self.critic = critic

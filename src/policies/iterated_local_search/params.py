@@ -20,14 +20,12 @@ class ILSParams:
         n_restarts: Number of perturbation + descent cycles.
         inner_iterations: LLH iterations per descent phase.
         n_removal: Nodes removed per LLH destroy step.
-        n_llh: Number of LLHs in the pool.
         perturbation_strength: Fraction of nodes perturbed.
         time_limit: Wall-clock time limit in seconds.
     """
 
-    n_restarts: int = 30
-    inner_iterations: int = 20
+    n_restarts: int = 50
+    inner_iterations: int = 100
     n_removal: int = 2
-    n_llh: int = 5
     perturbation_strength: float = 0.15
     time_limit: float = 60.0

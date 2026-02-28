@@ -9,11 +9,9 @@ Usage:
 
 import logging
 import time
-from typing import Dict
 
 import hydra
 from omegaconf import DictConfig, OmegaConf
-from solvers.base import BaseSolver
 
 from core.scoring import ScoringConfig
 from core.synergy import SynergyEngine, SynergyRule
@@ -21,40 +19,6 @@ from data.datasets.games.file_source import FileSource
 from data.transforms import deduplicate, filter_by_level
 
 logger = logging.getLogger(__name__)
-
-# Solver registry
-SOLVER_REGISTRY: Dict[str, type] = {}
-
-
-def _register_solvers() -> None:
-    """Lazy-register all solver classes."""
-    from solvers.alns import ALNSSolver
-    from solvers.ga import GASolver
-    from solvers.gls import GLSSolver
-    from solvers.greedy import GreedySolver
-    from solvers.ils import ILSSolver
-    from solvers.lahc import LAHCSolver
-    from solvers.oba import OBASolver
-    from solvers.random_search import RandomSearchSolver
-    from solvers.rrt import RRTSolver
-    from solvers.rts import RTSSolver
-    from solvers.sa import SASolver
-
-    SOLVER_REGISTRY.update(
-        {
-            "greedy": GreedySolver,
-            "random": RandomSearchSolver,
-            "sa": SASolver,
-            "ga": GASolver,
-            "ils": ILSSolver,
-            "lahc": LAHCSolver,
-            "rrt": RRTSolver,
-            "gls": GLSSolver,
-            "rts": RTSSolver,
-            "oba": OBASolver,
-            "alns": ALNSSolver,
-        }
-    )
 
 
 def _build_scoring_config(cfg: DictConfig) -> ScoringConfig:
@@ -112,7 +76,7 @@ def main(cfg: DictConfig) -> None:
     print(f"  Loaded {len(items)} items, {len(raw_synergies)} synergy rules")
 
     # 3. Build scoring and synergy engine
-    scoring_config = _build_scoring_config(cfg)
+    _scoring_config = _build_scoring_config(cfg)
     synergy_engine = _build_synergy_engine(
         [
             {
@@ -126,32 +90,40 @@ def main(cfg: DictConfig) -> None:
         ]
     )
 
-    # 4. Instantiate and run solver
-    _register_solvers()
+    # Solver registry parsing handled by PolicyFactory
+    from policies import create_policy
 
     solver_name = list(cfg.solver.keys())[0]
-    solver_cls = SOLVER_REGISTRY.get(solver_name)
-    if solver_cls is None:
-        print(f"\n  ERROR: Unknown solver '{solver_name}'")
-        print(f"  Available: {', '.join(SOLVER_REGISTRY.keys())}")
-        return
 
     solver_params = OmegaConf.to_container(cfg.solver[solver_name], resolve=True)
     solver_kwargs = solver_params if isinstance(solver_params, dict) else {}
 
-    solver: BaseSolver = solver_cls(
-        items=items,
-        budget=cfg.optimization.budget,
-        character_level=cfg.optimization.character_level,
-        synergy_engine=synergy_engine,
-        scoring_config=scoring_config,
-        time_limit=cfg.optimization.time_limit,
-        **solver_kwargs,
-    )
+    try:
+        policy = create_policy(solver_name, config=solver_kwargs)
+    except ValueError as e:
+        print(f"\n  ERROR: {e}")
+        return
 
     print(f"\n  Running {solver_name.upper()}...")
     start = time.time()
-    best_build, best_score = solver.solve()
+
+    from core.problem import BuildProblem
+
+    class DummyItemContext:
+        def __init__(self, items):
+            import numpy as np
+
+            self.items = np.zeros((len(items), 5))
+            self.costs = items.cost.to_numpy()
+
+    ctx = DummyItemContext(items)
+    problem = BuildProblem(ctx.items, ctx.costs)
+
+    best_build, best_score, _ = policy.execute(
+        problem=problem,
+        budget=cfg.optimization.budget,
+    )
+
     elapsed = time.time() - start
 
     # 5. Display results

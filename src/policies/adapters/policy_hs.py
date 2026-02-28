@@ -1,16 +1,13 @@
 """
-HS Policy Adapter.
-
-Adapts the Harmony Search (HS) solver to the agnostic BaseRoutingPolicy
-interface.
+HS (Harmony Search) Policy Adapter.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Optional, Tuple, Type, Union
 
 import numpy as np
 
 from configs.policies.hs import HSConfig
-from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.adapters.base_build_policy import BaseBuildPolicy
 from policies.harmony_search.params import HSParams
 from policies.harmony_search.solver import HSSolver
 
@@ -18,12 +15,8 @@ from .factory import PolicyRegistry
 
 
 @PolicyRegistry.register("hs")
-class HSPolicy(BaseRoutingPolicy):
-    """
-    HS policy class.
-
-    Visits bins using Harmony Search.
-    """
+class HSPolicy(BaseBuildPolicy):
+    """Harmony Search policy adapter."""
 
     def __init__(self, config: Optional[Union[HSConfig, Dict[str, Any]]] = None):
         super().__init__(config)
@@ -37,17 +30,13 @@ class HSPolicy(BaseRoutingPolicy):
 
     def _run_solver(
         self,
-        sub_dist_matrix: np.ndarray,
-        sub_wastes: Dict[int, float],
-        capacity: float,
-        revenue: float,
-        cost_unit: float,
+        problem: Any,  # BuildProblem
+        budget: float,
         values: Dict[str, Any],
-        mandatory_nodes: List[int],
         **kwargs: Any,
-    ) -> Tuple[List[List[int]], float, float]:
+    ) -> Tuple[np.ndarray, float]:
         params = HSParams(
-            hm_size=int(values.get("hm_size", 10)),
+            hm_size=int(values.get("hm_size", 20)),
             HMCR=float(values.get("HMCR", 0.9)),
             PAR=float(values.get("PAR", 0.3)),
             max_iterations=int(values.get("max_iterations", 500)),
@@ -55,14 +44,9 @@ class HSPolicy(BaseRoutingPolicy):
         )
 
         solver = HSSolver(
-            sub_dist_matrix,
-            sub_wastes,
-            capacity,
-            revenue,
-            cost_unit,
-            params,
-            mandatory_nodes,
+            problem=problem,
+            budget=budget,
+            params=params,
         )
 
-        routes, profit, cost = solver.solve()
-        return routes, profit, cost
+        return solver.solve()

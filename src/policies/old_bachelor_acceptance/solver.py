@@ -1,222 +1,108 @@
 """
-Old Bachelor Acceptance (OBA) for VRPP.
+Old Bachelor Acceptance (OBA) for Build Optimization.
 
-OBA introduces a dynamically oscillating, non-monotonic acceptance threshold.
-The threshold dilates after consecutive rejections (facilitating escape from
-local optima) and contracts after consecutive acceptances (intensifying
-exploitation of promising basins).
-
-Reference:
-    Hu, Kahng & Tsao, "Old Bachelor Acceptance: A New Class of Non-Monotone
-    Threshold Accepting Methods", 1995.
+Threshold dilates after rejections and contracts after acceptances.
 """
 
-import copy
 import random
 import time
-from typing import Dict, List, Optional, Tuple
+from typing import Tuple
 
 import numpy as np
 
+from core.problem import BuildProblem
 from tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.destroy_operators import cluster_removal, random_removal, worst_removal
-from ..operators.repair_operators import greedy_insertion, regret_2_insertion
+from ..operators.repair_operators import greedy_blink_insertion, greedy_insertion, regret_2_insertion
 from .params import OBAParams
 
 
 class OBASolver(PolicyVizMixin):
     """
-    Old Bachelor Acceptance solver for VRPP.
+    Old Bachelor Acceptance solver for Build Optimization.
     """
 
     def __init__(
         self,
-        dist_matrix: np.ndarray,
-        wastes: Dict[int, float],
-        capacity: float,
-        R: float,
-        C: float,
+        problem: BuildProblem,
+        budget: float,
         params: OBAParams,
-        mandatory_nodes: Optional[List[int]] = None,
     ):
-        self.dist_matrix = dist_matrix
-        self.wastes = wastes
-        self.capacity = capacity
-        self.R = R
-        self.C = C
+        self.problem = problem
+        self.budget = budget
         self.params = params
-        self.mandatory_nodes = mandatory_nodes or []
-        self.n_nodes = len(dist_matrix) - 1
-        self.nodes = list(range(1, self.n_nodes + 1))
 
         self._llh_pool = [
-            self._llh0,
-            self._llh1,
-            self._llh2,
-            self._llh3,
-            self._llh4,
+            self._llh_greedy,
+            self._llh_regret,
+            self._llh_blink,
         ]
 
-    # ------------------------------------------------------------------
-    # Public interface
-    # ------------------------------------------------------------------
-
-    def solve(self) -> Tuple[List[List[int]], float, float]:
+    def solve(self) -> Tuple[np.ndarray, float]:
         """
         Run OBA optimisation.
 
         Returns:
-            Tuple of (routes, profit, cost).
+            Tuple of (best_build, best_score).
         """
-        if self.n_nodes == 0:
-            return [], 0.0, 0.0
-
         start = time.time()
 
-        routes = self._build_initial_solution()
-        profit = self._evaluate(routes)
-        best_routes = copy.deepcopy(routes)
-        best_profit = profit
+        # Initial solution
+        current_build = self.problem.greedy_solution()
+        current_score = self.problem.evaluate(current_build)
 
-        # OBA threshold starts at 0 (only strict improvements accepted initially)
+        best_build = current_build.copy()
+        best_score = current_score
+
+        # OBA threshold
         threshold = 0.0
 
         for iteration in range(self.params.max_iterations):
             if time.time() - start > self.params.time_limit:
                 break
 
-            llh_idx = random.randint(0, self.params.n_llh - 1)
-            llh = self._llh_pool[llh_idx]
-
+            # Select and apply a random LLH
+            llh = random.choice(self._llh_pool)
             try:
-                new_routes = llh(copy.deepcopy(routes), self.params.n_removal)
-                new_profit = self._evaluate(new_routes)
+                new_build = llh(current_build)
+                new_score = self.problem.evaluate(new_build)
+
+                # OBA acceptance
+                if new_score >= current_score - threshold:
+                    current_build = new_build
+                    current_score = new_score
+
+                    # Contract threshold on acceptance
+                    threshold = max(0.0, threshold - self.params.contraction)
+
+                    if current_score > best_score:
+                        best_build = current_build.copy()
+                        best_score = current_score
+                else:
+                    # Dilate threshold on rejection
+                    threshold += self.params.dilation
             except Exception:
-                # Rejection path — dilate threshold
                 threshold += self.params.dilation
                 continue
-
-            # OBA acceptance: accept if within threshold of current
-            if new_profit >= profit - threshold:
-                routes = new_routes
-                profit = new_profit
-
-                # Contract threshold on acceptance
-                threshold = max(0.0, threshold - self.params.contraction)
-
-                if profit > best_profit:
-                    best_routes = copy.deepcopy(routes)
-                    best_profit = profit
-            else:
-                # Dilate threshold on rejection
-                threshold += self.params.dilation
 
             self._viz_record(
                 iteration=iteration,
-                best_profit=best_profit,
-                best_cost=self._cost(best_routes),
+                best_profit=best_score,
+                best_cost=-best_score,
                 threshold=threshold,
             )
 
-        best_cost = self._cost(best_routes)
-        return best_routes, best_profit, best_cost
+        return best_build, best_score
 
-    # ------------------------------------------------------------------
-    # LLH pool
-    # ------------------------------------------------------------------
+    def _llh_greedy(self, build: np.ndarray) -> np.ndarray:
+        partial = random_removal(build, self.params.n_removal, self.problem)
+        return greedy_insertion(partial, self.budget, self.problem)
 
-    def _llh0(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
+    def _llh_regret(self, build: np.ndarray) -> np.ndarray:
+        partial = worst_removal(build, self.params.n_removal, self.problem)
+        return regret_2_insertion(partial, self.budget, self.problem)
 
-    def _llh1(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh2(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = cluster_removal(routes, n, self.dist_matrix, self.nodes)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh3(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh4(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    # ------------------------------------------------------------------
-    # Helpers
-    # ------------------------------------------------------------------
-
-    def _build_initial_solution(self) -> List[List[int]]:
-        from policies.operators.heuristics.initialization import build_nn_routes
-
-        routes = build_nn_routes(
-            nodes=self.nodes,
-            mandatory_nodes=self.mandatory_nodes,
-            wastes=self.wastes,
-            capacity=self.capacity,
-            dist_matrix=self.dist_matrix,
-            R=self.R,
-            C=self.C,
-        )
-        return routes
-
-    def _evaluate(self, routes: List[List[int]]) -> float:
-        if not routes:
-            return 0.0
-        rev = sum(self.wastes.get(n, 0.0) * self.R for r in routes for n in r)
-        return rev - self._cost(routes) * self.C
-
-    def _cost(self, routes: List[List[int]]) -> float:
-        total = 0.0
-        for route in routes:
-            if not route:
-                continue
-            total += self.dist_matrix[0][route[0]]
-            for k in range(len(route) - 1):
-                total += self.dist_matrix[route[k]][route[k + 1]]
-            total += self.dist_matrix[route[-1]][0]
-        return total
+    def _llh_blink(self, build: np.ndarray) -> np.ndarray:
+        partial = cluster_removal(build, self.params.n_removal, self.problem)
+        return greedy_blink_insertion(partial, self.budget, self.problem)

@@ -16,12 +16,14 @@ Example:
 """
 
 from .greedy import greedy_insertion
-from .greedy_blink import greedy_insertion_with_blinks
+from .greedy_blink import greedy_blink_insertion
+from .random import random_insertion
 from .regret import regret_2_insertion, regret_k_insertion
 
 __all__ = [
     "greedy_insertion",
     "regret_2_insertion",
     "regret_k_insertion",
-    "greedy_insertion_with_blinks",
+    "greedy_blink_insertion",
+    "random_insertion",
 ]

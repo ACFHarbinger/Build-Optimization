@@ -1,5 +1,5 @@
 """
-Optimization logic for RL4COLitModule.
+Optimization logic for LitModule.
 """
 
 from __future__ import annotations

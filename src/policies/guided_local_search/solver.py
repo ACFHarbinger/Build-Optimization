@@ -1,88 +1,63 @@
 """
-Guided Local Search (GLS) for VRPP.
+Guided Local Search (GLS) for Build Optimization.
 
-GLS augments the objective function with adaptive penalty terms on routing
-edge features that appear in local optima.  When the inner local search
-stagnates, the feature with the highest utility is penalised, artificially
-inflating the cost of the current optimum and guiding the search toward
-unexplored basins.
-
-Reference:
-    Voudouris & Tsang, "Guided Local Search and Its Application to the
-    Traveling Salesman Problem", 1999.
+Augments the objective function with penalties on (slot, item) assignments
+that frequently appear in local optima.
 """
 
-import copy
 import random
 import time
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Tuple
 
 import numpy as np
 
+from core.problem import BuildProblem
 from tracking.viz_mixin import PolicyVizMixin
 
 from ..operators.destroy_operators import cluster_removal, random_removal, worst_removal
-from ..operators.repair_operators import greedy_insertion, regret_2_insertion
+from ..operators.repair_operators import greedy_blink_insertion, greedy_insertion, regret_2_insertion
 from .params import GLSParams
 
 
 class GLSSolver(PolicyVizMixin):
     """
-    Guided Local Search solver for VRPP.
+    Guided Local Search solver for Build Optimization.
     """
 
     def __init__(
         self,
-        dist_matrix: np.ndarray,
-        wastes: Dict[int, float],
-        capacity: float,
-        R: float,
-        C: float,
+        problem: BuildProblem,
+        budget: float,
         params: GLSParams,
-        mandatory_nodes: Optional[List[int]] = None,
     ):
-        self.dist_matrix = dist_matrix
-        self.wastes = wastes
-        self.capacity = capacity
-        self.R = R
-        self.C = C
+        self.problem = problem
+        self.budget = budget
         self.params = params
-        self.mandatory_nodes = mandatory_nodes or []
-        self.n_nodes = len(dist_matrix) - 1
-        self.nodes = list(range(1, self.n_nodes + 1))
 
-        # Edge penalty matrix (features = edges)
-        n = len(dist_matrix)
-        self.penalties = np.zeros((n, n), dtype=np.float64)
+        # Feature penalty matrix: penalties[slot_idx][item_idx]
+        self.penalties = np.zeros((problem.num_slots, problem.num_items), dtype=np.float64)
 
         self._llh_pool = [
-            self._llh0,
-            self._llh1,
-            self._llh2,
-            self._llh3,
-            self._llh4,
+            self._llh_greedy,
+            self._llh_regret,
+            self._llh_blink,
         ]
 
-    # ------------------------------------------------------------------
-    # Public interface
-    # ------------------------------------------------------------------
-
-    def solve(self) -> Tuple[List[List[int]], float, float]:
+    def solve(self) -> Tuple[np.ndarray, float]:
         """
         Run GLS optimisation.
 
         Returns:
-            Tuple of (routes, profit, cost).
+            Tuple of (best_build, best_score).
         """
-        if self.n_nodes == 0:
-            return [], 0.0, 0.0
-
         start = time.time()
 
-        routes = self._build_initial_solution()
-        profit = self._evaluate(routes)
-        best_routes = copy.deepcopy(routes)
-        best_profit = profit
+        # Initial solution
+        current_build = self.problem.greedy_solution()
+        current_score = self.problem.evaluate(current_build)
+
+        best_build = current_build.copy()
+        best_score = current_score
 
         for restart in range(self.params.max_restarts):
             if time.time() - start > self.params.time_limit:
@@ -93,181 +68,78 @@ class GLSSolver(PolicyVizMixin):
                 if time.time() - start > self.params.time_limit:
                     break
 
-                llh_idx = random.randint(0, self.params.n_llh - 1)
-                llh = self._llh_pool[llh_idx]
-
+                llh = random.choice(self._llh_pool)
                 try:
-                    new_routes = llh(copy.deepcopy(routes), self.params.n_removal)
+                    new_build = llh(current_build)
+                    new_score = self.problem.evaluate(new_build)
+
+                    # Accept if augmented objective improves
+                    # We maximize (score - lambda * penalty)
+                    aug_new = self._augmented_evaluate(new_build, new_score)
+                    aug_cur = self._augmented_evaluate(current_build, current_score)
+
+                    if aug_new >= aug_cur:
+                        current_build = new_build
+                        current_score = new_score
+
+                        if current_score > best_score:
+                            best_build = current_build.copy()
+                            best_score = current_score
                 except Exception:
                     continue
 
-                # Accept if augmented objective improves
-                aug_new = self._augmented_evaluate(new_routes)
-                aug_cur = self._augmented_evaluate(routes)
-
-                if aug_new >= aug_cur:
-                    routes = new_routes
-                    real_profit = self._evaluate(routes)
-
-                    if real_profit > best_profit:
-                        best_routes = copy.deepcopy(routes)
-                        best_profit = real_profit
-
-            # At local optimum: penalise the edge with highest utility
-            self._update_penalties(routes)
+            # At local optimum: penalise the (slot, item) features with highest utility
+            self._update_penalties(current_build)
 
             self._viz_record(
                 iteration=restart,
-                best_profit=best_profit,
-                best_cost=self._cost(best_routes),
+                best_profit=best_score,
+                best_cost=-best_score,
             )
 
-        best_cost = self._cost(best_routes)
-        return best_routes, best_profit, best_cost
+        return best_build, best_score
 
-    # ------------------------------------------------------------------
-    # Penalty management
-    # ------------------------------------------------------------------
-
-    def _get_edges(self, routes: List[List[int]]) -> Set[Tuple[int, int]]:
-        """Extract all edges from routes (including depot connections)."""
-        edges: Set[Tuple[int, int]] = set()
-        for route in routes:
-            if not route:
-                continue
-            edges.add((0, route[0]))
-            for k in range(len(route) - 1):
-                edges.add((route[k], route[k + 1]))
-            edges.add((route[-1], 0))
-        return edges
-
-    def _update_penalties(self, routes: List[List[int]]) -> None:
-        """Penalise the edge feature with highest utility."""
-        edges = self._get_edges(routes)
-        if not edges:
-            return
-
+    def _update_penalties(self, build: np.ndarray) -> None:
+        """Penalise the (slot, item) features with highest utility in current build."""
         best_utility = -1.0
-        best_edge = None
+        best_features = []
 
-        for i, j in edges:
-            cost_ij = self.dist_matrix[i][j]
-            utility = cost_ij / (1.0 + self.penalties[i][j])
+        for slot_idx, item_idx in enumerate(build):
+            if item_idx == -1:
+                continue
+
+            # Utility = Feature_Cost / (1 + Penalty)
+            # In Build models, "cost" of a feature is the item cost
+            cost = self.problem.costs[item_idx]
+            utility = cost / (1.0 + self.penalties[slot_idx][item_idx])
+
             if utility > best_utility:
                 best_utility = utility
-                best_edge = (i, j)
+                best_features = [(slot_idx, item_idx)]
+            elif abs(utility - best_utility) < 1e-9:
+                best_features.append((slot_idx, item_idx))
 
-        if best_edge is not None:
-            self.penalties[best_edge[0]][best_edge[1]] += 1.0
+        # Penalize one or all features with max utility
+        for s_idx, i_idx in best_features:
+            self.penalties[s_idx][i_idx] += 1.0
 
-    def _augmented_evaluate(self, routes: List[List[int]]) -> float:
+    def _augmented_evaluate(self, build: np.ndarray, score: float) -> float:
         """Evaluate with penalty-augmented objective."""
-        real = self._evaluate(routes)
-        penalty = 0.0
-        for route in routes:
-            if not route:
-                continue
-            penalty += self.penalties[0][route[0]]
-            for k in range(len(route) - 1):
-                penalty += self.penalties[route[k]][route[k + 1]]
-            penalty += self.penalties[route[-1]][0]
-        return real - self.params.lambda_param * penalty
+        penalty_sum = 0.0
+        for slot_idx, item_idx in enumerate(build):
+            if item_idx != -1:
+                penalty_sum += self.penalties[slot_idx][item_idx]
 
-    # ------------------------------------------------------------------
-    # LLH pool
-    # ------------------------------------------------------------------
+        return score - self.params.lambda_param * penalty_sum
 
-    def _llh0(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
+    def _llh_greedy(self, build: np.ndarray) -> np.ndarray:
+        partial = random_removal(build, self.params.n_removal, self.problem)
+        return greedy_insertion(partial, self.budget, self.problem)
 
-    def _llh1(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
+    def _llh_regret(self, build: np.ndarray) -> np.ndarray:
+        partial = worst_removal(build, self.params.n_removal, self.problem)
+        return regret_2_insertion(partial, self.budget, self.problem)
 
-    def _llh2(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = cluster_removal(routes, n, self.dist_matrix, self.nodes)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh3(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = worst_removal(routes, n, self.dist_matrix)
-        return greedy_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    def _llh4(self, routes: List[List[int]], n: int) -> List[List[int]]:
-        partial, removed = random_removal(routes, n)
-        return regret_2_insertion(
-            partial,
-            removed,
-            self.dist_matrix,
-            self.wastes,
-            self.capacity,
-            R=self.R,
-            mandatory_nodes=self.mandatory_nodes,
-        )
-
-    # ------------------------------------------------------------------
-    # Helpers
-    # ------------------------------------------------------------------
-
-    def _build_initial_solution(self) -> List[List[int]]:
-        from policies.operators.heuristics.initialization import build_nn_routes
-
-        routes = build_nn_routes(
-            nodes=self.nodes,
-            mandatory_nodes=self.mandatory_nodes,
-            wastes=self.wastes,
-            capacity=self.capacity,
-            dist_matrix=self.dist_matrix,
-            R=self.R,
-            C=self.C,
-        )
-        return routes
-
-    def _evaluate(self, routes: List[List[int]]) -> float:
-        if not routes:
-            return 0.0
-        rev = sum(self.wastes.get(n, 0.0) * self.R for r in routes for n in r)
-        return rev - self._cost(routes) * self.C
-
-    def _cost(self, routes: List[List[int]]) -> float:
-        total = 0.0
-        for route in routes:
-            if not route:
-                continue
-            total += self.dist_matrix[0][route[0]]
-            for k in range(len(route) - 1):
-                total += self.dist_matrix[route[k]][route[k + 1]]
-            total += self.dist_matrix[route[-1]][0]
-        return total
+    def _llh_blink(self, build: np.ndarray) -> np.ndarray:
+        partial = cluster_removal(build, self.params.n_removal, self.problem)
+        return greedy_blink_insertion(partial, self.budget, self.problem)

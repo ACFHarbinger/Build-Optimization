@@ -2,12 +2,12 @@
 OBA (Old Bachelor Acceptance) Policy Adapter.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Optional, Tuple, Type, Union
 
 import numpy as np
 
 from configs.policies.oba import OBAConfig
-from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.adapters.base_build_policy import BaseBuildPolicy
 from policies.old_bachelor_acceptance.params import OBAParams
 from policies.old_bachelor_acceptance.solver import OBASolver
 
@@ -15,8 +15,8 @@ from .factory import PolicyRegistry
 
 
 @PolicyRegistry.register("oba")
-class OBAPolicy(BaseRoutingPolicy):
-    """Old Bachelor Acceptance policy class."""
+class OBAPolicy(BaseBuildPolicy):
+    """OBA policy adapter."""
 
     def __init__(self, config: Optional[Union[OBAConfig, Dict[str, Any]]] = None):
         super().__init__(config)
@@ -30,32 +30,23 @@ class OBAPolicy(BaseRoutingPolicy):
 
     def _run_solver(
         self,
-        sub_dist_matrix: np.ndarray,
-        sub_wastes: Dict[int, float],
-        capacity: float,
-        revenue: float,
-        cost_unit: float,
+        problem: Any,  # BuildProblem
+        budget: float,
         values: Dict[str, Any],
-        mandatory_nodes: List[int],
         **kwargs: Any,
-    ) -> Tuple[List[List[int]], float, float]:
+    ) -> Tuple[np.ndarray, float]:
         params = OBAParams(
-            dilation=float(values.get("dilation", 5.0)),
-            contraction=float(values.get("contraction", 2.0)),
-            max_iterations=int(values.get("max_iterations", 500)),
+            max_iterations=int(values.get("max_iterations", 1000)),
+            contraction=float(values.get("contraction", 0.01)),
+            dilation=float(values.get("dilation", 0.02)),
             n_removal=int(values.get("n_removal", 2)),
-            n_llh=int(values.get("n_llh", 5)),
             time_limit=float(values.get("time_limit", 60.0)),
         )
 
         solver = OBASolver(
-            sub_dist_matrix,
-            sub_wastes,
-            capacity,
-            revenue,
-            cost_unit,
-            params,
-            mandatory_nodes,
+            problem=problem,
+            budget=budget,
+            params=params,
         )
 
         return solver.solve()

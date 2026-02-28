@@ -4,31 +4,25 @@ ACO Policy Adapter.
 Adapts the K-Sparse Ant Colony Optimization solver to the common policy interface.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Optional, Tuple, Type, Union
 
 import numpy as np
 
 from configs.policies import ACOConfig
-from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from core.problem import BuildProblem
+from policies.adapters.base_build_policy import BaseBuildPolicy
 from policies.ant_colony_optimization.k_sparse_aco import run_k_sparse_aco
 
 from .factory import PolicyRegistry
 
 
 @PolicyRegistry.register("aco")
-class ACOPolicy(BaseRoutingPolicy):
+class ACOPolicy(BaseBuildPolicy):
     """
-    K-Sparse Ant Colony Optimization policy class.
-
-    Uses ACS with sparse pheromone matrix for efficient VRP solving.
+    K-Sparse Ant Colony Optimization policy class for Build Optimization.
     """
 
     def __init__(self, config: Optional[Union[ACOConfig, Dict[str, Any]]] = None):
-        """Initialize ACO policy with optional config.
-
-        Args:
-            config: ACOConfig dataclass, raw dict from YAML, or None.
-        """
         super().__init__(config)
 
     @classmethod
@@ -36,33 +30,24 @@ class ACOPolicy(BaseRoutingPolicy):
         return ACOConfig
 
     def _get_config_key(self) -> str:
-        """Return config key for ACO."""
         return "aco"
 
     def _run_solver(
         self,
-        sub_dist_matrix: np.ndarray,
-        sub_wastes: Dict[int, float],
-        capacity: float,
-        revenue: float,
-        cost_unit: float,
+        problem: BuildProblem,
+        budget: float,
         values: Dict[str, Any],
-        mandatory_nodes: List[int],
         **kwargs: Any,
-    ) -> Tuple[List[List[int]], float, float]:
+    ) -> Tuple[np.ndarray, float]:
         """
-        Run K-Sparse ACO solver.
+        Run K-Sparse ACO solver for builds.
 
         Returns:
-            Tuple of (routes, profit, solver_cost)
+            Tuple of (build_array, score)
         """
-        routes, profit, solver_cost = run_k_sparse_aco(
-            sub_dist_matrix,
-            sub_wastes,
-            capacity,
-            revenue,
-            cost_unit,
+        build_arr, score = run_k_sparse_aco(
+            problem,
+            budget,
             values,
-            mandatory_nodes=mandatory_nodes,
         )
-        return routes, profit, solver_cost
+        return build_arr, score

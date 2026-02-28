@@ -1,181 +1,71 @@
 """
-Gurobi engine for Branch-Cut-and-Price module.
+BCP (Integer Programming) engine using Gurobi for Build Optimization.
 """
 
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, Tuple
 
-import gurobipy as gp
-from gurobipy import GRB
+import numpy as np
 
-from tracking.viz_mixin import PolicyStateRecorder
+try:
+    import gurobipy as gp
+    from gurobipy import GRB
+except ImportError:
+    gp = None
 
-
-def _setup_model(values: Dict[str, Any], env: Optional[gp.Env]) -> gp.Model:
-    """Initialize Gurobi model with parameters."""
-    model = gp.Model("CVRP", env=env) if env else gp.Model("CVRP")
-    model.setParam("TimeLimit", values.get("time_limit", 30))
-    model.setParam("MIPGap", 0.05)
-    return model
-
-
-def _create_variables(
-    model: gp.Model,
-    nodes: List[int],
-    customers: List[int],
-    wastes: Dict[int, float],
-    capacity: float,
-) -> Tuple[Dict[Tuple[int, int], gp.Var], Dict[int, gp.Var], Dict[int, gp.Var]]:
-    """Create decision variables x, y, u."""
-    # x[i,j]: 1 if edge (i,j) used.
-    x = {}
-    for i in nodes:
-        for j in nodes:
-            if i != j:
-                x[i, j] = model.addVar(vtype=GRB.BINARY, name=f"x_{i}_{j}")
-
-    # y[i]: 1 if node i is visited (Waste Collecting)
-    y = {}
-    for i in customers:
-        y[i] = model.addVar(vtype=GRB.BINARY, name=f"y_{i}")
-
-    # u[i]: load after visiting node i (MTZ)
-    u = {}
-    for i in customers:
-        u[i] = model.addVar(lb=wastes.get(i, 0), ub=capacity, vtype=GRB.CONTINUOUS, name=f"u_{i}")
-
-    return x, y, u
-
-
-def _create_objective(
-    model: gp.Model,
-    x: Dict[Tuple[int, int], gp.Var],
-    y: Dict[int, gp.Var],
-    dist_matrix: Any,
-    wastes: Dict[int, float],
-    nodes: List[int],
-    customers: List[int],
-    R: float,
-    C: float,
-    mandatory_nodes: Optional[Set[int]],
-) -> None:
-    """Set the objective function: Minimize Cost + Penalties."""
-    travel_cost = gp.quicksum(dist_matrix[i][j] * C * x[i, j] for i in nodes for j in nodes if i != j)
-
-    revenue_penalty = gp.LinExpr(0)
-    m_nodes = mandatory_nodes if mandatory_nodes is not None else set()
-    for i in customers:
-        d = wastes.get(i, 0)
-        rev = d * R
-        if i in m_nodes:
-            # Must Visit constraint
-            model.addConstr(y[i] == 1, name=f"must_visit_{i}")
-        else:
-            # Penalty if y[i] is 0 -> (1 - y[i]) * rev
-            revenue_penalty += (1 - y[i]) * rev
-
-    model.setObjective(travel_cost + revenue_penalty, GRB.MINIMIZE)
-
-
-def _add_constraints(
-    model: gp.Model,
-    x: Dict[Tuple[int, int], gp.Var],
-    y: Dict[int, gp.Var],
-    u: Dict[int, gp.Var],
-    nodes: List[int],
-    customers: List[int],
-    wastes: Dict[int, float],
-    capacity: float,
-) -> None:
-    """Add flow conservation and capacity constraints."""
-    # Flow Conservation
-    for i in customers:
-        model.addConstr(gp.quicksum(x[i, j] for j in nodes if i != j) == y[i], name=f"out_{i}")
-        model.addConstr(gp.quicksum(x[j, i] for j in nodes if i != j) == y[i], name=f"in_{i}")
-
-    # MTZ Constraints (Subtour elimination and load tracking)
-    for i in customers:
-        for j in customers:
-            if i != j:
-                d_j = wastes.get(j, 0)
-                model.addConstr(u[j] >= u[i] + d_j - capacity * (1 - x[i, j]), name=f"mtz_{i}_{j}")
-
-
-def _extract_solution(
-    model: gp.Model, x: Dict[Tuple[int, int], gp.Var], nodes: List[int]
-) -> Tuple[List[List[int]], float]:
-    """Extract optimal routes from the model."""
-    if model.status not in [GRB.OPTIMAL, GRB.TIME_LIMIT] or model.SolCount == 0:
-        return [], 0.0
-
-    active_edges = [edge for edge, var in x.items() if var.X > 0.5]
-    adj: Dict[int, List[int]] = {i: [] for i in nodes}
-    for i, j in active_edges:
-        adj[i].append(j)
-
-    routes = []
-    # Find all paths starting from depot (0)
-    for start_node in adj[0]:
-        route = [start_node]
-        current = start_node
-        while current != 0 and current in adj and adj[current]:
-            next_node = adj[current][0]
-            if next_node != 0:
-                route.append(next_node)
-            current = next_node
-        routes.append(route)
-
-    return routes, model.objVal
+from core.problem import BuildProblem
 
 
 def run_bcp_gurobi(
-    dist_matrix: Any,
-    wastes: Dict[int, float],
-    capacity: float,
-    R: float,
-    C: float,
+    problem: BuildProblem,
+    budget: float,
     values: Dict[str, Any],
-    mandatory_nodes: Optional[List[int]] = None,
-    env: Optional[gp.Env] = None,
-    recorder: Optional[PolicyStateRecorder] = None,
-) -> Tuple[List[List[int]], float]:
+    **kwargs: Any,
+) -> Tuple[np.ndarray, float]:
     """
-    Solve Waste-Collecting CVRP using Gurobi MIP solver.
-
-    Args:
-        dist_matrix: NxN distance matrix.
-        wastes: Dictionary of node wastes.
-        capacity: Maximum vehicle capacity.
-        R: Revenue multiplier.
-        C: Cost multiplier.
-        values: Config dictionary (time_limit).
-        mandatory_nodes: List of mandatory node indices.
-        env: Gurobi environment (Optional).
-
-    Returns:
-        Tuple[List[List[int]], float]: (routes, total_cost)
+    Solve the Build Optimization problem (MCKP) using Gurobi.
     """
-    m_set = set(mandatory_nodes) if mandatory_nodes else set()
+    if gp is None:
+        return problem.greedy_solution(), 0.0
 
-    # Identifying Customer Nodes: Indices 1..N
-    num_nodes = len(dist_matrix)
-    nodes = list(range(num_nodes))
-    customers = list(range(1, num_nodes))
+    # 1. Create model
+    env = kwargs.get("env")
+    model = gp.Model("BuildOptimization", env=env)
+    model.setParam("OutputFlag", 0)
+    model.setParam("TimeLimit", values.get("time_limit", 30))
 
-    model = _setup_model(values, env)
-    x, y, u = _create_variables(model, nodes, customers, wastes, capacity)
-    _create_objective(model, x, y, dist_matrix, wastes, nodes, customers, R, C, m_set)
-    _add_constraints(model, x, y, u, nodes, customers, wastes, capacity)
+    # 2. Variables
+    x = {}
+    item_scores = (
+        (problem.stat_matrix @ problem.stat_weights) + problem.rarities * problem.rarity_bonus + problem.slot_bonus
+    )
 
+    for slot_idx in range(problem.num_slots):
+        item_indices = np.where(problem.slot_ids == slot_idx)[0]
+        for i_idx in item_indices:
+            x[slot_idx, i_idx] = model.addVar(vtype=GRB.BINARY, name=f"x_{slot_idx}_{i_idx}")
+
+    # 3. Constraints
+    for slot_idx in range(problem.num_slots):
+        item_indices = np.where(problem.slot_ids == slot_idx)[0]
+        if len(item_indices) > 0:
+            model.addConstr(gp.quicksum(x[slot_idx, i_idx] for i_idx in item_indices) <= 1)
+
+    model.addConstr(gp.quicksum(problem.costs[i_idx] * x[slot_idx, i_idx] for (slot_idx, i_idx) in x.keys()) <= budget)
+
+    # 4. Objective
+    model.setObjective(
+        gp.quicksum(item_scores[i_idx] * x[slot_idx, i_idx] for (slot_idx, i_idx) in x.keys()), GRB.MAXIMIZE
+    )
+
+    # 5. Optimize
     model.optimize()
 
-    if recorder is not None:
-        solved = int(model.SolCount > 0)
-        recorder.record(
-            engine="gurobi",
-            solved=solved,
-            obj_val=model.ObjVal if solved else 0.0,
-            mip_gap=model.MIPGap if solved else 1.0,
-            obj_bound=model.ObjBound if solved else 0.0,
-        )
+    # 6. Extract result
+    best_build = np.full(problem.num_slots, -1, dtype=np.int64)
+    if model.Status in [GRB.OPTIMAL, GRB.SUBOPTIMAL]:
+        for (slot_idx, i_idx), var in x.items():
+            if var.X > 0.5:
+                best_build[slot_idx] = i_idx
+        return best_build, problem.evaluate(best_build)
 
-    return _extract_solution(model, x, nodes)
+    return problem.greedy_solution(), 0.0

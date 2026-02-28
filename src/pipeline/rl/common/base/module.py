@@ -1,5 +1,5 @@
 """
-Main RL4COLitModule class assembling all mixins.
+Main LitModule class assembling all mixins.
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 logger = get_pylogger(__name__)
 
 
-class RL4COLitModule(DataMixin, OptimizationMixin, StepMixin, pl.LightningModule, ABC):
+class LitModule(DataMixin, OptimizationMixin, StepMixin, pl.LightningModule, ABC):
     """
     Base PyTorch Lightning module for RL training.
 
@@ -56,7 +56,7 @@ class RL4COLitModule(DataMixin, OptimizationMixin, StepMixin, pl.LightningModule
         **kwargs,
     ):
         """
-        Initialize the RL4COLitModule.
+        Initialize the LitModule.
 
         Args:
             env: The RL environment for the problem.

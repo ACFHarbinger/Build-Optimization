@@ -29,5 +29,4 @@ class SAParams:
     min_temp: float = 0.01
     max_iterations: int = 500
     n_removal: int = 2
-    n_llh: int = 5
     time_limit: float = 60.0

@@ -1,7 +1,7 @@
 """
 Epoch-level utilities for RL training.
 Includes expanded dataset handling, validation metric computation,
-and time-based training (train_time) logic.
+and time-based training (train_time)
 """
 
 from typing import Any, Dict, Optional

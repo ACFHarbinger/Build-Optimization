@@ -28,12 +28,10 @@ class LAHCParams:
         queue_size: Length of the circular history queue (L).
         max_iterations: Total LLH applications.
         n_removal: Nodes removed per LLH destroy step.
-        n_llh: Number of Low-Level Heuristics in the pool.
         time_limit: Wall-clock time limit in seconds.
     """
 
     queue_size: int = 50
-    max_iterations: int = 500
+    max_iterations: int = 2000
     n_removal: int = 2
-    n_llh: int = 5
     time_limit: float = 60.0

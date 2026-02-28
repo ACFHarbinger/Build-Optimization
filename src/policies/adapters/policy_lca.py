@@ -1,16 +1,13 @@
 """
-LCA Policy Adapter.
-
-Adapts the League Championship Algorithm (LCA) solver to the agnostic
-BaseRoutingPolicy interface.
+LCA (League Championship Algorithm) Policy Adapter.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, Optional, Tuple, Type, Union
 
 import numpy as np
 
 from configs.policies.lca import LCAConfig
-from policies.adapters.base_routing_policy import BaseRoutingPolicy
+from policies.adapters.base_build_policy import BaseBuildPolicy
 from policies.league_championship_algorithm.params import LCAParams
 from policies.league_championship_algorithm.solver import LCASolver
 
@@ -18,12 +15,8 @@ from .factory import PolicyRegistry
 
 
 @PolicyRegistry.register("lca")
-class LCAPolicy(BaseRoutingPolicy):
-    """
-    LCA policy class.
-
-    Visits bins using the League Championship Algorithm.
-    """
+class LCAPolicy(BaseBuildPolicy):
+    """League Championship Algorithm policy adapter."""
 
     def __init__(self, config: Optional[Union[LCAConfig, Dict[str, Any]]] = None):
         super().__init__(config)
@@ -37,33 +30,23 @@ class LCAPolicy(BaseRoutingPolicy):
 
     def _run_solver(
         self,
-        sub_dist_matrix: np.ndarray,
-        sub_wastes: Dict[int, float],
-        capacity: float,
-        revenue: float,
-        cost_unit: float,
+        problem: Any,  # BuildProblem
+        budget: float,
         values: Dict[str, Any],
-        mandatory_nodes: List[int],
         **kwargs: Any,
-    ) -> Tuple[List[List[int]], float, float]:
+    ) -> Tuple[np.ndarray, float]:
         params = LCAParams(
             n_teams=int(values.get("n_teams", 10)),
+            crossover_prob=float(values.get("crossover_prob", 0.5)),
             max_iterations=int(values.get("max_iterations", 100)),
-            tolerance_pct=float(values.get("tolerance_pct", 0.05)),
-            crossover_prob=float(values.get("crossover_prob", 0.6)),
             n_removal=int(values.get("n_removal", 2)),
             time_limit=float(values.get("time_limit", 60.0)),
         )
 
         solver = LCASolver(
-            sub_dist_matrix,
-            sub_wastes,
-            capacity,
-            revenue,
-            cost_unit,
-            params,
-            mandatory_nodes,
+            problem=problem,
+            budget=budget,
+            params=params,
         )
 
-        routes, profit, cost = solver.solve()
-        return routes, profit, cost
+        return solver.solve()

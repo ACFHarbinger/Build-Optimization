@@ -1,56 +1,41 @@
 """
-Branch-Cut-and-Price (BCP) solver dispatcher.
+Branch-Cut-and-Price (BCP) solver dispatcher for Build Optimization.
+
+In the discrete build domain, this dispatches to ILP solvers (Gurobi or OR-Tools)
+to solve the Multiple Choice Knapsack Problem (MCKP) optimally.
 """
 
-from typing import Optional
+from typing import Any, Dict, Tuple
 
-from tracking.viz_mixin import PolicyStateRecorder
+import numpy as np
+
+from core.problem import BuildProblem
 
 from .gurobi_engine import run_bcp_gurobi
 from .ortools_engine import run_bcp_ortools
-from .vrpy_engine import run_bcp_vrpy
 
 
 def run_bcp(
-    dist_matrix,
-    wastes,
-    capacity,
-    R,
-    C,
-    values,
-    must_go_indices=None,
-    env=None,
-    recorder: Optional[PolicyStateRecorder] = None,
-):
+    problem: BuildProblem,
+    budget: float,
+    values: Dict[str, Any],
+    **kwargs: Any,
+) -> Tuple[np.ndarray, float]:
     """
-    Main dispatcher for Branch-Cut-and-Price solvers.
-
-    Selects and runs the appropriate BCP solver based on configuration.
-    Supports Waste-Collecting CVRP with optional must-go nodes.
+    Main dispatcher for BCP / ILP solvers.
 
     Args:
-        dist_matrix (np.ndarray): Distance matrix (N x N) with depot at index 0
-        wastes (dict): Node wastes {node_id: waste_value}
-        capacity (float): Vehicle capacity constraint
-        R (float): Revenue per unit waste
-        C (float): Cost per unit distance
-        values (dict): Configuration with 'bcp_engine' in ['ortools', 'vrpy', 'gurobi'].
-            Default: 'ortools'. Also supports 'time_limit' (default: 30 seconds)
-        must_go_indices (set, optional): Node IDs that must be visited
-        env (gp.Env, optional): Gurobi environment (for Gurobi engine only)
-        recorder (PolicyStateRecorder, optional): Telemetry recorder.
+        problem: BuildProblem instance.
+        budget: Maximum cost budget.
+        values: Configuration with 'bcp_engine'.
 
     Returns:
-        Tuple[List[List[int]], float]: Routes and total cost
-            - routes: List of routes, each containing node IDs
-            - cost: Total travel cost (distance * C)
+        Tuple[np.ndarray, float]: (best_build, best_score).
     """
     engine = values.get("bcp_engine", "ortools")
 
-    if engine == "vrpy":
-        return run_bcp_vrpy(dist_matrix, wastes, capacity, R, C, values, recorder=recorder)
-    elif engine == "gurobi":
-        return run_bcp_gurobi(dist_matrix, wastes, capacity, R, C, values, must_go_indices, env, recorder=recorder)
+    if engine == "gurobi":
+        return run_bcp_gurobi(problem, budget, values, **kwargs)
     else:
         # Default to OR-Tools
-        return run_bcp_ortools(dist_matrix, wastes, capacity, R, C, values, must_go_indices, recorder=recorder)
+        return run_bcp_ortools(problem, budget, values, **kwargs)

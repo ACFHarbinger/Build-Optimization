@@ -29,5 +29,4 @@ class VNSParams:
     max_iterations: int = 200
     local_search_iterations: int = 20
     n_removal: int = 2
-    n_llh: int = 5
     time_limit: float = 60.0

@@ -20,15 +20,14 @@ class GAParams:
         max_generations: Number of evolutionary generations.
         crossover_rate: Probability of crossover between parents.
         mutation_rate: Probability of mutation per individual.
-        tournament_size: Number of individuals in tournament selection.
-        n_removal: Nodes removed per local search step.
         time_limit: Wall-clock time limit in seconds.
+        n_removal: Nodes removed per local search step.
     """
 
-    pop_size: int = 30
+    pop_size: int = 50
     max_generations: int = 100
+    tournament_size: int = 3
     crossover_rate: float = 0.8
     mutation_rate: float = 0.1
-    tournament_size: int = 3
-    n_removal: int = 2
     time_limit: float = 60.0
+    n_removal: int = 2
