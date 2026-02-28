@@ -51,12 +51,27 @@ hgs_alns:
       # Range: 5-25 (typically 20% of population_size)
       # Only elite solutions undergo ALNS refinement (computational efficiency)
 
+    - n_offspring: 20
+      # Number of offspring to generate per generation
+      # Range: 10-50
+      # Same recommendations as pure HGS
+
+    - n_generations: 100
+      # Number of generations to run
+      # Range: 50-200
+      # Same recommendations as pure HGS
+
     # ---------------------------------------------------------------------
     # Genetic Operators
     # ---------------------------------------------------------------------
     - mutation_rate: 0.2
       # Probability of mutation after crossover in HGS phase
       # Range: 0.0-0.5
+      # Same recommendations as pure HGS
+
+    - crossover_rate: 0.7
+      # Probability of applying crossover
+      # Range: 0.5-0.9
       # Same recommendations as pure HGS
 
     # ---------------------------------------------------------------------

@@ -11,7 +11,7 @@ reset := '\033[0m'
 
 # Default variables (can be overridden: just train problem=wcvrp)
 
-game := "default"
+game := "darktide"
 model := "am"
 encoder := "gat"
 decoder := "transformer"
@@ -75,6 +75,36 @@ eval model_path="" dataset="" game=game strategy=strategy:
         eval.game={{ game }} \
         eval.val_size={{ samples }} \
         eval.decoding.strategy={{ strategy }}
+
+# Run build optimization across the defined policies for a given game.
+# Budget, level, and time default to the game's optimization config profile.
+# Usage: just optimize                                   # darktide, default policies
+#        just optimize game=rpg                          # rpg, game-config defaults
+#        just optimize game=darktide budget=30000        # endgame Darktide build
+#        just optimize game=rpg policies=sa,ga time=120
+optimize game=game policies=policies budget="" level="" time="":
+    @printf "{{ cyan }}╔════════════════════════════════════════════════════════════╗{{ reset }}\n"
+    @printf "{{ cyan }}║{{ reset }} {{ bold }}%-58s{{ reset }}   {{ cyan }}║{{ reset }}\n" "🎮 BUILD OPTIMIZATION"
+    @printf "{{ cyan }}╠════════════════════════════════════════════════════════════╣{{ reset }}\n"
+    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Game:" "{{ game }}"
+    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Policies:" "{{ policies }}"
+    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Budget:" "{{ if budget != '' { budget } else { 'from configs/optimization/' + game + '.yaml' } }}"
+    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Level cap:" "{{ if level != '' { level } else { 'from configs/optimization/' + game + '.yaml' } }}"
+    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Time limit:" "{{ if time != '' { time + 's' } else { 'from configs/optimization/' + game + '.yaml' } }}"
+    @printf "{{ cyan }}╚════════════════════════════════════════════════════════════╝{{ reset }}\n"
+    for policy in $(echo "{{ policies }}" | tr ',' ' '); do \
+        printf "\n{{ bold }}>>> Policy: $policy{{ reset }}\n"; \
+        EXTRA=""; \
+        [ -n "{{ budget }}" ] && EXTRA="$EXTRA optimization.budget={{ budget }}"; \
+        [ -n "{{ level }}" ]  && EXTRA="$EXTRA optimization.character_level={{ level }}"; \
+        [ -n "{{ time }}" ]   && EXTRA="$EXTRA optimization.time_limit={{ time }}"; \
+        uv run python main.py \
+            policy=policy_$policy \
+            optimization={{ game }} \
+            game={{ game }} \
+            output.compare_baselines=false \
+            $EXTRA || true; \
+    done
 
 # Launch the GUI
 gui:

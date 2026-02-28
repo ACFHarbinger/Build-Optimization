@@ -1,0 +1,4 @@
+# RPG optimization defaults
+budget: 2000.0
+character_level: 50
+time_limit: 60.0

@@ -53,6 +53,14 @@ hgs:
       # Range: 5-25 (typically 20% of population_size)
       # Elite solutions drive intensification (exploitation)
 
+    - n_offspring: 20
+      # Number of offspring to generate per generation
+      # Range: 10-50
+
+    - n_generations: 100
+      # Number of generations to run
+      # Range: 50-200
+
     # ---------------------------------------------------------------------
     # Genetic Operators
     # ---------------------------------------------------------------------

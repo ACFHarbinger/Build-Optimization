@@ -40,10 +40,8 @@ Usage::
 
 from .context import GameOptimizationContext
 from .optimizer import run_batch, run_optimization
-from .problem import BuildProblem
 
 __all__ = [
-    "BuildProblem",
     "GameOptimizationContext",
     "run_optimization",
     "run_batch",

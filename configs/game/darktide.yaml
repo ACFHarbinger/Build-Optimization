@@ -1,0 +1,50 @@
+# Warhammer 40,000: Darktide — game profile
+#
+# Gear slots in use:
+#   weapon      → melee weapon  (Slot.WEAPON)
+#   ring_1      → ranged weapon (Slot.RING_1)
+#   accessory_1 → curio slot 1
+#   accessory_2 → curio slot 2
+#   amulet      → curio slot 3
+#
+# Rarity mapping (Darktide tier → enum):
+#   profane → COMMON  |  redeemed → UNCOMMON  |  anointed → RARE
+#   exalted → EPIC    |  transcendent → LEGENDARY
+#
+# Budget and character_level are optimization parameters — set them
+# in configs/optimization.yaml or override on the command line:
+#   python main.py game=darktide optimization.budget=30000 optimization.character_level=30
+
+name: "Warhammer 40,000: Darktide"
+description: >
+  Darktide 5-slot build optimizer. Covers melee weapon, ranged weapon,
+  and three curio slots. Stats model Darktide modifier tiers (0-100 scale).
+  Blessing synergies reward stacking matching Blessing tags across gear.
+
+data:
+  items_path: "src/data/sample/darktide.json"
+
+scoring:
+  stat_weights:
+    # Combat effectiveness
+    damage:                  1.2   # Primary DPS driver
+    penetration:             1.0   # Critical against armoured / Ogryn enemies
+    stopping_power:          0.9   # Stagger control — key for crowd safety
+    sweep:                   0.7   # Horde-clear efficiency
+    range:                   0.8   # Effective engagement range for ranged weapons
+    mobility:                0.6   # Dodge speed and handling
+
+    # Survivability (curios)
+    toughness_regeneration:  1.1   # Most important curio stat for sustain
+    damage_reduction:        1.0   # Flat mitigation from Elite hits
+    health_bonus:            0.8   # Max health expansion
+    coherency:               0.7   # Team aura support radius and strength
+    stamina:                 0.5   # Stamina cap (affects dodge count)
+    sprint_recovery:         0.4   # Time to regain sprint after combat
+
+  synergy_multiplier: 1.6   # Darktide Blessings scale aggressively with stacking
+  cost_penalty:       0.0   # Dockets are abundant at endgame; no cost penalty
+  slot_bonus:         4.0   # Reward for filling each of the 5 active slots
+  rarity_bonus:       2.5   # Transcendent items outperform lower tiers markedly
+  diminishing_returns: true
+  diminishing_threshold: 150.0  # Stats saturate earlier than in fantasy RPGs

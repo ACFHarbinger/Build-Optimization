@@ -1,0 +1,4 @@
+# MOBA optimization defaults
+budget: 3000.0
+character_level: 18
+time_limit: 60.0

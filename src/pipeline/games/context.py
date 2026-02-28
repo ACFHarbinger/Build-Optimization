@@ -11,10 +11,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from core.item import Item
+from core.problem import BuildProblem
 from core.scoring import ScoringConfig
 from core.synergy import SynergyEngine
-
-from .problem import BuildProblem
 
 if TYPE_CHECKING:
     from core.build import Build

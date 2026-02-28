@@ -7,11 +7,11 @@ to fetch, filter, and pre-process game data from JSON or CSV files.
 
 from typing import Any, Dict
 
+from core.problem import BuildProblem
 from core.synergy import SynergyEngine
 from data.datasets.games.file_source import FileSource
 from data.transforms import deduplicate, filter_by_level
 
-from ..problem import BuildProblem
 from .base import GameAction
 
 

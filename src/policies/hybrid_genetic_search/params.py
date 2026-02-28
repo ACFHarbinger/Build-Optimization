@@ -22,6 +22,9 @@ class HGSParams:
         elite_size: Number of elite individuals for survivor selection.
         mutation_rate: Probability of applying local search improvement.
         max_vehicles: Maximum number of vehicles allowed (0 = unlimited).
+        crossover_rate: Probability of applying crossover.
+        n_generations: Number of generations to run.
+        n_offspring: Number of offspring to generate per generation.
     """
 
     time_limit: float = 60.0
@@ -30,6 +33,7 @@ class HGSParams:
     mutation_rate: float = 0.2
     crossover_rate: float = 0.7
     n_generations: int = 100
+    n_offspring: int = 20
     max_vehicles: int = 0
 
     @classmethod
@@ -42,5 +46,6 @@ class HGSParams:
             mutation_rate=float(data.get("mutation_rate", 0.2)),
             crossover_rate=float(data.get("crossover_rate", 0.7)),
             n_generations=int(data.get("n_generations", 100)),
+            n_offspring=int(data.get("n_offspring", 20)),
             max_vehicles=int(data.get("max_vehicles", 0)),
         )

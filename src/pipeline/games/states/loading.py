@@ -11,11 +11,11 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from core.problem import BuildProblem
 from core.synergy import SynergyEngine
 from data.datasets.games.file_source import FileSource
 from data.transforms import deduplicate, filter_by_level
 
-from ..problem import BuildProblem
 from .base import GameState
 
 if TYPE_CHECKING:
