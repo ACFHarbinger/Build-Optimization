@@ -9,7 +9,7 @@ opportunistically, the vehicle avoids returning to the same neighborhood
 the very next day.
 
 Example:
-    >>> from logic.src.policies.helpers.mandatory.selection_spatial_synergy import SpatialSynergySelection
+    >>> from policies.helpers.mandatory.selection_spatial_synergy import SpatialSynergySelection
     >>> strategy = SpatialSynergySelection()
     >>> bins = strategy.select_bins(context)
 """
@@ -18,10 +18,10 @@ from typing import List, Tuple
 
 import numpy as np
 
-from logic.src.interfaces.context.search_context import SearchContext
-from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
-from logic.src.policies.mandatory_selection.base.selection_context import SelectionContext
-from logic.src.policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
+from interfaces.context.search_context import SearchContext
+from interfaces.mandatory_selection import IMandatorySelectionStrategy
+from policies.mandatory_selection.base.selection_context import SelectionContext
+from policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
 
 
 @MandatorySelectionRegistry.register("spatial_synergy")

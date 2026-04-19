@@ -7,7 +7,7 @@ from typing import Optional
 import torch
 from torch import Tensor
 
-from logic.src.models.meta.hrl_manager import MandatoryManager
+from models.meta.hrl_manager import MandatoryManager
 
 from .base import VectorizedSelector
 

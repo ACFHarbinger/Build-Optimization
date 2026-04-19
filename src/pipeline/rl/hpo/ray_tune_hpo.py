@@ -43,7 +43,7 @@ import contextlib
 import copy
 from typing import Any, Callable, Dict, Optional
 
-from logic.src.configs import Config
+from configs import Config
 
 try:
     import ray
@@ -55,7 +55,7 @@ try:
     from ray.tune.schedulers.hb_bohb import HyperBandForBOHB
     from ray.tune.search.bohb import TuneBOHB
 
-    from logic.src.tracking.core.run import get_active_run
+    from tracking.core.run import get_active_run
 except ImportError:
     ray = None  # type: ignore[assignment,misc]
     ray_train = None  # type: ignore[assignment,misc]

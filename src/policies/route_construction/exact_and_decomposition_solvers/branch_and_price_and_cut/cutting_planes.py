@@ -39,13 +39,13 @@ from typing import Dict, FrozenSet, List, Optional, Set, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.solvers_and_matheuristics import (
+from policies.helpers.solvers_and_matheuristics import (
     CapacityCut,
     PCSubtourEliminationCut,
     SeparationEngine,
     VRPPMasterProblem,
 )
-from logic.src.policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
+from policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
 
 
 class CuttingPlaneEngine(ABC):

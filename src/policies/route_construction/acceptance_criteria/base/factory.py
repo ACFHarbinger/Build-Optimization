@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional, Union
 
-from logic.src.interfaces.acceptance_criterion import IAcceptanceCriterion
+from interfaces.acceptance_criterion import IAcceptanceCriterion
 
 from .registry import AcceptanceCriterionRegistry
 
@@ -54,7 +54,7 @@ class AcceptanceCriterionFactory:
 
         for mod in modules:
             with contextlib.suppress(ImportError):
-                importlib.import_module(f"logic.src.policies.route_construction.acceptance_criteria.{mod}")
+                importlib.import_module(f"policies.route_construction.acceptance_criteria.{mod}")
 
         cls._registered = True
 

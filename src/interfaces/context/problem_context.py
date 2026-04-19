@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-from logic.src.pipeline.simulations.bins.prediction import ScenarioTree
+from pipeline.simulations.bins.prediction import ScenarioTree
 
 
 @dataclass(frozen=True)

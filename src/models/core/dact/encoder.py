@@ -15,9 +15,9 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.models.common.improvement.encoder import ImprovementEncoder
-from logic.src.models.subnets.embeddings.positional import pos_init_embedding
-from logic.src.models.subnets.modules import MultiHeadAttention, Normalization
+from models.common.improvement.encoder import ImprovementEncoder
+from models.subnets.embeddings.positional import pos_init_embedding
+from models.subnets.modules import MultiHeadAttention, Normalization
 
 
 class DACTEncoder(ImprovementEncoder):

@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.solvers_and_matheuristics import RCSPPSolver, Route
+from policies.helpers.solvers_and_matheuristics import RCSPPSolver, Route
 
 
 class ALNSMultiPeriodPricer:

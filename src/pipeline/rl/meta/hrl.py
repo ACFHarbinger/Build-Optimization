@@ -19,9 +19,9 @@ import torch
 import torch.nn.functional as F
 from tensordict import TensorDict
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.autoregressive.constructive import ConstructivePolicy
-from logic.src.models.meta.hrl_manager import MandatoryManager
+from envs.base.base import RL4COEnvBase
+from models.common.autoregressive.constructive import ConstructivePolicy
+from models.meta.hrl_manager import MandatoryManager
 
 
 class HRLModule(pl.LightningModule):

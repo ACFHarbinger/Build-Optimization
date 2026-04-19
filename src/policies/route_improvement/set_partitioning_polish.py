@@ -10,9 +10,9 @@ SetPartitioningRouteImprover.
 import logging
 from typing import Any, List, Tuple
 
-from logic.src.interfaces.context.search_context import ImprovementMetrics
-from logic.src.interfaces.route_improvement import IRouteImprovement
-from logic.src.policies.helpers.operators.intensification_fixing import (
+from interfaces.context.search_context import ImprovementMetrics
+from interfaces.route_improvement import IRouteImprovement
+from policies.helpers.operators.intensification_fixing import (
     set_partitioning_polish,
     set_partitioning_polish_profit,
 )

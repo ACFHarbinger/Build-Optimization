@@ -22,13 +22,13 @@ Attributes:
     get_vectorized_selector (function): Factory function for vectorized selectors.
 
 Example:
-    >>> from logic.src.policies.mandatory import create_selector_from_config
+    >>> from policies.mandatory import create_selector_from_config
     >>> selector = create_selector_from_config(config)
     >>> selected_nodes = selector.select(context)
 """
 
-from logic.src.interfaces import IMandatorySelectionStrategy
-from logic.src.models.policies.selection import (
+from interfaces import IMandatorySelectionStrategy
+from models.policies.selection import (
     CombinedSelector,
     LastMinuteSelector,
     LookaheadSelector,

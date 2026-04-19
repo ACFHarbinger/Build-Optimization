@@ -3,15 +3,15 @@ from typing import Any, Dict, List, Optional, Tuple
 import gurobipy as gp
 import numpy as np
 
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.interfaces.context.multi_day_context import MultiDayContext
-from logic.src.interfaces.context.problem_context import ProblemContext
-from logic.src.interfaces.context.solution_context import SolutionContext
-from logic.src.policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.matheuristics.column_generation_heuristic.params import CGHParams
-from logic.src.utils.policy.routes import route_cost, route_profit
-from logic.src.utils.policy.wrappers import greedy_day_route, two_opt
+from enums import GlobalRegistry, PolicyTag
+from interfaces.context.multi_day_context import MultiDayContext
+from interfaces.context.problem_context import ProblemContext
+from interfaces.context.solution_context import SolutionContext
+from policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.matheuristics.column_generation_heuristic.params import CGHParams
+from utils.policy.routes import route_cost, route_profit
+from utils.policy.wrappers import greedy_day_route, two_opt
 
 
 @GlobalRegistry.register(

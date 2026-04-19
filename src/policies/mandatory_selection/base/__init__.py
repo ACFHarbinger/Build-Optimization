@@ -11,7 +11,7 @@ Attributes:
     SelectionContext (class): Data container for selection context.
 
 Example:
-    >>> from logic.src.policies.mandatory.base import SelectionContext
+    >>> from policies.mandatory.base import SelectionContext
     >>> ctx = SelectionContext(bin_ids=..., current_fill=...)
 """
 

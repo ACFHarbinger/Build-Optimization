@@ -9,16 +9,16 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple, Union
 
 import numpy as np
 
-from logic.src.policies.helpers.solvers_and_matheuristics.branching.constraints import (
+from policies.helpers.solvers_and_matheuristics.branching.constraints import (
     EdgeBranchingConstraint,
     FleetSizeBranchingConstraint,
     NodeVisitationBranchingConstraint,
     RyanFosterBranchingConstraint,
 )
-from logic.src.policies.helpers.solvers_and_matheuristics.common.route import Route
+from policies.helpers.solvers_and_matheuristics.common.route import Route
 
 if TYPE_CHECKING:
-    from logic.src.policies.helpers.solvers_and_matheuristics.common.node import BranchNode
+    from policies.helpers.solvers_and_matheuristics.common.node import BranchNode
 
 
 class EdgeBranching:
@@ -106,7 +106,7 @@ class EdgeBranching:
         Returns:
             (left_child, right_child)
         """
-        from logic.src.policies.helpers.solvers_and_matheuristics.common.node import BranchNode
+        from policies.helpers.solvers_and_matheuristics.common.node import BranchNode
 
         left_bc = EdgeBranchingConstraint(u, v, must_use=True)
         right_bc = EdgeBranchingConstraint(u, v, must_use=False)
@@ -406,7 +406,7 @@ class MultiEdgePartitionBranching:
         Returns:
             (left_child, right_child)
         """
-        from logic.src.policies.helpers.solvers_and_matheuristics.common.node import BranchNode
+        from policies.helpers.solvers_and_matheuristics.common.node import BranchNode
 
         # Child 1: Forbid arcs in arc_set_1
         constraints_1 = [EdgeBranchingConstraint(u, v, must_use=False) for u, v in arc_set_1]
@@ -561,7 +561,7 @@ class RyanFosterBranching:
         Returns:
             (left_child, right_child)
         """
-        from logic.src.policies.helpers.solvers_and_matheuristics.common.node import BranchNode
+        from policies.helpers.solvers_and_matheuristics.common.node import BranchNode
 
         hint = parent.lp_bound if parent.lp_bound is not None else 0.0
         # Separation branch gets small penalty
@@ -600,7 +600,7 @@ class FleetSizeBranching:
     @staticmethod
     def create_child_nodes(parent: "BranchNode", fleet_usage: float) -> Tuple["BranchNode", "BranchNode"]:
         """Create floor (lower branch) and ceiling (upper branch) child nodes."""
-        from logic.src.policies.helpers.solvers_and_matheuristics.common.node import BranchNode
+        from policies.helpers.solvers_and_matheuristics.common.node import BranchNode
 
         floor = math.floor(fleet_usage + 1e-6)
         ceil = math.ceil(fleet_usage - 1e-6)
@@ -639,7 +639,7 @@ class NodeVisitationBranching:
     @staticmethod
     def create_child_nodes(parent: "BranchNode", node: int, visitation: float) -> Tuple["BranchNode", "BranchNode"]:
         """Create v_i = 0 and v_i = 1 child nodes."""
-        from logic.src.policies.helpers.solvers_and_matheuristics.common.node import BranchNode
+        from policies.helpers.solvers_and_matheuristics.common.node import BranchNode
 
         left = BranchNode(
             constraints=[NodeVisitationBranchingConstraint(node, forced=False)],

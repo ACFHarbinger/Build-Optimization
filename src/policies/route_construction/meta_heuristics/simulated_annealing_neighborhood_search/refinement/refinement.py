@@ -8,13 +8,13 @@ from typing import Dict, List, Tuple
 import numpy as np
 import pandas as pd
 
-from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.routes import (
+from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.routes import (
     uncross_arcs_in_routes,
 )
-from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.search.deterministic import (
+from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.search.deterministic import (
     local_search_2,
 )
-from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.search.reversed import (
+from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.search.reversed import (
     local_search_reversed,
 )
 

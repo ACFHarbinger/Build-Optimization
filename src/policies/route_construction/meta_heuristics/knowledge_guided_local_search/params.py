@@ -5,7 +5,7 @@ KGLS algorithm parameters.
 from dataclasses import dataclass
 from typing import List, Optional
 
-from logic.src.configs.policies import KGLSConfig
+from configs.policies import KGLSConfig
 
 
 @dataclass

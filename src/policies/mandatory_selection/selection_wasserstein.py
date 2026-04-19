@@ -10,7 +10,7 @@ Wasserstein-1 distance. Utilizing the duality result from Mohajerin Esfahani
 the nominal expectation plus the radius epsilon.
 
 Example:
-    >>> from logic.src.policies.helpers.mandatory.selection_wasserstein import WassersteinRobustSelection
+    >>> from policies.helpers.mandatory.selection_wasserstein import WassersteinRobustSelection
     >>> strategy = WassersteinRobustSelection()
     >>> bins = strategy.select_bins(context)
 """
@@ -20,10 +20,10 @@ from typing import List, Tuple
 import numpy as np
 from scipy.stats import norm
 
-from logic.src.interfaces.context.search_context import SearchContext
-from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
-from logic.src.policies.mandatory_selection.base.selection_context import SelectionContext
-from logic.src.policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
+from interfaces.context.search_context import SearchContext
+from interfaces.mandatory_selection import IMandatorySelectionStrategy
+from policies.mandatory_selection.base.selection_context import SelectionContext
+from policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
 
 
 @MandatorySelectionRegistry.register("wasserstein_robust")

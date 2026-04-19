@@ -4,12 +4,12 @@ Meta-Learning Strategy Registry.
 
 from typing import Dict, Type
 
-from logic.src.pipeline.rl.meta.contextual_bandits import WeightContextualBandit
-from logic.src.pipeline.rl.meta.hypernet_strategy import HyperNetworkStrategy
-from logic.src.pipeline.rl.meta.multi_objective.weight_optimizer import MORLWeightOptimizer
-from logic.src.pipeline.rl.meta.td_learning import CostWeightManager
-from logic.src.pipeline.rl.meta.weight_optimizer import RewardWeightOptimizer
-from logic.src.pipeline.rl.meta.weight_strategy import WeightAdjustmentStrategy
+from pipeline.rl.meta.contextual_bandits import WeightContextualBandit
+from pipeline.rl.meta.hypernet_strategy import HyperNetworkStrategy
+from pipeline.rl.meta.multi_objective.weight_optimizer import MORLWeightOptimizer
+from pipeline.rl.meta.td_learning import CostWeightManager
+from pipeline.rl.meta.weight_optimizer import RewardWeightOptimizer
+from pipeline.rl.meta.weight_strategy import WeightAdjustmentStrategy
 
 META_STRATEGY_REGISTRY: Dict[str, Type[WeightAdjustmentStrategy]] = {
     "rnn": RewardWeightOptimizer,

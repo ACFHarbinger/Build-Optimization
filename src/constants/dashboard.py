@@ -16,7 +16,7 @@ Colors are chosen from the ColorBrewer2 qualitative palette for:
 
 Usage Example
 -------------
-    >>> from logic.src.constants.dashboard import ROUTE_COLORS
+    >>> from constants.dashboard import ROUTE_COLORS
     >>> for route_id, tour in enumerate(tours):
     >>>     color = ROUTE_COLORS[route_id % len(ROUTE_COLORS)]
     >>>     plt.plot(tour, color=color, label=f"Vehicle {route_id}")

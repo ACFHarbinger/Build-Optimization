@@ -7,7 +7,7 @@ import math
 import torch
 from torch import nn
 
-from logic.src.models.subnets import PointerDecoder, PointerEncoder
+from models.subnets import PointerDecoder, PointerEncoder
 
 
 # Attention, Learn to Solve Routing Problems

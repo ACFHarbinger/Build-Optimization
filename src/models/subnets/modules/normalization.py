@@ -10,7 +10,7 @@ from typing import Optional
 import torch
 from torch import nn
 
-from logic.src.configs.models.normalization import NormalizationConfig
+from configs.models.normalization import NormalizationConfig
 
 
 class Normalization(nn.Module):

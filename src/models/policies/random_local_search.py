@@ -10,9 +10,9 @@ from typing import Any, Dict, Optional
 import torch
 from tensordict import TensorDict
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.improvement.policy import ImprovementPolicy
-from logic.src.models.policies.local_search import (
+from envs.base.base import RL4COEnvBase
+from models.common.improvement.policy import ImprovementPolicy
+from models.policies.local_search import (
     vectorized_relocate,
     vectorized_swap,
     vectorized_swap_star,
@@ -20,8 +20,8 @@ from logic.src.models.policies.local_search import (
     vectorized_two_opt,
     vectorized_two_opt_star,
 )
-from logic.src.models.policies.shared import vectorized_linear_split
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from models.policies.shared import vectorized_linear_split
+from tracking.viz_mixin import PolicyVizMixin
 
 
 class RandomLocalSearchPolicy(ImprovementPolicy, PolicyVizMixin):

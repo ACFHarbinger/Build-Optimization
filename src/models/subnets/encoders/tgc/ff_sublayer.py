@@ -2,7 +2,7 @@
 
 from torch import nn
 
-from logic.src.models.subnets.modules import ActivationFunction, FeedForward
+from models.subnets.modules import ActivationFunction, FeedForward
 
 
 class TGCFeedForwardSubLayer(nn.Module):

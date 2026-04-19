@@ -15,7 +15,7 @@ from tensordict import TensorDict
 from torch import nn
 from torch.utils.data import DataLoader
 
-from logic.src.envs.base.base import RL4COEnvBase
+from envs.base.base import RL4COEnvBase
 
 from .policy import MDAMPolicy
 

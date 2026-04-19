@@ -13,9 +13,9 @@ import torch
 from tensordict import TensorDict
 
 if TYPE_CHECKING:
-    from logic.src.interfaces.env import IEnv
+    from interfaces.env import IEnv
 
-from logic.src.pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.common.base import RL4COLitModule
 
 
 class REINFORCE(RL4COLitModule):

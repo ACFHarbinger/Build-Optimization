@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.ant_colony_optimization_hyper_heuristic.params import HyperACOParams
+    >>> from policies.ant_colony_optimization_hyper_heuristic.params import HyperACOParams
     >>> params = HyperACOParams(n_ants=10, alpha=1.0)
 """
 

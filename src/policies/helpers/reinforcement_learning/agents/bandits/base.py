@@ -5,7 +5,7 @@ from typing import Any, Deque, Dict, Optional
 
 import numpy as np
 
-from logic.src.policies.helpers.reinforcement_learning.agents.base import RLAgent
+from policies.helpers.reinforcement_learning.agents.base import RLAgent
 
 
 class BanditAgent(RLAgent, ABC):

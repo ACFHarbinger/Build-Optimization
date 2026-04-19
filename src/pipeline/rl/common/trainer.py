@@ -8,7 +8,7 @@ import os
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 if TYPE_CHECKING:
-    from logic.src.configs.tracking import TrackingConfig
+    from configs.tracking import TrackingConfig
 
 import pytorch_lightning as pl
 import torch
@@ -20,11 +20,11 @@ from pytorch_lightning.callbacks import (
 )
 from pytorch_lightning.loggers import Logger, WandbLogger
 
-from logic.src.pipeline.callbacks import (
+from pipeline.callbacks import (
     ModelSummaryCallback,
     TrainingDisplayCallback,
 )
-from logic.src.tracking.integrations.lightning import TrackingCallback
+from tracking.integrations.lightning import TrackingCallback
 
 try:
     from pytorch_lightning.loggers import TensorBoardLogger

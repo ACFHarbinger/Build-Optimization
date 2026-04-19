@@ -17,8 +17,8 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.envs import get_env
-from logic.src.envs.base.base import RL4COEnvBase
+from envs import get_env
+from envs.base.base import RL4COEnvBase
 
 from .decoder import ImprovementDecoder
 from .encoder import ImprovementEncoder
@@ -100,7 +100,7 @@ class ImprovementPolicy(nn.Module, ABC):
             env = get_env(self.env_name or "tsp_kopt")
 
         # Initial solution generation (done by env.reset)
-        from logic.src.utils.decoding import batchify, unbatchify
+        from utils.decoding import batchify, unbatchify
 
         td = env.reset(td)
 

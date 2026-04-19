@@ -14,7 +14,7 @@ Implemented Operators:
 - vectorized_three_opt: Intra-route 3-opt moves.
 """
 
-from logic.src.models.policies.operators import (
+from models.policies.operators import (
     vectorized_relocate,
     vectorized_swap,
     vectorized_swap_star,

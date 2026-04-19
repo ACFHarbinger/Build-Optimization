@@ -8,13 +8,13 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.mandatory.base.selection_factory import MandatorySelectionFactory
+    >>> from policies.mandatory.base.selection_factory import MandatorySelectionFactory
     >>> strategy = MandatorySelectionFactory.create_strategy("regular", threshold=2)
 """
 
 from typing import Any, Optional, Type, cast
 
-from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
+from interfaces.mandatory_selection import IMandatorySelectionStrategy
 
 from .selection_registry import MandatorySelectionRegistry
 
@@ -65,32 +65,32 @@ class MandatorySelectionFactory:
             **kwargs: Arguments to pass to the strategy constructor.
         """
         # Lazy imports to avoid circular dependencies and keep strategies separated
-        from logic.src.policies.mandatory_selection.selection_combined import CombinedSelection
-        from logic.src.policies.mandatory_selection.selection_cvar import CVaRSelection
-        from logic.src.policies.mandatory_selection.selection_deadline import DeadlineDrivenSelection
-        from logic.src.policies.mandatory_selection.selection_dispatcher_portfolio import PortfolioDispatcher
-        from logic.src.policies.mandatory_selection.selection_dispatcher_thompson import ThompsonDispatcher
-        from logic.src.policies.mandatory_selection.selection_fractional_knapsack import FractionalKnapsackSelection
-        from logic.src.policies.mandatory_selection.selection_lagrangian import LagrangianSelection
-        from logic.src.policies.mandatory_selection.selection_last_minute import LastMinuteSelection
-        from logic.src.policies.mandatory_selection.selection_learned import LearnedSelection
-        from logic.src.policies.mandatory_selection.selection_lookahead import LookaheadSelection
-        from logic.src.policies.mandatory_selection.selection_mip_knapsack import MIPKnapsackSelection
-        from logic.src.policies.mandatory_selection.selection_multi_day_prob import MultiDayOverflowSelection
-        from logic.src.policies.mandatory_selection.selection_pareto import ParetoFrontSelection
-        from logic.src.policies.mandatory_selection.selection_profit_per_km import ProfitPerKmSelection
-        from logic.src.policies.mandatory_selection.selection_regular import RegularSelection
-        from logic.src.policies.mandatory_selection.selection_revenue import RevenueThresholdSelection
-        from logic.src.policies.mandatory_selection.selection_rollout import RolloutSelection
-        from logic.src.policies.mandatory_selection.selection_savings import SavingsSelection
-        from logic.src.policies.mandatory_selection.selection_service_level import ServiceLevelSelection
-        from logic.src.policies.mandatory_selection.selection_set_cover import SetCoverSelection
-        from logic.src.policies.mandatory_selection.selection_spatial_synergy import SpatialSynergySelection
-        from logic.src.policies.mandatory_selection.selection_stochastic_regret import StochasticRegretSelection
-        from logic.src.policies.mandatory_selection.selection_submodular_greedy import SubmodularGreedySelection
-        from logic.src.policies.mandatory_selection.selection_supermodular_greedy import SupermodularGreedySelection
-        from logic.src.policies.mandatory_selection.selection_wasserstein import WassersteinRobustSelection
-        from logic.src.policies.mandatory_selection.selection_whittle import WhittleIndexSelection
+        from policies.mandatory_selection.selection_combined import CombinedSelection
+        from policies.mandatory_selection.selection_cvar import CVaRSelection
+        from policies.mandatory_selection.selection_deadline import DeadlineDrivenSelection
+        from policies.mandatory_selection.selection_dispatcher_portfolio import PortfolioDispatcher
+        from policies.mandatory_selection.selection_dispatcher_thompson import ThompsonDispatcher
+        from policies.mandatory_selection.selection_fractional_knapsack import FractionalKnapsackSelection
+        from policies.mandatory_selection.selection_lagrangian import LagrangianSelection
+        from policies.mandatory_selection.selection_last_minute import LastMinuteSelection
+        from policies.mandatory_selection.selection_learned import LearnedSelection
+        from policies.mandatory_selection.selection_lookahead import LookaheadSelection
+        from policies.mandatory_selection.selection_mip_knapsack import MIPKnapsackSelection
+        from policies.mandatory_selection.selection_multi_day_prob import MultiDayOverflowSelection
+        from policies.mandatory_selection.selection_pareto import ParetoFrontSelection
+        from policies.mandatory_selection.selection_profit_per_km import ProfitPerKmSelection
+        from policies.mandatory_selection.selection_regular import RegularSelection
+        from policies.mandatory_selection.selection_revenue import RevenueThresholdSelection
+        from policies.mandatory_selection.selection_rollout import RolloutSelection
+        from policies.mandatory_selection.selection_savings import SavingsSelection
+        from policies.mandatory_selection.selection_service_level import ServiceLevelSelection
+        from policies.mandatory_selection.selection_set_cover import SetCoverSelection
+        from policies.mandatory_selection.selection_spatial_synergy import SpatialSynergySelection
+        from policies.mandatory_selection.selection_stochastic_regret import StochasticRegretSelection
+        from policies.mandatory_selection.selection_submodular_greedy import SubmodularGreedySelection
+        from policies.mandatory_selection.selection_supermodular_greedy import SupermodularGreedySelection
+        from policies.mandatory_selection.selection_wasserstein import WassersteinRobustSelection
+        from policies.mandatory_selection.selection_whittle import WhittleIndexSelection
 
         default_map = {
             "service_level": ServiceLevelSelection,

@@ -8,7 +8,7 @@ from typing import Any, Optional
 
 from torch import nn
 
-from logic.src.envs.base.base import RL4COEnvBase
+from envs.base.base import RL4COEnvBase
 
 from .policy import NeuOptPolicy
 

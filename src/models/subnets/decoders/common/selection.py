@@ -17,7 +17,7 @@ from typing import Optional
 
 import torch
 
-from logic.src.constants.models import NUMERICAL_EPSILON
+from constants.models import NUMERICAL_EPSILON
 
 
 def select_action(

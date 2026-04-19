@@ -16,7 +16,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.intra_route.k_opt import move_kopt_intra
+    >>> from policies.helpers.operators.intra_route.k_opt import move_kopt_intra
     >>> improved = move_kopt_intra(ls, u, v, r_u, p_u, r_v, p_v, k=2)
     >>> improved = move_kopt_intra(ls, u, v, r_u, p_u, r_v, p_v, k=3, rng=rng)
     >>> improved = move_kopt_intra(ls, u, v, r_u, p_u, r_v, p_v, k=4, rng=rng)

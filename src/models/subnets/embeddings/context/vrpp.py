@@ -7,7 +7,7 @@ from typing import Any
 import torch
 from torch import nn
 
-from logic.src.constants.models import NODE_DIM, VRPP_STEP_CONTEXT_OFFSET
+from constants.models import NODE_DIM, VRPP_STEP_CONTEXT_OFFSET
 
 from .base import ContextEmbedder
 

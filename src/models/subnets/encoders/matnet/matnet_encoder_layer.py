@@ -7,8 +7,8 @@ from typing import Optional
 import torch
 from torch import nn
 
-from logic.src.models.subnets.modules.matnet_attention import MixedScoreMHA
-from logic.src.models.subnets.modules.normalization import Normalization
+from models.subnets.modules.matnet_attention import MixedScoreMHA
+from models.subnets.modules.normalization import Normalization
 
 
 class MatNetEncoderLayer(nn.Module):

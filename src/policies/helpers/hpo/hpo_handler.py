@@ -8,15 +8,15 @@ from typing import Any
 import optuna
 import torch
 from logic.src import tracking as wst
-from logic.src.configs import Config
-from logic.src.constants import ROOT_DIR, SIM_METRICS
-from logic.src.pipeline.simulations.repository import (
+from configs import Config
+from constants import ROOT_DIR, SIM_METRICS
+from pipeline.simulations.repository import (
     load_indices,
     load_simulator_data,
     set_repository_from_path,
 )
-from logic.src.pipeline.simulations.simulator import sequential_simulations
-from logic.src.tracking.logging.pylogger import get_pylogger
+from pipeline.simulations.simulator import sequential_simulations
+from tracking.logging.pylogger import get_pylogger
 from omegaconf import OmegaConf
 
 logger = get_pylogger(__name__)

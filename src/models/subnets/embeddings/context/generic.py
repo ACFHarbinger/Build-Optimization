@@ -14,7 +14,7 @@ from typing import Any
 import torch
 from torch import nn
 
-from logic.src.constants.models import NODE_DIM
+from constants.models import NODE_DIM
 
 from .base import ContextEmbedder
 

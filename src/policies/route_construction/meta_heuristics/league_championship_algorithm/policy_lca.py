@@ -9,9 +9,9 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.lca import LCAConfig
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from configs.policies.lca import LCAConfig
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
 
 from .params import LCAParams
 from .solver import LCASolver

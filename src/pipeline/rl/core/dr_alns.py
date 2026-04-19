@@ -21,9 +21,9 @@ import torch
 import torch.nn.functional as F
 from torch.optim import Adam
 
-from logic.src.envs.dr_alns import DRALNSEnv
-from logic.src.models.core.dr_alns import DRALNSPPOAgent
-from logic.src.tracking.logging.pylogger import get_pylogger
+from envs.dr_alns import DRALNSEnv
+from models.core.dr_alns import DRALNSPPOAgent
+from tracking.logging.pylogger import get_pylogger
 
 if TYPE_CHECKING:
     pass

@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 
 from torch import Tensor
 
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from tracking.viz_mixin import PolicyVizMixin
 
 
 class VectorizedSelector(PolicyVizMixin, ABC):

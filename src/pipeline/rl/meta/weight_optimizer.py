@@ -7,10 +7,10 @@ from typing import Dict, List, Optional
 import torch
 from torch import nn
 
-from logic.src.pipeline.rl.meta.weight_strategy import WeightAdjustmentStrategy
+from pipeline.rl.meta.weight_strategy import WeightAdjustmentStrategy
 
 try:
-    from logic.src.tracking.core.run import get_active_run
+    from tracking.core.run import get_active_run
 except ImportError:
     get_active_run = None  # type: ignore[assignment]
 

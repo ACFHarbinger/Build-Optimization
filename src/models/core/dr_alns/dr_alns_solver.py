@@ -18,14 +18,14 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import torch
 
-from logic.src.policies.helpers.operators import (
+from policies.helpers.operators import (
     cluster_removal,
     greedy_insertion,
     random_removal,
     regret_2_insertion,
     worst_removal,
 )
-from logic.src.policies.helpers.operators.solution_initialization import (
+from policies.helpers.operators.solution_initialization import (
     build_nn_routes,
 )
 

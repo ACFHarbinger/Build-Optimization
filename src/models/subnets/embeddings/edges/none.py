@@ -16,7 +16,7 @@ from torch import nn
 from torch_geometric.data import Batch, Data
 from torch_geometric.data.data import BaseData
 
-from logic.src.utils.ops import get_full_graph_edge_index
+from utils.ops import get_full_graph_edge_index
 
 
 class NoEdgeEmbedding(nn.Module):

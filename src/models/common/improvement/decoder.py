@@ -14,7 +14,7 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.envs.base.base import RL4COEnvBase
+from envs.base.base import RL4COEnvBase
 
 
 class ImprovementDecoder(nn.Module, ABC):

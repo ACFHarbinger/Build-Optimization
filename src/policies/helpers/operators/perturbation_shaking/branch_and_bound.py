@@ -37,7 +37,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.perturbation.branch_bound import (
+    >>> from policies.helpers.operators.perturbation.branch_bound import (
     ...     bb_perturbation, bb_profit_perturbation
     ... )
     >>> # Standard CVRP perturbation
@@ -57,11 +57,11 @@ from typing import Dict, List, Optional
 
 import numpy as np
 
-from logic.src.policies.helpers.operators.destroy_ruin.branch_and_bound import (
+from policies.helpers.operators.destroy_ruin.branch_and_bound import (
     bb_profit_removal,
     bb_removal,
 )
-from logic.src.policies.helpers.operators.recreate_repair.branch_and_bound import (
+from policies.helpers.operators.recreate_repair.branch_and_bound import (
     bb_insertion,
     bb_profit_insertion,
 )

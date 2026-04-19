@@ -9,14 +9,14 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.mandatory.base.selection_registry import MandatorySelectionRegistry
+    >>> from policies.mandatory.base.selection_registry import MandatorySelectionRegistry
     >>> @MandatorySelectionRegistry.register("my_strategy")
     >>> class MyStrategy(IMandatorySelectionStrategy): ...
 """
 
 from typing import Dict, Optional, Type
 
-from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
+from interfaces.mandatory_selection import IMandatorySelectionStrategy
 
 
 class MandatorySelectionRegistry:

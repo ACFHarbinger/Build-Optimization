@@ -11,7 +11,7 @@ from typing import Any
 import torch
 from tensordict import TensorDict
 
-from logic.src.configs.rl.policies import (
+from configs.rl.policies import (
     ACOConfig,
     ALNSConfig,
     HGSALNSConfig,
@@ -19,21 +19,21 @@ from logic.src.configs.rl.policies import (
     ILSConfig,
     RLSConfig,
 )
-from logic.src.models.policies.alns import VectorizedALNS
-from logic.src.models.policies.ant_colony_system import VectorizedACOPolicy
-from logic.src.models.policies.hgs import VectorizedHGS
-from logic.src.models.policies.hgs_alns import VectorizedHGSALNS
-from logic.src.models.policies.iterated_local_search import IteratedLocalSearchPolicy
-from logic.src.models.policies.random_local_search import RandomLocalSearchPolicy
-from logic.src.pipeline.rl.common.base import RL4COLitModule
-from logic.src.pipeline.rl.core.losses import (
+from models.policies.alns import VectorizedALNS
+from models.policies.ant_colony_system import VectorizedACOPolicy
+from models.policies.hgs import VectorizedHGS
+from models.policies.hgs_alns import VectorizedHGSALNS
+from models.policies.iterated_local_search import IteratedLocalSearchPolicy
+from models.policies.random_local_search import RandomLocalSearchPolicy
+from pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.core.losses import (
     js_divergence_loss,
     kl_divergence_loss,
     nll_loss,
     reverse_kl_divergence_loss,
     weighted_nll_loss,
 )
-from logic.src.utils.data.rl_utils import safe_td_copy
+from utils.data.rl_utils import safe_td_copy
 
 
 class ImitationLearning(RL4COLitModule):

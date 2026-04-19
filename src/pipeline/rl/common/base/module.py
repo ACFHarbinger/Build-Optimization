@@ -13,19 +13,19 @@ import pytorch_lightning as pl
 import torch
 from omegaconf import OmegaConf
 
-from logic.src.pipeline.rl.common.baselines import WarmupBaseline, get_baseline
-from logic.src.pipeline.rl.common.epoch import apply_time_step, prepare_epoch, regenerate_dataset
-from logic.src.tracking.logging.pylogger import get_pylogger
+from pipeline.rl.common.baselines import WarmupBaseline, get_baseline
+from pipeline.rl.common.epoch import apply_time_step, prepare_epoch, regenerate_dataset
+from tracking.logging.pylogger import get_pylogger
 
 from .data import DataMixin
 from .optimization import OptimizationMixin
 from .steps import StepMixin
 
 if TYPE_CHECKING:
-    from logic.src.configs import Config
-    from logic.src.interfaces.env import IEnv
-    from logic.src.interfaces.policy import IPolicy
-    from logic.src.models.policies.selection import VectorizedSelector
+    from configs import Config
+    from interfaces.env import IEnv
+    from interfaces.policy import IPolicy
+    from models.policies.selection import VectorizedSelector
 
 logger = get_pylogger(__name__)
 

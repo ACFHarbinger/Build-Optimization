@@ -4,7 +4,7 @@
 
 import torch
 
-from logic.src.constants.routing import IMPROVEMENT_EPSILON
+from constants.routing import IMPROVEMENT_EPSILON
 
 
 def vectorized_two_opt(tours, distance_matrix, max_iterations=200, generator=None):

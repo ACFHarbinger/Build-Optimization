@@ -8,9 +8,9 @@ intra-route 2-opt local minimum.
 
 from typing import Any, List, Tuple
 
-from logic.src.interfaces.context.search_context import ImprovementMetrics
-from logic.src.interfaces.route_improvement import IRouteImprovement
-from logic.src.policies.helpers.operators.improvement_descent import (
+from interfaces.context.search_context import ImprovementMetrics
+from interfaces.route_improvement import IRouteImprovement
+from policies.helpers.operators.improvement_descent import (
     two_opt_steepest,
     two_opt_steepest_profit,
 )

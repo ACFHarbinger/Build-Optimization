@@ -11,11 +11,11 @@ from typing import Any, Dict, Optional
 import torch
 from tensordict import TensorDict
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.autoregressive.policy import AutoregressivePolicy
-from logic.src.models.subnets.decoders.gat import DeepGATDecoder
-from logic.src.models.subnets.embeddings import get_init_embedding
-from logic.src.models.subnets.encoders.gat import GraphAttentionEncoder
+from envs.base.base import RL4COEnvBase
+from models.common.autoregressive.policy import AutoregressivePolicy
+from models.subnets.decoders.gat import DeepGATDecoder
+from models.subnets.embeddings import get_init_embedding
+from models.subnets.encoders.gat import GraphAttentionEncoder
 
 
 class DeepDecoderPolicy(AutoregressivePolicy):
@@ -95,7 +95,7 @@ class DeepDecoderPolicy(AutoregressivePolicy):
         while not td["done"].all():
             # Wrap state
             assert self.env_name is not None, "env_name must be set"
-            from logic.src.utils.data import TensorDictStateWrapper
+            from utils.data import TensorDictStateWrapper
 
             state_wrapper = TensorDictStateWrapper(td, self.env_name)
 

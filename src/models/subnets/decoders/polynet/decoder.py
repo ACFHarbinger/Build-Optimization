@@ -8,12 +8,12 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.constants.models import NUMERICAL_EPSILON
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.subnets.decoders.common import AttentionDecoderCache
-from logic.src.models.subnets.embeddings import CONTEXT_EMBEDDING_REGISTRY
-from logic.src.models.subnets.embeddings.dynamic import DynamicEmbedding
-from logic.src.models.subnets.modules.polynet_attention import PolyNetAttention
+from constants.models import NUMERICAL_EPSILON
+from envs.base.base import RL4COEnvBase
+from models.subnets.decoders.common import AttentionDecoderCache
+from models.subnets.embeddings import CONTEXT_EMBEDDING_REGISTRY
+from models.subnets.embeddings.dynamic import DynamicEmbedding
+from models.subnets.modules.polynet_attention import PolyNetAttention
 
 
 class PolyNetDecoder(nn.Module):

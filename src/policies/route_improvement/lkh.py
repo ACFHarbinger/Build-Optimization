@@ -6,9 +6,9 @@ from typing import Any, List, Tuple
 
 import numpy as np
 
-from logic.src.interfaces import IRouteImprovement
-from logic.src.interfaces.context.search_context import ImprovementMetrics
-from logic.src.policies.helpers.operators.search_heuristics.lin_kernighan_helsgaun import solve_lkh
+from interfaces import IRouteImprovement
+from interfaces.context.search_context import ImprovementMetrics
+from policies.helpers.operators.search_heuristics.lin_kernighan_helsgaun import solve_lkh
 
 from .base import RouteImproverRegistry
 from .common.helpers import assemble_tour, split_tour, to_numpy

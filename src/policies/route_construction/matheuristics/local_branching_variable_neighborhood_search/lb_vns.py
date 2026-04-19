@@ -36,16 +36,16 @@ except ImportError:
     gp: Any = None  # type: ignore[assignment,no-redef]
     GRB: Any = None  # type: ignore[misc,assignment,no-redef]
 
-from logic.src.policies.route_construction.matheuristics.kernel_search.solver import (
+from policies.route_construction.matheuristics.kernel_search.solver import (
     _dfj_subtour_elimination_callback,
     _reconstruct_tour,
     _set_mip_start,
     _setup_ks_model,
 )
-from logic.src.policies.route_construction.matheuristics.local_branching.lb import (
+from policies.route_construction.matheuristics.local_branching.lb import (
     _add_local_branching_constraint,
 )
-from logic.src.policies.route_construction.matheuristics.local_branching_variable_neighborhood_search.params import (
+from policies.route_construction.matheuristics.local_branching_variable_neighborhood_search.params import (
     LBVNSParams,
 )
 
@@ -182,7 +182,7 @@ def run_lb_vns_gurobi(
         acceptance_criterion = params.acceptance_criterion
     else:
         # Avoid circular import if needed, or use a default
-        from logic.src.policies.route_construction.acceptance_criteria.only_improving import OnlyImproving
+        from policies.route_construction.acceptance_criteria.only_improving import OnlyImproving
 
         acceptance_criterion = OnlyImproving()
 

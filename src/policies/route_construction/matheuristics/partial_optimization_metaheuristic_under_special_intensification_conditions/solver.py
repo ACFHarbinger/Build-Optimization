@@ -20,16 +20,16 @@ import numpy as np
 import pandas as pd
 from scipy.spatial import KDTree
 
-from logic.src.configs.policies.alns import ALNSConfig
-from logic.src.configs.policies.hgs import HGSConfig
-from logic.src.policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
-from logic.src.policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
-from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.alns import ALNSSolver
-from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.hgs import HGSSolver
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.split import LinearSplit
-from logic.src.policies.route_construction.other_algorithms.travelling_salesman_problem.tsp import (
+from configs.policies.alns import ALNSConfig
+from configs.policies.hgs import HGSConfig
+from policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
+from policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
+from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.alns import ALNSSolver
+from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.hgs import HGSSolver
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.split import LinearSplit
+from policies.route_construction.other_algorithms.travelling_salesman_problem.tsp import (
     find_route,
     get_route_cost,
 )

@@ -10,21 +10,21 @@ import torch
 import torch.utils.checkpoint
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.constants.models import (
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from constants.models import (
     FEED_FORWARD_EXPANSION,
     NODE_DIM,
     TANH_CLIPPING,
 )
-from logic.src.interfaces.tensor_dict_like import ITensorDictLike
-from logic.src.models.subnets.embeddings import (
+from interfaces.tensor_dict_like import ITensorDictLike
+from models.subnets.embeddings import (
     GenericContextEmbedder,
     VRPPContextEmbedder,
     WCVRPContextEmbedder,
 )
-from logic.src.models.subnets.factories import NeuralComponentFactory
-from logic.src.utils.functions.problem import is_tsp_problem, is_vrpp_problem, is_wc_problem
+from models.subnets.factories import NeuralComponentFactory
+from utils.functions.problem import is_tsp_problem, is_vrpp_problem, is_wc_problem
 
 from .decoding import DecodingMixin
 
@@ -369,7 +369,7 @@ class AttentionModel(DecodingMixin, nn.Module):
         Returns:
             CachedLookup: A cached lookup object containing precomputed decoder state.
         """
-        from logic.src.utils.decoding import CachedLookup
+        from utils.decoding import CachedLookup
 
         embeddings, init_context = self._get_initial_embeddings(input)
         out = self.decoder(input, embeddings, init_context, None, precompute_only=True)

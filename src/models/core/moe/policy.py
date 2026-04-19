@@ -6,8 +6,8 @@ Extends AttentionModelPolicy with MoE Graph Attention Encoder.
 
 from typing import Any, cast
 
-from logic.src.models.core.attention_model import AttentionModelPolicy
-from logic.src.models.subnets.encoders.moe.encoder import MoEGraphAttentionEncoder
+from models.core.attention_model import AttentionModelPolicy
+from models.subnets.encoders.moe.encoder import MoEGraphAttentionEncoder
 
 
 class MoEPolicy(AttentionModelPolicy):

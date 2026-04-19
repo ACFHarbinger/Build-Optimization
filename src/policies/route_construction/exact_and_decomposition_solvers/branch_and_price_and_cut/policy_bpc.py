@@ -8,13 +8,13 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies import BPCConfig
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.interfaces.context.multi_day_context import MultiDayContext
-from logic.src.interfaces.context.search_context import SearchContext
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.exact_and_decomposition_solvers.branch_and_price_and_cut.bpc_engine import (
+from configs.policies import BPCConfig
+from enums import GlobalRegistry, PolicyTag
+from interfaces.context.multi_day_context import MultiDayContext
+from interfaces.context.search_context import SearchContext
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.exact_and_decomposition_solvers.branch_and_price_and_cut.bpc_engine import (
     run_bpc,
 )
 

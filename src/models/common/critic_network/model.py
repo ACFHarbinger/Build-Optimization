@@ -2,10 +2,10 @@
 Backward-compatibility shim for CriticNetwork.
 
 The canonical CriticNetwork implementation is now in
-``logic.src.models.critic``. This module re-exports both
+``models.critic``. This module re-exports both
 the new (TensorDict-based) and legacy (problem/factory-based) versions.
 
-**New code should import from** ``logic.src.models.critic``.
+**New code should import from** ``models.critic``.
 """
 
 import warnings
@@ -13,9 +13,9 @@ import warnings
 from torch import nn
 
 # Re-export the canonical CriticNetwork and factory
-from logic.src.models.common.critic_network.policy import CriticNetwork, create_critic_from_actor  # noqa: F401
-from logic.src.models.subnets.embeddings import VRPPContextEmbedder, WCVRPContextEmbedder
-from logic.src.models.subnets.modules import ActivationFunction
+from models.common.critic_network.policy import CriticNetwork, create_critic_from_actor  # noqa: F401
+from models.subnets.embeddings import VRPPContextEmbedder, WCVRPContextEmbedder
+from models.subnets.modules import ActivationFunction
 
 
 class LegacyCriticNetwork(nn.Module):
@@ -24,7 +24,7 @@ class LegacyCriticNetwork(nn.Module):
 
     This is the original implementation kept for backward compatibility with
     the legacy training pipeline. New code should use
-    ``logic.src.models.critic.CriticNetwork`` instead.
+    ``models.critic.CriticNetwork`` instead.
     """
 
     def __init__(
@@ -60,7 +60,7 @@ class LegacyCriticNetwork(nn.Module):
         """
         super().__init__()
         warnings.warn(
-            "LegacyCriticNetwork is deprecated. Use logic.src.models.critic.CriticNetwork instead.",
+            "LegacyCriticNetwork is deprecated. Use models.critic.CriticNetwork instead.",
             DeprecationWarning,
             stacklevel=2,
         )

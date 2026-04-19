@@ -8,8 +8,8 @@ from typing import Optional
 import torch
 from torch import nn
 
-from logic.src.models.subnets.modules.moe_layer import MoE
-from logic.src.models.subnets.modules.multi_head_attention import MultiHeadAttention
+from models.subnets.modules.moe_layer import MoE
+from models.subnets.modules.multi_head_attention import MultiHeadAttention
 
 
 class PointerAttnMoE(nn.Module):
@@ -105,7 +105,7 @@ class PointerAttnMoE(nn.Module):
 
         # 2. Project glimpse using MoE
         # MoE forward: (x, loss_coef) -> (y, loss) or just y depending on implementation
-        # The MoE in logic.src.models.subnets.modules/moe.py returns just y.reshape(...)
+        # The MoE in models.subnets.modules/moe.py returns just y.reshape(...)
 
         glimpse_moe = self.moe_out(glimpse)
 

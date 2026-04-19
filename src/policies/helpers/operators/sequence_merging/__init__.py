@@ -43,7 +43,7 @@ are mutable and designed to persist across search iterations for online
 learning.
 
 Example:
-    >>> from logic.src.policies.helpers.operators.sequence_merging import (
+    >>> from policies.helpers.operators.sequence_merging import (
     ...     AcoSequenceState,
     ...     aco_build_sequence,
     ...     aco_update_pheromones,

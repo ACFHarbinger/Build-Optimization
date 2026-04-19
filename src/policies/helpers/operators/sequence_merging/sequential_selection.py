@@ -33,7 +33,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.sequence_merging.ss_hh import (
+    >>> from policies.helpers.operators.sequence_merging.ss_hh import (
     ...     SsHhState,
     ...     ss_hh_select,
     ...     ss_hh_update,

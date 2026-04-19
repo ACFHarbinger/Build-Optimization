@@ -11,11 +11,11 @@ from typing import Any, Dict, Optional
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.autoregressive.policy import AutoregressivePolicy
-from logic.src.models.subnets.decoders.polynet import PolyNetDecoder
-from logic.src.models.subnets.embeddings import get_init_embedding
-from logic.src.models.subnets.encoders.gat.encoder import GraphAttentionEncoder
+from envs.base.base import RL4COEnvBase
+from models.common.autoregressive.policy import AutoregressivePolicy
+from models.subnets.decoders.polynet import PolyNetDecoder
+from models.subnets.embeddings import get_init_embedding
+from models.subnets.encoders.gat.encoder import GraphAttentionEncoder
 
 
 class PolyNetPolicy(AutoregressivePolicy):

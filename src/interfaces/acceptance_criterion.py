@@ -15,7 +15,7 @@ backward compatibility but is superseded by the metrics in the returned tuple.
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Sequence, Tuple, Union
 
-from logic.src.interfaces.context.search_context import AcceptanceMetrics
+from interfaces.context.search_context import AcceptanceMetrics
 
 # Type alias for single or multi-objective values
 ObjectiveValue = Union[float, Sequence[float]]

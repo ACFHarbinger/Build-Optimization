@@ -2,7 +2,7 @@
 
 from torch import nn
 
-from logic.src.models.subnets.modules import Normalization, SkipConnection
+from models.subnets.modules import Normalization, SkipConnection
 
 from .conv_sublayer import FFConvSubLayer
 

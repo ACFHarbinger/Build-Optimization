@@ -18,13 +18,13 @@ from typing import Any, Dict, Optional, Tuple
 import torch
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.models.core.attention_model import AttentionModel
-from logic.src.models.subnets.factories import NeuralComponentFactory
-from logic.src.models.subnets.helpers.gru_fill_predictor import GatedRecurrentUnitFillPredictor
-from logic.src.models.subnets.helpers.lstm_fill_predictor import LongShortTermMemoryFillPredictor
-from logic.src.models.subnets.modules import ActivationFunction
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from models.core.attention_model import AttentionModel
+from models.subnets.factories import NeuralComponentFactory
+from models.subnets.helpers.gru_fill_predictor import GatedRecurrentUnitFillPredictor
+from models.subnets.helpers.lstm_fill_predictor import LongShortTermMemoryFillPredictor
+from models.subnets.modules import ActivationFunction
 
 
 class TemporalAttentionModel(AttentionModel):

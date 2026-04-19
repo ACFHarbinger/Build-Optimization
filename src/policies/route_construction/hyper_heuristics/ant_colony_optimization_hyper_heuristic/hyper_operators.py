@@ -10,7 +10,7 @@ Attributes:
     OPERATOR_NAMES (list): List of operator names.
 
 Example:
-    >>> from logic.src.policies.ant_colony_optimization_hyper_heuristic.hyper_operators import apply_2opt
+    >>> from policies.ant_colony_optimization_hyper_heuristic.hyper_operators import apply_2opt
     >>> improved = apply_2opt(context)
 """
 
@@ -19,7 +19,7 @@ from typing import Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators import (
+from policies.helpers.operators import (
     greedy_insertion,
     greedy_profit_insertion,
     kick,

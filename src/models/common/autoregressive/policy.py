@@ -11,7 +11,7 @@ from typing import Any, Dict, Optional
 
 from tensordict import TensorDict
 
-from logic.src.envs.base.base import RL4COEnvBase
+from envs.base.base import RL4COEnvBase
 
 from .constructive import ConstructivePolicy
 from .decoder import AutoregressiveDecoder

@@ -41,7 +41,7 @@ simulation iterations.
 
 Example
 -------
->>> from logic.src.interfaces.context import SearchContext, SelectionMetrics, merge_context
+>>> from interfaces.context import SearchContext, SelectionMetrics, merge_context
 >>> sm: SelectionMetrics = {"bin_scores": [0.9, 0.3, 0.7], "strategy": "fractional_knapsack"}
 >>> ctx = SearchContext.initialize(selection_metrics=sm)
 >>> ctx2 = merge_context(ctx, construction_metrics={"insertion_costs": [1.2, 0.8]})

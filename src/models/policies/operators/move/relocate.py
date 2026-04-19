@@ -4,7 +4,7 @@ Relocate local search operator.
 
 import torch
 
-from logic.src.constants.routing import IMPROVEMENT_EPSILON
+from constants.routing import IMPROVEMENT_EPSILON
 
 
 def vectorized_relocate(tours, dist_matrix, max_iterations=200, generator=None):

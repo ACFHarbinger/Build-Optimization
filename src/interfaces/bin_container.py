@@ -4,7 +4,7 @@ This module defines the IBinContainer protocol for duck typing with
 objects that manage waste bin states in simulations and environments.
 
 Example:
-    >>> from logic.src.interfaces.bin_container import IBinContainer
+    >>> from interfaces.bin_container import IBinContainer
     >>> def check_overflow(bins: IBinContainer, threshold: float) -> torch.Tensor:
     ...     return bins.fill_levels > threshold
 """

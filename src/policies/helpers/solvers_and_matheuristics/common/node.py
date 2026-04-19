@@ -9,8 +9,8 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 if TYPE_CHECKING:
-    from logic.src.policies.helpers.solvers_and_matheuristics.branching.constraints import AnyBranchingConstraint
-    from logic.src.policies.helpers.solvers_and_matheuristics.common.route import Route
+    from policies.helpers.solvers_and_matheuristics.branching.constraints import AnyBranchingConstraint
+    from policies.helpers.solvers_and_matheuristics.common.route import Route
 
 
 @dataclass(order=True)

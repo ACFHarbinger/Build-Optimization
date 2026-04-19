@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.configs.policies.lbbd import LBBDConfig
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.interfaces.context.multi_day_context import MultiDayContext
-from logic.src.interfaces.context.problem_context import ProblemContext
-from logic.src.interfaces.context.solution_context import SolutionContext
-from logic.src.policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from configs.policies.lbbd import LBBDConfig
+from enums import GlobalRegistry, PolicyTag
+from interfaces.context.multi_day_context import MultiDayContext
+from interfaces.context.problem_context import ProblemContext
+from interfaces.context.solution_context import SolutionContext
+from policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
 
 if TYPE_CHECKING:
     pass

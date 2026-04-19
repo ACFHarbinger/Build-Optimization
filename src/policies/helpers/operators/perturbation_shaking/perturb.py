@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.perturbation.perturb import perturb
+    >>> from policies.helpers.operators.perturbation.perturb import perturb
     >>> changed = perturb(context, k=5)
 """
 

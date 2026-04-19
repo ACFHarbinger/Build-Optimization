@@ -6,8 +6,8 @@ from typing import Any
 
 from torch import nn
 
-from logic.src.models.subnets.decoders.deepaco import ACODecoder
-from logic.src.models.subnets.encoders.gfacs.encoder import GFACSEncoder
+from models.subnets.decoders.deepaco import ACODecoder
+from models.subnets.encoders.gfacs.encoder import GFACSEncoder
 
 from .base import NeuralComponentFactory
 

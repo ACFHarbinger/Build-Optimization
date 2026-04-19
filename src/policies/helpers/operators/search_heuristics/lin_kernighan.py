@@ -62,19 +62,19 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators.search_heuristics._objective import (
+from policies.helpers.operators.search_heuristics._objective import (
     get_cost,
     is_better,
 )
-from logic.src.policies.helpers.operators.search_heuristics._tour_construction import (
+from policies.helpers.operators.search_heuristics._tour_construction import (
     _double_bridge_kick,
     _initialize_tour,
 )
-from logic.src.policies.helpers.operators.search_heuristics.lin_kernighan_helsgaun import (
+from policies.helpers.operators.search_heuristics.lin_kernighan_helsgaun import (
     compute_alpha_measures,
     get_candidate_set,
 )
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 # ---------------------------------------------------------------------------
 # Internal tour manipulation (position-indexed)

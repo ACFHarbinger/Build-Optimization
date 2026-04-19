@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.repair.regret import RegretInsertion
+    >>> from policies.helpers.operators.repair.regret import RegretInsertion
     >>> operator = RegretInsertion(k=2)
     >>> new_routes = operator.repair(destroyed_routes, unassigned_nodes)
 """
@@ -18,7 +18,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.utils.policy.routes import (
+from utils.policy.routes import (
     prune_unprofitable_routes,
 )
 

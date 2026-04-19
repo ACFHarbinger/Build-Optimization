@@ -2,7 +2,7 @@
 
 from torch import nn
 
-from logic.src.models.subnets.modules import (
+from models.subnets.modules import (
     ActivationFunction,
     FeedForward,
     GraphConvolution,

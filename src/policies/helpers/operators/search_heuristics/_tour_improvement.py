@@ -53,7 +53,7 @@ Dependencies
 
 Typical usage
 -------------
->>> from logic.src.policies.helpers.operators.heuristics._tour_improvement import (
+>>> from policies.helpers.operators.heuristics._tour_improvement import (
 ...     _2opt_gain,               # Exact gain for 2-opt
 ...     _apply_kopt_via_operator,  # Bridge to move_kopt_intra
 ...     _try_3opt_move,           # Sequential 3-opt search
@@ -69,13 +69,13 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators.intra_route_local_search.k_opt import move_kopt_intra
-from logic.src.policies.helpers.operators.search_heuristics._objective import (
+from policies.helpers.operators.intra_route_local_search.k_opt import move_kopt_intra
+from policies.helpers.operators.search_heuristics._objective import (
     get_cost,
     is_better,
 )
-from logic.src.policies.helpers.operators.search_heuristics._tour_adapter import TourAdapter
-from logic.src.policies.helpers.operators.search_heuristics._tour_construction import (
+from policies.helpers.operators.search_heuristics._tour_adapter import TourAdapter
+from policies.helpers.operators.search_heuristics._tour_construction import (
     _2opt_gain,
     _3opt_gains,
     _4opt_gains,

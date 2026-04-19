@@ -2,8 +2,8 @@
 Mixture of Experts (MoE) Temporal Attention Model.
 """
 
-from logic.src.models.core.temporal_attention_model import TemporalAttentionModel
-from logic.src.models.subnets.factories import MoEComponentFactory
+from models.core.temporal_attention_model import TemporalAttentionModel
+from models.subnets.factories import MoEComponentFactory
 
 
 class MoETemporalAttentionModel(TemporalAttentionModel):

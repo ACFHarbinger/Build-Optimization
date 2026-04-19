@@ -7,14 +7,14 @@ from typing import Any, Optional
 
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.models.subnets.decoders.deepaco import ACODecoder
-from logic.src.models.subnets.decoders.gat import DeepGATDecoder
-from logic.src.models.subnets.decoders.glimpse.decoder import GlimpseDecoder
-from logic.src.models.subnets.decoders.mdam import MDAMDecoder
-from logic.src.models.subnets.decoders.polynet import PolyNetDecoder
-from logic.src.models.subnets.decoders.ptr import PointerDecoder
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from models.subnets.decoders.deepaco import ACODecoder
+from models.subnets.decoders.gat import DeepGATDecoder
+from models.subnets.decoders.glimpse.decoder import GlimpseDecoder
+from models.subnets.decoders.mdam import MDAMDecoder
+from models.subnets.decoders.polynet import PolyNetDecoder
+from models.subnets.decoders.ptr import PointerDecoder
 
 
 def _create_decoder_by_type(decoder_type: str, **kwargs: Any) -> nn.Module:

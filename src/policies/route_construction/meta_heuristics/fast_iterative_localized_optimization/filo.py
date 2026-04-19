@@ -18,13 +18,13 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.local_search.local_search_filo import (
+from policies.helpers.local_search.local_search_filo import (
     FILOLocalSearch,
 )
-from logic.src.policies.route_construction.meta_heuristics.fast_iterative_localized_optimization.params import (
+from policies.route_construction.meta_heuristics.fast_iterative_localized_optimization.params import (
     FILOParams,
 )
-from logic.src.policies.route_construction.meta_heuristics.fast_iterative_localized_optimization.ruin_recreate import (
+from policies.route_construction.meta_heuristics.fast_iterative_localized_optimization.ruin_recreate import (
     RuinAndRecreate,
 )
 

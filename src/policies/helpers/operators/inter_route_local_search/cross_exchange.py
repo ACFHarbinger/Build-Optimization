@@ -25,11 +25,11 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.inter_route.cross_exchange import cross_exchange
+    >>> from policies.helpers.operators.inter_route.cross_exchange import cross_exchange
     >>> improved = cross_exchange(ls, r_a=0, seg_a_start=1, seg_a_len=2, ...)
-    >>> from logic.src.policies.helpers.operators.inter_route.cross_exchange import lambda_interchange
+    >>> from policies.helpers.operators.inter_route.cross_exchange import lambda_interchange
     >>> improved = lambda_interchange(ls, lambda_max=2)
-    >>> from logic.src.policies.helpers.operators.inter_route.cross_exchange import improved_cross_exchange
+    >>> from policies.helpers.operators.inter_route.cross_exchange import improved_cross_exchange
     >>> improved = improved_cross_exchange(ls, r_a=0, seg_a_start=1, seg_a_len=2,
     ...                                    r_b=1, seg_b_start=0, seg_b_len=3)
 """

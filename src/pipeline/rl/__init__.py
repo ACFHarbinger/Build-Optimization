@@ -15,7 +15,7 @@ Registries:
 - ``get_rl_algorithm(name)``: Factory function for looking up algorithm classes.
 """
 
-from logic.src.pipeline.rl.core import (
+from pipeline.rl.core import (
     A2C,
     DRGRPO,
     GDPO,

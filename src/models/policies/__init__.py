@@ -14,28 +14,28 @@ import importlib
 
 from torch import nn
 
-from logic.src.models.common import (
+from models.common import (
     ConstructivePolicy,
     ImprovementPolicy,
     NonAutoregressivePolicy,
 )
-from logic.src.models.core.attention_model.deep_decoder_policy import DeepDecoderPolicy
-from logic.src.models.core.attention_model.policy import AttentionModelPolicy
-from logic.src.models.core.attention_model.symnco_policy import SymNCOPolicy
-from logic.src.models.core.dact.policy import DACTPolicy
-from logic.src.models.core.deepaco.policy import DeepACOPolicy
-from logic.src.models.core.gfacs.policy import GFACSPolicy
-from logic.src.models.core.glop.policy import GLOPPolicy
-from logic.src.models.core.hybrid_attention_model.hybrid_neural_heuristic_policy import NeuralHeuristicHybrid
-from logic.src.models.core.hybrid_attention_model.hybrid_two_step_policy import HybridTwoStagePolicy
-from logic.src.models.core.mdam.policy import MDAMPolicy
-from logic.src.models.core.moe.policy import MoEPolicy
-from logic.src.models.core.n2s.policy import N2SPolicy
-from logic.src.models.core.nargnn.policy import NARGNNPolicy
-from logic.src.models.core.neuopt.policy import NeuOptPolicy
-from logic.src.models.core.pointer_network.policy import PointerNetworkPolicy
-from logic.src.models.core.polynet.policy import PolyNetPolicy
-from logic.src.models.core.temporal_attention_model.policy import TemporalAMPolicy
+from models.core.attention_model.deep_decoder_policy import DeepDecoderPolicy
+from models.core.attention_model.policy import AttentionModelPolicy
+from models.core.attention_model.symnco_policy import SymNCOPolicy
+from models.core.dact.policy import DACTPolicy
+from models.core.deepaco.policy import DeepACOPolicy
+from models.core.gfacs.policy import GFACSPolicy
+from models.core.glop.policy import GLOPPolicy
+from models.core.hybrid_attention_model.hybrid_neural_heuristic_policy import NeuralHeuristicHybrid
+from models.core.hybrid_attention_model.hybrid_two_step_policy import HybridTwoStagePolicy
+from models.core.mdam.policy import MDAMPolicy
+from models.core.moe.policy import MoEPolicy
+from models.core.n2s.policy import N2SPolicy
+from models.core.nargnn.policy import NARGNNPolicy
+from models.core.neuopt.policy import NeuOptPolicy
+from models.core.pointer_network.policy import PointerNetworkPolicy
+from models.core.polynet.policy import PolyNetPolicy
+from models.core.temporal_attention_model.policy import TemporalAMPolicy
 
 from .alns import VectorizedALNS
 from .ant_colony_system import VectorizedACOPolicy
@@ -48,25 +48,25 @@ from .iterated_local_search import IteratedLocalSearchPolicy
 # Short-name registry: CLI model name -> (module_path, class_name)
 # This enables ``get_policy("am")`` without importing everything eagerly.
 _POLICY_REGISTRY_SPEC = {
-    "am": ("logic.src.models.core.attention_model.policy", "AttentionModelPolicy"),
-    "deep_decoder": ("logic.src.models.core.attention_model.deep_decoder_policy", "DeepDecoderPolicy"),
-    "deepaco": ("logic.src.models.core.deepaco.policy", "DeepACOPolicy"),
-    "gfacs": ("logic.src.models.core.gfacs.policy", "GFACSPolicy"),
-    "glop": ("logic.src.models.core.glop.policy", "GLOPPolicy"),
-    "mdam": ("logic.src.models.core.mdam.policy", "MDAMPolicy"),
-    "moe": ("logic.src.models.core.moe.policy", "MoEPolicy"),
-    "nargnn": ("logic.src.models.core.nargnn.policy", "NARGNNPolicy"),
-    "n2s": ("logic.src.models.core.n2s.policy", "N2SPolicy"),
-    "neuopt": ("logic.src.models.core.neuopt.policy", "NeuOptPolicy"),
-    "dact": ("logic.src.models.core.dact.policy", "DACTPolicy"),
-    "pointer": ("logic.src.models.core.pointer_network.policy", "PointerNetworkPolicy"),
-    "polynet": ("logic.src.models.core.polynet.policy", "PolyNetPolicy"),
-    "symnco": ("logic.src.models.core.attention_model.symnco_policy", "SymNCOPolicy"),
-    "temporal": ("logic.src.models.core.temporal_attention_model.policy", "TemporalAMPolicy"),
-    "hvpl": ("logic.src.models.policies.hybrid_volleyball_premier_league", "VectorizedHVPL"),
-    "ahvpl": ("logic.src.models.policies.augmented_hybrid_volleyball_premier_league", "VectorizedAHVPL"),
-    "hgs": ("logic.src.models.policies.hgs", "VectorizedHGS"),
-    "hgs_alns": ("logic.src.models.policies.hgs_alns", "VectorizedHGSALNS"),
+    "am": ("models.core.attention_model.policy", "AttentionModelPolicy"),
+    "deep_decoder": ("models.core.attention_model.deep_decoder_policy", "DeepDecoderPolicy"),
+    "deepaco": ("models.core.deepaco.policy", "DeepACOPolicy"),
+    "gfacs": ("models.core.gfacs.policy", "GFACSPolicy"),
+    "glop": ("models.core.glop.policy", "GLOPPolicy"),
+    "mdam": ("models.core.mdam.policy", "MDAMPolicy"),
+    "moe": ("models.core.moe.policy", "MoEPolicy"),
+    "nargnn": ("models.core.nargnn.policy", "NARGNNPolicy"),
+    "n2s": ("models.core.n2s.policy", "N2SPolicy"),
+    "neuopt": ("models.core.neuopt.policy", "NeuOptPolicy"),
+    "dact": ("models.core.dact.policy", "DACTPolicy"),
+    "pointer": ("models.core.pointer_network.policy", "PointerNetworkPolicy"),
+    "polynet": ("models.core.polynet.policy", "PolyNetPolicy"),
+    "symnco": ("models.core.attention_model.symnco_policy", "SymNCOPolicy"),
+    "temporal": ("models.core.temporal_attention_model.policy", "TemporalAMPolicy"),
+    "hvpl": ("models.policies.hybrid_volleyball_premier_league", "VectorizedHVPL"),
+    "ahvpl": ("models.policies.augmented_hybrid_volleyball_premier_league", "VectorizedAHVPL"),
+    "hgs": ("models.policies.hgs", "VectorizedHGS"),
+    "hgs_alns": ("models.policies.hgs_alns", "VectorizedHGSALNS"),
 }
 
 

@@ -19,7 +19,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.evolutionary_mutation.scramble import (
+    >>> from policies.helpers.operators.evolutionary_mutation.scramble import (
     ...     scramble_mutation,
     ... )
     >>> mutated = scramble_mutation(routes, rng=rng)

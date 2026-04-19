@@ -56,7 +56,7 @@ Dependencies
 
 Typical usage
 -------------
->>> from logic.src.policies.lin_kernighan_helsgaun_three.tour_improvement import (
+>>> from policies.lin_kernighan_helsgaun_three.tour_improvement import (
 ...     _apply_kopt_via_operator,
 ...     _try_2opt_move,
 ...     _try_3opt_move,
@@ -70,21 +70,21 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.kopt_topologies import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.kopt_topologies import (
     EXHAUSTIVE_2OPT_CASES,
     EXHAUSTIVE_3OPT_CASES,
     EXHAUSTIVE_4OPT_CASES,
     EXHAUSTIVE_5OPT_CASES,
 )
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.load_tracker import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.load_tracker import (
     LoadState,
     get_exact_penalty_delta,
 )
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.objective import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.objective import (
     get_score,
     is_better,
 )
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.tour_construction import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.tour_construction import (
     _should_accept_kopt_move,
     build_tour_from_segments,
 )

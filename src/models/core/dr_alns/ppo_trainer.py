@@ -20,7 +20,7 @@ from torch import nn
 from torch.optim import Adam
 
 if TYPE_CHECKING:
-    from logic.src.envs.dr_alns import DRALNSEnv
+    from envs.dr_alns import DRALNSEnv
 
 from .ppo_agent import DRALNSPPOAgent
 

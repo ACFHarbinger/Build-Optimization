@@ -20,9 +20,9 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.destroy.route import route_removal
+    >>> from policies.helpers.operators.destroy.route import route_removal
     >>> routes, removed = route_removal(routes, strategy="smallest")
-    >>> from logic.src.policies.helpers.operators.destroy.route import route_profit_removal
+    >>> from policies.helpers.operators.destroy.route import route_profit_removal
     >>> routes, removed = route_profit_removal(routes, dist_matrix=d, wastes=w, R=1.0, C=1.0)
 """
 

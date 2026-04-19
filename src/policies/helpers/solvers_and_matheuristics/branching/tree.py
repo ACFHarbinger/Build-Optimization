@@ -11,19 +11,19 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set, Tuple, Union, 
 
 import numpy as np
 
-from logic.src.policies.helpers.solvers_and_matheuristics.branching.strategies import (
+from policies.helpers.solvers_and_matheuristics.branching.strategies import (
     EdgeBranching,
     FleetSizeBranching,
     MultiEdgePartitionBranching,
     NodeVisitationBranching,
     RyanFosterBranching,
 )
-from logic.src.policies.helpers.solvers_and_matheuristics.common.node import BranchNode
+from policies.helpers.solvers_and_matheuristics.common.node import BranchNode
 
 if TYPE_CHECKING:
-    from logic.src.policies.helpers.solvers_and_matheuristics.common.route import Route
-    from logic.src.policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
-    from logic.src.policies.route_construction.exact_and_decomposition_solvers.branch_and_price_and_cut.params import (
+    from policies.helpers.solvers_and_matheuristics.common.route import Route
+    from policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
+    from policies.route_construction.exact_and_decomposition_solvers.branch_and_price_and_cut.params import (
         BPCParams,
     )
 

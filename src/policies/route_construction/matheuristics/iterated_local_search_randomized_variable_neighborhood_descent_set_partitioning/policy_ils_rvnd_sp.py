@@ -8,14 +8,14 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies import ILSRVNDSPConfig
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.matheuristics.iterated_local_search_randomized_variable_neighborhood_descent_set_partitioning.ils_rvnd_sp import (
+from configs.policies import ILSRVNDSPConfig
+from enums import GlobalRegistry, PolicyTag
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.matheuristics.iterated_local_search_randomized_variable_neighborhood_descent_set_partitioning.ils_rvnd_sp import (
     ILSRVNDSPSolver,
 )
-from logic.src.policies.route_construction.matheuristics.iterated_local_search_randomized_variable_neighborhood_descent_set_partitioning.params import (
+from policies.route_construction.matheuristics.iterated_local_search_randomized_variable_neighborhood_descent_set_partitioning.params import (
     ILSRVNDSPParams,
 )
 

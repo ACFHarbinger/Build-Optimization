@@ -34,7 +34,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.evolutionary_mutation.differential_evolution import (
+    >>> from policies.helpers.operators.evolutionary_mutation.differential_evolution import (
     ...     de_rand_1_mutation,
     ... )
     >>> mutated_pop = de_rand_1_mutation(population, distance_matrix, capacity, wastes, F=0.5)

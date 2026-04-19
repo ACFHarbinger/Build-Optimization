@@ -59,7 +59,7 @@ get_candidate_set(distance_matrix, alpha_measures, ...) -> Dict[int, List[int]]
 
 Typical usage
 -------------
->>> from logic.src.policies.lin_kernighan_helsgaun_three.objective import (
+>>> from policies.lin_kernighan_helsgaun_three.objective import (
 ...     get_score, is_better, split_tour_at_dummies, solve_subgradient
 ... )
 >>> # 1. Optimize penalties and compute candidates

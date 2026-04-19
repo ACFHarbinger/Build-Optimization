@@ -8,7 +8,7 @@ Attributes:
     RouteConstructorRegistry: Registry where this policy is automatically registered with key "na".
 
 Example:
-    >>> from logic.src.policies.neural_agent.policy_neural import NeuralPolicy
+    >>> from policies.neural_agent.policy_neural import NeuralPolicy
     >>> policy = NeuralPolicy()
     >>> route, cost, _ = policy.execute(model_env=env, model_ls=ls, ...)
 """
@@ -17,14 +17,14 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import torch
 
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.interfaces.context.multi_day_context import MultiDayContext
-from logic.src.interfaces.context.search_context import SearchContext
-from logic.src.models.policies.selection import get_vectorized_selector
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.tracking.core.run import get_active_run
-from logic.src.utils.functions import move_to
+from enums import GlobalRegistry, PolicyTag
+from interfaces.context.multi_day_context import MultiDayContext
+from interfaces.context.search_context import SearchContext
+from models.policies.selection import get_vectorized_selector
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from tracking.core.run import get_active_run
+from utils.functions import move_to
 
 from .agent import NeuralAgent
 from .params import NeuralParams

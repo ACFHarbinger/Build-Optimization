@@ -79,7 +79,7 @@ from typing import Callable, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators import (
+from policies.helpers.operators import (
     build_greedy_routes,
     cluster_profit_removal,
     cluster_removal,
@@ -103,7 +103,7 @@ from logic.src.policies.helpers.operators import (
     worst_profit_removal,
     worst_removal,
 )
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 from .params import ALNSParams
 
@@ -185,7 +185,7 @@ class ALNSSolver:
         self.acceptance_criterion = params.acceptance_criterion
         if self.acceptance_criterion is None:
             # Fallback (should not happen if from_config is used)
-            from logic.src.policies.route_construction.acceptance_criteria.base.factory import (
+            from policies.route_construction.acceptance_criteria.base.factory import (
                 AcceptanceCriterionFactory,
             )
 

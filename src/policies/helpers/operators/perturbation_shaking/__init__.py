@@ -13,7 +13,7 @@ Includes:
     - bb_perturbation: B&B destroy-and-repair (Shaw 1998).
 
 Example:
-    >>> from logic.src.policies.helpers.operators.perturbation import kick
+    >>> from policies.helpers.operators.perturbation import kick
     >>> kick(context, destroy_ratio=0.2)
 """
 

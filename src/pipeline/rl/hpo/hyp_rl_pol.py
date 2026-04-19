@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from torch.distributions import Categorical, Normal
 
-from logic.src.models.subnets.modules import ActivationFunction, Normalization
+from models.subnets.modules import ActivationFunction, Normalization
 
 from .base import ParamSpec
 from .hyp_rl_enc import HyperparameterEncoder

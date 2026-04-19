@@ -10,9 +10,9 @@ from typing import Any, List, Optional, Tuple, Union
 
 import torch
 
-from logic.src.models.policies.hgs_core.crossover import vectorized_ordered_crossover
-from logic.src.models.policies.hgs_core.population import VectorizedPopulation
-from logic.src.models.policies.local_search import (
+from models.policies.hgs_core.crossover import vectorized_ordered_crossover
+from models.policies.hgs_core.population import VectorizedPopulation
+from models.policies.local_search import (
     vectorized_relocate,
     vectorized_swap,
     vectorized_swap_star,
@@ -20,8 +20,8 @@ from logic.src.models.policies.local_search import (
     vectorized_two_opt,
     vectorized_two_opt_star,
 )
-from logic.src.models.policies.shared import vectorized_linear_split
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from models.policies.shared import vectorized_linear_split
+from tracking.viz_mixin import PolicyVizMixin
 
 
 class VectorizedHGS(PolicyVizMixin):

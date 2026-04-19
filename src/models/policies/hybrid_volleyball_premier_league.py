@@ -11,12 +11,12 @@ from typing import Any, Dict, List, Optional, Tuple
 import torch
 from tensordict import TensorDict
 
-from logic.src.constants.simulation import VEHICLE_CAPACITY
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.autoregressive.policy import AutoregressivePolicy
-from logic.src.models.policies.adaptive_large_neighborhood_search import VectorizedALNS
-from logic.src.models.policies.hgs import VectorizedHGS
-from logic.src.models.policies.shared.linear import vectorized_linear_split
+from constants.simulation import VEHICLE_CAPACITY
+from envs.base.base import RL4COEnvBase
+from models.common.autoregressive.policy import AutoregressivePolicy
+from models.policies.adaptive_large_neighborhood_search import VectorizedALNS
+from models.policies.hgs import VectorizedHGS
+from models.policies.shared.linear import vectorized_linear_split
 
 
 class VectorizedHVPL(AutoregressivePolicy):

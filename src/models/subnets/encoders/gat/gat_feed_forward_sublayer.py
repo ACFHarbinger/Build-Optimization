@@ -7,8 +7,8 @@ from typing import Optional
 import torch
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.models.subnets.modules import ActivationFunction, FeedForward
+from configs.models.activation_function import ActivationConfig
+from models.subnets.modules import ActivationFunction, FeedForward
 
 
 class GATFeedForwardSubLayer(nn.Module):

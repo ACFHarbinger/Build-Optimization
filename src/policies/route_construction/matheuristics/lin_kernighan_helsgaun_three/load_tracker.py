@@ -47,7 +47,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.objective import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.objective import (
     calculate_penalty,
     is_any_depot,
 )

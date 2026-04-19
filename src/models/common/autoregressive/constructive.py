@@ -12,7 +12,7 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.envs.base.base import RL4COEnvBase
+from envs.base.base import RL4COEnvBase
 
 
 class ConstructivePolicy(nn.Module, ABC):
@@ -106,7 +106,7 @@ class ConstructivePolicy(nn.Module, ABC):
             Tuple of (action, log_prob, entropy)
         """
         # Get strategy (can be cached if needed)
-        from logic.src.utils.decoding import get_decoding_strategy
+        from utils.decoding import get_decoding_strategy
 
         decoder_strategy = get_decoding_strategy(strategy, **kwargs)
 

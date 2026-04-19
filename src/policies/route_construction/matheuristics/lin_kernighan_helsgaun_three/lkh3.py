@@ -20,7 +20,7 @@ Key features (following Helsgaun 2000 and LKH-3 extension paper):
    order moves (3 to 5-opt) are delegated to components in
    ``._tour_improvement``, with all final segment swaps executed via
    :func:`move_kopt_intra` from
-   ``logic.src.policies.helpers.operators.intra_route.k_opt``.
+   ``policies.helpers.operators.intra_route.k_opt``.
 
 4. **Candidate-set restricted search** (Section 3.2 / 4.1):
    Inner loops restricted to the α-nearest neighbours of each node, giving
@@ -33,7 +33,7 @@ Key features (following Helsgaun 2000 and LKH-3 extension paper):
 6. **Double-bridge kick** (ILS perturbation):
    4-opt non-sequential perturbation that escapes local optima, delegated to
    :func:`double_bridge` from
-   ``logic.src.policies.helpers.operators.perturbation.double_bridge``.
+   ``policies.helpers.operators.perturbation.double_bridge``.
 
 7. **Tour merging** (pool-based recombination):
    Combines shared edges from several elite tours to seed new searches.
@@ -68,30 +68,30 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.graph_augmentation import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.graph_augmentation import (
     augment_graph,
     decode_augmented_tour,
 )
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.load_tracker import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.load_tracker import (
     build_load_state,
     update_load_state_after_move,
 )
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.objective import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.objective import (
     compute_alpha_measures,
     get_candidate_set,
     get_score,
     is_better,
     solve_subgradient,
 )
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.popmusic import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.popmusic import (
     popmusic_candidates,
 )
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.tour_construction import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.tour_construction import (
     _double_bridge_kick,
     _initialize_tour,
     merge_tours_best,
 )
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.tour_improvement import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.tour_improvement import (
     _dynamic_kopt_search,
     _try_2opt_move,
     _try_3opt_move,
@@ -99,7 +99,7 @@ from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_
     _try_5opt_move,
     _try_oropt_move,
 )
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 # ---------------------------------------------------------------------------
 # Main improvement loop
@@ -803,7 +803,7 @@ def solve_lkh3_with_alns(
     if rng is None:
         rng = Random(seed)
 
-    from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.adaptive_large_neighborhood_search import (
+    from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.adaptive_large_neighborhood_search import (
         LKH3_ALNS,
     )
 

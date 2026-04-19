@@ -13,7 +13,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.inter_route.exchange_chain import exchange_k_0
+    >>> from policies.helpers.operators.inter_route.exchange_chain import exchange_k_0
     >>> improved = exchange_k_0(ls, r_src=0, pos_src=1, r_dst=1, pos_dst=2, k=3)
 """
 

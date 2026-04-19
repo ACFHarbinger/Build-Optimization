@@ -39,7 +39,7 @@ import torch
 import torch.nn.functional as F
 from tensordict import TensorDict
 
-from logic.src.pipeline.rl.meta.hrl import HRLModule
+from pipeline.rl.meta.hrl import HRLModule
 
 
 class HRLIRPModule(HRLModule):

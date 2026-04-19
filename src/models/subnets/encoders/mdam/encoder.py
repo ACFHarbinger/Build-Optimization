@@ -8,10 +8,10 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.models.common.autoregressive.encoder import AutoregressiveEncoder
-from logic.src.models.subnets.modules.mdam_attention import MultiHeadAttentionMDAM
-from logic.src.models.subnets.modules.normalization import Normalization
-from logic.src.models.subnets.modules.skip_connection import SkipConnection
+from models.common.autoregressive.encoder import AutoregressiveEncoder
+from models.subnets.modules.mdam_attention import MultiHeadAttentionMDAM
+from models.subnets.modules.normalization import Normalization
+from models.subnets.modules.skip_connection import SkipConnection
 
 from .mdam_attention_layer import MultiHeadAttentionLayer
 

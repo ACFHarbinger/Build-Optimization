@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, Tuple, Union
 import torch
 from torch import nn
 
-from logic.src.models.subnets.modules.normalization import Normalization
+from models.subnets.modules.normalization import Normalization
 
 if TYPE_CHECKING:
     # This block is only seen by static type checkers

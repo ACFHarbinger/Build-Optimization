@@ -12,11 +12,11 @@ from scipy import stats
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
 
-from logic.src.constants.routing import DEFAULT_ROLLOUT_BATCH_SIZE
-from logic.src.data.datasets import BaselineDataset, tensordict_collate_fn
-from logic.src.tracking.logging.pylogger import get_pylogger
-from logic.src.utils.data.rl_utils import safe_td_copy
-from logic.src.utils.functions.rl import ensure_tensordict
+from constants.routing import DEFAULT_ROLLOUT_BATCH_SIZE
+from data.datasets import BaselineDataset, tensordict_collate_fn
+from tracking.logging.pylogger import get_pylogger
+from utils.data.rl_utils import safe_td_copy
+from utils.functions.rl import ensure_tensordict
 
 from .base import Baseline
 

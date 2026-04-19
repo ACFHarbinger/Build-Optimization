@@ -23,11 +23,11 @@ from typing import TYPE_CHECKING, Any, Dict, FrozenSet, List, Optional, Set, Tup
 
 import numpy as np
 
-from logic.src.policies.helpers.solvers_and_matheuristics.common.route import Route
-from logic.src.policies.helpers.solvers_and_matheuristics.pricing.labels import Label
+from policies.helpers.solvers_and_matheuristics.common.route import Route
+from policies.helpers.solvers_and_matheuristics.pricing.labels import Label
 
 if TYPE_CHECKING:
-    from logic.src.policies.helpers.solvers_and_matheuristics.branching.constraints import AnyBranchingConstraint
+    from policies.helpers.solvers_and_matheuristics.branching.constraints import AnyBranchingConstraint
 
 logger = logging.getLogger(__name__)
 

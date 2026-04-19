@@ -11,8 +11,8 @@ from typing import Any, Optional, Union
 import torch
 from torch import nn
 
-from logic.src.models.subnets.decoders.common import AttentionDecoderCache
-from logic.src.models.subnets.decoders.glimpse.attention import make_heads, one_to_many_logits
+from models.subnets.decoders.common import AttentionDecoderCache
+from models.subnets.decoders.glimpse.attention import make_heads, one_to_many_logits
 
 
 class GlimpseDecoder(nn.Module):

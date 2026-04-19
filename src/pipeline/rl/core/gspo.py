@@ -16,10 +16,10 @@ from pytorch_lightning.core.optimizer import LightningOptimizer
 from tensordict import TensorDict
 from torch.utils.data import DataLoader
 
-from logic.src.data.datasets import FastTdDataset
-from logic.src.interfaces import ITraversable
-from logic.src.pipeline.rl.core.ppo import PPO
-from logic.src.utils.data.rl_utils import safe_td_copy
+from data.datasets import FastTdDataset
+from interfaces import ITraversable
+from pipeline.rl.core.ppo import PPO
+from utils.data.rl_utils import safe_td_copy
 
 
 class GSPO(PPO):

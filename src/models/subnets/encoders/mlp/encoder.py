@@ -5,8 +5,8 @@ from __future__ import annotations
 import torch
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
 
 from .mlp_layer import MLPLayer
 

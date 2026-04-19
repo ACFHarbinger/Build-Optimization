@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from logic.src.policies.route_construction.exact_and_decomposition_solvers.scenario_tree_extensive_form.tree import (
+from policies.route_construction.exact_and_decomposition_solvers.scenario_tree_extensive_form.tree import (
     ScenarioTree,
 )
 

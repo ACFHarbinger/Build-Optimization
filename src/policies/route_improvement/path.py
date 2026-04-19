@@ -4,8 +4,8 @@ Path Refinement Route Improver.
 
 from typing import Any, List, Tuple
 
-from logic.src.interfaces import IRouteImprovement
-from logic.src.interfaces.context.search_context import ImprovementMetrics
+from interfaces import IRouteImprovement
+from interfaces.context.search_context import ImprovementMetrics
 
 from .base import RouteImproverRegistry
 

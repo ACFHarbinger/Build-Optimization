@@ -12,9 +12,9 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.destroy.worst import worst_removal
+    >>> from policies.helpers.operators.destroy.worst import worst_removal
     >>> routes, removed = worst_removal(routes, n_remove=5, dist_matrix=d, p=3.0)
-    >>> from logic.src.policies.helpers.operators.destroy.worst import worst_profit_removal
+    >>> from policies.helpers.operators.destroy.worst import worst_profit_removal
     >>> routes, removed = worst_profit_removal(routes, n_remove=5, dist_matrix=d, wastes=w, R=1.0, C=1.0, p=3.0)
 """
 

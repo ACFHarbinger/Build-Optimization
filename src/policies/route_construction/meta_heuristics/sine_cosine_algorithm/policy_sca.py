@@ -9,11 +9,11 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.sca import SCAConfig
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.meta_heuristics.sine_cosine_algorithm.params import SCAParams
-from logic.src.policies.route_construction.meta_heuristics.sine_cosine_algorithm.solver import SCASolver
+from configs.policies.sca import SCAConfig
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.meta_heuristics.sine_cosine_algorithm.params import SCAParams
+from policies.route_construction.meta_heuristics.sine_cosine_algorithm.solver import SCASolver
 
 
 @RouteConstructorRegistry.register("sca")

@@ -17,7 +17,7 @@ balancing bounding strength with computational viability for the VRPP.
 
 from __future__ import annotations
 
-from logic.src.policies.helpers.solvers_and_matheuristics.pricing.labels import Label
-from logic.src.policies.helpers.solvers_and_matheuristics.pricing.solver import RCSPPSolver
+from policies.helpers.solvers_and_matheuristics.pricing.labels import Label
+from policies.helpers.solvers_and_matheuristics.pricing.solver import RCSPPSolver
 
 __all__ = ["Label", "RCSPPSolver"]

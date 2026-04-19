@@ -9,13 +9,13 @@ from typing import TYPE_CHECKING, Any, Optional, cast
 
 from torch.utils.data import DataLoader
 
-from logic.src.data.datasets import TensorDictDataset
-from logic.src.tracking.logging.pylogger import get_pylogger
-from logic.src.utils.data.td_utils import tensordict_collate_fn
+from data.datasets import TensorDictDataset
+from tracking.logging.pylogger import get_pylogger
+from utils.data.td_utils import tensordict_collate_fn
 
 if TYPE_CHECKING:
-    from logic.src.interfaces.env import IEnv
-    from logic.src.interfaces.policy import IPolicy
+    from interfaces.env import IEnv
+    from interfaces.policy import IPolicy
 
 logger = get_pylogger(__name__)
 

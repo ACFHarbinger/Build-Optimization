@@ -17,7 +17,7 @@ from typing import List, Optional, Tuple
 
 import torch
 
-from logic.src.constants.routing import IMPROVEMENT_EPSILON
+from constants.routing import IMPROVEMENT_EPSILON
 
 
 def vectorized_lkh(

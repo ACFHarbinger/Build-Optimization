@@ -1,6 +1,6 @@
 """ZenML HPO pipeline for WSmart-Route.
 
-Wraps :func:`~logic.src.pipeline.features.train.hpo.run_hpo` in a
+Wraps :func:`~pipeline.features.train.hpo.run_hpo` in a
 three-step ZenML pipeline:
 
 1. **prepare_hpo_config** — serialise the Hydra config to a plain dict.
@@ -9,7 +9,7 @@ three-step ZenML pipeline:
 3. **log_hpo_summary** — record the best metric as a ZenML artifact.
 
 The pipeline is invoked from
-:func:`~logic.src.pipeline.features.train.hpo._run_hpo_via_zenml`
+:func:`~pipeline.features.train.hpo._run_hpo_via_zenml`
 when ``cfg.tracking.zenml_enabled`` is ``True``.
 """
 
@@ -19,9 +19,9 @@ from typing import Any, Dict
 
 from omegaconf import OmegaConf
 
-from logic.src.configs import Config
-from logic.src.pipeline.features.train.hpo import run_hpo
-from logic.src.tracking.logging.pylogger import get_pylogger
+from configs import Config
+from pipeline.features.train.hpo import run_hpo
+from tracking.logging.pylogger import get_pylogger
 
 _ZENML_AVAILABLE = False
 try:
@@ -93,7 +93,7 @@ def hpo_pipeline(cfg: Any) -> float:
     """Serialise *cfg* and launch the ZenML HPO pipeline.
 
     Args:
-        cfg: Root Hydra :class:`~logic.src.configs.Config` object.
+        cfg: Root Hydra :class:`~configs.Config` object.
 
     Returns:
         Best metric value found.

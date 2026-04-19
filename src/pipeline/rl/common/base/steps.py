@@ -10,15 +10,15 @@ from typing import TYPE_CHECKING, Any, Dict, Optional, Union, cast
 import torch
 from tensordict import TensorDict
 
-from logic.src.constants.metrics import METRIC_MAPPING
-from logic.src.interfaces import ITraversable
-from logic.src.tracking.logging.pylogger import get_pylogger
-from logic.src.utils.functions.rl import ensure_tensordict
+from constants.metrics import METRIC_MAPPING
+from interfaces import ITraversable
+from tracking.logging.pylogger import get_pylogger
+from utils.functions.rl import ensure_tensordict
 
 if TYPE_CHECKING:
-    from logic.src.interfaces.env import IEnv
-    from logic.src.interfaces.policy import IPolicy
-    from logic.src.policies.mandatory_selection import VectorizedSelector
+    from interfaces.env import IEnv
+    from interfaces.policy import IPolicy
+    from policies.mandatory_selection import VectorizedSelector
 
 logger = get_pylogger(__name__)
 

@@ -17,9 +17,9 @@ from typing import Optional
 
 from torch import nn
 
-from logic.src.constants.models import DEFAULT_MOE_KWARGS
-from logic.src.models.core.attention_model import AttentionModelPolicy
-from logic.src.pipeline.rl.core.reinforce import REINFORCE
+from constants.models import DEFAULT_MOE_KWARGS
+from models.core.attention_model import AttentionModelPolicy
+from pipeline.rl.core.reinforce import REINFORCE
 
 
 class MVMoE_AM(REINFORCE):

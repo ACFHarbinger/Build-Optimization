@@ -7,12 +7,12 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.autoregressive.policy import AutoregressivePolicy
-from logic.src.models.policies.adaptive_large_neighborhood_search import VectorizedALNS
-from logic.src.models.policies.ant_colony_system import VectorizedACOPolicy
-from logic.src.models.policies.hybrid_genetic_search import VectorizedHGS
-from logic.src.models.policies.operators import (
+from envs.base.base import RL4COEnvBase
+from models.common.autoregressive.policy import AutoregressivePolicy
+from models.policies.adaptive_large_neighborhood_search import VectorizedALNS
+from models.policies.ant_colony_system import VectorizedACOPolicy
+from models.policies.hybrid_genetic_search import VectorizedHGS
+from models.policies.operators import (
     # Destroy
     vectorized_cluster_removal,
     # Exchange
@@ -42,8 +42,8 @@ from logic.src.models.policies.operators import (
     vectorized_type_iv_unstringing,
     vectorized_worst_removal,
 )
-from logic.src.models.subnets.embeddings import get_init_embedding
-from logic.src.models.subnets.encoders.gat import GraphAttentionEncoder
+from models.subnets.embeddings import get_init_embedding
+from models.subnets.encoders.gat import GraphAttentionEncoder
 
 from .improvement_step_decoder import ImprovementStepDecoder
 

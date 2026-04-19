@@ -9,7 +9,7 @@ metrics that flow immutably through the three-phase pipeline:
   Phase 3 — Route Improvement    : appends ``ImprovementMetrics``
 """
 
-from logic.src.interfaces.context import (
+from interfaces.context import (
     AcceptanceMetrics,
     ConstructionMetrics,
     ImprovementMetrics,

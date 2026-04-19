@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.models.subnets.encoders.common import MultiHeadAttentionLayerBase
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from models.subnets.encoders.common import MultiHeadAttentionLayerBase
 
 
 class MultiHeadAttentionLayer(MultiHeadAttentionLayerBase):

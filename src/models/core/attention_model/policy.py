@@ -12,14 +12,14 @@ from typing import Any, Dict, Optional, Union
 import torch
 from tensordict import TensorDict
 
-from logic.src.data.processor.transforms import batchify
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.autoregressive.policy import AutoregressivePolicy
-from logic.src.models.subnets.decoders.glimpse.decoder import GlimpseDecoder
-from logic.src.models.subnets.embeddings import get_init_embedding
-from logic.src.models.subnets.encoders.gat import GraphAttentionEncoder
-from logic.src.utils.data.td_state_wrapper import TensorDictStateWrapper
-from logic.src.utils.tasks.dummy_problem import DummyProblem
+from data.processor.transforms import batchify
+from envs.base.base import RL4COEnvBase
+from models.common.autoregressive.policy import AutoregressivePolicy
+from models.subnets.decoders.glimpse.decoder import GlimpseDecoder
+from models.subnets.embeddings import get_init_embedding
+from models.subnets.encoders.gat import GraphAttentionEncoder
+from utils.data.td_state_wrapper import TensorDictStateWrapper
+from utils.tasks.dummy_problem import DummyProblem
 
 
 class AttentionModelPolicy(AutoregressivePolicy):

@@ -16,7 +16,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.capacitated_vehicle_routing_problem.cvrp import find_routes
+    >>> from policies.capacitated_vehicle_routing_problem.cvrp import find_routes
     >>> routes = find_routes(dist_matrix, wastes, capacity, num_vehicles)
 
 Reference:
@@ -35,8 +35,8 @@ from google.protobuf.duration_pb2 import Duration
 from ortools.constraint_solver import pywrapcp, routing_enums_pb2
 from pyvrp.stop import MaxRuntime
 
-from logic.src.constants.routing import SCALE
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from constants.routing import SCALE
+from tracking.viz_mixin import PolicyStateRecorder
 
 from .clark_wright import clarke_wright_solve
 

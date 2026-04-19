@@ -8,10 +8,10 @@ from typing import Any, Optional, cast
 import torch
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.models.subnets.decoders.common import AttentionDecoderCache
-from logic.src.models.subnets.decoders.gat.graph_decoder import GraphAttentionDecoder
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from models.subnets.decoders.common import AttentionDecoderCache
+from models.subnets.decoders.gat.graph_decoder import GraphAttentionDecoder
 
 
 class DeepGATDecoder(nn.Module):

@@ -13,7 +13,7 @@ from tensordict import TensorDict
 from torch import nn
 from torch.utils.data import DataLoader
 
-from logic.src.envs.base.base import RL4COEnvBase
+from envs.base.base import RL4COEnvBase
 
 from .policy import PolyNetPolicy
 
@@ -169,7 +169,7 @@ class PolyNet(nn.Module):
 
         # Reshape for multi-solution: (batch * k) -> (batch, k)
         if reward.dim() == 1:
-            from logic.src.utils.decoding import unbatchify
+            from utils.decoding import unbatchify
 
             reward = unbatchify(reward, self.k)
             log_likelihood = unbatchify(log_likelihood, self.k)

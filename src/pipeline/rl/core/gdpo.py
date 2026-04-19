@@ -11,9 +11,9 @@ import torch
 from tensordict import TensorDict
 
 if TYPE_CHECKING:
-    from logic.src.interfaces.env import IEnv
+    from interfaces.env import IEnv
 
-from logic.src.pipeline.rl.core.reinforce import REINFORCE
+from pipeline.rl.core.reinforce import REINFORCE
 
 
 class GDPO(REINFORCE):

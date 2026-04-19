@@ -7,8 +7,8 @@ from __future__ import annotations
 import torch
 from tensordict import TensorDict
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.non_autoregressive.decoder import NonAutoregressiveDecoder
+from envs.base.base import RL4COEnvBase
+from models.common.non_autoregressive.decoder import NonAutoregressiveDecoder
 
 
 class SimpleNARDecoder(NonAutoregressiveDecoder):

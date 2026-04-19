@@ -8,8 +8,8 @@ from __future__ import annotations
 import random
 from typing import Any, Dict, List, Optional, Tuple
 
-from logic.src.interfaces import ITraversable
-from logic.src.pipeline.rl.meta.weight_strategy import WeightAdjustmentStrategy
+from interfaces import ITraversable
+from pipeline.rl.meta.weight_strategy import WeightAdjustmentStrategy
 
 
 class CostWeightManager(WeightAdjustmentStrategy):

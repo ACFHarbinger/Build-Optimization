@@ -5,20 +5,20 @@ from typing import Dict, List, Optional, Set, Tuple
 import gurobipy as gp
 import numpy as np
 
-from logic.src.policies.route_construction.matheuristics.adaptive_kernel_search.aks import (
+from policies.route_construction.matheuristics.adaptive_kernel_search.aks import (
     _assess_difficulty,
     _get_feasible,
     _get_partitioned_vars_aks,
     _solve_easy_iterations,
     _solve_rigorous_iterations,
 )
-from logic.src.policies.route_construction.matheuristics.kernel_search.solver import (
+from policies.route_construction.matheuristics.kernel_search.solver import (
     _dfj_subtour_elimination_callback,
     _reconstruct_tour,
     _set_mip_start,
     _setup_ks_model,
 )
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 from .params import TPKSParams
 

@@ -26,7 +26,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators import (
+from policies.helpers.operators import (
     greedy_insertion,
     greedy_profit_insertion,
     random_removal,
@@ -35,8 +35,8 @@ from logic.src.policies.helpers.operators import (
     worst_profit_removal,
     worst_removal,
 )
-from logic.src.policies.helpers.operators.destroy_ruin import cluster_removal
-from logic.src.policies.helpers.operators.solution_initialization.greedy_si import (
+from policies.helpers.operators.destroy_ruin import cluster_removal
+from policies.helpers.operators.solution_initialization.greedy_si import (
     build_greedy_routes,
 )
 

@@ -4,7 +4,7 @@ Factory functions for creating vectorized selectors.
 
 from typing import Any, Optional, cast
 
-from logic.src.interfaces import ITraversable
+from interfaces import ITraversable
 
 from .base import VectorizedSelector
 from .combined import CombinedSelector

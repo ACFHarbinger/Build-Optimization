@@ -15,17 +15,17 @@ from typing import Any, Deque, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.local_search.local_search_manager import LocalSearchManager
-from logic.src.policies.helpers.operators.solution_initialization import build_nn_routes
-from logic.src.policies.helpers.reinforcement_learning.agents.td_learning import QLearningAgent
-from logic.src.policies.helpers.reinforcement_learning.features.state import StateFeatureExtractor
-from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.construction import (
+from policies.helpers.local_search.local_search_manager import LocalSearchManager
+from policies.helpers.operators.solution_initialization import build_nn_routes
+from policies.helpers.reinforcement_learning.agents.td_learning import QLearningAgent
+from policies.helpers.reinforcement_learning.features.state import StateFeatureExtractor
+from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.construction import (
     SolutionConstructor,
 )
-from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
+from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
     KSACOParams,
 )
-from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.pheromones import (
+from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.pheromones import (
     SparsePheromoneTau,
 )
 

@@ -9,12 +9,12 @@ from typing import TYPE_CHECKING, Any, Dict, Union
 
 from tensordict import TensorDict
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.autoregressive.policy import AutoregressivePolicy
+from envs.base.base import RL4COEnvBase
+from models.common.autoregressive.policy import AutoregressivePolicy
 
 if TYPE_CHECKING:
-    from logic.src.models.policies.alns import VectorizedALNS
-    from logic.src.models.policies.hgs import VectorizedHGS
+    from models.policies.alns import VectorizedALNS
+    from models.policies.hgs import VectorizedHGS
 
 
 class NeuralHeuristicHybrid(AutoregressivePolicy):

@@ -5,7 +5,7 @@ TS (Tabu Search) configuration for Hydra.
 from dataclasses import dataclass, field
 from typing import Any, List, Optional
 
-from logic.src.configs.policies.other.acceptance_criteria import AcceptanceConfig
+from configs.policies.other.acceptance_criteria import AcceptanceConfig
 
 
 @dataclass

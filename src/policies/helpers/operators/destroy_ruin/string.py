@@ -11,9 +11,9 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.destroy.string import string_removal
+    >>> from policies.helpers.operators.destroy.string import string_removal
     >>> routes, removed = string_removal(routes, n_remove=5, dist_matrix=d)
-    >>> from logic.src.policies.helpers.operators.destroy.string import string_profit_removal
+    >>> from policies.helpers.operators.destroy.string import string_profit_removal
     >>> routes, removed = string_profit_removal(routes, n_remove=5, dist_matrix=d, wastes=w, R=1.0, C=1.0)
 """
 

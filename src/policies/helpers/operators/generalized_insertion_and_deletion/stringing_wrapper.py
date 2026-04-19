@@ -15,23 +15,23 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_i import (
+from policies.helpers.operators.generalized_insertion_and_deletion.stringing_i import (
     apply_type_i_s,
     apply_type_i_s_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_ii import (
+from policies.helpers.operators.generalized_insertion_and_deletion.stringing_ii import (
     apply_type_ii_s,
     apply_type_ii_s_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_iii import (
+from policies.helpers.operators.generalized_insertion_and_deletion.stringing_iii import (
     apply_type_iii_s,
     apply_type_iii_s_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_iv import (
+from policies.helpers.operators.generalized_insertion_and_deletion.stringing_iv import (
     apply_type_iv_s,
     apply_type_iv_s_profit,
 )
-from logic.src.utils.policy.neighborhood import get_p_neighborhood
+from utils.policy.neighborhood import get_p_neighborhood
 
 
 def _evaluate_routes(routes: List[List[int]], dist_matrix: np.ndarray) -> float:
@@ -300,7 +300,7 @@ def stringing_insertion_wrapper(  # noqa: C901
     if rng is None:
         rng = random.Random()
 
-    from logic.src.policies.helpers.operators.recreate_repair.greedy import (
+    from policies.helpers.operators.recreate_repair.greedy import (
         greedy_insertion,
         greedy_profit_insertion,
     )

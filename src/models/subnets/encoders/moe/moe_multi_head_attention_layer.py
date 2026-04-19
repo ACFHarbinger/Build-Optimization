@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.models.subnets.encoders.common import MultiHeadAttentionLayerBase
-from logic.src.models.subnets.modules.connections import get_connection_module
-from logic.src.models.subnets.modules.moe_feed_forward import MoEFeedForward
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from models.subnets.encoders.common import MultiHeadAttentionLayerBase
+from models.subnets.modules.connections import get_connection_module
+from models.subnets.modules.moe_feed_forward import MoEFeedForward
 
 
 class MoEMultiHeadAttentionLayer(MultiHeadAttentionLayerBase):

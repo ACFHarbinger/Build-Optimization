@@ -18,7 +18,7 @@ Usage
 Import configurations for use in training pipelines:
 
 ```python
-from logic.src.configs.common import HGSConfig, ALNSConfig, ILSConfig
+from configs.common import HGSConfig, ALNSConfig, ILSConfig
 
 # Create expert policy config for imitation learning
 expert_config = HGSConfig(

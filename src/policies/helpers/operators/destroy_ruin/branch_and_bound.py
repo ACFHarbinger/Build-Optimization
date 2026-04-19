@@ -60,7 +60,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.destroy.branch_bound import (
+    >>> from policies.helpers.operators.destroy.branch_bound import (
     ...     bb_removal, bb_profit_removal
     ... )
     >>> routes, removed = bb_removal(routes, n_remove=5, dist_matrix=d, wastes=w, capacity=Q)

@@ -8,16 +8,16 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.constants.models import (
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from constants.models import (
     DEFAULT_TEMPORAL_HORIZON,
     STATIC_DIM,
 )
-from logic.src.constants.routing import DEFAULT_EVAL_BATCH_SIZE
-from logic.src.constants.waste import CRITICAL_FILL_THRESHOLD
-from logic.src.models.subnets.factories import AttentionComponentFactory, NeuralComponentFactory
-from logic.src.tracking.logging.pylogger import get_pylogger
+from constants.routing import DEFAULT_EVAL_BATCH_SIZE
+from constants.waste import CRITICAL_FILL_THRESHOLD
+from models.subnets.factories import AttentionComponentFactory, NeuralComponentFactory
+from tracking.logging.pylogger import get_pylogger
 
 from .critic_head import CriticHead
 from .gate_head import GateHead

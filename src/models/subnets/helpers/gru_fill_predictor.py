@@ -5,7 +5,7 @@ from typing import Tuple, cast
 import torch
 from torch import nn
 
-from logic.src.models.subnets.modules import ActivationFunction
+from models.subnets.modules import ActivationFunction
 
 
 class GatedRecurrentUnitFillPredictor(nn.Module):

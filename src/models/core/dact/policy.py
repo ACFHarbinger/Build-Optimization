@@ -9,7 +9,7 @@ Example:
 
 from __future__ import annotations
 
-from logic.src.models.common.improvement.policy import ImprovementPolicy
+from models.common.improvement.policy import ImprovementPolicy
 
 from .decoder import DACTDecoder
 from .encoder import DACTEncoder

@@ -9,9 +9,9 @@ from __future__ import annotations
 
 from torch import nn
 
-from logic.src.models.subnets.embeddings.cvrpp import CVRPPInitEmbedding
-from logic.src.models.subnets.embeddings.vrpp import VRPPInitEmbedding
-from logic.src.models.subnets.embeddings.wcvrp import WCVRPInitEmbedding
+from models.subnets.embeddings.cvrpp import CVRPPInitEmbedding
+from models.subnets.embeddings.vrpp import VRPPInitEmbedding
+from models.subnets.embeddings.wcvrp import WCVRPInitEmbedding
 
 from .context import (
     CONTEXT_EMBEDDING_REGISTRY,

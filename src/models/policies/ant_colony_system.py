@@ -14,9 +14,9 @@ from typing import Any, Dict, Optional, Tuple
 import torch
 from tensordict import TensorDict
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.autoregressive.policy import AutoregressivePolicy
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from envs.base.base import RL4COEnvBase
+from models.common.autoregressive.policy import AutoregressivePolicy
+from tracking.viz_mixin import PolicyVizMixin
 
 
 class VectorizedACOPolicy(AutoregressivePolicy, PolicyVizMixin):

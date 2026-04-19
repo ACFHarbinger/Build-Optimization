@@ -70,7 +70,7 @@ class DecodingMixin:
             Proposed expansions (indices and probabilities).
         """
         # Delegate to decoder's detailed proposal method if available
-        # logic.src.models.subnets.modules/decoder.py usually handles this
+        # models.subnets.modules/decoder.py usually handles this
         return self.decoder.propose_expansions(beam, fixed, expand_size, normalize, max_calc_batch_size)  # type: ignore[attr-defined]
 
     def sample_many(
@@ -94,7 +94,7 @@ class DecodingMixin:
                 costs: Tensor of costs for each sampled solution.
                 pis: Tensor of action indices for each sampled solution.
         """
-        from logic.src.utils.functions import sample_many as _sample_many
+        from utils.functions import sample_many as _sample_many
 
         return _sample_many(
             lambda i: self.forward(  # type: ignore[attr-defined]

@@ -18,7 +18,7 @@ Reference:
     Bell System Technical Journal, 44(10), 2245-2269.
 
 Example:
-    >>> from logic.src.policies.helpers.operators.intensification import two_opt_steepest
+    >>> from policies.helpers.operators.intensification import two_opt_steepest
     >>> improved = two_opt_steepest(routes, dist_matrix, wastes, capacity)
     >>> improved_vrpp = two_opt_steepest_profit(routes, dist_matrix, wastes, capacity, R=1.0, C=0.5)
 """

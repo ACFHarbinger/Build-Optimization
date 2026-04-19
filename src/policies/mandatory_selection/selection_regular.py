@@ -8,17 +8,17 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.mandatory.selection_regular import RegularSelection
+    >>> from policies.mandatory.selection_regular import RegularSelection
     >>> strategy = RegularSelection()
     >>> bins = strategy.select_bins(context)
 """
 
 from typing import List, Tuple
 
-from logic.src.interfaces.context.search_context import SearchContext
-from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
-from logic.src.policies.mandatory_selection.base.selection_context import SelectionContext
-from logic.src.policies.mandatory_selection.base.selection_registry import (
+from interfaces.context.search_context import SearchContext
+from interfaces.mandatory_selection import IMandatorySelectionStrategy
+from policies.mandatory_selection.base.selection_context import SelectionContext
+from policies.mandatory_selection.base.selection_registry import (
     MandatorySelectionRegistry,
 )
 

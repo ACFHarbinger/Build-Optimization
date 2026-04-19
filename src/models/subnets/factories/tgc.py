@@ -6,7 +6,7 @@ from typing import Any
 
 from torch import nn
 
-from logic.src.models.subnets.encoders.tgc import TransGraphConvEncoder
+from models.subnets.encoders.tgc import TransGraphConvEncoder
 
 from .base import NeuralComponentFactory, _create_decoder_by_type
 

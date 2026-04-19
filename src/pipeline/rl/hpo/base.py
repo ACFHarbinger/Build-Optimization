@@ -8,7 +8,7 @@ and applying sampled parameter values to the structured Config object.
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, Optional
 
-from logic.src.configs import Config
+from configs import Config
 
 try:
     import ConfigSpace as CS

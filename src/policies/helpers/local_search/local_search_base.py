@@ -23,8 +23,8 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from logic.src.interfaces import IAcceptanceCriterion
-from logic.src.policies.helpers.operators.inter_route_local_search import (
+from interfaces import IAcceptanceCriterion
+from policies.helpers.operators.inter_route_local_search import (
     move_2opt_star,
     move_cross,
     move_swap_star,
@@ -32,15 +32,15 @@ from logic.src.policies.helpers.operators.inter_route_local_search import (
     swap_2_1,
     swap_2_2,
 )
-from logic.src.policies.helpers.operators.inter_route_local_search.cross_exchange import (
+from policies.helpers.operators.inter_route_local_search.cross_exchange import (
     cross_exchange,
     improved_cross_exchange,
     lambda_interchange,
 )
-from logic.src.policies.helpers.operators.inter_route_local_search.cyclic_transfer import cyclic_transfer
-from logic.src.policies.helpers.operators.inter_route_local_search.ejection_chain import ejection_chain
-from logic.src.policies.helpers.operators.inter_route_local_search.exchange_chain import exchange_2_0, exchange_2_1
-from logic.src.policies.helpers.operators.intra_route_local_search import (
+from policies.helpers.operators.inter_route_local_search.cyclic_transfer import cyclic_transfer
+from policies.helpers.operators.inter_route_local_search.ejection_chain import ejection_chain
+from policies.helpers.operators.inter_route_local_search.exchange_chain import exchange_2_0, exchange_2_1
+from policies.helpers.operators.intra_route_local_search import (
     move_2opt_intra,
     move_3opt_intra,
     move_or_opt,
@@ -48,7 +48,7 @@ from logic.src.policies.helpers.operators.intra_route_local_search import (
     move_swap,
     relocate_chain,
 )
-from logic.src.policies.helpers.operators.intra_route_local_search.k_permutation import three_permutation
+from policies.helpers.operators.intra_route_local_search.k_permutation import three_permutation
 
 
 class LocalSearch(ABC):
@@ -96,7 +96,7 @@ class LocalSearch(ABC):
         self.acceptance_criterion = acceptance_criterion or getattr(params, "acceptance_criterion", None)
         if self.acceptance_criterion is None:
             # Fallback for base LocalSearch (elitist hill-climbing)
-            from logic.src.policies.route_construction.acceptance_criteria.base.factory import (
+            from policies.route_construction.acceptance_criteria.base.factory import (
                 AcceptanceCriterionFactory,
             )
 

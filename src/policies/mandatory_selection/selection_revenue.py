@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.mandatory.selection_revenue import RevenueThresholdSelection
+    >>> from policies.mandatory.selection_revenue import RevenueThresholdSelection
     >>> strategy = RevenueThresholdSelection()
     >>> bins = strategy.select_bins(context)
 """
@@ -17,8 +17,8 @@ from typing import List, Tuple
 
 import numpy as np
 
-from logic.src.interfaces.context.search_context import SearchContext
-from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
+from interfaces.context.search_context import SearchContext
+from interfaces.mandatory_selection import IMandatorySelectionStrategy
 
 from .base.eoq import resolve_trigger_threshold
 from .base.selection_context import SelectionContext

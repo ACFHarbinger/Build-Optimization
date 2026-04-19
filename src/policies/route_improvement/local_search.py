@@ -4,9 +4,9 @@ Classical Local Search Route Improver.
 
 from typing import Any, List, Tuple
 
-from logic.src.interfaces import IRouteImprovement
-from logic.src.interfaces.context.search_context import ImprovementMetrics
-from logic.src.policies.helpers.operators.intensification_fixing import INTENSIFICATION_OPERATORS
+from interfaces import IRouteImprovement
+from interfaces.context.search_context import ImprovementMetrics
+from policies.helpers.operators.intensification_fixing import INTENSIFICATION_OPERATORS
 
 from .base import RouteImproverRegistry
 from .common.helpers import assemble_tour, split_tour, to_numpy
@@ -79,7 +79,7 @@ class ClassicalLocalSearchRouteImprover(IRouteImprovement):
                 return tour, {"algorithm": "ClassicalLocalSearchRouteImprover"}
 
         # Case 2: Multi-move or iterative operators via LocalSearchManager
-        from logic.src.policies.helpers.local_search.local_search_manager import LocalSearchManager
+        from policies.helpers.local_search.local_search_manager import LocalSearchManager
 
         manager = LocalSearchManager(
             dist_matrix=dist_matrix,

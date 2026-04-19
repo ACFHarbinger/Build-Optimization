@@ -11,10 +11,10 @@ from typing import Any, Callable, Dict, Optional
 
 from dehb import DEHB
 
-from logic.src.configs import Config
+from configs import Config
 
 try:
-    from logic.src.tracking.core.run import get_active_run
+    from tracking.core.run import get_active_run
 except ImportError:
     get_active_run = None  # type: ignore[assignment]
 

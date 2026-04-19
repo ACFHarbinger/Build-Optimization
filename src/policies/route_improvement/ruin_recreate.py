@@ -9,9 +9,9 @@ Delegates Simulated Annealing acceptance to the pluggable
 import random
 from typing import Any, List, Tuple
 
-from logic.src.interfaces.context.search_context import AcceptanceMetrics, ImprovementMetrics
-from logic.src.interfaces.route_improvement import IRouteImprovement
-from logic.src.policies.helpers.operators.search_heuristics.large_neighborhood_search import (
+from interfaces.context.search_context import AcceptanceMetrics, ImprovementMetrics
+from interfaces.route_improvement import IRouteImprovement
+from policies.helpers.operators.search_heuristics.large_neighborhood_search import (
     apply_lns,
 )
 
@@ -123,7 +123,7 @@ class RuinRecreateRouteImprover(IRouteImprovement):
         # Set up SA criterion if needed (Q2 delegation)
         sa_criterion = None
         if acceptance == "sa":
-            from logic.src.policies.route_construction.acceptance_criteria.boltzmann_metropolis_criterion import (
+            from policies.route_construction.acceptance_criteria.boltzmann_metropolis_criterion import (
                 BoltzmannAcceptance,
             )
 

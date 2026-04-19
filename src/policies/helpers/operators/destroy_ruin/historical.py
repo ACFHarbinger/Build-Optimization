@@ -11,10 +11,10 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.destroy.historical import historical_removal
+    >>> from policies.helpers.operators.destroy.historical import historical_removal
     >>> history = {1: 12.5, 2: 8.0, 3: 15.3, ...}
     >>> routes, removed = historical_removal(routes, n_remove=5, history=history)
-    >>> from logic.src.policies.helpers.operators.destroy.historical import historical_profit_removal
+    >>> from policies.helpers.operators.destroy.historical import historical_profit_removal
     >>> routes, removed = historical_profit_removal(routes, n_remove=5, history=history,
     ...                                             dist_matrix=d, wastes=w, R=1.0, C=1.0)
 """

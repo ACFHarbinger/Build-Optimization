@@ -61,7 +61,7 @@ risky (non-zero expected overflow score).
 
 Example::
 
-    >>> from logic.src.policies.mandatory_selection.selection_mip_knapsack import (
+    >>> from policies.mandatory_selection.selection_mip_knapsack import (
     ...     MIPKnapsackSelection,
     ... )
     >>> strategy = MIPKnapsackSelection()
@@ -73,10 +73,10 @@ from typing import Any, List, Optional, Tuple
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, milp
 
-from logic.src.interfaces.context.search_context import SearchContext
-from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
-from logic.src.policies.mandatory_selection.base.selection_context import SelectionContext
-from logic.src.policies.mandatory_selection.base.selection_registry import (
+from interfaces.context.search_context import SearchContext
+from interfaces.mandatory_selection import IMandatorySelectionStrategy
+from policies.mandatory_selection.base.selection_context import SelectionContext
+from policies.mandatory_selection.base.selection_registry import (
     MandatorySelectionRegistry,
 )
 

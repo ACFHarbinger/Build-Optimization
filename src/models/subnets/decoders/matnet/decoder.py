@@ -14,7 +14,7 @@ from typing import Any, Optional, Tuple, Union
 import torch
 from torch import nn
 
-from logic.src.models.subnets.decoders.glimpse.decoder import GlimpseDecoder
+from models.subnets.decoders.glimpse.decoder import GlimpseDecoder
 
 
 class MatNetDecoder(GlimpseDecoder):

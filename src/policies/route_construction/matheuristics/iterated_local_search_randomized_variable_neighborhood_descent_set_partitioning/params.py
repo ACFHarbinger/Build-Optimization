@@ -5,8 +5,8 @@ ILS-RVND-SP algorithm parameters.
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
-from logic.src.interfaces.acceptance_criterion import IAcceptanceCriterion
-from logic.src.policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
+from interfaces.acceptance_criterion import IAcceptanceCriterion
+from policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
 
 
 @dataclass

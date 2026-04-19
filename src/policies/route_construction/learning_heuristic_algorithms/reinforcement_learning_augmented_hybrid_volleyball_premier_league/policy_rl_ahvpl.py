@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.other import (
+from configs.policies.other import (
     BanditConfig,
     ContextFeatureExtractorConfig,
     EvolutionaryCMABConfig,
@@ -19,20 +19,20 @@ from logic.src.configs.policies.other import (
     RLConfig,
     TDLearningConfig,
 )
-from logic.src.configs.policies.rl_ahvpl import RLAHVPLConfig
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_augmented_hybrid_volleyball_premier_league.params import (
+from configs.policies.rl_ahvpl import RLAHVPLConfig
+from enums import GlobalRegistry, PolicyTag
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_augmented_hybrid_volleyball_premier_league.params import (
     RLAHVPLParams,
 )
-from logic.src.policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_augmented_hybrid_volleyball_premier_league.rl_ahvpl import (
+from policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_augmented_hybrid_volleyball_premier_league.rl_ahvpl import (
     RLAHVPLSolver,
 )
-from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
-from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
-from logic.src.policies.route_construction.meta_heuristics.reactive_tabu_search.params import RTSParams
+from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
+from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
+from policies.route_construction.meta_heuristics.reactive_tabu_search.params import RTSParams
 
 
 @GlobalRegistry.register(

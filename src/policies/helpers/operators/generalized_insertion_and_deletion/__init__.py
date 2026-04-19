@@ -15,43 +15,43 @@ Based on the GENIUS algorithm and variants described in:
   Algorithms, 15(1), 9. https://doi.org/10.3390/a15010009
 """
 
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_i import (
+from policies.helpers.operators.generalized_insertion_and_deletion.stringing_i import (
     apply_type_i_s,
     apply_type_i_s_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_ii import (
+from policies.helpers.operators.generalized_insertion_and_deletion.stringing_ii import (
     apply_type_ii_s,
     apply_type_ii_s_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_iii import (
+from policies.helpers.operators.generalized_insertion_and_deletion.stringing_iii import (
     apply_type_iii_s,
     apply_type_iii_s_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_iv import (
+from policies.helpers.operators.generalized_insertion_and_deletion.stringing_iv import (
     apply_type_iv_s,
     apply_type_iv_s_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_wrapper import (
+from policies.helpers.operators.generalized_insertion_and_deletion.stringing_wrapper import (
     stringing_insertion,
     stringing_profit_insertion,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_i import (
+from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_i import (
     apply_type_i_us,
     apply_type_i_us_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_ii import (
+from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_ii import (
     apply_type_ii_us,
     apply_type_ii_us_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_iii import (
+from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_iii import (
     apply_type_iii_us,
     apply_type_iii_us_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_iv import (
+from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_iv import (
     apply_type_iv_us,
     apply_type_iv_us_profit,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_wrapper import (
+from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_wrapper import (
     unstringing_profit_removal,
     unstringing_removal,
 )

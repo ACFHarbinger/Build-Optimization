@@ -19,7 +19,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.evolutionary_mutation.inversion import (
+    >>> from policies.helpers.operators.evolutionary_mutation.inversion import (
     ...     inversion_mutation,
     ... )
     >>> mutated = inversion_mutation(routes, rng=rng)

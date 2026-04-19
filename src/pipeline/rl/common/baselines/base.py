@@ -11,9 +11,9 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.data.datasets import BaselineDataset
-from logic.src.interfaces import ITensorDictLike
-from logic.src.tracking.logging.pylogger import get_pylogger
+from data.datasets import BaselineDataset
+from interfaces import ITensorDictLike
+from tracking.logging.pylogger import get_pylogger
 
 logger = get_pylogger(__name__)
 

@@ -4,7 +4,7 @@ from typing import Tuple, cast
 
 from torch import nn
 
-from logic.src.models.subnets.modules import ActivationFunction
+from models.subnets.modules import ActivationFunction
 
 
 class LongShortTermMemoryFillPredictor(nn.Module):

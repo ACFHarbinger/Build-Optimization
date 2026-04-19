@@ -5,14 +5,14 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-from logic.src.policies.helpers.operators.destroy_ruin import (
+from policies.helpers.operators.destroy_ruin import (
     cluster_removal,
     random_removal,
     shaw_removal,
     worst_removal,
 )
-from logic.src.policies.helpers.operators.recreate_repair import greedy_insertion, greedy_profit_insertion
-from logic.src.policies.helpers.operators.recreate_repair.regret import regret_k_insertion, regret_k_profit_insertion
+from policies.helpers.operators.recreate_repair import greedy_insertion, greedy_profit_insertion
+from policies.helpers.operators.recreate_repair.regret import regret_k_insertion, regret_k_profit_insertion
 
 _DESTROY_OPS = {
     "random": random_removal,

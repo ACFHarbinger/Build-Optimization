@@ -13,7 +13,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.perturbation.double_bridge import double_bridge
+    >>> from policies.helpers.operators.perturbation.double_bridge import double_bridge
     >>> # Using LocalSearch
     >>> success = double_bridge(ls, r_idx=0, rng=rng)
     >>> # Using raw route plan

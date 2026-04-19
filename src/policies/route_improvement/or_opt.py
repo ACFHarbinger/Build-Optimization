@@ -4,8 +4,8 @@ Or-opt Route Improver.
 
 from typing import Any, List, Tuple
 
-from logic.src.interfaces.context.search_context import ImprovementMetrics
-from logic.src.interfaces.route_improvement import IRouteImprovement
+from interfaces.context.search_context import ImprovementMetrics
+from interfaces.route_improvement import IRouteImprovement
 
 from .base import RouteImproverRegistry
 from .common.helpers import assemble_tour, split_tour, to_numpy
@@ -50,7 +50,7 @@ class OrOptRouteImprover(IRouteImprovement):
             return tour, {"algorithm": "OrOptRouteImprover"}
 
         try:
-            from logic.src.policies.helpers.local_search.local_search_manager import LocalSearchManager
+            from policies.helpers.local_search.local_search_manager import LocalSearchManager
 
             routes = split_tour(tour)
             if not routes:

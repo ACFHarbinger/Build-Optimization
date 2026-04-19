@@ -6,9 +6,9 @@ from typing import Optional
 
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.models.subnets.encoders.common import TransformerEncoderBase
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from models.subnets.encoders.common import TransformerEncoderBase
 
 from .attention_convolution_layer import AttentionConvolutionLayer
 

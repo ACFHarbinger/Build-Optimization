@@ -33,7 +33,7 @@ Requirements:
     Gurobi Optimizer ≥ 11.0 with a valid licence.
 
 Example:
-    >>> from logic.src.policies.helpers.operators.intensification import (
+    >>> from policies.helpers.operators.intensification import (
     ...     set_partitioning_polish, set_partitioning_polish_profit
     ... )
     >>> pool = [r for r in historical_route_pool]

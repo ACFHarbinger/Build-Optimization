@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass, fields
 from typing import Any, Optional
 
-from logic.src.interfaces.acceptance_criterion import IAcceptanceCriterion
+from interfaces.acceptance_criterion import IAcceptanceCriterion
 
 
 @dataclass
@@ -79,7 +79,7 @@ class SAParams:
             )
 
         # Handle Acceptance Criterion Injection
-        from logic.src.policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
+        from policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
 
         acceptance_cfg = getattr(config, "acceptance", None)
         if acceptance_cfg:

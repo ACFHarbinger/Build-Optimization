@@ -8,7 +8,7 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.models.core.attention_model.policy import AttentionModelPolicy
+from models.core.attention_model.policy import AttentionModelPolicy
 
 
 class SymNCOPolicy(AttentionModelPolicy):

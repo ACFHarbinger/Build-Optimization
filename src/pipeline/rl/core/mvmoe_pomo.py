@@ -17,9 +17,9 @@ from typing import Callable, Optional, Union
 
 from torch import nn
 
-from logic.src.constants.models import DEFAULT_MOE_KWARGS
-from logic.src.models.core.attention_model import AttentionModelPolicy
-from logic.src.pipeline.rl.core.pomo import POMO
+from constants.models import DEFAULT_MOE_KWARGS
+from models.core.attention_model import AttentionModelPolicy
+from pipeline.rl.core.pomo import POMO
 
 
 class MVMoE_POMO(POMO):

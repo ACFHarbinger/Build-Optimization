@@ -10,7 +10,7 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.utils.functions.rl import ensure_tensordict
+from utils.functions.rl import ensure_tensordict
 
 from .base import Baseline
 

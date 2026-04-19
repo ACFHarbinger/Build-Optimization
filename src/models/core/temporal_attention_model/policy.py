@@ -8,12 +8,12 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.core.attention_model.policy import AttentionModelPolicy
-from logic.src.models.subnets.helpers.gru_fill_predictor import GatedRecurrentUnitFillPredictor
-from logic.src.models.subnets.helpers.lstm_fill_predictor import LongShortTermMemoryFillPredictor
-from logic.src.models.subnets.modules.activation_function import ActivationFunction
-from logic.src.utils.data.td_state_wrapper import TensorDictStateWrapper
+from envs.base.base import RL4COEnvBase
+from models.core.attention_model.policy import AttentionModelPolicy
+from models.subnets.helpers.gru_fill_predictor import GatedRecurrentUnitFillPredictor
+from models.subnets.helpers.lstm_fill_predictor import LongShortTermMemoryFillPredictor
+from models.subnets.modules.activation_function import ActivationFunction
+from utils.data.td_state_wrapper import TensorDictStateWrapper
 
 
 class TemporalAMPolicy(AttentionModelPolicy):

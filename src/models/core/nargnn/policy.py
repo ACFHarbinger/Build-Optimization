@@ -11,13 +11,13 @@ from typing import Any, Dict, Optional
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.envs import get_env
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.non_autoregressive.decoder import NonAutoregressiveDecoder
-from logic.src.models.common.non_autoregressive.encoder import NonAutoregressiveEncoder
-from logic.src.models.common.non_autoregressive.policy import NonAutoregressivePolicy
-from logic.src.models.subnets.decoders.nar import SimpleNARDecoder
-from logic.src.models.subnets.encoders.nargnn import NARGNNEncoder
+from envs import get_env
+from envs.base.base import RL4COEnvBase
+from models.common.non_autoregressive.decoder import NonAutoregressiveDecoder
+from models.common.non_autoregressive.encoder import NonAutoregressiveEncoder
+from models.common.non_autoregressive.policy import NonAutoregressivePolicy
+from models.subnets.decoders.nar import SimpleNARDecoder
+from models.subnets.encoders.nargnn import NARGNNEncoder
 
 
 class NARGNNPolicy(NonAutoregressivePolicy):
@@ -166,7 +166,7 @@ class NARGNNPolicy(NonAutoregressivePolicy):
         # Constructed outputs
         # Narrow env type to RL4COEnvBase (guaranteed by common_decoding)
         # Post-decoding result preparation
-        from logic.src.utils.decoding import get_log_likelihood
+        from utils.decoding import get_log_likelihood
 
         out = {
             "actions": actions,

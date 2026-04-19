@@ -8,9 +8,9 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.models.subnets.decoders.common import AttentionDecoderCache
-from logic.src.models.subnets.decoders.mdam.attention import compute_mdam_logits
-from logic.src.models.subnets.embeddings import CONTEXT_EMBEDDING_REGISTRY
+from models.subnets.decoders.common import AttentionDecoderCache
+from models.subnets.decoders.mdam.attention import compute_mdam_logits
+from models.subnets.embeddings import CONTEXT_EMBEDDING_REGISTRY
 
 
 class MDAMPath(nn.Module):

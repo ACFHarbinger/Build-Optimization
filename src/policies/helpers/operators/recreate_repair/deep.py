@@ -20,7 +20,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.helpers.operators.repair.deep import deep_insertion
+    >>> from policies.helpers.operators.repair.deep import deep_insertion
     >>> routes = deep_insertion(routes, removed, dist_matrix, wastes, capacity, alpha=0.3)
 """
 
@@ -28,7 +28,7 @@ from typing import Dict, List, Optional
 
 import numpy as np
 
-from logic.src.utils.policy.routes import (
+from utils.policy.routes import (
     prune_unprofitable_routes,
 )
 

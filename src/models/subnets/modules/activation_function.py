@@ -4,7 +4,7 @@ from typing import Optional, Tuple
 import torch
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
+from configs.models.activation_function import ActivationConfig
 
 
 class ActivationFunction(nn.Module):

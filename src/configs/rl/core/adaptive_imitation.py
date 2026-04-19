@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from typing import Any, Union
 
-from logic.src.configs.rl.policies import (
+from configs.rl.policies import (
     ACOConfig,
     ALNSConfig,
     HGSALNSConfig,

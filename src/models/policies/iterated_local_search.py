@@ -12,9 +12,9 @@ from typing import Any, Dict, List, Optional, Union
 import torch
 from tensordict import TensorDict
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.improvement.policy import ImprovementPolicy
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from envs.base.base import RL4COEnvBase
+from models.common.improvement.policy import ImprovementPolicy
+from tracking.viz_mixin import PolicyVizMixin
 
 from .local_search import (
     vectorized_relocate,

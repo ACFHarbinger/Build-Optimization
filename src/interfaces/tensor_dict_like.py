@@ -4,7 +4,7 @@ This module defines the ITensorDictLike protocol for duck typing with
 dict-like objects that store tensors and have batch dimension information.
 
 Example:
-    >>> from logic.src.interfaces.tensor_dict_like import ITensorDictLike
+    >>> from interfaces.tensor_dict_like import ITensorDictLike
     >>> if isinstance(state, ITensorDictLike):
     ...     batch_size = state.batch_size
 """

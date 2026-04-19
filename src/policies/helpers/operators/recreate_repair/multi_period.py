@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators.recreate_repair.forward_looking import (
+from policies.helpers.operators.recreate_repair.forward_looking import (
     _compute_routing_delta,
     _simulate_inventory_forward,
 )
@@ -285,7 +285,7 @@ def _get_scenarios_from_ef(tree: Any, node: int, t: int, H: int) -> List[List[fl
 
 def _get_scenarios_from_prediction(tree: Any, node: int, t: int, H: int) -> List[List[float]]:
     """Helper for root-based tree traversal (prediction.py)."""
-    from logic.src.pipeline.simulations.bins.prediction import ScenarioTreeNode
+    from pipeline.simulations.bins.prediction import ScenarioTreeNode
 
     start_nodes_p: List[ScenarioTreeNode] = []
 

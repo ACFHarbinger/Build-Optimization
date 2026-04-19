@@ -10,7 +10,7 @@ from typing import List, Optional, Tuple
 
 import torch
 
-from logic.src.models.policies.operators import (
+from models.policies.operators import (
     vectorized_cluster_removal,
     vectorized_greedy_insertion,
     vectorized_random_removal,
@@ -23,8 +23,8 @@ from logic.src.models.policies.operators import (
     vectorized_two_opt_star,
     vectorized_worst_removal,
 )
-from logic.src.models.policies.shared.linear import vectorized_linear_split
-from logic.src.tracking.viz_mixin import PolicyVizMixin
+from models.policies.shared.linear import vectorized_linear_split
+from tracking.viz_mixin import PolicyVizMixin
 
 
 class VectorizedALNS(PolicyVizMixin):

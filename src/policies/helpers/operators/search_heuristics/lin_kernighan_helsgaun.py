@@ -36,7 +36,7 @@ in Helsgaun (2000), including the components absent from the existing
    order moves (3 to 5-opt) are delegated to components in
    ``._tour_improvement``, with all final segment swaps executed via
    :func:`move_kopt_intra` from
-   ``logic.src.policies.helpers.operators.intra_route.k_opt``.
+   ``policies.helpers.operators.intra_route.k_opt``.
 
 6. **Candidate-set restricted search** (Section 3.2 / 4.1):
    Inner loops restricted to the α-nearest neighbours of each node, giving
@@ -49,7 +49,7 @@ in Helsgaun (2000), including the components absent from the existing
 6. **Double-bridge kick** (ILS perturbation):
    4-opt non-sequential perturbation that escapes local optima, delegated to
    :func:`double_bridge` from
-   ``logic.src.policies.helpers.operators.perturbation.double_bridge``.
+   ``policies.helpers.operators.perturbation.double_bridge``.
 
 7. **Tour merging** (pool-based recombination):
    Combines shared edges from several elite tours to seed new searches.
@@ -101,23 +101,23 @@ from typing import Deque, Dict, FrozenSet, List, Optional, Set, Tuple, Union
 import numpy as np
 from scipy.sparse.csgraph import minimum_spanning_tree
 
-from logic.src.policies.helpers.operators.search_heuristics._objective import (
+from policies.helpers.operators.search_heuristics._objective import (
     get_cost,
     is_better,
 )
-from logic.src.policies.helpers.operators.search_heuristics._tour_construction import (
+from policies.helpers.operators.search_heuristics._tour_construction import (
     _double_bridge_kick,
     _initialize_tour,
     merge_tours,
 )
-from logic.src.policies.helpers.operators.search_heuristics._tour_improvement import (
+from policies.helpers.operators.search_heuristics._tour_improvement import (
     _2opt_gain,
     _apply_kopt_via_operator,
     _try_3opt_move,
     _try_4opt_move,
     _try_5opt_move,
 )
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 # ---------------------------------------------------------------------------
 # Alpha-measure and candidate-set construction

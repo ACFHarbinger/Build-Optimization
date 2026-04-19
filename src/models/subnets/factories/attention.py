@@ -6,9 +6,9 @@ from typing import Any, Optional
 
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.models.subnets.encoders.gat import GraphAttentionEncoder
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from models.subnets.encoders.gat import GraphAttentionEncoder
 
 from .base import NeuralComponentFactory, _create_decoder_by_type
 

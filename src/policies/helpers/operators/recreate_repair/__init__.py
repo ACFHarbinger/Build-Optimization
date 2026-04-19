@@ -6,9 +6,9 @@ partial solutions. Includes greedy, regret-based, savings-based, deep, and
 branch-and-bound heuristics.
 
 Example:
-    >>> from logic.src.policies.helpers.operators.repair import greedy_insertion
+    >>> from policies.helpers.operators.repair import greedy_insertion
     >>> routes = greedy_insertion(routes, removed, dist_matrix, wastes, capacity)
-    >>> from logic.src.policies.helpers.operators.repair import bb_insertion
+    >>> from policies.helpers.operators.repair import bb_insertion
     >>> routes = bb_insertion(routes, removed, dist_matrix, wastes, capacity)
 """
 

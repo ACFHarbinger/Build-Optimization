@@ -15,7 +15,7 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.envs.base.base import RL4COEnvBase
+from envs.base.base import RL4COEnvBase
 
 from .policy import GFACSPolicy
 
@@ -204,7 +204,7 @@ class GFACS(nn.Module):
             _a3 = _a1[:, 2:] - _a1[:, :-2]
             n_multinode_routes = np.count_nonzero(_a3, axis=1) - n_nodes
             log_b_p = -scipy.special.gammaln(n_routes + 1) - n_multinode_routes * math.log(2)
-            from logic.src.utils.decoding import unbatchify
+            from utils.decoding import unbatchify
 
             return unbatchify(torch.from_numpy(log_b_p).to(actions.device), n_ants)
         elif self.env.name in ("op", "pctsp", "vrpp"):

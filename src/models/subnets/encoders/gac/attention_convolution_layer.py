@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from torch import nn
 
-from logic.src.models.subnets.modules import (
+from models.subnets.modules import (
     MultiHeadAttention,
     Normalization,
     SkipConnection,

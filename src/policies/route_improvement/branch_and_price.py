@@ -24,8 +24,8 @@ from typing import Any, Dict, List, Optional, Tuple
 import networkx as nx
 import numpy as np
 
-from logic.src.interfaces.context.search_context import ImprovementMetrics
-from logic.src.interfaces.route_improvement import IRouteImprovement
+from interfaces.context.search_context import ImprovementMetrics
+from interfaces.route_improvement import IRouteImprovement
 
 from .base import RouteImproverRegistry
 from .common.helpers import (
@@ -40,10 +40,10 @@ logger = logging.getLogger(__name__)
 
 # Primary: in-house solver
 try:
-    from logic.src.policies.route_construction.exact_and_decomposition_solvers.branch_and_price.bp import (
+    from policies.route_construction.exact_and_decomposition_solvers.branch_and_price.bp import (
         BranchAndPriceSolver,
     )
-    from logic.src.policies.route_construction.exact_and_decomposition_solvers.branch_and_price.params import BPParams
+    from policies.route_construction.exact_and_decomposition_solvers.branch_and_price.params import BPParams
 
     _HAS_INHOUSE_BP = True
 except ImportError as e:

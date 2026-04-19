@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from logic.src.models.subnets.modules import ActivationFunction, Normalization
+from models.subnets.modules import ActivationFunction, Normalization
 
 from .base import ParamSpec
 

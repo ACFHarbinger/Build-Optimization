@@ -6,8 +6,8 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.envs.base.base import RL4COEnvBase
-from logic.src.models.common.improvement.decoder import ImprovementDecoder
+from envs.base.base import RL4COEnvBase
+from models.common.improvement.decoder import ImprovementDecoder
 
 
 class ImprovementStepDecoder(ImprovementDecoder):

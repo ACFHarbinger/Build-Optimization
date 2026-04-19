@@ -3,8 +3,8 @@
 import torch
 from torch import nn
 
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.models.subnets.modules import GatedGraphConvolution
+from configs.models.normalization import NormalizationConfig
+from models.subnets.modules import GatedGraphConvolution
 
 
 class GraphConvolutionEncoder(nn.Module):

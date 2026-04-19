@@ -10,7 +10,7 @@ Example:
 import torch
 from torch import nn
 
-from logic.src.models.subnets.modules import ActivationFunction, Normalization
+from models.subnets.modules import ActivationFunction, Normalization
 
 
 class HyperNetwork(nn.Module):

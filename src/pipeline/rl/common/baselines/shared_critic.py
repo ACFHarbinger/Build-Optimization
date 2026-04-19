@@ -13,8 +13,8 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from logic.src.models.common.critic_network.policy import create_critic_from_actor
-from logic.src.utils.functions.rl import ensure_tensordict
+from models.common.critic_network.policy import create_critic_from_actor
+from utils.functions.rl import ensure_tensordict
 
 from .base import Baseline
 

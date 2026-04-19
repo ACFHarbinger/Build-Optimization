@@ -5,7 +5,7 @@ Configuration for Local Branching with Variable Neighborhood Search (LB-VNS).
 from dataclasses import dataclass, field
 from typing import Optional
 
-from logic.src.configs.policies.other.acceptance_criteria import AcceptanceConfig
+from configs.policies.other.acceptance_criteria import AcceptanceConfig
 
 from .other.mandatory_selection import MandatorySelectionConfig
 from .other.route_improvement import RouteImprovingConfig

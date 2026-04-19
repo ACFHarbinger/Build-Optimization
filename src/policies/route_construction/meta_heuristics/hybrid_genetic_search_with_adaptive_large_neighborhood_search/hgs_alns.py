@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.hybrid_genetic_search_with_adaptive_large_neighborhood_search import HGSALNSSolver
+    >>> from policies.hybrid_genetic_search_with_adaptive_large_neighborhood_search import HGSALNSSolver
     >>> result = solver.solve()
 """
 
@@ -17,17 +17,17 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators.crossover_recombination import ordered_crossover
-from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.alns import (
+from policies.helpers.operators.crossover_recombination import ordered_crossover
+from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.alns import (
     ALNSSolver,
 )
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search import Individual
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.evolution import (
+from policies.route_construction.meta_heuristics.hybrid_genetic_search import Individual
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.evolution import (
     evaluate,
     update_biased_fitness,
 )
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.hgs import HGSSolver
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_large_neighborhood_search.params import (
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.hgs import HGSSolver
+from policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_large_neighborhood_search.params import (
     HGSALNSParams,
 )
 

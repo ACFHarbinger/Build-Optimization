@@ -15,14 +15,14 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.lkh3 import LKH3Config
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.graph_augmentation import (
+from configs.policies.lkh3 import LKH3Config
+from enums import GlobalRegistry, PolicyTag
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.graph_augmentation import (
     augment_graph,
 )
-from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.lkh3 import (
+from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.lkh3 import (
     solve_lkh3,
     solve_lkh3_with_alns,
 )

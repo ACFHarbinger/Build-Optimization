@@ -6,7 +6,7 @@ from typing import Any
 
 from torch import nn
 
-from logic.src.models.subnets.encoders.nargnn import NARGNNEncoder
+from models.subnets.encoders.nargnn import NARGNNEncoder
 
 from .base import NeuralComponentFactory, _create_decoder_by_type
 

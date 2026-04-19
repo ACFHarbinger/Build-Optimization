@@ -5,8 +5,8 @@ This package contains training utilities and common components
 like epoch preparation, dataset regeneration, and training hooks.
 """
 
-from logic.src.pipeline.rl.common.base import RL4COLitModule
-from logic.src.pipeline.rl.common.baselines import (
+from pipeline.rl.common.base import RL4COLitModule
+from pipeline.rl.common.baselines import (
     BASELINE_REGISTRY,
     Baseline,
     CriticBaseline,
@@ -19,14 +19,14 @@ from logic.src.pipeline.rl.common.baselines import (
     WarmupBaseline,
     get_baseline,
 )
-from logic.src.pipeline.rl.common.reward_scaler import RewardScaler
-from logic.src.pipeline.rl.common.reward_scaler_batch import BatchRewardScaler
-from logic.src.pipeline.rl.common.route_improvement import (
+from pipeline.rl.common.reward_scaler import RewardScaler
+from pipeline.rl.common.reward_scaler_batch import BatchRewardScaler
+from pipeline.rl.common.route_improvement import (
     EfficiencyOptimizer,
     calculate_efficiency,
     decode_routes,
 )
-from logic.src.pipeline.rl.common.trainer import WSTrainer
+from pipeline.rl.common.trainer import WSTrainer
 
 from . import base as base
 from . import baselines as baselines

@@ -6,7 +6,7 @@ from typing import Optional
 
 import torch
 
-from logic.src.constants.routing import IMPROVEMENT_EPSILON
+from constants.routing import IMPROVEMENT_EPSILON
 
 
 def vectorized_type_iii_unstringing(

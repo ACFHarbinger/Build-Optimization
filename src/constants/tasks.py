@@ -12,11 +12,11 @@ should configure these via YAML config files instead.
 Migration Path
 --------------
 Old code:
-    >>> from logic.src.constants.tasks import COST_KM, REVENUE_KG
+    >>> from constants.tasks import COST_KM, REVENUE_KG
     >>> profit = REVENUE_KG * kg_collected - COST_KM * km_traveled
 
 New code:
-    >>> from logic.src.configs.simulation import SimulationConfig
+    >>> from configs.simulation import SimulationConfig
     >>> cfg = SimulationConfig.load("assets/configs/sim/default.yaml")
     >>> profit = cfg.revenue_per_kg * kg_collected - cfg.cost_per_km * km_traveled
 

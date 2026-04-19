@@ -6,10 +6,10 @@ from typing import Optional
 
 from torch import nn
 
-from logic.src.configs.models.activation_function import ActivationConfig
-from logic.src.configs.models.normalization import NormalizationConfig
-from logic.src.models.subnets.modules.activation_function import ActivationFunction
-from logic.src.models.subnets.modules.normalization import Normalization
+from configs.models.activation_function import ActivationConfig
+from configs.models.normalization import NormalizationConfig
+from models.subnets.modules.activation_function import ActivationFunction
+from models.subnets.modules.normalization import Normalization
 
 
 class MLPLayer(nn.Module):

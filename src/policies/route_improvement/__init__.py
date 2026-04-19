@@ -2,7 +2,7 @@
 Routing route improvement sub-package.
 """
 
-from logic.src.interfaces import IRouteImprovement
+from interfaces import IRouteImprovement
 
 from .adaptive_ensemble import AdaptiveEnsembleRouteImprover
 from .adaptive_large_neighborhood_search import AdaptiveLargeNeighborhoodSearchRouteImprover

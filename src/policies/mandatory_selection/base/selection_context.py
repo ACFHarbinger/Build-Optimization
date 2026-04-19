@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.mandatory.base.selection_context import SelectionContext
+    >>> from policies.mandatory.base.selection_context import SelectionContext
     >>> ctx = SelectionContext(bin_ids=np.array([1, 2]), current_fill=np.array([0.8, 0.5]))
 """
 
