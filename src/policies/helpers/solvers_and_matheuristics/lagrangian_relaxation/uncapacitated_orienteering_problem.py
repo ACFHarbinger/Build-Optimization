@@ -29,7 +29,7 @@ import networkx as nx
 import numpy as np
 from gurobipy import GRB, quicksum
 
-from tracking.viz_mixin import PolicyStateRecorder
+from logic.src.tracking.viz_mixin import PolicyStateRecorder
 
 
 def _op_dfj_callback(model: gp.Model, where: int) -> None:

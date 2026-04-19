@@ -6,7 +6,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from interfaces.context.problem_context import ProblemContext
+from logic.src.interfaces.context.problem_context import ProblemContext
 
 
 def day_shuffle(

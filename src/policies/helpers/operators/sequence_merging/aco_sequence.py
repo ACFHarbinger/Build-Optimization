@@ -31,7 +31,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.sequence_merging.aco_sequence import (
+    >>> from logic.src.policies.helpers.operators.sequence_merging.aco_sequence import (
     ...     AcoSequenceState,
     ...     aco_build_sequence,
     ...     aco_update_pheromones,

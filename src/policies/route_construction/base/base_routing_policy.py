@@ -13,11 +13,11 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from interfaces.context.search_context import ConstructionMetrics, SearchContext, merge_context
-from interfaces.route_constructor import IRouteConstructor
-from pipeline.simulations.repository import load_area_and_waste_type_params
-from tracking.core.run import get_active_run
-from tracking.viz_mixin import PolicyVizMixin
+from logic.src.interfaces.context.search_context import ConstructionMetrics, SearchContext, merge_context
+from logic.src.interfaces.route_constructor import IRouteConstructor
+from logic.src.pipeline.simulations.repository import load_area_and_waste_type_params
+from logic.src.tracking.core.run import get_active_run
+from logic.src.tracking.viz_mixin import PolicyVizMixin
 
 
 def _flatten_raw_config(source: Any) -> Dict[str, Any]:
@@ -330,7 +330,7 @@ class BaseRoutingPolicy(PolicyVizMixin, IRouteConstructor):
         Returns:
             Total distance cost.
         """
-        from policies.route_construction.other_algorithms.travelling_salesman_problem.tsp import (
+        from logic.src.policies.route_construction.other_algorithms.travelling_salesman_problem.tsp import (
             get_route_cost,
         )
 
@@ -517,7 +517,7 @@ class BaseRoutingPolicy(PolicyVizMixin, IRouteConstructor):
             "profit": profit,
         }
         if incoming_ctx is not None:
-            from interfaces.context.search_context import SearchPhase
+            from logic.src.interfaces.context.search_context import SearchPhase
 
             out_ctx: Optional[SearchContext] = merge_context(
                 incoming_ctx,

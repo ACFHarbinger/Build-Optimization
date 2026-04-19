@@ -13,15 +13,15 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 import numpy as np
 import torch
 
-from configs.policies import HNAPolicyConfig
-from enums import GlobalRegistry, PolicyTag
-from interfaces.context.multi_day_context import MultiDayContext
-from interfaces.context.problem_context import ProblemContext
-from interfaces.context.solution_context import SolutionContext
-from policies.helpers.operators import greedy_insertion
-from policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
-from policies.route_construction.learning_algorithms.hierarchical_neural_agent.params import HNAParams
+from logic.src.configs.policies import HNAPolicyConfig
+from logic.src.enums import GlobalRegistry, PolicyTag
+from logic.src.interfaces.context.multi_day_context import MultiDayContext
+from logic.src.interfaces.context.problem_context import ProblemContext
+from logic.src.interfaces.context.solution_context import SolutionContext
+from logic.src.policies.helpers.operators import greedy_insertion
+from logic.src.policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.policies.route_construction.learning_algorithms.hierarchical_neural_agent.params import HNAParams
 
 
 @GlobalRegistry.register(
@@ -80,7 +80,7 @@ class HierarchicalNeuralAgentPolicy(BaseMultiPeriodRoutingPolicy):
         params = self.params
         if params.checkpoint_path is not None:
             try:
-                from pipeline.rl.meta.hrl_irp import HRLIRPModule
+                from logic.src.pipeline.rl.meta.hrl_irp import HRLIRPModule
 
                 self._module = HRLIRPModule.load_from_checkpoint(
                     params.checkpoint_path,

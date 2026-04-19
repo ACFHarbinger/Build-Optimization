@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.mandatory.selection_last_minute import LastMinuteSelection
+    >>> from logic.src.policies.mandatory.selection_last_minute import LastMinuteSelection
     >>> strategy = LastMinuteSelection()
     >>> bins = strategy.select_bins(context)
 """
@@ -17,8 +17,8 @@ from typing import List, Tuple
 
 import numpy as np
 
-from interfaces.context.search_context import SearchContext
-from interfaces.mandatory_selection import IMandatorySelectionStrategy
+from logic.src.interfaces.context.search_context import SearchContext
+from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
 
 from .base.eoq import resolve_trigger_threshold
 from .base.selection_context import SelectionContext

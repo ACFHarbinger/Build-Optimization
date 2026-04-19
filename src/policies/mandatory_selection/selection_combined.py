@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.mandatory.selection_combined import CombinedSelection
+    >>> from logic.src.policies.mandatory.selection_combined import CombinedSelection
     >>> strategy = CombinedSelection(strategies=[...], logic="or")
     >>> bins = strategy.select_bins(context)
 """
@@ -17,8 +17,8 @@ Example:
 from dataclasses import replace
 from typing import Any, Dict, List, Optional, Tuple, cast
 
-from interfaces.context.search_context import SearchContext
-from interfaces.mandatory_selection import IMandatorySelectionStrategy
+from logic.src.interfaces.context.search_context import SearchContext
+from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
 
 from .base.selection_context import SelectionContext
 from .base.selection_registry import MandatorySelectionRegistry

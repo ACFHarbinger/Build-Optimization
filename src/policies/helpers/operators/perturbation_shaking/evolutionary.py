@@ -16,7 +16,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.perturbation.evolutionary import (
+    >>> from logic.src.policies.helpers.operators.perturbation.evolutionary import (
     ...     evolutionary_perturbation,
     ... )
     >>> improved = evolutionary_perturbation(ls, target_routes=[0, 1], pop_size=10, n_gen=5)

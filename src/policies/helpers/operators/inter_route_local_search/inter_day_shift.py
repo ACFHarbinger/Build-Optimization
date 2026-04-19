@@ -6,10 +6,10 @@ import random
 
 import numpy as np
 
-from policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_diversity_control.individual import (
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_diversity_control.individual import (
     Individual,
 )
-from policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_diversity_control.split import (
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_diversity_control.split import (
     compute_daily_loads,
     split_day,
 )

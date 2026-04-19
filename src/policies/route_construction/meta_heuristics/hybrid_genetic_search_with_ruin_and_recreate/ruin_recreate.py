@@ -10,10 +10,10 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
-from policies.helpers.operators import destroy_ruin as destroy_operators
-from policies.helpers.operators import recreate_repair as repair_operators
-from policies.route_construction.meta_heuristics.hybrid_genetic_search import Individual
-from policies.route_construction.meta_heuristics.hybrid_genetic_search.evolution import evaluate
+from logic.src.policies.helpers.operators import destroy_ruin as destroy_operators
+from logic.src.policies.helpers.operators import recreate_repair as repair_operators
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search import Individual
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.evolution import evaluate
 
 from .params import HGSRRParams
 

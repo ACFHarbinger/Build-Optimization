@@ -21,7 +21,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from policies.helpers.operators import (
+from logic.src.policies.helpers.operators import (
     cluster_removal,
     greedy_insertion,
     greedy_profit_insertion,
@@ -31,7 +31,7 @@ from policies.helpers.operators import (
     regret_2_profit_insertion,
     worst_removal,
 )
-from policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
+from logic.src.policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
 
 from .params import GLSParams
 

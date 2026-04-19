@@ -8,18 +8,18 @@ Attributes:
     None
 
 Example:
-    >>> from policies.simulated_annealing_neighborhood_search.search.reversed import ReversedSearch
+    >>> from logic.src.policies.simulated_annealing_neighborhood_search.search.reversed import ReversedSearch
     >>> search = ReversedSearch(...)
     >>> result = search.run()
 """
 
 from copy import deepcopy
 
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.objectives import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.objectives import (
     compute_profit,
     compute_real_profit,
 )
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.search.deterministic import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.search.deterministic import (
     _evaluate_move,
 )
 

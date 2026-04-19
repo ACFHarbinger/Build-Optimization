@@ -26,7 +26,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.repair.geni import geni_insertion
+    >>> from logic.src.policies.helpers.operators.repair.geni import geni_insertion
     >>> improved = geni_insertion(ls, node=5, r_idx=0, neighborhood_size=5)
 """
 
@@ -35,10 +35,10 @@ from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from utils.policy.neighborhood import (
+from logic.src.utils.policy.neighborhood import (
     get_p_neighborhood,
 )
-from utils.policy.routes import (
+from logic.src.utils.policy.routes import (
     prune_unprofitable_routes,
 )
 

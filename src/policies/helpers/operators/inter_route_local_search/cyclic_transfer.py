@@ -16,7 +16,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.inter_route.cyclic_transfer import cyclic_transfer
+    >>> from logic.src.policies.helpers.operators.inter_route.cyclic_transfer import cyclic_transfer
     >>> improved = cyclic_transfer(ls, [(r0, p0), (r1, p1), (r2, p2)])
 """
 

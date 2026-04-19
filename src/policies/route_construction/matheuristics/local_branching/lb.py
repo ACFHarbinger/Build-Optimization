@@ -18,13 +18,13 @@ except ImportError:
     GUROBI_AVAILABLE = False
     gp: Any = None  # type: ignore[assignment,no-redef]
 
-from policies.route_construction.matheuristics.kernel_search.solver import (
+from logic.src.policies.route_construction.matheuristics.kernel_search.solver import (
     _dfj_subtour_elimination_callback,
     _reconstruct_tour,
     _set_mip_start,
     _setup_ks_model,
 )
-from tracking.viz_mixin import PolicyStateRecorder
+from logic.src.tracking.viz_mixin import PolicyStateRecorder
 
 
 def _add_local_branching_constraint(

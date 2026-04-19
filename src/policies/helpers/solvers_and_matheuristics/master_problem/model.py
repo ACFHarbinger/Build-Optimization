@@ -18,17 +18,17 @@ import gurobipy as gp
 import numpy as np
 from gurobipy import GRB
 
-from policies.helpers.solvers_and_matheuristics.master_problem.constraints import (
+from logic.src.policies.helpers.solvers_and_matheuristics.master_problem.constraints import (
     VRPPMasterProblemConstraintsMixin,
 )
-from policies.helpers.solvers_and_matheuristics.master_problem.pool import GlobalCutPool
-from policies.helpers.solvers_and_matheuristics.master_problem.problem_support import (
+from logic.src.policies.helpers.solvers_and_matheuristics.master_problem.pool import GlobalCutPool
+from logic.src.policies.helpers.solvers_and_matheuristics.master_problem.problem_support import (
     MasterProblemSupport,
     VRPPMasterProblemSupportMixin,
 )
 
 if TYPE_CHECKING:
-    from policies.helpers.solvers_and_matheuristics.common.route import Route
+    from logic.src.policies.helpers.solvers_and_matheuristics.common.route import Route
 
 logger = logging.getLogger(__name__)
 

@@ -33,7 +33,7 @@ from typing import Deque, List
 
 import numpy as np
 
-from policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
 
 
 class ContextFeatureExtractor:

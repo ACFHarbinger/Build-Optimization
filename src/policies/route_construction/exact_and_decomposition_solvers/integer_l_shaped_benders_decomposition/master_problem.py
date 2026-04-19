@@ -42,12 +42,12 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.solvers_and_matheuristics import (
+from logic.src.policies.helpers.solvers_and_matheuristics import (
     CapacityCut,
     PCSubtourEliminationCut,
     SeparationEngine,
 )
-from policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
+from logic.src.policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
 
 from .params import ILSBDParams
 

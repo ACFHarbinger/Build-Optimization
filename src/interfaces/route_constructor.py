@@ -11,8 +11,8 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Union
 
 if TYPE_CHECKING:
-    from interfaces.context.multi_day_context import MultiDayContext
-    from interfaces.context.search_context import SearchContext
+    from logic.src.interfaces.context.multi_day_context import MultiDayContext
+    from logic.src.interfaces.context.search_context import SearchContext
 
 
 class IRouteConstructor(ABC):

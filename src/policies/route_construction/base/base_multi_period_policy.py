@@ -12,11 +12,11 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-from interfaces.context.multi_day_context import MultiDayContext
-from interfaces.context.problem_context import ProblemContext
-from interfaces.context.search_context import SearchContext
-from interfaces.context.solution_context import SolutionContext
-from pipeline.simulations.bins.prediction import ScenarioTree
+from logic.src.interfaces.context.multi_day_context import MultiDayContext
+from logic.src.interfaces.context.problem_context import ProblemContext
+from logic.src.interfaces.context.search_context import SearchContext
+from logic.src.interfaces.context.solution_context import SolutionContext
+from logic.src.pipeline.simulations.bins.prediction import ScenarioTree
 
 if TYPE_CHECKING:
     pass
@@ -141,7 +141,7 @@ class BaseMultiPeriodRoutingPolicy(BaseRoutingPolicy):
     def execute(
         self, **kwargs: Any
     ) -> Tuple[Union[List[int], List[List[int]]], float, float, Optional[SearchContext], Optional[MultiDayContext]]:
-        from interfaces.context.problem_context import ProblemContext
+        from logic.src.interfaces.context.problem_context import ProblemContext
 
         # 1. Load area params (unchanged — uses existing _load_area_params)
         capacity, revenue, cost_unit, values = self._load_area_params(

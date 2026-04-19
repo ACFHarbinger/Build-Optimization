@@ -42,22 +42,22 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.local_search.local_search_aco import ACOLocalSearch
-from policies.helpers.operators import (
+from logic.src.policies.helpers.local_search.local_search_aco import ACOLocalSearch
+from logic.src.policies.helpers.operators import (
     greedy_insertion,
     greedy_profit_insertion,
     random_removal,
     worst_profit_removal,
     worst_removal,
 )
-from policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
-from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.alns import (
+from logic.src.policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
+from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.alns import (
     ALNSSolver,
 )
-from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.solver import (
+from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.solver import (
     KSparseACOSolver,
 )
-from policies.route_construction.meta_heuristics.hybrid_memetic_search.params import (
+from logic.src.policies.route_construction.meta_heuristics.hybrid_memetic_search.params import (
     HybridMemeticSearchParams,
 )
 

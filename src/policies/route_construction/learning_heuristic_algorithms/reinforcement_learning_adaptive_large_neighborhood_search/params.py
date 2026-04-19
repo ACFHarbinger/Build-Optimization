@@ -5,10 +5,10 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Optional
 
 # Local imports
-from configs.policies.other import RLConfig
+from logic.src.configs.policies.other import RLConfig
 
 if TYPE_CHECKING:
-    from configs.policies import RLALNSConfig
+    from logic.src.configs.policies import RLALNSConfig
 
 
 @dataclass

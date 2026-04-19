@@ -22,13 +22,13 @@ Attributes:
     get_vectorized_selector (function): Factory function for vectorized selectors.
 
 Example:
-    >>> from policies.mandatory import create_selector_from_config
+    >>> from logic.src.policies.mandatory import create_selector_from_config
     >>> selector = create_selector_from_config(config)
     >>> selected_nodes = selector.select(context)
 """
 
-from interfaces import IMandatorySelectionStrategy
-from models.policies.selection import (
+from logic.src.interfaces import IMandatorySelectionStrategy
+from logic.src.models.policies.selection import (
     CombinedSelector,
     LastMinuteSelector,
     LookaheadSelector,
@@ -47,6 +47,7 @@ from .selection_cvar import CVaRSelection
 from .selection_deadline import DeadlineDrivenSelection
 from .selection_dispatcher_portfolio import PortfolioDispatcher
 from .selection_dispatcher_thompson import ThompsonDispatcher
+from .selection_filter_and_fan import FilterAndFanSelection
 from .selection_fractional_knapsack import FractionalKnapsackSelection
 from .selection_lagrangian import LagrangianSelection
 from .selection_last_minute import LastMinuteSelection
@@ -112,4 +113,5 @@ __all__ = [
     "ServiceLevelSelection",
     "FractionalKnapsackSelection",
     "MIPKnapsackSelection",
+    "FilterAndFanSelection",
 ]

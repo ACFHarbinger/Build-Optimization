@@ -18,7 +18,7 @@ import networkx as nx
 import numpy as np
 from gurobipy import GRB, quicksum
 
-from tracking.viz_mixin import PolicyStateRecorder
+from logic.src.tracking.viz_mixin import PolicyStateRecorder
 
 from .params import BBParams
 

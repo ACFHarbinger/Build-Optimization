@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from configs.policies.abpc_hg import ABPCHGConfig
+    from logic.src.configs.policies.abpc_hg import ABPCHGConfig
 
 
 @dataclass

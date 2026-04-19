@@ -20,7 +20,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.operators import greedy_insertion, greedy_profit_insertion
+from logic.src.policies.helpers.operators import greedy_insertion, greedy_profit_insertion
 
 from .params import MAParams
 

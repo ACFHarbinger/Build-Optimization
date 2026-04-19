@@ -20,14 +20,14 @@ import logging
 import random
 from typing import Any, List, Set, Tuple
 
-from interfaces.context.search_context import ImprovementMetrics
-from interfaces.route_improvement import IRouteImprovement
-from policies.helpers.operators.intensification_fixing import (
+from logic.src.interfaces.context.search_context import ImprovementMetrics
+from logic.src.interfaces.route_improvement import IRouteImprovement
+from logic.src.policies.helpers.operators.intensification_fixing import (
     dp_route_reopt,
     set_partitioning_polish,
     set_partitioning_polish_profit,
 )
-from policies.helpers.operators.search_heuristics.large_neighborhood_search import apply_lns
+from logic.src.policies.helpers.operators.search_heuristics.large_neighborhood_search import apply_lns
 
 from .base import RouteImproverRegistry
 from .common.helpers import (

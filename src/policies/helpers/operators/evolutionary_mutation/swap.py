@@ -18,7 +18,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.evolutionary_mutation.swap import (
+    >>> from logic.src.policies.helpers.operators.evolutionary_mutation.swap import (
     ...     swap_mutation,
     ... )
     >>> mutated = swap_mutation(routes, distance_matrix, capacity, wastes, rng=rng)

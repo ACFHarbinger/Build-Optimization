@@ -27,7 +27,7 @@ from typing import Dict, List, Optional
 
 import numpy as np
 
-from policies.helpers.operators.inter_route_local_search import (
+from logic.src.policies.helpers.operators.inter_route_local_search import (
     cross_exchange,
     cyclic_transfer,
     ejection_chain,
@@ -40,7 +40,7 @@ from policies.helpers.operators.inter_route_local_search import (
     move_kopt_star,
     move_swap_star,
 )
-from policies.helpers.operators.intra_route_local_search import (
+from logic.src.policies.helpers.operators.intra_route_local_search import (
     move_2opt_intra,
     move_3opt_intra,
     move_kopt_intra,
@@ -52,7 +52,7 @@ from policies.helpers.operators.intra_route_local_search import (
 )
 
 # Import operators from their respective modules
-from policies.helpers.operators.search_heuristics import apply_ges, apply_lns, solve_lkh
+from logic.src.policies.helpers.operators.search_heuristics import apply_ges, apply_lns, solve_lkh
 
 
 class LocalSearchManager:

@@ -26,7 +26,7 @@ The CVRP and VRPP stopping conditions are therefore equivalent, with the delta
 scaled by C for unit consistency.
 
 Example:
-    >>> from policies.helpers.operators.intensification import node_exchange_steepest
+    >>> from logic.src.policies.helpers.operators.intensification import node_exchange_steepest
     >>> improved = node_exchange_steepest(routes, dist_matrix, wastes, capacity)
     >>> improved = node_exchange_steepest_profit(routes, dist_matrix, wastes,
     ...                                          capacity, R=1.0, C=0.5)

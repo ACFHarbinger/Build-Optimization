@@ -37,7 +37,7 @@ TourAdapter._updated
 
 Typical usage
 -------------
->>> from policies.helpers.operators.heuristics._tour_adapter import TourAdapter
+>>> from logic.src.policies.helpers.operators.heuristics._tour_adapter import TourAdapter
 >>> adapter = TourAdapter(tour, distance_matrix)
 >>> applied = move_kopt_intra(adapter, u=u, v=v, r_u=0, p_u=i, r_v=0, p_v=j, k=2)
 >>> if applied:

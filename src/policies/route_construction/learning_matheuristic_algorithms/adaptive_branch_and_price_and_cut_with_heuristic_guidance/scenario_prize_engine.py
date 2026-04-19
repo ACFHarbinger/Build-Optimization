@@ -5,7 +5,7 @@ from typing import Dict
 import numpy as np
 
 # Corrected imports as found in the repository
-from pipeline.simulations.bins.prediction import (
+from logic.src.pipeline.simulations.bins.prediction import (
     ScenarioTree,
     calculate_frequency_and_level,
     predict_days_to_overflow,

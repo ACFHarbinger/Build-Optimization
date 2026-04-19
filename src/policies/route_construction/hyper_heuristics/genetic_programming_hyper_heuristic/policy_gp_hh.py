@@ -12,12 +12,12 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies.gp_hh import GPHHConfig
-from enums import GlobalRegistry, PolicyTag
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
-from policies.route_construction.hyper_heuristics.genetic_programming_hyper_heuristic.params import GPHHParams
-from policies.route_construction.hyper_heuristics.genetic_programming_hyper_heuristic.solver import GPHHSolver
+from logic.src.configs.policies.gp_hh import GPHHConfig
+from logic.src.enums import GlobalRegistry, PolicyTag
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.policies.route_construction.hyper_heuristics.genetic_programming_hyper_heuristic.params import GPHHParams
+from logic.src.policies.route_construction.hyper_heuristics.genetic_programming_hyper_heuristic.solver import GPHHSolver
 
 # ---------------------------------------------------------------------------
 # Synthetic training environment factory

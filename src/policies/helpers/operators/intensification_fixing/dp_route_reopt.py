@@ -38,7 +38,7 @@ Reference:
     Mathematics, 10(1), 196-210.
 
 Example:
-    >>> from policies.helpers.operators.intensification import dp_route_reopt
+    >>> from logic.src.policies.helpers.operators.intensification import dp_route_reopt
     >>> improved = dp_route_reopt(routes, dist_matrix, wastes, capacity)
     >>> improved = dp_route_reopt(routes, dist_matrix, wastes, capacity, max_nodes=15)
 """

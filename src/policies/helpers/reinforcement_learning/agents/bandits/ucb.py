@@ -28,7 +28,7 @@ class UCBBandit(BanditAgent):
         super().__init__(n_arms, seed, history_size)
         self.c = c
 
-    def select_action(self, state: Any, rng: Optional[np.random.Generator] = None) -> int:
+    def select_action(self, state: Any, rng: np.random.Generator) -> int:
         """
         Select an arm using the UCB1 policy.
 
@@ -38,7 +38,7 @@ class UCBBandit(BanditAgent):
 
         Args:
             state: Contextual state (unused).
-            rng: Optional RNG.
+            rng: Random number generator for deterministic stability.
 
         Returns:
             The selected arm index.
@@ -100,13 +100,13 @@ class DiscountedUCBBandit(BanditAgent):
         self.discounted_counts = np.zeros(n_arms)
         self.discounted_rewards = np.zeros(n_arms)
 
-    def select_action(self, state: Any, rng: Optional[np.random.Generator] = None) -> int:
+    def select_action(self, state: Any, rng: np.random.Generator) -> int:
         """
         Select an arm using the Discounted UCB policy.
 
         Args:
             state: Contextual state (unused).
-            rng: Optional RNG.
+            rng: Random number generator.
 
         Returns:
             The selected arm index.
@@ -182,13 +182,13 @@ class SlidingWindowUCBBandit(BanditAgent):
         # Maintain window-specific reward deques
         self.windows: List[Deque[float]] = [deque(maxlen=window_size) for _ in range(n_arms)]
 
-    def select_action(self, state: Any, rng: Optional[np.random.Generator] = None) -> int:
+    def select_action(self, state: Any, rng: np.random.Generator) -> int:
         """
         Select an arm using the Sliding Window UCB policy.
 
         Args:
             state: Contextual state (unused).
-            rng: Optional RNG.
+            rng: Random number generator.
 
         Returns:
             The selected arm index.

@@ -7,7 +7,7 @@ the expected accumulation and standard deviation over a defined horizon
 to ensure bins are collected before their worst-case prediction hits capacity.
 
 Example:
-    >>> from policies.helpers.mandatory.selection_service_level import ServiceLevelSelection
+    >>> from logic.src.policies.helpers.mandatory.selection_service_level import ServiceLevelSelection
     >>> strategy = ServiceLevelSelection()
     >>> bins = strategy.select_bins(context)
 """
@@ -16,11 +16,11 @@ from typing import List, Tuple
 
 import numpy as np
 
-from constants import MAX_CAPACITY_PERCENT
-from interfaces.context.search_context import SearchContext
-from interfaces.mandatory_selection import IMandatorySelectionStrategy
-from policies.mandatory_selection.base.selection_context import SelectionContext
-from policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
+from logic.src.constants import MAX_CAPACITY_PERCENT
+from logic.src.interfaces.context.search_context import SearchContext
+from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
+from logic.src.policies.mandatory_selection.base.selection_context import SelectionContext
+from logic.src.policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
 
 
 @MandatorySelectionRegistry.register("service_level")

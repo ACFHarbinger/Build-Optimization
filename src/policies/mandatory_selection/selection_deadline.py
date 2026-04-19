@@ -6,7 +6,7 @@ overflow based on the expected accumulation rate. It obligates collection
 for any bin whose deadline is less than or equal to a defined lookahead horizon.
 
 Example:
-    >>> from policies.helpers.mandatory.selection_deadline import DeadlineDrivenSelection
+    >>> from logic.src.policies.helpers.mandatory.selection_deadline import DeadlineDrivenSelection
     >>> strategy = DeadlineDrivenSelection()
     >>> bins = strategy.select_bins(context)
 """
@@ -15,10 +15,10 @@ from typing import List, Tuple
 
 import numpy as np
 
-from interfaces.context.search_context import SearchContext
-from interfaces.mandatory_selection import IMandatorySelectionStrategy
-from policies.mandatory_selection.base.selection_context import SelectionContext
-from policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
+from logic.src.interfaces.context.search_context import SearchContext
+from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
+from logic.src.policies.mandatory_selection.base.selection_context import SelectionContext
+from logic.src.policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
 
 
 @MandatorySelectionRegistry.register("deadline")

@@ -35,7 +35,7 @@ functions for use in ALNS / ILS operator pools.  CVRP operators are keyed
 directly; VRPP operators carry a ``_PROFIT`` suffix.
 
 Example:
-    >>> from policies.helpers.operators.improvement import (
+    >>> from logic.src.policies.helpers.operators.improvement import (
     ...     two_opt_steepest, or_opt_steepest, node_exchange_steepest
     ... )
     >>> improved = two_opt_steepest(routes, dist_matrix, wastes, capacity)

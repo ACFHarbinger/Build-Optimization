@@ -8,9 +8,9 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies import ALNSConfig
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.configs.policies import ALNSConfig
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
 
 from .dispatcher import run_alns
 

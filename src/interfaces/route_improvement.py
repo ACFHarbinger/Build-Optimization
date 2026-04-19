@@ -10,7 +10,7 @@ Implementations MUST NOT hold mutable state that accumulates between
 from abc import ABC, abstractmethod
 from typing import Any, List, Tuple
 
-from interfaces.context.search_context import ImprovementMetrics
+from logic.src.interfaces.context.search_context import ImprovementMetrics
 
 
 class IRouteImprovement(ABC):

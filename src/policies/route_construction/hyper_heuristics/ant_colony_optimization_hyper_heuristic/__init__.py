@@ -12,7 +12,7 @@ Attributes:
     run_hyper_heuristic_aco (function): Helper function to run the solver.
 
 Example:
-    >>> from policies.ant_colony_optimization_hyper_heuristic import run_hyper_heuristic_aco
+    >>> from logic.src.policies.ant_colony_optimization_hyper_heuristic import run_hyper_heuristic_aco
     >>> result = run_hyper_heuristic_aco(dist_matrix, wastes, ...)
 """
 

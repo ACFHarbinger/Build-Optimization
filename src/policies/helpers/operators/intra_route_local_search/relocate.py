@@ -11,9 +11,9 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.intra_route.relocate import move_relocate
+    >>> from logic.src.policies.helpers.operators.intra_route.relocate import move_relocate
     >>> improved = move_relocate(ls, u=1, v=2, r_u=0, p_u=1, r_v=0, p_v=5)
-    >>> from policies.helpers.operators.intra_route.relocate import relocate_chain
+    >>> from logic.src.policies.helpers.operators.intra_route.relocate import relocate_chain
     >>> improved = relocate_chain(ls, r_src=0, pos_src=2, r_dst=0, pos_dst=5, chain_len=2)
     >>> improved_route = or_opt_route(route, dist_matrix)
 """

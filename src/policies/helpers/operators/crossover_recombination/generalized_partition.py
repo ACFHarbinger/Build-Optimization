@@ -7,14 +7,14 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple
 import numpy as np
 
 if TYPE_CHECKING:
-    from policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import (
+    from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import (
         Individual,
     )
 
 
 def _get_individual_class() -> type:
     """Lazy import of Individual to break the circular import."""
-    from policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
+    from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
 
     return Individual
 

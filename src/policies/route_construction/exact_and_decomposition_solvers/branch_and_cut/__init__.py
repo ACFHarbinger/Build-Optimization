@@ -12,7 +12,7 @@ The VRPP combines node selection (which nodes to visit) with routing optimizatio
 aiming to maximize profit (waste collected) minus travel cost.
 """
 
-from policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
+from logic.src.policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
 
 from .bc import BranchAndCutSolver
 from .policy_bc import BranchAndCutPolicy

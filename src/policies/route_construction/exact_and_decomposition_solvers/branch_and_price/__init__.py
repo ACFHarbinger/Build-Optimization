@@ -18,7 +18,7 @@ Key Components:
 - PolicyBP: Policy adapter for WSmart+ Route framework
 """
 
-from policies.helpers.solvers_and_matheuristics import RCSPPSolver, VRPPMasterProblem
+from logic.src.policies.helpers.solvers_and_matheuristics import RCSPPSolver, VRPPMasterProblem
 
 from .bp import BranchAndPriceSolver
 from .policy_bp import BranchAndPricePolicy

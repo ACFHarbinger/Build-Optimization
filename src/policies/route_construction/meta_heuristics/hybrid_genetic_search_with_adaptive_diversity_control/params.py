@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from configs.policies import HGSADCConfig
+    from logic.src.configs.policies import HGSADCConfig
 
 
 @dataclass

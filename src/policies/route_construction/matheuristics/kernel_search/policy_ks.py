@@ -8,13 +8,13 @@ It handles configuration parsing, state extraction, and results formatting.
 
 from typing import Any, Dict, List, Optional, Tuple, Type
 
-from configs.policies.ks import KernelSearchConfig
-from enums import GlobalRegistry, PolicyTag
-from interfaces.context.multi_day_context import MultiDayContext
-from interfaces.context.search_context import SearchContext
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
-from policies.route_construction.matheuristics.kernel_search.solver import run_kernel_search_gurobi
+from logic.src.configs.policies.ks import KernelSearchConfig
+from logic.src.enums import GlobalRegistry, PolicyTag
+from logic.src.interfaces.context.multi_day_context import MultiDayContext
+from logic.src.interfaces.context.search_context import SearchContext
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.policies.route_construction.matheuristics.kernel_search.solver import run_kernel_search_gurobi
 
 from .params import KSParams
 

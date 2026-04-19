@@ -24,10 +24,10 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.reinforcement_learning.alns_sarsa import (
+from logic.src.policies.helpers.reinforcement_learning.alns_sarsa import (
     ALNSSARSASolver,
 )
-from policies.helpers.reinforcement_learning.ks_aco_qlearning import (
+from logic.src.policies.helpers.reinforcement_learning.ks_aco_qlearning import (
     KSparseACOQLSolver,
 )
 

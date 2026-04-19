@@ -9,9 +9,9 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies import HGSRRConfig
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.configs.policies import HGSRRConfig
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
 
 from .hgs_rr import HGSRRSolver
 from .params import HGSRRParams

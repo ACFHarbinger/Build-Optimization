@@ -3,8 +3,8 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from configs.policies.lbbd import LBBDConfig
-from pipeline.simulations.bins.prediction import ScenarioTree
+from logic.src.configs.policies.lbbd import LBBDConfig
+from logic.src.pipeline.simulations.bins.prediction import ScenarioTree
 
 from .master import LBBDMasterProblem
 from .subproblem import RoutingSubproblem

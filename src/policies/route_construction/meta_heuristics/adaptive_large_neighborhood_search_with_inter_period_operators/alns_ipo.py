@@ -44,7 +44,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.operators import (
+from logic.src.policies.helpers.operators import (
     build_greedy_routes,
     forward_looking_insertion,
     greedy_horizon_insertion,
@@ -59,13 +59,13 @@ from policies.helpers.operators import (
     urgency_aware_removal,
     worst_profit_horizon_removal,
 )
-from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.alns import (
+from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.alns import (
     ALNSSolver,
 )
-from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search_with_inter_period_operators.params import (
+from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search_with_inter_period_operators.params import (
     ALNSIPOParams,
 )
-from tracking.viz_mixin import PolicyStateRecorder
+from logic.src.tracking.viz_mixin import PolicyStateRecorder
 
 
 class ALNSSolverIPO(ALNSSolver):

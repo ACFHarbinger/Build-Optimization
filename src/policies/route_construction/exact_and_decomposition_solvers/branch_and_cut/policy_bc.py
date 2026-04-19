@@ -10,11 +10,11 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies import BCConfig
-from enums import GlobalRegistry, PolicyTag
-from policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.configs.policies import BCConfig
+from logic.src.enums import GlobalRegistry, PolicyTag
+from logic.src.policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
 
 from .bc import BranchAndCutSolver
 from .params import BCParams

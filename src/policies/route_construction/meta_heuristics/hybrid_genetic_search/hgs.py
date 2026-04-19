@@ -16,8 +16,8 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.local_search.local_search_hgs import HGSLocalSearch
-from policies.helpers.operators.crossover_recombination import ordered_crossover
+from logic.src.policies.helpers.local_search.local_search_hgs import HGSLocalSearch
+from logic.src.policies.helpers.operators.crossover_recombination import ordered_crossover
 
 from .evolution import evaluate, update_biased_fitness
 from .individual import Individual

@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
 import optuna
-from configs import Config
+from logic.src.configs import Config
 
 
 class PolicyHPOBase(ABC):

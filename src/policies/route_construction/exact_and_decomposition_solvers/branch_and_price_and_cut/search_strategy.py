@@ -21,7 +21,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, List, Optional
 
 if TYPE_CHECKING:
-    from policies.helpers.solvers_and_matheuristics import BranchAndBoundTree, BranchNode
+    from logic.src.policies.helpers.solvers_and_matheuristics import BranchAndBoundTree, BranchNode
 else:
     # Use Any for runtime or environments where TYPE_CHECKING is False
     BranchAndBoundTree = Any

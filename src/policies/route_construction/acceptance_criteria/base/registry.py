@@ -1,6 +1,6 @@
 from typing import Callable, Dict, List, Optional, Type
 
-from interfaces.acceptance_criterion import IAcceptanceCriterion
+from logic.src.interfaces.acceptance_criterion import IAcceptanceCriterion
 
 
 class AcceptanceCriterionRegistry:

@@ -11,7 +11,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.intra_route.k_permutation import k_permutation
+    >>> from logic.src.policies.helpers.operators.intra_route.k_permutation import k_permutation
     >>> improved = k_permutation(ls, r_idx=0, start_pos=2, k=4)
 """
 

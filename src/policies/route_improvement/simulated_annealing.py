@@ -9,9 +9,9 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from interfaces.context.search_context import AcceptanceMetrics, ImprovementMetrics
-from interfaces.route_improvement import IRouteImprovement
-from policies.route_construction.acceptance_criteria.boltzmann_metropolis_criterion import (
+from logic.src.interfaces.context.search_context import AcceptanceMetrics, ImprovementMetrics
+from logic.src.interfaces.route_improvement import IRouteImprovement
+from logic.src.policies.route_construction.acceptance_criteria.boltzmann_metropolis_criterion import (
     BoltzmannAcceptance,
 )
 

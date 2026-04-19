@@ -27,18 +27,17 @@ class SoftmaxBandit(BanditAgent):
         self.temperature = temperature
         self.probs = np.ones(n_arms) / n_arms
 
-    def select_action(self, state: Any, rng: Optional[np.random.Generator] = None) -> int:
+    def select_action(self, state: Any, rng: np.random.Generator) -> int:
         """
         Select an arm using Softmax sampling.
 
         Args:
             state: Contextual state (unused).
-            rng: Optional RNG.
+            rng: Random number generator.
 
         Returns:
             The selected arm index.
         """
-        rng = rng or self.rng
 
         # Calculate exponentiated values for probability distribution
         # clip values to prevent overflow in exp

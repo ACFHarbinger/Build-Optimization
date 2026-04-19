@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.ant_colony_optimization_k_sparse.params import KSACOParams
+    >>> from logic.src.policies.ant_colony_optimization_k_sparse.params import KSACOParams
     >>> params = KSACOParams(n_ants=20, rho=0.1)
 """
 
@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 if TYPE_CHECKING:
-    from configs.policies import KSparseACOConfig
+    from logic.src.configs.policies import KSparseACOConfig
 
 
 @dataclass

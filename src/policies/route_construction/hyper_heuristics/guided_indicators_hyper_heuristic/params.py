@@ -7,7 +7,7 @@ This module defines the configuration parameters for the GIHH algorithm.
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional
 
-from interfaces.acceptance_criterion import IAcceptanceCriterion
+from logic.src.interfaces.acceptance_criterion import IAcceptanceCriterion
 
 if TYPE_CHECKING:
     pass
@@ -68,7 +68,7 @@ class GIHHParams:
         )
 
         # Handle Acceptance Criterion Injection
-        from policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
+        from logic.src.policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
 
         acceptance_cfg = getattr(config, "acceptance", None)
         if acceptance_cfg:

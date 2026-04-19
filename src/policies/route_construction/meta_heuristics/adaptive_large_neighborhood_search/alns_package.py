@@ -14,7 +14,7 @@ from alns.accept import SimulatedAnnealing
 from alns.select import RouletteWheel
 from alns.stop import MaxRuntime
 
-from tracking.viz_mixin import PolicyStateRecorder
+from logic.src.tracking.viz_mixin import PolicyStateRecorder
 
 
 class ALNSState:

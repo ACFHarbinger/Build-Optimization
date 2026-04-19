@@ -10,8 +10,8 @@ except ImportError:
     gp: Any = None  # type: ignore[assignment,no-redef]
     GRB: Any = None  # type: ignore[assignment,misc,no-redef]
 
-from configs.policies.lbbd import LBBDConfig
-from pipeline.simulations.bins.prediction import ScenarioTree, ScenarioTreeNode
+from logic.src.configs.policies.lbbd import LBBDConfig
+from logic.src.pipeline.simulations.bins.prediction import ScenarioTree, ScenarioTreeNode
 
 
 class LBBDMasterProblem:

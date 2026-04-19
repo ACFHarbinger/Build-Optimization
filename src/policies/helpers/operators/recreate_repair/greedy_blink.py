@@ -13,7 +13,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.repair.greedy_blink import greedy_insertion_with_blinks
+    >>> from logic.src.policies.helpers.operators.repair.greedy_blink import greedy_insertion_with_blinks
     >>> routes = greedy_insertion_with_blinks(routes, removed, dist_matrix, wastes, capacity, blink_rate=0.1)
 """
 
@@ -22,7 +22,7 @@ from typing import Dict, List, Optional
 
 import numpy as np
 
-from utils.policy.routes import (
+from logic.src.utils.policy.routes import (
     prune_unprofitable_routes,
 )
 

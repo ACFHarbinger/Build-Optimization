@@ -8,7 +8,7 @@ Attributes:
     RouteConstructorRegistry: The singleton registry class.
 
 Example:
-    >>> from policies.route_construction.base import RouteConstructorRegistry
+    >>> from logic.src.policies.route_construction.base import RouteConstructorRegistry
     >>> @RouteConstructorRegistry.register("my_route_constructor")
     ... class MyPolicy(IRouteConstructor): ...
     >>> policy_cls = RouteConstructorRegistry.get("my_policy")
@@ -16,7 +16,7 @@ Example:
 
 from typing import Callable, Dict, List, Optional, Type
 
-from interfaces.route_constructor import IRouteConstructor
+from logic.src.interfaces.route_constructor import IRouteConstructor
 
 
 # --- Route Constructor Registry ---

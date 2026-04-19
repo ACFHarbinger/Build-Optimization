@@ -11,14 +11,14 @@ from typing import Dict, List, Tuple
 import numpy as np
 import pandas as pd
 
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.check import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.check import (
     check_bins_overflowing_feasibility,
     check_solution_admissibility,
 )
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.objectives import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.objectives import (
     compute_profit,
 )
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.search.random_search import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.search.random_search import (
     local_search,
 )
 

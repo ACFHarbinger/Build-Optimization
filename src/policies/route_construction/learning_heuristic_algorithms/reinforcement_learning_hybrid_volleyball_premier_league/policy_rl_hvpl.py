@@ -9,19 +9,19 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies.other import RLConfig
-from configs.policies.rl_hvpl import RLHVPLConfig
-from enums import GlobalRegistry, PolicyTag
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
-from policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_hybrid_volleyball_premier_league.params import (
+from logic.src.configs.policies.other import RLConfig
+from logic.src.configs.policies.rl_hvpl import RLHVPLConfig
+from logic.src.enums import GlobalRegistry, PolicyTag
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_hybrid_volleyball_premier_league.params import (
     RLHVPLParams,
 )
-from policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_hybrid_volleyball_premier_league.rl_hvpl import (
+from logic.src.policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_hybrid_volleyball_premier_league.rl_hvpl import (
     RLHVPLSolver,
 )
-from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
-from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
+from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
+from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
 
 
 @GlobalRegistry.register(

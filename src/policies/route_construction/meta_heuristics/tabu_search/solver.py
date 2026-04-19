@@ -18,22 +18,22 @@ from typing import Any, DefaultDict, Deque, Dict, List, Optional, Sequence, Set,
 
 import numpy as np
 
-from policies.helpers.operators.destroy_ruin import (
+from logic.src.policies.helpers.operators.destroy_ruin import (
     cluster_removal,
     random_removal,
     worst_profit_removal,
     worst_removal,
 )
-from policies.helpers.operators.intra_route_local_search.k_opt import move_2opt_intra
-from policies.helpers.operators.intra_route_local_search.relocate import move_relocate
-from policies.helpers.operators.intra_route_local_search.swap import move_swap
-from policies.helpers.operators.recreate_repair import (
+from logic.src.policies.helpers.operators.intra_route_local_search.k_opt import move_2opt_intra
+from logic.src.policies.helpers.operators.intra_route_local_search.relocate import move_relocate
+from logic.src.policies.helpers.operators.intra_route_local_search.swap import move_swap
+from logic.src.policies.helpers.operators.recreate_repair import (
     greedy_insertion,
     greedy_profit_insertion,
     regret_2_insertion,
     regret_2_profit_insertion,
 )
-from policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
+from logic.src.policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
 
 from .params import TSParams
 

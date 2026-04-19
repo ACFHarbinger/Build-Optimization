@@ -36,7 +36,7 @@ Operators:
         Faster convergence than DE/rand/1 at the cost of diversity.
 
 Example:
-    >>> from policies.helpers.operators.evolutionary_mutation import (
+    >>> from logic.src.policies.helpers.operators.evolutionary_mutation import (
     ...     swap_mutation,
     ...     inversion_mutation,
     ...     scramble_mutation,

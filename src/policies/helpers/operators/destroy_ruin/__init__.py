@@ -11,11 +11,11 @@ neighbor_profit_removal, historical_profit_removal, string_profit_removal,
 sector_profit_removal, and route_profit_removal.
 
 Example:
-    >>> from policies.helpers.operators.destroy import random_removal
+    >>> from logic.src.policies.helpers.operators.destroy import random_removal
     >>> routes, removed = random_removal(routes, n=5)
-    >>> from policies.helpers.operators.destroy import worst_profit_removal
+    >>> from logic.src.policies.helpers.operators.destroy import worst_profit_removal
     >>> routes, removed = worst_profit_removal(routes, n=5, dist_matrix=d, wastes=w, R=1.0, C=1.0)
-    >>> from policies.helpers.operators.destroy import route_profit_removal
+    >>> from logic.src.policies.helpers.operators.destroy import route_profit_removal
     >>> routes, removed = route_profit_removal(routes, dist_matrix=d, wastes=w, R=1.0, C=1.0)
 """
 

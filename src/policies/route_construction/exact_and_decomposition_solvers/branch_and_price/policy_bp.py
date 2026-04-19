@@ -19,12 +19,12 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies import BPConfig
-from enums import GlobalRegistry, PolicyTag
-from interfaces.context.multi_day_context import MultiDayContext
-from interfaces.context.search_context import SearchContext
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.configs.policies import BPConfig
+from logic.src.enums import GlobalRegistry, PolicyTag
+from logic.src.interfaces.context.multi_day_context import MultiDayContext
+from logic.src.interfaces.context.search_context import SearchContext
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
 
 from .bp import BranchAndPriceSolver
 from .params import BPParams

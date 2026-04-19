@@ -14,7 +14,7 @@ is_better(c1, c2) -> bool
 
 Typical usage
 -------------
->>> from policies.helpers.operators.heuristics._objective import (
+>>> from logic.src.policies.helpers.operators.heuristics._objective import (
 ...     get_cost, is_better
 ... )
 >>> cost = get_cost(tour, dist)

@@ -1,3 +1,4 @@
+from .joint_context import JointSelectionConstructionContext
 from .multi_day_context import MultiDayContext
 from .problem_context import ProblemContext
 from .search_context import (
@@ -22,4 +23,5 @@ __all__ = [
     "MultiDayContext",
     "ProblemContext",
     "SolutionContext",
+    "JointSelectionConstructionContext",
 ]

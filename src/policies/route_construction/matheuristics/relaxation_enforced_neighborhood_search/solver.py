@@ -8,7 +8,7 @@ import gurobipy as gp
 import numpy as np
 from gurobipy import GRB, quicksum
 
-from tracking.viz_mixin import PolicyStateRecorder
+from logic.src.tracking.viz_mixin import PolicyStateRecorder
 
 
 def _setup_rens_model(

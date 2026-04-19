@@ -53,7 +53,7 @@ Dependencies
 
 Typical usage
 -------------
->>> from policies.helpers.operators.heuristics._tour_construction import (
+>>> from logic.src.policies.helpers.operators.heuristics._tour_construction import (
 ...     _initialize_tour, _double_bridge_kick, _2opt_gain, _3opt_gains
 ... )
 >>> tour = _initialize_tour(dist, initial_tour=None)
@@ -69,8 +69,8 @@ from typing import Dict, List, Optional
 
 import numpy as np
 
-from policies.helpers.operators.perturbation_shaking.double_bridge import double_bridge
-from policies.helpers.operators.search_heuristics._tour_adapter import TourAdapter
+from logic.src.policies.helpers.operators.perturbation_shaking.double_bridge import double_bridge
+from logic.src.policies.helpers.operators.search_heuristics._tour_adapter import TourAdapter
 
 # ---------------------------------------------------------------------------
 # Tour construction and perturbation
@@ -155,7 +155,7 @@ def _double_bridge_kick(
     Apply a double-bridge (random 4-opt) perturbation via the shared operator.
 
     Delegates to :func:`double_bridge` from
-    ``policies.helpers.operators.perturbation.double_bridge``, which
+    ``logic.src.policies.helpers.operators.perturbation.double_bridge``, which
     slices the route at three random cut points and reconnects as A+C+B+D.
 
     A :class:`TourAdapter` bridges the flat tour representation used by

@@ -28,7 +28,7 @@ References:
 import random
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from policies.helpers.local_search.local_search_base import LocalSearch
+from logic.src.policies.helpers.local_search.local_search_base import LocalSearch
 
 # ---------------------------------------------------------------------------
 # Constants

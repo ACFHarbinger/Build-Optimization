@@ -20,13 +20,13 @@ import time
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-from policies.helpers.local_search.local_search_base import LocalSearch
-from policies.helpers.operators import (
+from logic.src.policies.helpers.local_search.local_search_base import LocalSearch
+from logic.src.policies.helpers.operators import (
     greedy_insertion,
     greedy_profit_insertion,
     random_removal,
 )
-from policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
+from logic.src.policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
 
 from .params import SAParams
 

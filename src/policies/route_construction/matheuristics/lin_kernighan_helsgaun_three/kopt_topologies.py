@@ -45,7 +45,7 @@ Complexity: O(k! × k) preprocessing time, O(1) lookup during search.
 
 Usage
 -----
->>> from policies.lin_kernighan_helsgaun_three.kopt_topologies import (
+>>> from logic.src.policies.lin_kernighan_helsgaun_three.kopt_topologies import (
 ...     EXHAUSTIVE_5OPT_CASES,
 ... )
 >>> print(f"Number of 5-opt cases: {len(EXHAUSTIVE_5OPT_CASES)}")

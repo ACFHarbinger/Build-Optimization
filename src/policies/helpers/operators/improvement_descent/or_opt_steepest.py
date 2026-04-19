@@ -24,7 +24,7 @@ Reference:
     Northwestern University.
 
 Example:
-    >>> from policies.helpers.operators.intensification import or_opt_steepest
+    >>> from logic.src.policies.helpers.operators.intensification import or_opt_steepest
     >>> improved = or_opt_steepest(routes, dist_matrix, wastes, capacity)
     >>> improved = or_opt_steepest_profit(routes, dist_matrix, wastes, capacity, R=1.0, C=0.5)
 """

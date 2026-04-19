@@ -10,7 +10,7 @@ Theoretical Basis: Barnhart et al. (1998).
 
 from __future__ import annotations
 
-from policies.helpers.solvers_and_matheuristics.master_problem.model import VRPPMasterProblem
-from policies.helpers.solvers_and_matheuristics.master_problem.pool import GlobalCutPool
+from logic.src.policies.helpers.solvers_and_matheuristics.master_problem.model import VRPPMasterProblem
+from logic.src.policies.helpers.solvers_and_matheuristics.master_problem.pool import GlobalCutPool
 
 __all__ = ["VRPPMasterProblem", "GlobalCutPool"]

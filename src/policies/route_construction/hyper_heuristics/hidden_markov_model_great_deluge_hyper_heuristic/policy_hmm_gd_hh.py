@@ -10,15 +10,15 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies.hmm_gd_hh import HMMGDHHConfig
-from enums import GlobalRegistry, PolicyTag
-from policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
-from policies.route_construction.hyper_heuristics.hidden_markov_model_great_deluge_hyper_heuristic.params import (
+from logic.src.configs.policies.hmm_gd_hh import HMMGDHHConfig
+from logic.src.enums import GlobalRegistry, PolicyTag
+from logic.src.policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.policies.route_construction.hyper_heuristics.hidden_markov_model_great_deluge_hyper_heuristic.params import (
     HMMGDHHParams,
 )
-from policies.route_construction.hyper_heuristics.hidden_markov_model_great_deluge_hyper_heuristic.solver import (
+from logic.src.policies.route_construction.hyper_heuristics.hidden_markov_model_great_deluge_hyper_heuristic.solver import (
     HMMGDHHSolver,
 )
 

@@ -9,7 +9,7 @@ planning cycles.
 
 import numpy as np
 
-from constants import MAX_CAPACITY_PERCENT
+from logic.src.constants import MAX_CAPACITY_PERCENT
 
 
 def should_bin_be_collected(current_fill_level, accumulation_rate):

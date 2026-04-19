@@ -15,23 +15,23 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_i import (
+from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_i import (
     apply_type_i_us,
     apply_type_i_us_profit,
 )
-from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_ii import (
+from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_ii import (
     apply_type_ii_us,
     apply_type_ii_us_profit,
 )
-from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_iii import (
+from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_iii import (
     apply_type_iii_us,
     apply_type_iii_us_profit,
 )
-from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_iv import (
+from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_iv import (
     apply_type_iv_us,
     apply_type_iv_us_profit,
 )
-from utils.policy.neighborhood import get_p_neighborhood
+from logic.src.utils.policy.neighborhood import get_p_neighborhood
 
 
 def _evaluate_routes(routes: List[List[int]], dist_matrix: np.ndarray) -> float:
@@ -260,7 +260,7 @@ def unstringing_removal_wrapper(  # noqa: C901
     if rng is None:
         rng = random.Random()
 
-    from policies.helpers.operators.destroy_ruin.worst import (
+    from logic.src.policies.helpers.operators.destroy_ruin.worst import (
         worst_profit_removal,
         worst_removal,
     )

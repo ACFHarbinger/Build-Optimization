@@ -5,7 +5,7 @@ from typing import Any, Deque, Dict, Optional
 
 import numpy as np
 
-from policies.helpers.reinforcement_learning.agents.base import RLAgent
+from logic.src.policies.helpers.reinforcement_learning.agents.base import RLAgent
 
 
 class BanditAgent(RLAgent, ABC):
@@ -101,14 +101,15 @@ class BanditAgent(RLAgent, ABC):
         self.values[action] += (reward - self.values[action]) / n
 
     @abstractmethod
-    def select_action(self, context: Optional[Any] = None) -> int:
+    def select_action(self, state: Any, rng: np.random.Generator) -> int:
         """
         Select an arm to pull based on the internal policy.
 
         This method must be implemented by subclasses (e.g., EpsilonGreedy, UCB).
 
         Args:
-            context: Optional context for contextual bandits (not used in base).
+            state: Contextual state (for contextual bandits).
+            rng: Random number generator for deterministic stability.
 
         Returns:
             The index of the selected arm (0-based).

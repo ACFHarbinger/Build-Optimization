@@ -6,8 +6,8 @@ from typing import Any, List, Tuple
 
 import numpy as np
 
-from interfaces.context.search_context import ImprovementMetrics
-from interfaces.route_improvement import IRouteImprovement
+from logic.src.interfaces.context.search_context import ImprovementMetrics
+from logic.src.interfaces.route_improvement import IRouteImprovement
 
 from .base import RouteImproverRegistry
 from .common.helpers import assemble_tour, split_tour, to_numpy, tour_distance
@@ -58,7 +58,7 @@ class GuidedLocalSearchRouteImprover(IRouteImprovement):
             return tour, {"algorithm": "GuidedLocalSearchRouteImprover"}
 
         try:
-            from policies.helpers.local_search.local_search_manager import LocalSearchManager
+            from logic.src.policies.helpers.local_search.local_search_manager import LocalSearchManager
 
             routes = split_tour(tour)
             if not routes:

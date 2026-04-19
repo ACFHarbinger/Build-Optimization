@@ -15,7 +15,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.perturbation.genetic_transformation import (
+    >>> from logic.src.policies.helpers.operators.perturbation.genetic_transformation import (
     ...     genetic_transformation,
     ... )
     >>> routes = genetic_transformation(routes, elite, dist_matrix, wastes, capacity, rng)

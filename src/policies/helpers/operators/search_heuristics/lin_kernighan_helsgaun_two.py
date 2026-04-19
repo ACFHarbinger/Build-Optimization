@@ -67,21 +67,21 @@ from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from policies.helpers.operators.search_heuristics._objective import (
+from logic.src.policies.helpers.operators.search_heuristics._objective import (
     get_cost,
     is_better,
 )
-from policies.helpers.operators.search_heuristics._tour_construction import (
+from logic.src.policies.helpers.operators.search_heuristics._tour_construction import (
     _double_bridge_kick,
     _initialize_tour,
 )
-from policies.helpers.operators.search_heuristics.lin_kernighan_helsgaun import (
+from logic.src.policies.helpers.operators.search_heuristics.lin_kernighan_helsgaun import (
     _improve_tour,
     compute_alpha_measures,
     get_candidate_set,
     run_subgradient,
 )
-from tracking.viz_mixin import PolicyStateRecorder
+from logic.src.tracking.viz_mixin import PolicyStateRecorder
 
 # ---------------------------------------------------------------------------
 # Tour Population
@@ -516,7 +516,7 @@ def ipt_crossover(  # noqa: C901
 
     # --- 5. Refine with backbone-preserving LKH-1 k-opt ---
     offspring_cost = get_cost(offspring, distance_matrix)
-    dont_look = np.zeros(n, dtype=bool)
+    dont_look: Optional[np.ndarray] = np.zeros(n, dtype=bool)
     # Pass backbone as fixed_edges so refinement does not remove backbone edges
     backbone_fixed: Set[Tuple[int, int]] = backbone  # already sorted pairs
     for _ in range(max_gap_iter):
@@ -634,7 +634,7 @@ def solve_lkh2(  # noqa: C901
     # Seed 0: from the initial tour / nearest-neighbour
     seed_tour = _initialize_tour(distance_matrix, initial_tour)
     seed_cost = get_cost(seed_tour, distance_matrix)
-    dont_look_seed = np.zeros(n, dtype=bool)
+    dont_look_seed: Optional[np.ndarray] = np.zeros(n, dtype=bool)
     for _ in range(local_search_iter_per_offspring):
         seed_tour, seed_cost, improved, dont_look_seed = _improve_tour(
             seed_tour,
@@ -653,7 +653,7 @@ def solve_lkh2(  # noqa: C901
     for _k in range(population_size - 1):
         alt_tour = _double_bridge_kick(seed_tour, distance_matrix, stdlib_rng)
         alt_cost = get_cost(alt_tour, distance_matrix)
-        alt_dont_look = np.zeros(n, dtype=bool)
+        alt_dont_look: Optional[np.ndarray] = np.zeros(n, dtype=bool)
         for _ in range(local_search_iter_per_offspring):
             alt_tour, alt_cost, improved, alt_dont_look = _improve_tour(
                 alt_tour,
@@ -706,7 +706,7 @@ def solve_lkh2(  # noqa: C901
             # Pure ILS: double-bridge from best tour
             offspring = _double_bridge_kick(best_tour, distance_matrix, stdlib_rng)
             offspring_cost = get_cost(offspring, distance_matrix)
-            dont_look_ils = np.zeros(n, dtype=bool)
+            dont_look_ils: Optional[np.ndarray] = np.zeros(n, dtype=bool)
             for _ in range(local_search_iter_per_offspring):
                 offspring, offspring_cost, improved, dont_look_ils = _improve_tour(
                     offspring,

@@ -17,7 +17,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.inter_route.k_opt_star import move_kopt_star
+    >>> from logic.src.policies.helpers.operators.inter_route.k_opt_star import move_kopt_star
     >>> improved = move_kopt_star(ls, [(u, r_u, p_u), (v, r_v, p_v)])
     >>> improved = move_kopt_star(ls, [(u, r_u, p_u), (v, r_v, p_v), (w, r_w, p_w)])
 """

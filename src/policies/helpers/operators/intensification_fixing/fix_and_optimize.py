@@ -34,7 +34,7 @@ Requirements:
     Gurobi Optimizer ≥ 11.0 with a valid licence.
 
 Example:
-    >>> from policies.helpers.operators.intensification import fix_and_optimize
+    >>> from logic.src.policies.helpers.operators.intensification import fix_and_optimize
     >>> improved = fix_and_optimize(routes, dist_matrix, wastes, capacity)
     >>> improved = fix_and_optimize_profit(routes, dist_matrix, wastes, capacity,
     ...                                    R=1.0, C=0.5)

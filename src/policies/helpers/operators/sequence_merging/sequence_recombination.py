@@ -34,7 +34,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.sequence_merging.sequence_recombination import (
+    >>> from logic.src.policies.helpers.operators.sequence_merging.sequence_recombination import (
     ...     sequence_single_point_crossover,
     ...     sequence_uniform_crossover,
     ...     sequence_substitution_mutation,

@@ -16,22 +16,22 @@ from typing import Any, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
-from data.processor import convert_to_dict
-from interfaces.context.multi_day_context import MultiDayContext
-from interfaces.context.search_context import SearchContext
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search import (
+from logic.src.data.processor import convert_to_dict
+from logic.src.interfaces.context.multi_day_context import MultiDayContext
+from logic.src.interfaces.context.search_context import SearchContext
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search import (
     improved_simulated_annealing,
 )
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.routes import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.routes import (
     create_points,
 )
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.solution_initialization import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.solution_initialization import (
     compute_initial_solution,
 )
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.refinement.route_search import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.refinement.route_search import (
     find_solutions,
 )
-from policies.route_construction.other_algorithms.travelling_salesman_problem.tsp import get_route_cost
+from logic.src.policies.route_construction.other_algorithms.travelling_salesman_problem.tsp import get_route_cost
 
 from .params import SANSParams
 

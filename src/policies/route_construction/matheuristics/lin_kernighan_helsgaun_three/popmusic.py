@@ -31,7 +31,7 @@ References:
       constrained traveling salesman and vehicle routing problems.
 
 Example:
-    >>> from policies.lin_kernighan_helsgaun_three._popmusic import (
+    >>> from logic.src.policies.lin_kernighan_helsgaun_three._popmusic import (
     ...     popmusic_candidates
     ... )
     >>> candidates = popmusic_candidates(

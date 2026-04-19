@@ -9,7 +9,7 @@ try:
 except ImportError:
     OR_TOOLS_AVAILABLE = False
 
-from configs.policies.cp_sat import CPSATConfig
+from logic.src.configs.policies.cp_sat import CPSATConfig
 
 
 class CPSATEngine:

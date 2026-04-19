@@ -4,11 +4,11 @@ Simulator adapter for the POPMUSIC matheuristic.
 
 from typing import Any, Dict, List, Optional, Tuple, Type
 
-from configs.policies.popmusic import POPMUSICConfig
-from enums import GlobalRegistry, PolicyTag
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
-from policies.route_construction.matheuristics.partial_optimization_metaheuristic_under_special_intensification_conditions.solver import (
+from logic.src.configs.policies.popmusic import POPMUSICConfig
+from logic.src.enums import GlobalRegistry, PolicyTag
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.policies.route_construction.matheuristics.partial_optimization_metaheuristic_under_special_intensification_conditions.solver import (
     run_popmusic,
 )
 

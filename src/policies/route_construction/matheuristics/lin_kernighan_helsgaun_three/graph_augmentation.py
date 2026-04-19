@@ -61,7 +61,7 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
-from constants.routing import DEFAULT_HIGH_PENALTY
+from logic.src.constants.routing import DEFAULT_HIGH_PENALTY
 
 
 def augment_graph(

@@ -7,10 +7,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional
 
-from interfaces.acceptance_criterion import IAcceptanceCriterion
+from logic.src.interfaces.acceptance_criterion import IAcceptanceCriterion
 
 if TYPE_CHECKING:
-    from configs.policies import RTSConfig
+    from logic.src.configs.policies import RTSConfig
 
 
 @dataclass
@@ -66,7 +66,7 @@ class RTSParams:
         )
 
         # Handle Acceptance Criterion Injection (Aspiration folding)
-        from policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
+        from logic.src.policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
 
         acceptance_cfg = getattr(config, "acceptance", None)
         if acceptance_cfg:

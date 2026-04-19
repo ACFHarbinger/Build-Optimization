@@ -43,19 +43,17 @@ class EpsilonGreedyBandit(BanditAgent):
         """Apply multiplicative decay to the exploration rate."""
         self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
 
-    def select_action(self, state: Any, rng: Optional[np.random.Generator] = None) -> int:
+    def select_action(self, state: Any, rng: np.random.Generator) -> int:
         """
         Select an arm using the epsilon-greedy policy.
 
         Args:
             state: Contextual state (unused by non-contextual bandits).
-            rng: Optional RNG for local selection logic.
+            rng: Random number generator for local selection logic.
 
         Returns:
             The selected arm index.
         """
-        rng = rng or self.rng
-
         # Exploration: Select a random arm with probability epsilon
         if rng.random() < self.epsilon:
             return int(rng.integers(0, self.n_arms))

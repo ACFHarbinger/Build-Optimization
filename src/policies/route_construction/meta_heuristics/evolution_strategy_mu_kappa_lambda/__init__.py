@@ -15,7 +15,7 @@ Reference:
 
 Example:
     >>> import numpy as np
-    >>> from policies.evolution_strategy_mu_kappa_lambda import (
+    >>> from logic.src.policies.evolution_strategy_mu_kappa_lambda import (
     ...     MuKappaLambdaESSolver,
     ...     MuKappaLambdaESParams
     ... )

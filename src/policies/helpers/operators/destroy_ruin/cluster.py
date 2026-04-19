@@ -8,9 +8,9 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.destroy.cluster import cluster_removal
+    >>> from logic.src.policies.helpers.operators.destroy.cluster import cluster_removal
     >>> routes, removed = cluster_removal(routes, n_remove=5, dist_matrix=d, nodes=all_nodes)
-    >>> from policies.helpers.operators.destroy.cluster import cluster_profit_removal
+    >>> from logic.src.policies.helpers.operators.destroy.cluster import cluster_profit_removal
     >>> routes, removed = cluster_profit_removal(routes, n_remove=5, dist_matrix=d,
     ...                                              wastes=w, R=1.0, C=1.0)
 """

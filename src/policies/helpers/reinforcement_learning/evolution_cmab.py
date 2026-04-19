@@ -21,19 +21,19 @@ from typing import List, Optional
 
 import numpy as np
 
-from policies.helpers.operators.crossover_recombination import CROSSOVER_NAMES, CROSSOVER_OPERATORS
-from policies.helpers.reinforcement_learning.agents.bandits import (
+from logic.src.policies.helpers.operators.crossover_recombination import CROSSOVER_NAMES, CROSSOVER_OPERATORS
+from logic.src.policies.helpers.reinforcement_learning.agents.bandits import (
     EpsilonGreedyBandit,
 )
-from policies.helpers.reinforcement_learning.agents.contextual_bandits import (
+from logic.src.policies.helpers.reinforcement_learning.agents.contextual_bandits import (
     ContextualThompsonSamplingAgent,
     LinUCBAgent,
 )
-from policies.helpers.reinforcement_learning.features.context import ContextFeatureExtractor
-from policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import (
+from logic.src.policies.helpers.reinforcement_learning.features.context import ContextFeatureExtractor
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import (
     Individual,
 )
-from policies.route_construction.meta_heuristics.hybrid_genetic_search.split import LinearSplit
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.split import LinearSplit
 
 
 class CMABEvolution:

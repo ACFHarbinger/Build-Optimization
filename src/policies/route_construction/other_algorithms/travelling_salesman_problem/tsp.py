@@ -17,7 +17,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.travelling_salesman_problem.tsp import find_route
+    >>> from logic.src.policies.travelling_salesman_problem.tsp import find_route
     >>> tour, length = find_route(dist_matrix)
 
 Reference:
@@ -35,7 +35,7 @@ import numpy as np
 import torch
 from networkx.algorithms.shortest_paths.weighted import dijkstra_path
 
-from constants.routing import SCALE
+from logic.src.constants.routing import SCALE
 
 from .two_opt import solve_tsp_2opt
 

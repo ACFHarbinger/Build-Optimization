@@ -17,15 +17,15 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.operators.generalized_insertion_and_deletion.stringing_wrapper import (
+from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.stringing_wrapper import (
     stringing_insertion,
     stringing_profit_insertion,
 )
-from policies.helpers.operators.generalized_insertion_and_deletion.unstringing_wrapper import (
+from logic.src.policies.helpers.operators.generalized_insertion_and_deletion.unstringing_wrapper import (
     unstringing_profit_removal,
     unstringing_removal,
 )
-from policies.helpers.operators.recreate_repair.geni import geni_insertion, geni_profit_insertion
+from logic.src.policies.helpers.operators.recreate_repair.geni import geni_insertion, geni_profit_insertion
 
 from .params import GENIUSParams
 

@@ -10,7 +10,7 @@ Now also includes the IRouteConstructor interface and RouteConstructorRegistry.
 from typing import Any, Optional
 
 # --- IRouteConstructor Interface ---
-from interfaces.route_constructor import IRouteConstructor
+from logic.src.interfaces.route_constructor import IRouteConstructor
 
 from .registry import RouteConstructorRegistry
 
@@ -29,27 +29,30 @@ class RouteConstructorFactory:
             return
 
         # Exact Stochastic and Decomposition Solvers
-        import policies.route_construction.exact_and_decomposition_solvers as exact_solvers  # noqa
+        import logic.src.policies.route_construction.exact_and_decomposition_solvers as exact_solvers  # noqa
 
         # Meta-Heuristics
-        import policies.route_construction.meta_heuristics as meta_heuristics  # noqa
+        import logic.src.policies.route_construction.meta_heuristics as meta_heuristics  # noqa
 
         # Hyper-Heuristics
-        import policies.route_construction.hyper_heuristics as hyper_heuristics  # noqa
+        import logic.src.policies.route_construction.hyper_heuristics as hyper_heuristics  # noqa
 
         # Matheuristics (Exact Solvers + Heuristics)
-        import policies.route_construction.matheuristics as matheuristics  # noqa
+        import logic.src.policies.route_construction.matheuristics as matheuristics  # noqa
 
         # Learning Algorithms
-        import policies.route_construction.learning_algorithms as learning_algorithms  # noqa
+        import logic.src.policies.route_construction.learning_algorithms as learning_algorithms  # noqa
 
         # Learning Heuristic Algorithms (Learning Algorithms + Heuristics)
-        import policies.route_construction.learning_heuristic_algorithms as learning_heuristic_algorithms  # noqa
-        import policies.route_construction.learning_matheuristic_algorithms as learning_matheuristic_algorithms  # noqa
-        import policies.route_construction.acceptance_criteria as acceptance_criteria  # noqa
+        import logic.src.policies.route_construction.learning_heuristic_algorithms as learning_heuristic_algorithms  # noqa
+        import logic.src.policies.route_construction.learning_matheuristic_algorithms as learning_matheuristic_algorithms  # noqa
+        import logic.src.policies.route_construction.acceptance_criteria as acceptance_criteria  # noqa
 
         # Other Algorithms
-        import policies.route_construction.other_algorithms as other_algorithms  # noqa
+        import logic.src.policies.route_construction.other_algorithms as other_algorithms  # noqa
+
+        # Joint Selection and Construction Algorithms
+        import logic.src.policies.selection_and_construction as selection_and_construction  # noqa
 
         cls._registered = True
 

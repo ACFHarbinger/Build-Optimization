@@ -10,9 +10,9 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.destroy.neighbor import neighbor_removal
+    >>> from logic.src.policies.helpers.operators.destroy.neighbor import neighbor_removal
     >>> routes, removed = neighbor_removal(routes, n_remove=5, dist_matrix=dm)
-    >>> from policies.helpers.operators.destroy.neighbor import neighbor_profit_removal
+    >>> from logic.src.policies.helpers.operators.destroy.neighbor import neighbor_profit_removal
     >>> routes, removed = neighbor_profit_removal(routes, n_remove=5, dist_matrix=dm, wastes=w, R=1.0, C=1.0)
 """
 

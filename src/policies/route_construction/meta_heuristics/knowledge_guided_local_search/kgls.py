@@ -18,13 +18,13 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.local_search.local_search_aco import ACOLocalSearch
-from policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
-from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
-from policies.route_construction.meta_heuristics.knowledge_guided_local_search.cost_evaluator import (
+from logic.src.policies.helpers.local_search.local_search_aco import ACOLocalSearch
+from logic.src.policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
+from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
+from logic.src.policies.route_construction.meta_heuristics.knowledge_guided_local_search.cost_evaluator import (
     CostEvaluator,
 )
-from policies.route_construction.meta_heuristics.knowledge_guided_local_search.params import KGLSParams
+from logic.src.policies.route_construction.meta_heuristics.knowledge_guided_local_search.params import KGLSParams
 
 logger = logging.getLogger(__name__)
 

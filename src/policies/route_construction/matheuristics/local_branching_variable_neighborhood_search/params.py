@@ -7,8 +7,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field, fields
 from typing import Any, Dict
 
-from interfaces.acceptance_criterion import IAcceptanceCriterion
-from policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
+from logic.src.interfaces.acceptance_criterion import IAcceptanceCriterion
+from logic.src.policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
 
 
 @dataclass

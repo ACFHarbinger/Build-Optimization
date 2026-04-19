@@ -8,15 +8,15 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies import HGSALNSConfig
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
-from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
-from policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
-from policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_large_neighborhood_search.hgs_alns import (
+from logic.src.configs.policies import HGSALNSConfig
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_large_neighborhood_search.hgs_alns import (
     HGSALNSSolver,
 )
-from policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_large_neighborhood_search.params import (
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search_with_adaptive_large_neighborhood_search.params import (
     HGSALNSParams,
 )
 

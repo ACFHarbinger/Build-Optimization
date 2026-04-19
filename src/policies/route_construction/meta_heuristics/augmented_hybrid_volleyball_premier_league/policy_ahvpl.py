@@ -9,22 +9,22 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from configs.policies.ahvpl import AHVPLConfig
-from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from policies.route_construction.base.factory import RouteConstructorRegistry
-from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import (
+from logic.src.configs.policies.ahvpl import AHVPLConfig
+from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import (
     ALNSParams,
 )
-from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
+from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
     KSACOParams,
 )
-from policies.route_construction.meta_heuristics.augmented_hybrid_volleyball_premier_league.ahvpl import (
+from logic.src.policies.route_construction.meta_heuristics.augmented_hybrid_volleyball_premier_league.ahvpl import (
     AHVPLSolver,
 )
-from policies.route_construction.meta_heuristics.augmented_hybrid_volleyball_premier_league.params import (
+from logic.src.policies.route_construction.meta_heuristics.augmented_hybrid_volleyball_premier_league.params import (
     AHVPLParams,
 )
-from policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
+from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
 
 
 @RouteConstructorRegistry.register("ahvpl")

@@ -28,7 +28,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import connected_components, maximum_flow
 
-from policies.helpers.solvers_and_matheuristics.separation.inequality import (
+from logic.src.policies.helpers.solvers_and_matheuristics.separation.inequality import (
     CapacityCut,
     CombInequality,
     Inequality,

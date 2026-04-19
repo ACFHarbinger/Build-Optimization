@@ -4,7 +4,7 @@ from typing import Any, Deque, Optional
 
 import numpy as np
 
-from policies.helpers.reinforcement_learning.agents.base import RLAgent
+from logic.src.policies.helpers.reinforcement_learning.agents.base import RLAgent
 
 
 class ContextualBanditAgent(RLAgent):

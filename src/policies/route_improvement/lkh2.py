@@ -6,9 +6,9 @@ from typing import Any, List, Tuple
 
 import numpy as np
 
-from interfaces import IRouteImprovement
-from interfaces.context.search_context import ImprovementMetrics
-from policies.helpers.operators.search_heuristics.lin_kernighan_helsgaun_two import (
+from logic.src.interfaces import IRouteImprovement
+from logic.src.interfaces.context.search_context import ImprovementMetrics
+from logic.src.policies.helpers.operators.search_heuristics.lin_kernighan_helsgaun_two import (
     solve_lkh,
 )
 
@@ -73,7 +73,6 @@ class LinKernighanHelsgaunTwoRouteImprover(IRouteImprovement):
         # 3. Solver parameters
         max_iterations = kwargs.get("max_iterations", self.config.get("max_iterations", 200))
         max_k = kwargs.get("max_k", self.config.get("max_k", 5))
-        n_candidates = kwargs.get("n_candidates", self.config.get("n_candidates", 5))
         seed = kwargs.get("seed", self.config.get("seed", 42))
 
         refined_routes = []

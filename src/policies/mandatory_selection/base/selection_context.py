@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.mandatory.base.selection_context import SelectionContext
+    >>> from logic.src.policies.mandatory.base.selection_context import SelectionContext
     >>> ctx = SelectionContext(bin_ids=np.array([1, 2]), current_fill=np.array([0.8, 0.5]))
 """
 
@@ -98,3 +98,7 @@ class SelectionContext:
     # by the simulation engine before calling select_bins().  Strategies that do not
     # consume it simply ignore the field.
     scenario_tree: Optional[Any] = None
+
+    # --- Filter-and-Fan ---
+    ff_filter_width: int = 0   # 0 = auto (max(5, n_bins // 3))
+    ff_fan_depth: int = 3      # number of add/remove sweep passes

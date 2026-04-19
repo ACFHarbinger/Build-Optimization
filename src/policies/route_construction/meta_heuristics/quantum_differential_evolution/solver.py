@@ -18,15 +18,15 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.local_search.local_search_aco import ACOLocalSearch
-from policies.helpers.operators.recreate_repair.greedy import (
+from logic.src.policies.helpers.local_search.local_search_aco import ACOLocalSearch
+from logic.src.policies.helpers.operators.recreate_repair.greedy import (
     greedy_insertion,
     greedy_profit_insertion,
 )
-from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
+from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
     KSACOParams,
 )
-from policies.route_construction.meta_heuristics.quantum_differential_evolution.params import (
+from logic.src.policies.route_construction.meta_heuristics.quantum_differential_evolution.params import (
     QDEParams,
 )
 

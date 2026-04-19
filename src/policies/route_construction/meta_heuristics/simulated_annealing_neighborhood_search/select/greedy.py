@@ -4,7 +4,7 @@ Greedy selection strategies for bin management.
 
 from copy import deepcopy
 
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.objectives import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.objectives import (
     compute_profit,
     compute_real_profit,
 )

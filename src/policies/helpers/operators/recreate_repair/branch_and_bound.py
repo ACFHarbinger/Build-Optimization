@@ -52,7 +52,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.repair.branch_bound import (
+    >>> from logic.src.policies.helpers.operators.repair.branch_bound import (
     ...     bb_insertion, bb_profit_insertion
     ... )
     >>> routes = bb_insertion(routes, removed, dist_matrix, wastes, capacity)
@@ -65,7 +65,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from utils.policy.routes import (
+from logic.src.utils.policy.routes import (
     prune_unprofitable_routes,
 )
 

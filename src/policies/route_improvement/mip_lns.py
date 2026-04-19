@@ -10,10 +10,10 @@ import logging
 import random
 from typing import Any, List, Tuple
 
-from interfaces.context.search_context import ImprovementMetrics
-from interfaces.route_improvement import IRouteImprovement
-from policies.helpers.operators.destroy_ruin.random import random_removal
-from policies.helpers.operators.intensification_fixing import fix_and_optimize
+from logic.src.interfaces.context.search_context import ImprovementMetrics
+from logic.src.interfaces.route_improvement import IRouteImprovement
+from logic.src.policies.helpers.operators.destroy_ruin.random import random_removal
+from logic.src.policies.helpers.operators.intensification_fixing import fix_and_optimize
 
 from .base import RouteImproverRegistry
 from .common.helpers import assemble_tour, split_tour, to_numpy, tour_distance

@@ -26,7 +26,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.sequence_merging.markov_chain_sequence import (
+    >>> from logic.src.policies.helpers.operators.sequence_merging.markov_chain_sequence import (
     ...     MarkovSequenceState,
     ...     markov_sample_sequence,
     ...     markov_update,

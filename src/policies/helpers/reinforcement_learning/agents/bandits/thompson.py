@@ -36,19 +36,17 @@ class ThompsonSamplingBandit(BanditAgent):
         self.alphas = np.full(n_arms, alpha_prior, dtype=float)
         self.betas = np.full(n_arms, beta_prior, dtype=float)
 
-    def select_action(self, state: Any, rng: Optional[np.random.Generator] = None) -> int:
+    def select_action(self, state: Any, rng: np.random.Generator) -> int:
         """
         Select an arm using Thompson sampling.
 
         Args:
             state: Contextual state (unused).
-            rng: Optional RNG.
+            rng: Random number generator.
 
         Returns:
             The selected arm index.
         """
-        rng = rng or self.rng
-
         # Sample from the Beta distribution of each arm
         samples = [rng.beta(self.alphas[i], self.betas[i]) for i in range(self.n_arms)]
 

@@ -8,14 +8,14 @@ import numpy as np
 from .ordered import ordered_crossover
 
 if TYPE_CHECKING:
-    from policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import (
+    from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import (
         Individual,
     )
 
 
 def _get_individual_class() -> type:
     """Lazy import to break circular dependency with meta_heuristics.__init__"""
-    from policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
+    from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
 
     return Individual
 

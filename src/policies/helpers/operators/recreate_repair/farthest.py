@@ -17,7 +17,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.repair.farthest import farthest_insertion
+    >>> from logic.src.policies.helpers.operators.repair.farthest import farthest_insertion
     >>> routes = farthest_insertion(routes, removed, dist_matrix, wastes, capacity, R, C)
 """
 

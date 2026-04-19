@@ -23,7 +23,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.evolutionary_mutation.random_2opt import (
+    >>> from logic.src.policies.helpers.operators.evolutionary_mutation.random_2opt import (
     ...     random_2opt_mutation,
     ... )
     >>> mutated = random_2opt_mutation(routes, distance_matrix, capacity, wastes)

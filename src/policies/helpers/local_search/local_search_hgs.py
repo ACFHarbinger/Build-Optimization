@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.local_search.local_search_hgs import HGSLocalSearch
+    >>> from logic.src.policies.helpers.local_search.local_search_hgs import HGSLocalSearch
     >>> ls = HGSLocalSearch(dist_matrix, waste, capacity, R, C, params)
     >>> improved_ind = ls.optimize(individual)
 """
@@ -22,8 +22,8 @@ import numpy as np
 from .local_search_base import LocalSearch
 
 if TYPE_CHECKING:
-    from policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
-    from policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
+    from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
+    from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
 
 
 class HGSLocalSearch(LocalSearch):

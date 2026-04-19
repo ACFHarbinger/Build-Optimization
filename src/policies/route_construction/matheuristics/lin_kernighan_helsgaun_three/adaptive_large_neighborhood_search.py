@@ -21,7 +21,7 @@ Operator Dispatch
 
 Example
 -------
->>> from policies.lin_kernighan_helsgaun_three.adaptive_large_neighborhood_search import LKH3_ALNS
+>>> from logic.src.policies.lin_kernighan_helsgaun_three.adaptive_large_neighborhood_search import LKH3_ALNS
 >>> solver = LKH3_ALNS(
 ...     distance_matrix=dist,
 ...     wastes={1: 10, 2: 20, 3: 30},
@@ -44,49 +44,49 @@ from typing import Callable, Dict, List, Optional, Tuple
 import numpy as np
 
 # solve_lkh3 imported locally in _optimize_routes or solve() to break circularity
-from policies.helpers.operators.destroy_ruin.historical import (
+from logic.src.policies.helpers.operators.destroy_ruin.historical import (
     historical_profit_removal,
     historical_removal,
 )
-from policies.helpers.operators.destroy_ruin.neighbor import (
+from logic.src.policies.helpers.operators.destroy_ruin.neighbor import (
     neighbor_profit_removal,
     neighbor_removal,
 )
 
 # Destroy operators
-from policies.helpers.operators.destroy_ruin.route import (
+from logic.src.policies.helpers.operators.destroy_ruin.route import (
     route_profit_removal,
     route_removal,
 )
-from policies.helpers.operators.destroy_ruin.sector import (
+from logic.src.policies.helpers.operators.destroy_ruin.sector import (
     sector_profit_removal,
     sector_removal,
 )
-from policies.helpers.operators.perturbation_shaking.evolutionary import (
+from logic.src.policies.helpers.operators.perturbation_shaking.evolutionary import (
     evolutionary_perturbation,
     evolutionary_perturbation_profit,
 )
 
 # Perturbation operators
-from policies.helpers.operators.perturbation_shaking.genetic_transformation import (
+from logic.src.policies.helpers.operators.perturbation_shaking.genetic_transformation import (
     genetic_transformation,
     genetic_transformation_profit,
 )
 
 # Repair operators
-from policies.helpers.operators.recreate_repair.deep import (
+from logic.src.policies.helpers.operators.recreate_repair.deep import (
     deep_insertion,
     deep_profit_insertion,
 )
-from policies.helpers.operators.recreate_repair.nearest import (
+from logic.src.policies.helpers.operators.recreate_repair.nearest import (
     nearest_insertion,
     nearest_profit_insertion,
 )
-from policies.helpers.operators.recreate_repair.savings import (
+from logic.src.policies.helpers.operators.recreate_repair.savings import (
     savings_insertion,
     savings_profit_insertion,
 )
-from tracking.viz_mixin import PolicyStateRecorder
+from logic.src.tracking.viz_mixin import PolicyStateRecorder
 
 logger = logging.getLogger(__name__)
 
@@ -251,10 +251,10 @@ class LKH3_ALNS:
             - best_penalty: Final penalty (should be 0 for feasible solutions)
         """
         if native_prize_collecting:
-            from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.graph_augmentation import (
+            from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.graph_augmentation import (
                 augment_prize_collecting_graph,
             )
-            from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.lkh3 import solve_lkh3
+            from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.lkh3 import solve_lkh3
 
             # ATSP Transformation
             aug_dist, _, n_original = augment_prize_collecting_graph(
@@ -283,7 +283,7 @@ class LKH3_ALNS:
         # --- Standard ALNS Loop ---
         # 1. Initialize with greedy solution
         # Pre-compute global alpha-measures once (Phase 4 optimization)
-        from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.lkh3 import (
+        from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.lkh3 import (
             compute_alpha_measures,
         )
 
@@ -623,7 +623,7 @@ class LKH3_ALNS:
             # Fallback (should not happen with regular solve entry)
             local_candidates = {i: [] for i in range(n_sub)}
 
-        from policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.lkh3 import (
+        from logic.src.policies.route_construction.matheuristics.lin_kernighan_helsgaun_three.lkh3 import (
             solve_lkh3,
         )
 

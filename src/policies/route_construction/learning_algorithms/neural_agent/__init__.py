@@ -8,7 +8,7 @@ Attributes:
     __all__ (List[str]): List of public objects exported by this module.
 
 Example:
-    >>> from policies.neural_agent import NeuralAgent
+    >>> from logic.src.policies.neural_agent import NeuralAgent
     >>> agent = NeuralAgent(model)
     >>> action = agent.act(state)
 """

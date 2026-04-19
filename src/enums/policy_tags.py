@@ -39,6 +39,7 @@ class PolicyTag(Enum):
     IMPROVEMENT = auto()  # Improves routes (Local Search, etc.)
     OPERATOR = auto()  # Operators (2-Opt, Relocate, Cross Exchange, etc.)
     ACCEPTANCE = auto()  # Acceptance criteria (Metropolis-Hastings, Simulated Annealing, etc.)
+    JOINT = auto()  # Joint selection and construction
 
     # ==========================================
     # 4. PROBLEM TOPOLOGY & DOMAIN (What constraints can it handle?)
@@ -48,7 +49,8 @@ class PolicyTag(Enum):
     DETERMINISTIC = auto()  # All parameters known
     STOCHASTIC = auto()  # Handles distributions (Stochastic Demands, Markov Decision Processes)
     DYNAMIC = auto()  # Online routing (orders arrive during execution)
-    PROFIT_AWARE = auto()  # Orienteering, Team Orienteering (evaluates p_i over c_i)
+    PROFIT_AWARE = auto()  # Orienteering, VRP with Profits (evaluates p_i over c_i)
+    ORIENTEERING = auto()  # Orienteering, Team Orienteering
     TIME_WINDOWS = auto()  # Strictly enforces [e_i, l_i] temporal bounds
 
     # ==========================================

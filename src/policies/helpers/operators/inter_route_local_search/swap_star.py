@@ -21,7 +21,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.inter_route.swap_star import move_swap_star
+    >>> from logic.src.policies.helpers.operators.inter_route.swap_star import move_swap_star
     >>> applied = move_swap_star(ls, u, v, r_u, p_u, r_v, p_v)
 
 Removes u from route r_u and v from route r_v, then reinserts each node

@@ -35,19 +35,17 @@ class EXP3Agent(BanditAgent):
         self.weights = np.ones(n_arms)
         self.probs = np.ones(n_arms) / n_arms
 
-    def select_action(self, state: Any, rng: Optional[np.random.Generator] = None) -> int:
+    def select_action(self, state: Any, rng: np.random.Generator) -> int:
         """
         Select an arm using the EXP3 policy.
 
         Args:
             state: Contextual state (unused).
-            rng: Optional RNG.
+            rng: Random number generator.
 
         Returns:
             The selected arm index.
         """
-        rng = rng or self.rng
-
         # Calculate probabilities based on current weights
         total_w = np.sum(self.weights)
         # Prob = (1-gamma) * (weight / total_weight) + (gamma / n_arms)

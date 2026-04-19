@@ -16,7 +16,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from policies.helpers.operators import (
+from logic.src.policies.helpers.operators import (
     cluster_removal,
     greedy_insertion,
     greedy_profit_insertion,
@@ -27,35 +27,35 @@ from policies.helpers.operators import (
     worst_profit_removal,
     worst_removal,
 )
-from policies.helpers.operators.destroy_ruin.shaw import shaw_removal
-from policies.helpers.operators.destroy_ruin.string import string_removal
-from policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
-from policies.helpers.reinforcement_learning.agents.bandits import (
+from logic.src.policies.helpers.operators.destroy_ruin.shaw import shaw_removal
+from logic.src.policies.helpers.operators.destroy_ruin.string import string_removal
+from logic.src.policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
+from logic.src.policies.helpers.reinforcement_learning.agents.bandits import (
     DiscountedUCBBandit as DiscountedUCBAgent,
 )
-from policies.helpers.reinforcement_learning.agents.bandits import (
+from logic.src.policies.helpers.reinforcement_learning.agents.bandits import (
     EXP3Agent,
 )
-from policies.helpers.reinforcement_learning.agents.bandits import (
+from logic.src.policies.helpers.reinforcement_learning.agents.bandits import (
     SlidingWindowUCBBandit as SlidingWindowUCBAgent,
 )
-from policies.helpers.reinforcement_learning.agents.bandits import (
+from logic.src.policies.helpers.reinforcement_learning.agents.bandits import (
     ThompsonSamplingBandit as ThompsonSamplingAgent,
 )
-from policies.helpers.reinforcement_learning.agents.bandits import (
+from logic.src.policies.helpers.reinforcement_learning.agents.bandits import (
     UCBBandit as UCB1Agent,
 )
-from policies.helpers.reinforcement_learning.agents.td_learning import (
+from logic.src.policies.helpers.reinforcement_learning.agents.td_learning import (
     ExpectedSarsaAgent as ExpectedSARSAAgent,
 )
-from policies.helpers.reinforcement_learning.agents.td_learning import (
+from logic.src.policies.helpers.reinforcement_learning.agents.td_learning import (
     QLearningAgent,
 )
-from policies.helpers.reinforcement_learning.agents.td_learning import (
+from logic.src.policies.helpers.reinforcement_learning.agents.td_learning import (
     SarsaAgent as SARSAAgent,
 )
-from policies.helpers.reinforcement_learning.features.state import StateFeatureExtractor
-from policies.helpers.reinforcement_learning.reward.shaping import AdaptiveRewardShaper, RewardShaper
+from logic.src.policies.helpers.reinforcement_learning.features.state import StateFeatureExtractor
+from logic.src.policies.helpers.reinforcement_learning.reward.shaping import AdaptiveRewardShaper, RewardShaper
 
 from .params import RLALNSParams
 

@@ -8,7 +8,7 @@ from typing import Dict, List, Tuple
 import numpy as np
 import pandas as pd
 
-from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.select import (
+from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.select import (
     insert_bins,
     remove_bins_end,
 )

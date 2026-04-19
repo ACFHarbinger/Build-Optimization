@@ -13,7 +13,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from interfaces.context.problem_context import ProblemContext
+from logic.src.interfaces.context.problem_context import ProblemContext
 
 # ---------------------------------------------------------------------------
 # Cascade helper (must be used by every operator that changes multiple days)

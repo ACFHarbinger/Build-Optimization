@@ -10,9 +10,9 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.destroy.random import random_removal
+    >>> from logic.src.policies.helpers.operators.destroy.random import random_removal
     >>> routes, removed = random_removal(routes, n_remove=5)
-    >>> from policies.helpers.operators.destroy.random import random_profit_removal
+    >>> from logic.src.policies.helpers.operators.destroy.random import random_profit_removal
     >>> routes, removed = random_profit_removal(routes, n_remove=5, dist_matrix=d, wastes=w, R=1.0, C=1.0)
 """
 

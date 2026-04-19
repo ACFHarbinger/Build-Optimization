@@ -8,7 +8,7 @@ Attributes:
     None
 
 Example:
-    >>> from policies.helpers.operators.repair.greedy import greedy_insertion
+    >>> from logic.src.policies.helpers.operators.repair.greedy import greedy_insertion
     >>> routes = greedy_insertion(routes, removed, dist_matrix, wastes, capacity)
 """
 
@@ -16,7 +16,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from utils.policy.routes import (
+from logic.src.utils.policy.routes import (
     prune_unprofitable_routes,
 )
 

@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from policies.mandatory_selection.base.selection_context import (
+from logic.src.policies.mandatory_selection.base.selection_context import (
     SelectionContext,
 )
 

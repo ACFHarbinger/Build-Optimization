@@ -19,19 +19,19 @@ import gurobipy as gp
 import numpy as np
 from gurobipy import GRB
 
-from policies.helpers.local_search.local_search_aco import (
+from logic.src.policies.helpers.local_search.local_search_aco import (
     ACOLocalSearch,
 )
-from policies.helpers.operators import (
+from logic.src.policies.helpers.operators import (
     build_greedy_routes,
 )
-from policies.route_construction.matheuristics.iterated_local_search_randomized_variable_neighborhood_descent_set_partitioning.params import (
+from logic.src.policies.route_construction.matheuristics.iterated_local_search_randomized_variable_neighborhood_descent_set_partitioning.params import (
     ILSRVNDSPParams,
 )
-from policies.route_construction.matheuristics.iterated_local_search_randomized_variable_neighborhood_descent_set_partitioning.rvnd import (
+from logic.src.policies.route_construction.matheuristics.iterated_local_search_randomized_variable_neighborhood_descent_set_partitioning.rvnd import (
     RVND,
 )
-from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
+from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
 
 logger = logging.getLogger(__name__)
 

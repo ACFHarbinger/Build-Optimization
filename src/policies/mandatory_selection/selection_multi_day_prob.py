@@ -7,7 +7,7 @@ the total accumulation variance scales by the square root of time (sqrt(D)),
 providing a much more mathematically rigorous risk assessment than linear bounds.
 
 Example:
-    >>> from policies.helpers.mandatory.selection_multi_day_prob import MultiDayOverflowSelection
+    >>> from logic.src.policies.helpers.mandatory.selection_multi_day_prob import MultiDayOverflowSelection
     >>> strategy = MultiDayOverflowSelection()
     >>> bins = strategy.select_bins(context)
 """
@@ -17,10 +17,10 @@ from typing import List, Tuple
 import numpy as np
 from scipy.stats import norm
 
-from interfaces.context.search_context import SearchContext
-from interfaces.mandatory_selection import IMandatorySelectionStrategy
-from policies.mandatory_selection.base.selection_context import SelectionContext
-from policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
+from logic.src.interfaces.context.search_context import SearchContext
+from logic.src.interfaces.mandatory_selection import IMandatorySelectionStrategy
+from logic.src.policies.mandatory_selection.base.selection_context import SelectionContext
+from logic.src.policies.mandatory_selection.base.selection_registry import MandatorySelectionRegistry
 
 
 @MandatorySelectionRegistry.register("multi_day_prob")
