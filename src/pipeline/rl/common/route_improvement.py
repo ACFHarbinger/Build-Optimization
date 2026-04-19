@@ -1,5 +1,5 @@
 """
-Post-processing utilities.
+Route improvement utilities.
 Includes route decoding, efficiency calculation, and lightweight optimization.
 """
 
@@ -9,7 +9,7 @@ import torch
 
 
 class EfficiencyOptimizer:
-    """Optimizes routes post-generation."""
+    """Optimizes routes as a route improvement step."""
 
     def __init__(self, problem, **kwargs):
         """

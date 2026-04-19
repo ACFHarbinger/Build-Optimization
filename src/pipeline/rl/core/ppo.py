@@ -12,15 +12,18 @@ from __future__ import annotations
 from typing import Any
 
 import torch
+from pytorch_lightning.core.optimizer import LightningOptimizer
 from tensordict import TensorDict
 from torch import nn
-from utils.data.rl_utils import safe_td_copy
+from torch.utils.data import DataLoader
 
-from interfaces import ITraversable
-from pipeline.rl.common.base import LitModule
+from logic.src.data.datasets import FastTdDataset
+from logic.src.interfaces import ITraversable
+from logic.src.pipeline.rl.common.base import RL4COLitModule
+from logic.src.utils.data.rl_utils import safe_td_copy
 
 
-class PPO(LitModule):
+class PPO(RL4COLitModule):
     """
     Proximal Policy Optimization (PPO).
 
@@ -56,7 +59,7 @@ class PPO(LitModule):
             entropy_weight: Weight for entropy bonus.
             max_grad_norm: Maximum gradient norm for clipping.
             mini_batch_size: Mini-batch size (int or fraction of batch).
-            **kwargs: Arguments passed to LitModule.
+            **kwargs: Arguments passed to RL4COLitModule.
         """
         super().__init__(**kwargs)
         self.critic = critic
@@ -132,14 +135,7 @@ class PPO(LitModule):
             # Initial state value
             self.critic(batch).squeeze(-1)  # (batch)
 
-        # 2. PPO Optimization Loop
-        from pytorch_lightning.core.optimizer import LightningOptimizer
-        from torch.utils.data import DataLoader
-
-        from data.datasets import FastTdDataset
-
         opt = self.optimizers()
-
         if isinstance(opt, list):
             opt = opt[0]
 

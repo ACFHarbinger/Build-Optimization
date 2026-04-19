@@ -13,12 +13,12 @@ import torch
 from tensordict import TensorDict
 
 if TYPE_CHECKING:
-    from interfaces.env import IEnv
+    from logic.src.interfaces.env import IEnv
 
-from pipeline.rl.common.base import LitModule
+from logic.src.pipeline.rl.common.base import RL4COLitModule
 
 
-class REINFORCE(LitModule):
+class REINFORCE(RL4COLitModule):
     """
     REINFORCE with baseline.
 
@@ -44,7 +44,7 @@ class REINFORCE(LitModule):
         Args:
             entropy_weight: Weight for entropy bonus in loss.
             max_grad_norm: Maximum gradient norm for clipping.
-            **kwargs: Arguments passed to LitModule.
+            **kwargs: Arguments passed to RL4COLitModule.
         """
         super().__init__(**kwargs)
         self.entropy_weight = entropy_weight

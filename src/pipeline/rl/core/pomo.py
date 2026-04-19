@@ -11,10 +11,10 @@ from __future__ import annotations
 
 from typing import Callable, Optional, Union
 
-from data.processor.transforms import StateAugmentation
 from tensordict import TensorDict
 
-from pipeline.rl.core.reinforce import REINFORCE
+from logic.src.data.processor.transforms import StateAugmentation
+from logic.src.pipeline.rl.core.reinforce import REINFORCE
 
 
 class POMO(REINFORCE):

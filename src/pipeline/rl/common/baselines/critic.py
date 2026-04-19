@@ -10,6 +10,8 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
+from logic.src.utils.functions.rl import ensure_tensordict
+
 from .base import Baseline
 
 
@@ -40,8 +42,6 @@ class CriticBaseline(Baseline):
         """
         if self.critic is None:
             return torch.zeros_like(reward)
-
-        from utils.functions.rl import ensure_tensordict
 
         td = ensure_tensordict(td, next(iter(self.critic.parameters())).device)
         return self.critic(td).squeeze(-1)

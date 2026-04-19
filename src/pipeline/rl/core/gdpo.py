@@ -11,9 +11,9 @@ import torch
 from tensordict import TensorDict
 
 if TYPE_CHECKING:
-    from interfaces.env import IEnv
+    from logic.src.interfaces.env import IEnv
 
-from pipeline.rl.core.reinforce import REINFORCE
+from logic.src.pipeline.rl.core.reinforce import REINFORCE
 
 
 class GDPO(REINFORCE):
@@ -23,6 +23,8 @@ class GDPO(REINFORCE):
     Each objective channel is normalized independently (Z-scored) across the group/batch
     before being aggregated into the final advantage signal.
     """
+
+    weights_tensor: torch.Tensor
 
     def __init__(
         self,

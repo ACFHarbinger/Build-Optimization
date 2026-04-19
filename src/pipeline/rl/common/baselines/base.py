@@ -11,8 +11,9 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
-from interfaces import ITensorDictLike
-from tracking.logging.pylogger import get_pylogger
+from logic.src.data.datasets import BaselineDataset
+from logic.src.interfaces import ITensorDictLike
+from logic.src.tracking.logging.pylogger import get_pylogger
 
 logger = get_pylogger(__name__)
 
@@ -44,8 +45,6 @@ class Baseline(nn.Module, ABC):
 
     def unwrap_dataset(self, dataset: Any) -> Any:
         """Unwrap the dataset if it's wrapped."""
-        from data.datasets import BaselineDataset
-
         if isinstance(dataset, BaselineDataset):
             return dataset.dataset
         return dataset

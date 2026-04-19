@@ -1,5 +1,5 @@
 """
-Data logic for LitModule.
+Data logic for RL4COLitModule.
 """
 
 from __future__ import annotations
@@ -8,21 +8,22 @@ import os
 from typing import TYPE_CHECKING, Any, Optional, cast
 
 from torch.utils.data import DataLoader
-from utils.data.td_utils import tensordict_collate_fn
 
-from tracking.logging.pylogger import get_pylogger
+from logic.src.data.datasets import TensorDictDataset
+from logic.src.tracking.logging.pylogger import get_pylogger
+from logic.src.utils.data.td_utils import tensordict_collate_fn
 
 if TYPE_CHECKING:
-    from interfaces.env import IEnv
-    from interfaces.policy import IPolicy
+    from logic.src.interfaces.env import IEnv
+    from logic.src.interfaces.policy import IPolicy
 
 logger = get_pylogger(__name__)
 
 
 class DataMixin:
-    """Mixin for data loading"""
+    """Mixin for data loading logic."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Class.
 
         Args:
@@ -68,27 +69,19 @@ class DataMixin:
             if self.train_dataset_path is not None and os.path.exists(self.train_dataset_path):
                 if self.local_rank == 0:
                     logger.info(f"Loading training dataset from {self.train_dataset_path}")
-                from data.datasets import TensorDictDataset
 
                 self.train_dataset = TensorDictDataset.load(self.train_dataset_path)
             else:
                 data = gen(batch_size=self.train_data_size)
-                from data.datasets import TensorDictDataset
-
                 self.train_dataset = TensorDictDataset(data)
-
             assert self.train_dataset is not None
             if self.val_dataset_path is not None:
                 # Load validation dataset from file (legacy parity)
-                from data.datasets import TensorDictDataset
-
                 self.val_dataset = TensorDictDataset.load(self.val_dataset_path)
             else:
                 if self.local_rank == 0:
                     logger.info(f"Pre-generating validation dataset ({self.val_data_size} instances) on CPU...")
                 val_data = cast(Any, gen)(batch_size=self.val_data_size)
-                from data.datasets import TensorDictDataset
-
                 self.val_dataset = TensorDictDataset(val_data)
                 assert self.val_dataset is not None
         else:

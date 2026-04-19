@@ -4,14 +4,19 @@ Greedy rollout baseline with significance-based updates.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+import copy
+from typing import Any, Optional, cast
 
 import torch
-from constants.routing import DEFAULT_ROLLOUT_BATCH_SIZE
+from scipy import stats
 from torch import nn
-from utils.data.rl_utils import safe_td_copy
+from torch.utils.data import DataLoader, Dataset
 
-from tracking.logging.pylogger import get_pylogger
+from logic.src.constants.routing import DEFAULT_ROLLOUT_BATCH_SIZE
+from logic.src.data.datasets import BaselineDataset, tensordict_collate_fn
+from logic.src.tracking.logging.pylogger import get_pylogger
+from logic.src.utils.data.rl_utils import safe_td_copy
+from logic.src.utils.functions.rl import ensure_tensordict
 
 from .base import Baseline
 
@@ -53,8 +58,6 @@ class RolloutBaseline(Baseline):
 
     def setup(self, policy: nn.Module):
         """Copy policy for baseline."""
-        import copy
-
         self.baseline_policy = copy.deepcopy(policy)  # type: ignore[assignment]
         if self.baseline_policy is not None:
             self.baseline_policy.eval()  # type: ignore[misc]
@@ -63,8 +66,6 @@ class RolloutBaseline(Baseline):
 
     def _rollout(self, policy: nn.Module, td_or_dataset: Any, env: Optional[Any] = None) -> torch.Tensor:
         """Run greedy rollout on a batch or dataset."""
-        from torch.utils.data import Dataset
-
         if isinstance(td_or_dataset, Dataset):
             return self._rollout_dataset(policy, td_or_dataset, env)
         return self._rollout_batch(policy, td_or_dataset, env)
@@ -73,11 +74,6 @@ class RolloutBaseline(Baseline):
         """Run greedy rollout on a complete dataset."""
         if env is None:
             raise ValueError("Environment (env) is required for RolloutBaseline evaluation")
-
-        from torch.utils.data import DataLoader
-        from utils.functions.rl import ensure_tensordict
-
-        from data.datasets import tensordict_collate_fn
 
         # Determine strict batch size from environment
         batch_size = DEFAULT_ROLLOUT_BATCH_SIZE  # Default from constants
@@ -115,11 +111,11 @@ class RolloutBaseline(Baseline):
                     td_data = torch.cat([td_data, padding_safe], 0)
 
                 if hasattr(policy, "set_strategy"):
-                    policy.set_strategy("greedy")
-                    res = policy(td_data)
+                    cast(Any, policy).set_strategy("greedy")
+                    res = cast(Any, policy)(td_data)
                     out = {"reward": res[0]} if isinstance(res, tuple) else res
                 else:
-                    out = policy(td_data, env, strategy="greedy")
+                    out = cast(Any, policy)(td_data, env, strategy="greedy")
 
                 # Unpad rewards
                 if real_size != batch_size:
@@ -133,10 +129,6 @@ class RolloutBaseline(Baseline):
 
     def _rollout_batch(self, policy: nn.Module, td: Any, env: Optional[Any] = None) -> torch.Tensor:
         """Run greedy rollout on a single batch."""
-        import copy
-
-        from utils.functions.rl import ensure_tensordict
-
         # Note: deepcopy can be expensive, but ensure_tensordict helps standardize
         device = next(policy.parameters()).device
         td_data = ensure_tensordict(td, device)
@@ -145,13 +137,13 @@ class RolloutBaseline(Baseline):
         policy.eval()
         with torch.no_grad():
             if hasattr(policy, "set_strategy"):
-                policy.set_strategy("greedy")
-                res = policy(td_copy)
+                cast(Any, policy).set_strategy("greedy")
+                res = cast(Any, policy)(td_copy)
                 out = {"reward": res[0]} if isinstance(res, tuple) else res
             else:
                 if env is None:
                     raise ValueError("Environment (env) is required for RolloutBaseline evaluation")
-                out = policy(td_copy, env, strategy="greedy")
+                out = cast(Any, policy)(td_copy, env, strategy="greedy")
 
         return out["reward"]
 
@@ -162,8 +154,6 @@ class RolloutBaseline(Baseline):
         env: Optional[Any] = None,
     ) -> Any:
         """Wrap the dataset with rollout baseline values."""
-        from data.datasets import BaselineDataset
-
         # Compatibility: handle positional arguments if called as (policy, dataset, env)
         if isinstance(dataset, nn.Module):
             # Probably called as wrap_dataset(policy, dataset, env)
@@ -197,8 +187,6 @@ class RolloutBaseline(Baseline):
             # Note: This is computationally expensive if done every step
             # Ideally use wrap_dataset/unwrap_batch flow
             with torch.no_grad():
-                from utils.functions.rl import ensure_tensordict
-
                 td = ensure_tensordict(td, next(iter(self.baseline_policy.parameters())).device)
                 return self._rollout(self.baseline_policy, td, env)
 
@@ -219,8 +207,6 @@ class RolloutBaseline(Baseline):
                 and self.baseline_policy is not None
                 and env is not None
             ):
-                from scipy import stats
-
                 # Evaluate candidate
                 candidate_vals = self._rollout(policy, val_dataset, env)
                 candidate_mean = candidate_vals.mean().item()

@@ -11,12 +11,12 @@ from __future__ import annotations
 
 import torch
 from tensordict import TensorDict
-from utils.tasks.losses import (
+
+from logic.src.pipeline.rl.core.pomo import POMO
+from logic.src.utils.tasks.losses import (
     invariance_loss,
     solution_symmetricity_loss,
 )
-
-from pipeline.rl.core.pomo import POMO
 
 
 class SymNCO(POMO):

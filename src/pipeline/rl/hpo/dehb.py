@@ -11,7 +11,12 @@ from typing import Any, Callable, Dict, Optional
 
 from dehb import DEHB
 
-from configs import Config
+from logic.src.configs import Config
+
+try:
+    from logic.src.tracking.core.run import get_active_run
+except ImportError:
+    get_active_run = None  # type: ignore[assignment]
 
 from .base import BaseHPO, ParamSpec
 
@@ -94,9 +99,7 @@ class DifferentialEvolutionHyperband(BaseHPO):
         self.history = self._dehb.history
 
         # Log to WSTracker
-        from tracking.core.run import get_active_run
-
-        run = get_active_run()
+        run = get_active_run() if get_active_run is not None else None
         if run is not None:
             run.log_params({f"hpo/best/{k}": v for k, v in best_config.items()})
             run.log_metric("hpo/best_score", float(-best_score) if best_score is not None else 0.0)

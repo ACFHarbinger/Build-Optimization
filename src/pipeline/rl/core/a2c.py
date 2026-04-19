@@ -12,16 +12,17 @@ from __future__ import annotations
 from typing import Any, Optional, cast
 
 import torch
-from models.common.autoregressive.constructive import ConstructivePolicy
 from tensordict import TensorDict
 from torch import nn
 
-from envs.base import RL4COEnvBase
-from interfaces.env import IEnv
-from pipeline.rl.common.base import LitModule
+from logic.src.envs.base.base import RL4COEnvBase
+from logic.src.interfaces.env import IEnv
+from logic.src.models import CriticNetwork as LegacyCriticNetwork
+from logic.src.models.common.autoregressive.constructive import ConstructivePolicy
+from logic.src.pipeline.rl.common.base import RL4COLitModule
 
 
-class A2C(LitModule):
+class A2C(RL4COLitModule):
     """
     Advantage Actor-Critic (A2C) algorithm.
 
@@ -71,7 +72,7 @@ class A2C(LitModule):
             entropy_coef: Entropy regularization coefficient.
             value_loss_coef: Critic loss coefficient.
             normalize_advantage: Whether to normalize advantages.
-            **kwargs: Additional args passed to LitModule.
+            **kwargs: Additional args passed to RL4COLitModule.
         """
         # A2C uses critic baseline
         kwargs["baseline"] = "critic"
@@ -88,12 +89,10 @@ class A2C(LitModule):
         )
         self.automatic_optimization = False
 
-        self.save_hyperparameters(ignore=["env", "policy", "critic"])
+        self.save_hyperparameters(ignore=["env", "policy", "critic", "kwargs", "generator"])
 
         # Critic network
         if critic is None:
-            from models import CriticNetwork as LegacyCriticNetwork
-
             critic = LegacyCriticNetwork(
                 env_name=env.name if hasattr(env, "name") else "vrpp",
                 embed_dim=getattr(policy, "embed_dim", 128),

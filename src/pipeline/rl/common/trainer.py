@@ -8,14 +8,11 @@ import os
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 if TYPE_CHECKING:
-    from configs.tracking import TrackingConfig
+    from logic.src.configs.tracking import TrackingConfig
 
 import pytorch_lightning as pl
+import torch
 from loguru import logger
-from pipeline.callbacks import (
-    ModelSummaryCallback,
-    TrainingDisplayCallback,
-)
 from pytorch_lightning.callbacks import (
     Callback,
     ModelCheckpoint,
@@ -23,7 +20,18 @@ from pytorch_lightning.callbacks import (
 )
 from pytorch_lightning.loggers import Logger, WandbLogger
 
-from tracking.integrations.lightning import TrackingCallback
+from logic.src.pipeline.callbacks import (
+    ModelSummaryCallback,
+    TrainingDisplayCallback,
+)
+from logic.src.tracking.integrations.lightning import TrackingCallback
+
+try:
+    from pytorch_lightning.loggers import TensorBoardLogger
+    from pytorch_lightning.strategies import DDPStrategy
+except ImportError:
+    TensorBoardLogger = None  # type: ignore[assignment,misc]
+    DDPStrategy = None  # type: ignore[assignment,misc]
 
 
 class WSTrainer(pl.Trainer):
@@ -84,8 +92,6 @@ class WSTrainer(pl.Trainer):
             reload_dataloaders_every_n_epochs: Reload dataloaders every N epochs (for RL).
             **kwargs: Additional Trainer arguments.
         """
-        import torch
-
         # RL4CO Optimization 1: Disable JIT profiling (memory optimization)
         if disable_jit_profiling:
             torch._C._jit_set_profiling_executor(False)
@@ -100,8 +106,6 @@ class WSTrainer(pl.Trainer):
         if strategy is None and auto_ddp:
             n_devices = devices if isinstance(devices, int) else torch.cuda.device_count()
             if n_devices > 1:
-                from pytorch_lightning.strategies import DDPStrategy
-
                 strategy = DDPStrategy(find_unused_parameters=True)
 
         if strategy is None:
@@ -120,11 +124,8 @@ class WSTrainer(pl.Trainer):
 
         # Check if a custom progress bar callback exists
         # If we have a custom progress bar, we must enable Lightning's progress bar system
-        # (Lightning will use the custom bar, not add its default)
-        # If we don't have one, use the user's preference
         has_custom_progress_bar = any(isinstance(c, RichProgressBar) for c in callbacks)
         lightning_enable_progress_bar = has_custom_progress_bar or enable_progress_bar
-
         super().__init__(
             max_epochs=max_epochs,
             accelerator=accelerator,
@@ -214,8 +215,6 @@ class WSTrainer(pl.Trainer):
             )
         except (ImportError, Exception) as e:
             # Fall back to TensorBoard if WandB not available or network fails
-            from pytorch_lightning.loggers import TensorBoardLogger
-
             # We don't use pl.logger here because it might not be fully setup, but loguru is safe
             logger.warning(f"WandB initialization failed, falling back to TensorBoard: {e}")
             return TensorBoardLogger(logs_dir or "logs", name="")

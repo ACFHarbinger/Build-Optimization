@@ -12,10 +12,12 @@ from tensordict import TensorDict
 from torch import nn
 from torch.utils.data import DataLoader
 
-from pipeline.rl.common.base import LitModule
+from logic.src.data.datasets import FastTdDataset
+from logic.src.pipeline.rl.common.base import RL4COLitModule
+from logic.src.utils.data.rl_utils import safe_td_copy
 
 
-class StepwisePPO(LitModule):
+class StepwisePPO(RL4COLitModule):
     """
     Stepwise Proximal Policy Optimization (StepwisePPO).
 
@@ -50,7 +52,7 @@ class StepwisePPO(LitModule):
             mini_batch_size: Batch size for PPO updates.
             gamma: Discount factor.
             gae_lambda: GAE lambda parameter.
-            **kwargs: Arguments for LitModule.
+            **kwargs: Arguments for RL4COLitModule.
         """
         super().__init__(**kwargs)
         self.critic = critic
@@ -68,10 +70,6 @@ class StepwisePPO(LitModule):
 
     def training_step(self, batch: TensorDict, batch_idx: int):
         """Execute one StepwisePPO training step."""
-        from utils.data.rl_utils import safe_td_copy
-
-        from data.datasets import FastTdDataset
-
         env = self.env
         td = env.reset(batch)
 

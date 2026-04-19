@@ -1,6 +1,6 @@
 """ZenML HPO pipeline for WSmart-Route.
 
-Wraps :func:`~pipeline.features.train.hpo.run_hpo` in a
+Wraps :func:`~logic.src.pipeline.features.train.hpo.run_hpo` in a
 three-step ZenML pipeline:
 
 1. **prepare_hpo_config** — serialise the Hydra config to a plain dict.
@@ -9,29 +9,31 @@ three-step ZenML pipeline:
 3. **log_hpo_summary** — record the best metric as a ZenML artifact.
 
 The pipeline is invoked from
-:func:`~pipeline.features.train.hpo._run_hpo_via_zenml`
+:func:`~logic.src.pipeline.features.train.hpo._run_hpo_via_zenml`
 when ``cfg.tracking.zenml_enabled`` is ``True``.
 """
 
 from __future__ import annotations
 
-import contextlib
 from typing import Any, Dict
 
-from tracking.logging.pylogger import get_pylogger
+from omegaconf import OmegaConf
 
-logger = get_pylogger(__name__)
-
-# ---------------------------------------------------------------------------
-# Lazy ZenML imports
-# ---------------------------------------------------------------------------
+from logic.src.configs import Config
+from logic.src.pipeline.features.train.hpo import run_hpo
+from logic.src.tracking.logging.pylogger import get_pylogger
 
 _ZENML_AVAILABLE = False
-with contextlib.suppress(ImportError):
-    from zenml import pipeline as zenml_pipeline  # type: ignore[import-not-found]
-    from zenml import step  # type: ignore[import-not-found]
+try:
+    from zenml import pipeline as zenml_pipeline
+    from zenml import step
 
     _ZENML_AVAILABLE = True
+except ImportError:
+    zenml_pipeline = None  # type: ignore[assignment,misc]
+    step = None  # type: ignore[assignment,misc]
+
+logger = get_pylogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -52,11 +54,6 @@ if _ZENML_AVAILABLE:
         ZenML tracking is disabled in the reconstructed config to prevent
         the inner :func:`run_hpo` from re-dispatching to this pipeline.
         """
-        from omegaconf import OmegaConf
-        from pipeline.features.train.hpo import run_hpo
-
-        from configs import Config
-
         cfg = OmegaConf.structured(Config)
         cfg = OmegaConf.merge(cfg, OmegaConf.create(config_dict))
         cfg = OmegaConf.to_object(cfg)
@@ -96,7 +93,7 @@ def hpo_pipeline(cfg: Any) -> float:
     """Serialise *cfg* and launch the ZenML HPO pipeline.
 
     Args:
-        cfg: Root Hydra :class:`~configs.Config` object.
+        cfg: Root Hydra :class:`~logic.src.configs.Config` object.
 
     Returns:
         Best metric value found.
@@ -107,7 +104,5 @@ def hpo_pipeline(cfg: Any) -> float:
     if not _ZENML_AVAILABLE:
         raise ImportError("zenml is not installed — cannot run ZenML HPO pipeline")
 
-    from omegaconf import OmegaConf
-
     config_dict: Dict[str, Any] = OmegaConf.to_container(cfg, resolve=True)  # type: ignore[assignment]
-    return _hpo_pipeline(config_dict=config_dict)
+    return _hpo_pipeline(config_dict=config_dict)  # type: ignore[return-value]

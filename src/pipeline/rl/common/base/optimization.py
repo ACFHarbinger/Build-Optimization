@@ -1,5 +1,5 @@
 """
-Optimization logic for LitModule.
+Optimization logic for RL4COLitModule.
 """
 
 from __future__ import annotations
@@ -12,7 +12,7 @@ import torch
 class OptimizationMixin:
     """Mixin for optimizer and scheduler configuration."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Class.
 
         Args:

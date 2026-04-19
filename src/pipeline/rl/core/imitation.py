@@ -10,19 +10,33 @@ from typing import Any
 
 import torch
 from tensordict import TensorDict
-from utils.data.rl_utils import safe_td_copy
 
-from pipeline.rl.common.base import LitModule
-from pipeline.rl.core.losses import (
+from logic.src.configs.rl.policies import (
+    ACOConfig,
+    ALNSConfig,
+    HGSALNSConfig,
+    HGSConfig,
+    ILSConfig,
+    RLSConfig,
+)
+from logic.src.models.policies.alns import VectorizedALNS
+from logic.src.models.policies.ant_colony_system import VectorizedACOPolicy
+from logic.src.models.policies.hgs import VectorizedHGS
+from logic.src.models.policies.hgs_alns import VectorizedHGSALNS
+from logic.src.models.policies.iterated_local_search import IteratedLocalSearchPolicy
+from logic.src.models.policies.random_local_search import RandomLocalSearchPolicy
+from logic.src.pipeline.rl.common.base import RL4COLitModule
+from logic.src.pipeline.rl.core.losses import (
     js_divergence_loss,
     kl_divergence_loss,
     nll_loss,
     reverse_kl_divergence_loss,
     weighted_nll_loss,
 )
+from logic.src.utils.data.rl_utils import safe_td_copy
 
 
-class ImitationLearning(LitModule):
+class ImitationLearning(RL4COLitModule):
     """
     Imitation Learning / Supervised Learning.
 
@@ -40,6 +54,8 @@ class ImitationLearning(LitModule):
         policy_config: Any,  # Expert policy configuration (HGSConfig, ALNSConfig, etc.)
         env_name: str,
         loss_fn: str = "nll",
+        seed: int = 42,
+        device: str = "cpu",
         **kwargs,
     ):
         """
@@ -49,18 +65,18 @@ class ImitationLearning(LitModule):
             policy_config: Expert policy configuration object (HGSConfig, ALNSConfig, etc.).
             env_name: Environment name for the expert policy.
             loss_fn: Name of loss function to use ('nll', 'kl', 'js', etc.).
-            **kwargs: Arguments passed to LitModule.
+            **kwargs: Arguments passed to RL4COLitModule.
         """
         # Baseline is not used in IL, but we keep the structure
         kwargs["baseline"] = "none"
 
         # Exclude non-serializable objects from hyperparameters
-        self.save_hyperparameters(ignore=["policy_config", "env", "policy"])
+        self.save_hyperparameters(ignore=["policy_config", "env", "policy", "kwargs", "generator"])
 
         super().__init__(**kwargs)
 
         # Create expert policy from config
-        self.expert_policy = self._create_expert_policy(policy_config, env_name)
+        self.expert_policy = self._create_expert_policy(policy_config, env_name, seed, device)
         self.expert_name = type(policy_config).__name__.replace("Config", "").lower()
 
         # Map loss functions
@@ -74,31 +90,18 @@ class ImitationLearning(LitModule):
         self.loss_fn_name = loss_fn
         self.loss_fn = self._loss_map.get(loss_fn, nll_loss)
 
-    def _create_expert_policy(self, policy_config: Any, env_name: str) -> Any:
+    def _create_expert_policy(self, policy_config: Any, env_name: str, seed: int, device: str) -> Any:
         """Create expert policy from configuration.
 
         Args:
             policy_config: Expert policy configuration (HGSConfig, ALNSConfig, etc.).
             env_name: Environment name for the policy.
+            seed: Random seed for reproducibility.
+            device: Device to run the policy on.
 
         Returns:
             Initialized expert policy instance.
         """
-        from configs.rl.policies import (
-            ACOConfig,
-            ALNSConfig,
-            HGSALNSConfig,
-            HGSConfig,
-            ILSConfig,
-            RLSConfig,
-        )
-        from models.policies.alns import VectorizedALNS
-        from models.policies.ant_colony_system import VectorizedACOPolicy
-        from models.policies.hgs import VectorizedHGS
-        from models.policies.hgs_alns import VectorizedHGSALNS
-        from models.policies.iterated_local_search import IteratedLocalSearchPolicy
-        from models.policies.random_local_search import RandomLocalSearchPolicy
-
         # Map config types to policy classes
         config_to_policy_map = {
             HGSConfig: VectorizedHGS,
@@ -120,6 +123,8 @@ class ImitationLearning(LitModule):
         # Convert config to dict and add env_name
         config_dict = asdict(policy_config)
         config_dict["env_name"] = env_name
+        config_dict["device"] = device
+        config_dict["seed"] = seed
 
         # Create and return the policy
         return policy_cls(**config_dict)

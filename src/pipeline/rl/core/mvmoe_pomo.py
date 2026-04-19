@@ -15,10 +15,11 @@ from __future__ import annotations
 
 from typing import Callable, Optional, Union
 
-from constants.models import DEFAULT_MOE_KWARGS
 from torch import nn
 
-from pipeline.rl.core.pomo import POMO
+from logic.src.constants.models import DEFAULT_MOE_KWARGS
+from logic.src.models.core.attention_model import AttentionModelPolicy
+from logic.src.pipeline.rl.core.pomo import POMO
 
 
 class MVMoE_POMO(POMO):
@@ -55,14 +56,12 @@ class MVMoE_POMO(POMO):
             augment_fn: Augmentation function.
             first_aug_identity: Whether first augmentation is identity.
             num_starts: Number of multi-start nodes.
-            **kwargs: Passed to POMO (and REINFORCE/LitModule).
+            **kwargs: Passed to POMO (and REINFORCE/RL4COLitModule).
         """
         if moe_kwargs is None:
             moe_kwargs = DEFAULT_MOE_KWARGS
 
         if policy is None:
-            from models.core.attention_model import AttentionModelPolicy
-
             env_name = kwargs.get("env_name", "vrpp")
             # Inject MoE kwargs into policy, using MVMoE recommended defaults
             policy = AttentionModelPolicy(

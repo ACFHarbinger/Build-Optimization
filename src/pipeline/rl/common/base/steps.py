@@ -1,5 +1,5 @@
 """
-Training/Validation step logic for LitModule.
+Training/Validation step logic for RL4COLitModule.
 """
 
 from __future__ import annotations
@@ -8,15 +8,17 @@ from abc import abstractmethod
 from typing import TYPE_CHECKING, Any, Dict, Optional, Union, cast
 
 import torch
-from constants.metrics import METRIC_MAPPING
 from tensordict import TensorDict
 
-from interfaces import ITraversable
-from tracking.logging.pylogger import get_pylogger
+from logic.src.constants.metrics import METRIC_MAPPING
+from logic.src.interfaces import ITraversable
+from logic.src.tracking.logging.pylogger import get_pylogger
+from logic.src.utils.functions.rl import ensure_tensordict
 
 if TYPE_CHECKING:
-    from interfaces.env import IEnv
-    from interfaces.policy import IPolicy
+    from logic.src.interfaces.env import IEnv
+    from logic.src.interfaces.policy import IPolicy
+    from logic.src.policies.mandatory_selection import VectorizedSelector
 
 logger = get_pylogger(__name__)
 
@@ -24,7 +26,7 @@ logger = get_pylogger(__name__)
 class StepMixin:
     """Mixin for training, validation, and test steps."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Class.
 
         Args:
@@ -35,8 +37,78 @@ class StepMixin:
         self.policy: IPolicy
         self.baseline: Any
         self.device: torch.device
+        self.mandatory_selector: Optional[VectorizedSelector]
         self._current_baseline_val: Any = None
         self.last_out: Any = None
+
+    def _apply_mandatory_selection(self, td: TensorDict) -> TensorDict:
+        """
+        Apply mandatory selection to determine which bins must be collected.
+
+        Args:
+            td: TensorDict with problem instance data.
+
+        Returns:
+            TensorDict with 'mandatory' mask added.
+        """
+        if self.mandatory_selector is None:
+            return td
+
+        # Get fill levels from the TensorDict
+        fill_levels = None
+        for key in ["waste", "fill_level"]:
+            if key in td.keys():
+                fill_levels = td[key]
+                break
+
+        if fill_levels is None:
+            logger.warning("No fill levels found in TensorDict for mandatory selection")
+            return td
+
+        # Ensure fill_levels is 2D (batch_size, num_nodes)
+        if fill_levels.dim() == 1:
+            fill_levels = fill_levels.unsqueeze(0)
+
+        # Get additional data for advanced selectors (lookahead, service_level)
+        selector_kwargs = {}
+        if "accumulation_rate" in td.keys():
+            selector_kwargs["accumulation_rates"] = td["accumulation_rate"]
+        if "std_deviation" in td.keys():
+            selector_kwargs["std_deviations"] = td["std_deviation"]
+        if "current_day" in td.keys():
+            selector_kwargs["current_day"] = td["current_day"]
+
+        # Get data needed for ManagerSelector (neural network-based selection)
+        if "locs" in td.keys():
+            selector_kwargs["locs"] = td["locs"]
+        elif "loc" in td.keys():
+            selector_kwargs["locs"] = td["loc"]
+
+        # Waste history for temporal modeling
+        if "waste_history" in td.keys():
+            selector_kwargs["waste_history"] = td["waste_history"]
+        elif "fill_history" in td.keys():
+            selector_kwargs["waste_history"] = td["fill_history"]
+
+        # Apply selector to get mandatory mask
+        mandatory_mask = self.mandatory_selector.select(fill_levels, **selector_kwargs)
+
+        # Ensure mandatory_mask matches the environment's node count (N+1)
+        # Bins are typically customers-only in fill_levels, but mask needs depot (index 0)
+        # Check num_loc in env or its generator
+        num_loc = getattr(self.env, "num_loc", None)
+        if num_loc is None and hasattr(self.env, "generator"):
+            num_loc = getattr(self.env.generator, "num_loc", None)
+
+        if num_loc is not None and mandatory_mask.shape[-1] == num_loc:
+            # Prepend False for the depot (index 0)
+            depot_mandatory = torch.zeros(*mandatory_mask.shape[:-1], 1, dtype=torch.bool, device=mandatory_mask.device)
+            mandatory_mask = torch.cat([depot_mandatory, mandatory_mask], dim=-1)
+
+        # Store in TensorDict
+        td["mandatory"] = mandatory_mask
+
+        return td
 
     @abstractmethod
     def calculate_loss(
@@ -92,9 +164,11 @@ class StepMixin:
         self._current_baseline_val = baseline_val
 
         # env.reset expects data on the environment's device.
-        from utils.functions.rl import ensure_tensordict
-
         td = ensure_tensordict(batch, self.device)
+
+        # Apply mandatory selector if configured
+        if self.mandatory_selector is not None:
+            td = self._apply_mandatory_selection(td)
 
         td = self.env.reset(td)
 
@@ -163,6 +237,11 @@ class StepMixin:
                 sync_dist=True,
                 batch_size=batch_size,
             )
+
+        # Time-based training: accumulate actions for epoch-end update
+        if phase == "train" and getattr(self, "train_time", False) and "actions" in out:
+            # Type ignore is safe as we checked getattr in __init__
+            self._epoch_actions.append(out["actions"].detach().cpu())  # type: ignore[attr-defined]
 
         return out
 

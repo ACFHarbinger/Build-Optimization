@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import torch
 
-from pipeline.rl.core.ppo import PPO
+from logic.src.pipeline.rl.core.ppo import PPO
 
 
 class SAPO(PPO):
@@ -43,7 +43,7 @@ class SAPO(PPO):
             **kwargs: Arguments passed to PPO.
         """
         super().__init__(**kwargs)
-        self.save_hyperparameters(ignore=["critic"])
+        self.save_hyperparameters(ignore=["critic", "env", "policy", "kwargs", "generator"])
         self.tau_pos = tau_pos
         self.tau_neg = tau_neg
 

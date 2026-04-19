@@ -8,7 +8,12 @@ and applying sampled parameter values to the structured Config object.
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, Optional
 
-from configs import Config
+from logic.src.configs import Config
+
+try:
+    import ConfigSpace as CS
+except ImportError:
+    CS = None  # type: ignore[assignment,misc]
 
 # --------------------------------------------------------------------------- #
 #  Search-space spec helpers
@@ -174,7 +179,8 @@ class BaseHPO(ABC):
         Returns:
             A :class:`ConfigSpace.ConfigurationSpace`.
         """
-        import ConfigSpace as CS
+        if CS is None:
+            raise ImportError("ConfigSpace is not installed.")
 
         cs = CS.ConfigurationSpace()
         for name, spec in search_space.items():
@@ -187,14 +193,14 @@ class BaseHPO(ABC):
                     log=spec.get("log", False),
                 )
             elif ptype == "int":
-                hp = CS.UniformIntegerHyperparameter(
+                hp = CS.UniformIntegerHyperparameter(  # type: ignore[assignment]
                     name,
                     lower=spec["low"],
                     upper=spec["high"],
                     log=spec.get("log", False),
                 )
             elif ptype == "categorical":
-                hp = CS.CategoricalHyperparameter(
+                hp = CS.CategoricalHyperparameter(  # type: ignore[assignment]
                     name,
                     choices=spec["choices"],
                 )

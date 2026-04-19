@@ -43,7 +43,30 @@ import contextlib
 import copy
 from typing import Any, Callable, Dict, Optional
 
-from configs import Config
+from logic.src.configs import Config
+
+try:
+    import ray
+    import ray.train as ray_train
+    from ray import tune
+    from ray import tune as rt
+    from ray.tune.logger.mlflow import MLflowLoggerCallback
+    from ray.tune.schedulers import ASHAScheduler, PopulationBasedTraining
+    from ray.tune.schedulers.hb_bohb import HyperBandForBOHB
+    from ray.tune.search.bohb import TuneBOHB
+
+    from logic.src.tracking.core.run import get_active_run
+except ImportError:
+    ray = None  # type: ignore[assignment,misc]
+    ray_train = None  # type: ignore[assignment,misc]
+    tune = None  # type: ignore[assignment,misc]
+    rt = None  # type: ignore[assignment,misc]
+    MLflowLoggerCallback = None  # type: ignore[assignment,misc]
+    ASHAScheduler = None  # type: ignore[assignment,misc]
+    PopulationBasedTraining = None  # type: ignore[assignment,misc]
+    HyperBandForBOHB = None  # type: ignore[assignment,misc]
+    TuneBOHB = None  # type: ignore[assignment,misc]
+    get_active_run = None  # type: ignore[assignment,misc]
 
 from .base import BaseHPO, ParamSpec, apply_params
 
@@ -97,8 +120,8 @@ class RayTuneHPO(BaseHPO):
             Best ``val_reward`` found across all trials, or ``0.0`` if
             no successful trial was recorded.
         """
-        import ray
-        from ray import tune
+        if ray is None:
+            raise ImportError("ray is not installed")
 
         if not ray.is_initialized():
             ray.init(
@@ -118,8 +141,6 @@ class RayTuneHPO(BaseHPO):
 
         def trainable(trial_config: Dict[str, Any]) -> None:
             """Per-trial trainable executed inside a Ray worker."""
-            import ray.train as ray_train
-
             trial_cfg = copy.deepcopy(cfg_snapshot)
             apply_params(trial_cfg, trial_config)
 
@@ -167,9 +188,7 @@ class RayTuneHPO(BaseHPO):
             best_val = float(best.metrics.get("val_reward", 0.0))
 
         # Log to WSTracker
-        from tracking.core.run import get_active_run
-
-        run = get_active_run()
+        run = get_active_run() if get_active_run is not None else None
         if run is not None:
             run.log_metric("hpo/best_val_reward", best_val)
             run.log_metric("hpo/num_samples", self.cfg.hpo.num_samples)
@@ -186,8 +205,6 @@ class RayTuneHPO(BaseHPO):
 
     def _build_ray_search_space(self) -> Dict[str, Any]:
         """Convert typed ParamSpec dict to Ray Tune ``param_space``."""
-        from ray import tune as rt
-
         space: Dict[str, Any] = {}
         for name, spec in self.search_space.items():
             ptype = spec["type"]
@@ -218,8 +235,6 @@ class RayTuneHPO(BaseHPO):
         grace = max(1, max_t // self.cfg.hpo.reduction_factor)
 
         if name == "asha":
-            from ray.tune.schedulers import ASHAScheduler
-
             return ASHAScheduler(
                 max_t=max_t,
                 grace_period=grace,
@@ -227,8 +242,6 @@ class RayTuneHPO(BaseHPO):
             )
 
         if name == "pbt":
-            from ray.tune.schedulers import PopulationBasedTraining
-
             # Build perturbation intervals from the search space
             hyperparam_mutations: Dict[str, Any] = {}
             for param_name, spec in self.search_space.items():
@@ -244,8 +257,6 @@ class RayTuneHPO(BaseHPO):
             )
 
         if name == "bohb":
-            from ray.tune.schedulers.hb_bohb import HyperBandForBOHB
-
             return HyperBandForBOHB(
                 time_attr="training_iteration",
                 max_t=max_t,
@@ -253,7 +264,6 @@ class RayTuneHPO(BaseHPO):
             )
 
         # Fallback: ASHA
-        from ray.tune.schedulers import ASHAScheduler
 
         return ASHAScheduler(max_t=max_t, grace_period=grace)
 
@@ -262,9 +272,7 @@ class RayTuneHPO(BaseHPO):
         if self._scheduler_name == "bohb":
             # BOHB requires the TuneBOHB search algorithm
             with contextlib.suppress(ImportError):
-                from ray.tune.search.bohb import TuneBOHB
-
-                return TuneBOHB()
+                return TuneBOHB(seed=self.cfg.seed)
         return None
 
     # ------------------------------------------------------------------
@@ -282,8 +290,6 @@ class RayTuneHPO(BaseHPO):
             return callbacks
 
         with contextlib.suppress(ImportError, Exception):
-            from ray.tune.logger.mlflow import MLflowLoggerCallback
-
             callbacks.append(
                 MLflowLoggerCallback(
                     tracking_uri=mlflow_uri,

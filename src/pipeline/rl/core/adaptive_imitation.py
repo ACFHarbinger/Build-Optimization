@@ -5,19 +5,34 @@ Combines PPO/REINFORCE with Imitation Learning using an annealing schedule.
 
 from __future__ import annotations
 
+import json
 from dataclasses import asdict
 from typing import Any
 
 import torch
 from tensordict import TensorDict
 
-from pipeline.rl.core.losses import (
+from logic.src.configs.rl.policies import (
+    ACOConfig,
+    ALNSConfig,
+    HGSALNSConfig,
+    HGSConfig,
+    ILSConfig,
+    RLSConfig,
+)
+from logic.src.models.policies.alns import VectorizedALNS
+from logic.src.models.policies.ant_colony_system import VectorizedACOPolicy
+from logic.src.models.policies.hgs import VectorizedHGS
+from logic.src.models.policies.hgs_alns import VectorizedHGSALNS
+from logic.src.models.policies.iterated_local_search import IteratedLocalSearchPolicy
+from logic.src.models.policies.random_local_search import RandomLocalSearchPolicy
+from logic.src.pipeline.rl.core.losses import (
     kl_divergence_loss,
     nll_loss,
     reverse_kl_divergence_loss,
     weighted_nll_loss,
 )
-from pipeline.rl.core.reinforce import REINFORCE
+from logic.src.pipeline.rl.core.reinforce import REINFORCE
 
 
 class AdaptiveImitation(REINFORCE):
@@ -43,6 +58,8 @@ class AdaptiveImitation(REINFORCE):
         decay_step: int = 1,
         epsilon: float = 1e-5,
         loss_fn: str = "weighted_nll",
+        seed: int = 42,
+        device: str = "cpu",
         **kwargs,
     ):
         """
@@ -58,10 +75,11 @@ class AdaptiveImitation(REINFORCE):
             decay_step: Number of epochs to decay IL weight.
             epsilon: Epsilon for improvement detection.
             loss_fn: Name of loss function to use ('weighted_nll', 'nll', etc.).
+            seed: Random seed for reproducibility.
             **kwargs: Arguments passed to REINFORCE.
         """
         # Exclude non-serializable objects from hyperparameters
-        self.save_hyperparameters(ignore=["policy_config", "env", "policy"])
+        self.save_hyperparameters(ignore=["policy_config", "env", "policy", "generator"])
         if hasattr(self, "hparams"):
             keys_to_remove = []
             allowed_types = (int, float, str, bool, type(None), torch.Tensor)
@@ -73,8 +91,6 @@ class AdaptiveImitation(REINFORCE):
                     continue
                 if isinstance(v, (dict, list, tuple)):
                     try:
-                        import json
-
                         json.dumps(v)
                         continue
                     except (TypeError, OverflowError):
@@ -85,7 +101,7 @@ class AdaptiveImitation(REINFORCE):
         super().__init__(**kwargs)
 
         # Create expert policy from config
-        self.expert_policy = self._create_expert_policy(policy_config, env_name)
+        self.expert_policy = self._create_expert_policy(policy_config, env_name, seed, device)
         self.il_weight = il_weight
         self.initial_il_weight = il_weight
         self.il_decay = il_decay
@@ -110,31 +126,18 @@ class AdaptiveImitation(REINFORCE):
         self.best_reward = float("-inf")
         self.current_il_weight = il_weight
 
-    def _create_expert_policy(self, policy_config: Any, env_name: str) -> Any:
+    def _create_expert_policy(self, policy_config: Any, env_name: str, seed: int, device: str) -> Any:
         """Create expert policy from configuration.
 
         Args:
             policy_config: Expert policy configuration (HGSConfig, ALNSConfig, etc.).
             env_name: Environment name for the policy.
+            seed: Random seed for reproducibility.
+            device: Device to run the policy on.
 
         Returns:
             Initialized expert policy instance.
         """
-        from configs.rl.policies import (
-            ACOConfig,
-            ALNSConfig,
-            HGSALNSConfig,
-            HGSConfig,
-            ILSConfig,
-            RLSConfig,
-        )
-        from models.policies.alns import VectorizedALNS
-        from models.policies.ant_colony_system import VectorizedACOPolicy
-        from models.policies.hgs import VectorizedHGS
-        from models.policies.hgs_alns import VectorizedHGSALNS
-        from models.policies.iterated_local_search import IteratedLocalSearchPolicy
-        from models.policies.random_local_search import RandomLocalSearchPolicy
-
         # Map config types to policy classes
         config_to_policy_map = {
             HGSConfig: VectorizedHGS,
@@ -156,6 +159,8 @@ class AdaptiveImitation(REINFORCE):
         # Convert config to dict and add env_name
         config_dict = asdict(policy_config)
         config_dict["env_name"] = env_name
+        config_dict["device"] = device
+        config_dict["seed"] = seed
 
         # Create and return the policy
         return policy_cls(**config_dict)
@@ -170,7 +175,7 @@ class AdaptiveImitation(REINFORCE):
         # Iterate over all keys in the TensorDict and keep only Tensors
         # to ensure we break any nesting or recursive structures.
         safe_data = {}
-        for key in td:
+        for key in td.keys():
             val = td.get(key)
             if isinstance(val, torch.Tensor):
                 safe_data[key] = val
@@ -182,7 +187,7 @@ class AdaptiveImitation(REINFORCE):
         td: TensorDict,
         out: dict,
         batch_idx: int,
-        env: Any = None,  # Accept env to match LitModule.shared_step
+        env: Any = None,  # Accept env to match RL4COLitModule.shared_step
     ) -> torch.Tensor:
         """
         Compute Combined Loss: RL + IL.

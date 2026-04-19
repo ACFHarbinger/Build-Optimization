@@ -5,8 +5,8 @@ This package contains training utilities and common components
 like epoch preparation, dataset regeneration, and training hooks.
 """
 
-from pipeline.rl.common.base import LitModule
-from pipeline.rl.common.baselines import (
+from logic.src.pipeline.rl.common.base import RL4COLitModule
+from logic.src.pipeline.rl.common.baselines import (
     BASELINE_REGISTRY,
     Baseline,
     CriticBaseline,
@@ -19,12 +19,24 @@ from pipeline.rl.common.baselines import (
     WarmupBaseline,
     get_baseline,
 )
-from pipeline.rl.common.reward_scaler import RewardScaler
-from pipeline.rl.common.reward_scaler_batch import BatchRewardScaler
-from pipeline.rl.common.trainer import WSTrainer
+from logic.src.pipeline.rl.common.reward_scaler import RewardScaler
+from logic.src.pipeline.rl.common.reward_scaler_batch import BatchRewardScaler
+from logic.src.pipeline.rl.common.route_improvement import (
+    EfficiencyOptimizer,
+    calculate_efficiency,
+    decode_routes,
+)
+from logic.src.pipeline.rl.common.trainer import WSTrainer
+
+from . import base as base
+from . import baselines as baselines
+from . import reward_scaler as reward_scaler
+from . import reward_scaler_batch as reward_scaler_batch
+from . import route_improvement as route_improvement
+from . import trainer as trainer
 
 __all__ = [
-    "LitModule",
+    "RL4COLitModule",
     "Baseline",
     "NoBaseline",
     "ExponentialBaseline",
@@ -39,4 +51,7 @@ __all__ = [
     "WSTrainer",
     "RewardScaler",
     "BatchRewardScaler",
+    "EfficiencyOptimizer",
+    "decode_routes",
+    "calculate_efficiency",
 ]

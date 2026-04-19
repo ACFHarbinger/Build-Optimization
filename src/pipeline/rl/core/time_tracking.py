@@ -4,8 +4,8 @@ import torch
 from tensordict import TensorDict
 
 if TYPE_CHECKING:
-    from interfaces.env import IEnv
-from models.common.time_tracking_policy import TimeTrackingPolicy
+    from logic.src.interfaces.env import IEnv
+from logic.src.models.common.time_tracking_policy import TimeTrackingPolicy
 
 from .reinforce import REINFORCE
 

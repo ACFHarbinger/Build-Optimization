@@ -4,9 +4,15 @@ Optuna HPO Integration.
 
 from typing import Any, Callable, Dict, Optional
 
+import numpy as np
 import optuna
 
-from configs import Config
+from logic.src.configs import Config
+
+try:
+    from logic.src.tracking.core.run import get_active_run
+except ImportError:
+    get_active_run = None  # type: ignore[assignment,misc]
 
 from .base import BaseHPO, ParamSpec
 
@@ -61,9 +67,7 @@ class OptunaHPO(BaseHPO):
         )
 
         # Log to WSTracker
-        from tracking.core.run import get_active_run
-
-        run = get_active_run()
+        run = get_active_run() if get_active_run is not None else None
         if run is not None:
             run.log_params({f"hpo/best/{k}": v for k, v in study.best_params.items()})
             run.log_metric("hpo/best_value", study.best_value)
@@ -95,8 +99,6 @@ class OptunaHPO(BaseHPO):
                     grid[name] = list(range(spec["low"], spec["high"] + 1, step))
                 elif spec["type"] == "float":
                     # For grid search, fall back to linspace
-                    import numpy as np
-
                     grid[name] = np.linspace(spec["low"], spec["high"], 5).tolist()
             return optuna.samplers.GridSampler(grid)
 

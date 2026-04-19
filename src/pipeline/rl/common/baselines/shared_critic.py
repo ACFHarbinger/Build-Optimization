@@ -13,6 +13,9 @@ import torch
 from tensordict import TensorDict
 from torch import nn
 
+from logic.src.models.common.critic_network.policy import create_critic_from_actor
+from logic.src.utils.functions.rl import ensure_tensordict
+
 from .base import Baseline
 
 
@@ -51,8 +54,6 @@ class SharedBaseline(Baseline):
         if self.critic is not None:
             return  # Already built
 
-        from models.common.critic_network.policy import create_critic_from_actor
-
         self.critic = create_critic_from_actor(policy)
 
     def eval(self, td: TensorDict, reward: torch.Tensor, env: Optional[Any] = None) -> torch.Tensor:  # type: ignore[override]
@@ -69,8 +70,6 @@ class SharedBaseline(Baseline):
         """
         if self.critic is None:
             return torch.zeros_like(reward)
-
-        from utils.functions.rl import ensure_tensordict
 
         td = ensure_tensordict(td, next(iter(self.critic.parameters())).device)
         return self.critic(td).squeeze(-1)

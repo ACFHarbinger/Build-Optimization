@@ -15,10 +15,11 @@ from __future__ import annotations
 
 from typing import Optional
 
-from constants.models import DEFAULT_MOE_KWARGS
 from torch import nn
 
-from pipeline.rl.core.reinforce import REINFORCE
+from logic.src.constants.models import DEFAULT_MOE_KWARGS
+from logic.src.models.core.attention_model import AttentionModelPolicy
+from logic.src.pipeline.rl.core.reinforce import REINFORCE
 
 
 class MVMoE_AM(REINFORCE):
@@ -48,14 +49,12 @@ class MVMoE_AM(REINFORCE):
                     with MoE kwargs.
             moe_kwargs: MoE configuration for encoder and decoder.
             baseline: Baseline type (default "rollout").
-            **kwargs: Passed to REINFORCE/LitModule.
+            **kwargs: Passed to REINFORCE/RL4COLitModule.
         """
         if moe_kwargs is None:
             moe_kwargs = DEFAULT_MOE_KWARGS
 
         if policy is None:
-            from models.core.attention_model import AttentionModelPolicy
-
             env_name = kwargs.get("env_name", "vrpp")
             policy = AttentionModelPolicy(
                 env_name=env_name,
