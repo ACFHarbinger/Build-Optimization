@@ -8,12 +8,12 @@ interface, enabling it to be invoked via ``test_sim`` with the key ``"alns_ipo"`
 from dataclasses import asdict
 from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
-from logic.src.configs.policies import ALNSIPOConfig
-from logic.src.interfaces.context.multi_day_context import MultiDayContext
-from logic.src.interfaces.context.problem_context import ProblemContext
-from logic.src.interfaces.context.solution_context import SolutionContext
-from logic.src.policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from configs.policies import ALNSIPOConfig
+from interfaces.context.multi_day_context import MultiDayContext
+from interfaces.context.problem_context import ProblemContext
+from interfaces.context.solution_context import SolutionContext
+from policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
 
 from .alns_ipo import ALNSSolverIPO
 from .params import ALNSIPOParams
@@ -73,7 +73,7 @@ class ALNSInterPeriodOperatorsPolicy(BaseMultiPeriodRoutingPolicy):
         params = ALNSIPOParams.from_config(asdict(self.config))  # type: ignore[arg-type]
 
         if params.acceptance_criterion is None:
-            from logic.src.policies.route_construction.acceptance_criteria.base.factory import (
+            from policies.route_construction.acceptance_criteria.base.factory import (
                 AcceptanceCriterionFactory,
             )
 

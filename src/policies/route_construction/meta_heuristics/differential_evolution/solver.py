@@ -54,15 +54,15 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.local_search.local_search_aco import ACOLocalSearch
-from logic.src.policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
-from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
+from policies.helpers.local_search.local_search_aco import ACOLocalSearch
+from policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
+from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
     KSACOParams,
 )
-from logic.src.policies.route_construction.meta_heuristics.differential_evolution.evolution_strategy import (
+from policies.route_construction.meta_heuristics.differential_evolution.evolution_strategy import (
     create_evolution_strategy,
 )
-from logic.src.policies.route_construction.meta_heuristics.differential_evolution.params import DEParams
+from policies.route_construction.meta_heuristics.differential_evolution.params import DEParams
 
 
 class DESolver:

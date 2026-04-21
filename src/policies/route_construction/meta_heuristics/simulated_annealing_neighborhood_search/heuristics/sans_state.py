@@ -2,11 +2,11 @@
 State and Cost utilities for Simulated Annealing.
 """
 
-from logic.src.constants import (
+from constants import (
     MAX_CAPACITY_PERCENT,
     PENALTY_MANDATORY_NODES_MISSED,
 )
-from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.distance import (
+from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.distance import (
     compute_total_cost,
 )
 

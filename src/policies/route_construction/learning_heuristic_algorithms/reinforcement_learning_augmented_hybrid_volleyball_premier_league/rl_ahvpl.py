@@ -32,11 +32,11 @@ from typing import Deque, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.reinforcement_learning.alns_sarsa import ALNSSARSASolver
-from logic.src.policies.helpers.reinforcement_learning.evolution_cmab import CMABEvolution, update_biased_fitness
-from logic.src.policies.helpers.reinforcement_learning.ks_aco_qlearning import KSparseACOQLSolver
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.split import LinearSplit
+from policies.helpers.reinforcement_learning.alns_sarsa import ALNSSARSASolver
+from policies.helpers.reinforcement_learning.evolution_cmab import CMABEvolution, update_biased_fitness
+from policies.helpers.reinforcement_learning.ks_aco_qlearning import KSparseACOQLSolver
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.split import LinearSplit
 
 from .params import RLAHVPLParams
 

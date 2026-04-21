@@ -4,7 +4,7 @@ This module defines the ITraversable protocol for duck typing with
 configuration objects (dict, DictConfig, dataclass).
 
 Example:
-    >>> from logic.src.interfaces.traversable import ITraversable
+    >>> from interfaces.traversable import ITraversable
     >>> def extract_param(config: ITraversable, key: str) -> Any:
     ...     if key in config:
     ...         return config[key]

@@ -15,7 +15,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.ant_colony_optimization_hyper_heuristic import HyperHeuristicACO
+    >>> from policies.ant_colony_optimization_hyper_heuristic import HyperHeuristicACO
     >>> solver = HyperHeuristicACO(dist_matrix, wastes, capacity, R, C, params)
     >>> best_solution = solver.solve(initial_solution)
 """

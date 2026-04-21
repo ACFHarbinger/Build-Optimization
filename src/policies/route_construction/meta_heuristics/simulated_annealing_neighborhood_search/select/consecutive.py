@@ -2,7 +2,7 @@
 Consecutive selection strategies for bin management.
 """
 
-from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.routes import (
+from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.routes import (
     organize_route,
 )
 

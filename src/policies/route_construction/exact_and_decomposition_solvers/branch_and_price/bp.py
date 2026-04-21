@@ -20,7 +20,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union, cast
 
 import numpy as np
 
-from logic.src.policies.helpers.solvers_and_matheuristics import (
+from policies.helpers.solvers_and_matheuristics import (
     AnyBranchingConstraint,
     BranchAndBoundTree,
     BranchNode,
@@ -154,7 +154,7 @@ class BranchAndPriceSolver:
         # Precompute ng-neighborhoods once for reuse across all B&B nodes.
         self._ng_neighborhoods: Optional[Dict[int, Set[int]]] = None
         if self.params.use_exact_pricing:
-            from logic.src.policies.helpers.solvers_and_matheuristics import RCSPPSolver as _R
+            from policies.helpers.solvers_and_matheuristics import RCSPPSolver as _R
 
             _tmp = _R(
                 n_nodes=self.n_nodes,
@@ -538,7 +538,7 @@ class BranchAndPriceSolver:
         RCSPPSolver uses ``branching_constraints``; PricingSubproblem uses
         ``active_constraints``.
         """
-        from logic.src.policies.helpers.solvers_and_matheuristics import RCSPPSolver
+        from policies.helpers.solvers_and_matheuristics import RCSPPSolver
 
         if isinstance(pricing, RCSPPSolver):
             routes = pricing.solve(

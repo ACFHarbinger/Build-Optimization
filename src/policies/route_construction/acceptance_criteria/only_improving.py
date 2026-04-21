@@ -4,8 +4,8 @@ Only Improving (OI) Criterion.
 
 from typing import Any, Dict, Tuple, cast
 
-from logic.src.interfaces.acceptance_criterion import IAcceptanceCriterion, ObjectiveValue
-from logic.src.interfaces.context.search_context import AcceptanceMetrics
+from interfaces.acceptance_criterion import IAcceptanceCriterion, ObjectiveValue
+from interfaces.context.search_context import AcceptanceMetrics
 
 from .base.registry import AcceptanceCriterionRegistry
 

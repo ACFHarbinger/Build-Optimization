@@ -13,7 +13,7 @@ switching between two separate context objects.
 
 Example::
 
-    >>> from logic.src.policies.selection_and_construction.base.joint_context import (
+    >>> from policies.selection_and_construction.base.joint_context import (
     ...     JointSelectionConstructionContext,
     ... )
     >>> ctx = JointSelectionConstructionContext(

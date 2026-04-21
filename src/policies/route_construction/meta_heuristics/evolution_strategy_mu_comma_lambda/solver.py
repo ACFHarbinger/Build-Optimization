@@ -28,18 +28,18 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.local_search.local_search_aco import ACOLocalSearch
-from logic.src.policies.helpers.operators import (
+from policies.helpers.local_search.local_search_aco import ACOLocalSearch
+from policies.helpers.operators import (
     build_greedy_routes,
     greedy_insertion,
     greedy_profit_insertion,
     random_removal,
     shaw_profit_removal,
 )
-from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
+from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
     KSACOParams,
 )
-from logic.src.policies.route_construction.meta_heuristics.evolution_strategy_mu_comma_lambda.params import (
+from policies.route_construction.meta_heuristics.evolution_strategy_mu_comma_lambda.params import (
     MuCommaLambdaESParams,
 )
 

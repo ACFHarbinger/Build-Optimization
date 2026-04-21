@@ -25,17 +25,17 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.local_search.local_search_aco import ACOLocalSearch
-from logic.src.policies.helpers.operators import (
+from policies.helpers.local_search.local_search_aco import ACOLocalSearch
+from policies.helpers.operators import (
     greedy_insertion,
     greedy_profit_insertion,
     random_removal,
 )
-from logic.src.policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
-from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
+from policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
+from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import (
     KSACOParams,
 )
-from logic.src.policies.route_construction.meta_heuristics.volleyball_premier_league.params import VPLParams
+from policies.route_construction.meta_heuristics.volleyball_premier_league.params import VPLParams
 
 
 class VPLSolver:

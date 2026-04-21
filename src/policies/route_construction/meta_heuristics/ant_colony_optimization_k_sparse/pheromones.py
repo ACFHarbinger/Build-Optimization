@@ -11,7 +11,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.ant_colony_optimization_k_sparse.pheromones import SparsePheromoneTau
+    >>> from policies.ant_colony_optimization_k_sparse.pheromones import SparsePheromoneTau
     >>> pheromone = SparsePheromoneTau(n_nodes=100, tau_0=1.0, scale=5.0, ...)
     >>> val = pheromone.get(0, 1)
 

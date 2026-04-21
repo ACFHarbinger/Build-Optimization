@@ -74,7 +74,7 @@ def run_ils_bd(
             routes: List of customer-only route lists (depot excluded).
             profit: Deterministic net profit = revenue − travel_cost.
     """
-    from logic.src.policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
+    from policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
 
     n_nodes = len(dist_matrix)
     vrpp_model = VRPPModel(

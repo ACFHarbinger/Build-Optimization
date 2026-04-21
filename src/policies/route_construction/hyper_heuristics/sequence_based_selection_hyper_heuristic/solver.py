@@ -36,7 +36,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators import (
+from policies.helpers.operators import (
     cluster_removal,
     greedy_insertion,
     greedy_profit_insertion,
@@ -49,7 +49,7 @@ from logic.src.policies.helpers.operators import (
     worst_profit_removal,
     worst_removal,
 )
-from logic.src.policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
+from policies.helpers.operators.solution_initialization.nearest_neighbor_si import build_nn_routes
 
 from .params import SSHHParams
 

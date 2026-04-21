@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.slack_induction_by_string_removal.solver import SISRSolver
+    >>> from policies.slack_induction_by_string_removal.solver import SISRSolver
     >>> solver = SISRSolver(dist_matrix, wastes, ...)
     >>> result = solver.solve()
 
@@ -26,12 +26,12 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators import (
+from policies.helpers.operators import (
     greedy_insertion_with_blinks,
     greedy_profit_insertion_with_blinks,
     string_removal,
 )
-from logic.src.policies.helpers.operators.solution_initialization.greedy_si import (
+from policies.helpers.operators.solution_initialization.greedy_si import (
     build_greedy_routes,
 )
 

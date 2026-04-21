@@ -7,7 +7,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any
 
-from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
+from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
 
 
 @dataclass

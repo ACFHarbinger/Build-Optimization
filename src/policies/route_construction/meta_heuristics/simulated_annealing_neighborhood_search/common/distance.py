@@ -2,7 +2,7 @@
 Distance and time calculations for SANS.
 """
 
-from logic.src.constants.routing import (
+from constants.routing import (
     COLLECTION_TIME_MINUTES,
     VEHICLE_SPEED_KMH,
 )

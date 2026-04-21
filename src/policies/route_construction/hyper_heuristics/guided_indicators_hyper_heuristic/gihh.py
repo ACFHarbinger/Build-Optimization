@@ -20,19 +20,19 @@ from typing import Dict, List, Optional
 
 import numpy as np
 
-from logic.src.policies.helpers.local_search.local_search_manager import LocalSearchManager
-from logic.src.policies.helpers.operators import (
+from policies.helpers.local_search.local_search_manager import LocalSearchManager
+from policies.helpers.operators import (
     apply_ges,
     apply_intra_route_cross_exchange,
     apply_lns,
     build_greedy_routes,
 )
-from logic.src.policies.route_construction.hyper_heuristics.guided_indicators_hyper_heuristic.indicators import (
+from policies.route_construction.hyper_heuristics.guided_indicators_hyper_heuristic.indicators import (
     ScoreAIndicator,
     ScoreBIndicator,
 )
-from logic.src.policies.route_construction.hyper_heuristics.guided_indicators_hyper_heuristic.params import GIHHParams
-from logic.src.policies.route_construction.hyper_heuristics.guided_indicators_hyper_heuristic.solution import Solution
+from policies.route_construction.hyper_heuristics.guided_indicators_hyper_heuristic.params import GIHHParams
+from policies.route_construction.hyper_heuristics.guided_indicators_hyper_heuristic.solution import Solution
 
 
 class GIHHSolver:

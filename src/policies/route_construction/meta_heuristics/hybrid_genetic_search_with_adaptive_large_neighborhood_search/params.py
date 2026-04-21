@@ -3,10 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
-from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import (
+from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import (
     ALNSParams,
 )
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
 
 
 @dataclass

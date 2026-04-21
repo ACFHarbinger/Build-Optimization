@@ -6,12 +6,12 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.ts import TSConfig
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.meta_heuristics.tabu_search.params import TSParams
-from logic.src.policies.route_construction.meta_heuristics.tabu_search.solver import TSSolver
+from configs.policies.ts import TSConfig
+from enums import GlobalRegistry, PolicyTag
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.meta_heuristics.tabu_search.params import TSParams
+from policies.route_construction.meta_heuristics.tabu_search.solver import TSSolver
 
 
 @GlobalRegistry.register(

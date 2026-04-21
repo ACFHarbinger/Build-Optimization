@@ -2,20 +2,20 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from logic.src.configs.policies.other import (
+from configs.policies.other import (
     BanditConfig,
     FeatureExtractorConfig,
     RewardShapingConfig,
     RLConfig,
     TDLearningConfig,
 )
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_adaptive_large_neighborhood_search.params import (
+from enums import GlobalRegistry, PolicyTag
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_adaptive_large_neighborhood_search.params import (
     RLALNSParams,
 )
-from logic.src.policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_adaptive_large_neighborhood_search.solver import (
+from policies.route_construction.learning_heuristic_algorithms.reinforcement_learning_adaptive_large_neighborhood_search.solver import (
     RLALNSSolver,
 )
 

@@ -62,14 +62,14 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.solvers_and_matheuristics.lagrangian_relaxation.subgradient_optimization import (
+from policies.helpers.solvers_and_matheuristics.lagrangian_relaxation.subgradient_optimization import (
     _nearest_neighbour_tour_cost,
     run_subgradient,
 )
-from logic.src.policies.helpers.solvers_and_matheuristics.lagrangian_relaxation.uncapacitated_orienteering_problem import (
+from policies.helpers.solvers_and_matheuristics.lagrangian_relaxation.uncapacitated_orienteering_problem import (
     solve_uncapacitated_op,
 )
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 from .params import BBParams
 

@@ -4,16 +4,16 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.interfaces.context.multi_day_context import MultiDayContext
-from logic.src.interfaces.context.problem_context import ProblemContext
-from logic.src.interfaces.context.solution_context import SolutionContext
-from logic.src.policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.hyper_heuristics.matheuristic_hyper_heuristic.params import MHHParams
-from logic.src.utils.policy.llh_pool import LLHPool
-from logic.src.utils.policy.routes import route_profit
-from logic.src.utils.policy.wrappers import greedy_day_route
+from enums import GlobalRegistry, PolicyTag
+from interfaces.context.multi_day_context import MultiDayContext
+from interfaces.context.problem_context import ProblemContext
+from interfaces.context.solution_context import SolutionContext
+from policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.hyper_heuristics.matheuristic_hyper_heuristic.params import MHHParams
+from utils.policy.llh_pool import LLHPool
+from utils.policy.routes import route_profit
+from utils.policy.wrappers import greedy_day_route
 
 
 @GlobalRegistry.register(
@@ -96,7 +96,7 @@ class MHHPolicy(BaseMultiPeriodRoutingPolicy):
         best_prof = self._evaluate(best_plan, problem)
 
         try:
-            from logic.src.policies.route_construction.matheuristics.relax_and_fix_and_optimize.policy_rfo import (
+            from policies.route_construction.matheuristics.relax_and_fix_and_optimize.policy_rfo import (
                 RelaxFixOptimizePolicy,
             )
 

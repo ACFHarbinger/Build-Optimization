@@ -26,7 +26,7 @@ Attributes:
     find_route (function): Solves TSP.
 
 Example:
-    >>> from logic.src.policies import find_routes
+    >>> from policies import find_routes
     >>> routes = find_routes(distance_matrix, wastes, capacity)
 """
 

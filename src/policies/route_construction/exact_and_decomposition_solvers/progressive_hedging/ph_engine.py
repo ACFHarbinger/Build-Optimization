@@ -31,8 +31,8 @@ from typing import Any, Dict, List, Tuple, Union, cast
 
 import numpy as np
 
-from logic.src.configs.policies import PHConfig
-from logic.src.policies.route_construction.base.factory import RouteConstructorFactory
+from configs.policies import PHConfig
+from policies.route_construction.base.factory import RouteConstructorFactory
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +102,7 @@ class ProgressiveHedgingEngine:
         # 1. Prepare Scenarios from Tree
         # For PH, we typically decompose by full scenario paths.
         # We flatten the tree into S distinct T-period paths.
-        from logic.src.pipeline.simulations.bins.prediction import ScenarioTreeNode
+        from pipeline.simulations.bins.prediction import ScenarioTreeNode
 
         def get_all_paths(node: ScenarioTreeNode, current_path: List[np.ndarray]) -> List[List[np.ndarray]]:
             new_path = current_path + [node.wastes]

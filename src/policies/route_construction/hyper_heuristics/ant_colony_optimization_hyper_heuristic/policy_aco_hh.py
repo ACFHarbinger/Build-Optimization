@@ -9,18 +9,18 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies import HyperHeuristicACOConfig
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.hyper_heuristics.ant_colony_optimization_hyper_heuristic.hyper_aco import (
+from configs.policies import HyperHeuristicACOConfig
+from enums import GlobalRegistry, PolicyTag
+from policies.helpers.operators.solution_initialization.greedy_si import build_greedy_routes
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.hyper_heuristics.ant_colony_optimization_hyper_heuristic.hyper_aco import (
     HyperHeuristicACO,
 )
-from logic.src.policies.route_construction.hyper_heuristics.ant_colony_optimization_hyper_heuristic.hyper_operators import (
+from policies.route_construction.hyper_heuristics.ant_colony_optimization_hyper_heuristic.hyper_operators import (
     OPERATOR_NAMES,
 )
-from logic.src.policies.route_construction.hyper_heuristics.ant_colony_optimization_hyper_heuristic.params import (
+from policies.route_construction.hyper_heuristics.ant_colony_optimization_hyper_heuristic.params import (
     HyperACOParams,
 )
 

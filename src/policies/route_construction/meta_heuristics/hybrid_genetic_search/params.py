@@ -7,10 +7,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional
 
-from logic.src.interfaces.acceptance_criterion import IAcceptanceCriterion
+from interfaces.acceptance_criterion import IAcceptanceCriterion
 
 if TYPE_CHECKING:
-    from logic.src.configs.policies import HGSConfig
+    from configs.policies import HGSConfig
 
 
 @dataclass
@@ -124,7 +124,7 @@ class HGSParams:
         )
 
         # Handle Acceptance Criterion Injection
-        from logic.src.policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
+        from policies.route_construction.acceptance_criteria.base.factory import AcceptanceCriterionFactory
 
         acceptance_cfg = getattr(config, "acceptance", None)
         if acceptance_cfg:

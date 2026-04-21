@@ -8,12 +8,12 @@ from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
 
-from logic.src.configs.policies.vns import VNSConfig
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.meta_heuristics.variable_neighborhood_search.params import VNSParams
-from logic.src.policies.route_construction.meta_heuristics.variable_neighborhood_search.solver import VNSSolver
+from configs.policies.vns import VNSConfig
+from enums import GlobalRegistry, PolicyTag
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.meta_heuristics.variable_neighborhood_search.params import VNSParams
+from policies.route_construction.meta_heuristics.variable_neighborhood_search.solver import VNSSolver
 
 
 @GlobalRegistry.register(

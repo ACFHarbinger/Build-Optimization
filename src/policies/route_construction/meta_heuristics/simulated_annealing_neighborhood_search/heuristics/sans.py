@@ -8,16 +8,16 @@ import random
 import time
 from typing import Optional
 
-from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.routes import (
+from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.common.routes import (
     uncross_arcs_in_sans_routes,
 )
-from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.heuristics.sans_operators import (
+from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.heuristics.sans_operators import (
     apply_operator,
 )
-from logic.src.policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.heuristics.sans_state import (
+from policies.route_construction.meta_heuristics.simulated_annealing_neighborhood_search.heuristics.sans_state import (
     compute_profit,
 )
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 
 def _initialize_solution_state(routes, id_to_index, distance_matrix, data):

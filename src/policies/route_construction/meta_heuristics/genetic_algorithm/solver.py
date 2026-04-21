@@ -18,16 +18,16 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators.crossover_recombination import ordered_crossover
-from logic.src.policies.helpers.operators.destroy_ruin.random import random_removal
-from logic.src.policies.helpers.operators.recreate_repair.greedy import (
+from policies.helpers.operators.crossover_recombination import ordered_crossover
+from policies.helpers.operators.destroy_ruin.random import random_removal
+from policies.helpers.operators.recreate_repair.greedy import (
     greedy_insertion,
     greedy_profit_insertion,
 )
-from logic.src.policies.helpers.operators.solution_initialization.greedy_si import (
+from policies.helpers.operators.solution_initialization.greedy_si import (
     build_greedy_routes,
 )
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.individual import Individual
 
 from .params import GAParams
 

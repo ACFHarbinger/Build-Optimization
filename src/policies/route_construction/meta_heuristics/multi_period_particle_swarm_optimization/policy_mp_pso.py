@@ -4,19 +4,19 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.interfaces.context.multi_day_context import MultiDayContext
-from logic.src.interfaces.context.problem_context import ProblemContext
-from logic.src.interfaces.context.solution_context import SolutionContext
-from logic.src.policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
-from logic.src.policies.route_construction.meta_heuristics.multi_period_particle_swarm_optimization.params import (
+from enums import GlobalRegistry, PolicyTag
+from interfaces.context.multi_day_context import MultiDayContext
+from interfaces.context.problem_context import ProblemContext
+from interfaces.context.solution_context import SolutionContext
+from policies.route_construction.base.base_multi_period_policy import BaseMultiPeriodRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
+from policies.route_construction.meta_heuristics.multi_period_particle_swarm_optimization.params import (
     MP_PSO_Params,
 )
-from logic.src.utils.policy.routes import (
+from utils.policy.routes import (
     route_profit,
 )
-from logic.src.utils.policy.wrappers import (
+from utils.policy.wrappers import (
     greedy_day_route,
     two_opt,
 )

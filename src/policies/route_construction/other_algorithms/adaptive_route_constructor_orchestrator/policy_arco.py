@@ -61,13 +61,13 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 
 if TYPE_CHECKING:
-    from logic.src.interfaces.context.search_context import SearchContext
+    from interfaces.context.search_context import SearchContext
 
-from logic.src.enums import GlobalRegistry, PolicyTag
-from logic.src.interfaces.context.search_context import SearchContext
-from logic.src.interfaces.route_constructor import IRouteConstructor
-from logic.src.policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
-from logic.src.policies.route_construction.base.factory import RouteConstructorRegistry
+from enums import GlobalRegistry, PolicyTag
+from interfaces.context.search_context import SearchContext
+from interfaces.route_constructor import IRouteConstructor
+from policies.route_construction.base.base_routing_policy import BaseRoutingPolicy
+from policies.route_construction.base.factory import RouteConstructorRegistry
 
 from .params import ARCOParams
 
@@ -141,7 +141,7 @@ class AdaptiveRouteConstructorOrchestrator(BaseRoutingPolicy):
 
     @classmethod
     def _config_class(cls):
-        from logic.src.configs.policies.arco import ARCOConfig
+        from configs.policies.arco import ARCOConfig
 
         return ARCOConfig
 
@@ -158,7 +158,7 @@ class AdaptiveRouteConstructorOrchestrator(BaseRoutingPolicy):
         if self._initialized:
             return
 
-        from logic.src.policies.route_construction.base.factory import RouteConstructorFactory
+        from policies.route_construction.base.factory import RouteConstructorFactory
 
         names: List[str] = self.params.constructors
         self.constructors = [RouteConstructorFactory.get_adapter(name) for name in names]

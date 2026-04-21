@@ -9,7 +9,7 @@ Attributes:
     None
 
 Example:
-    >>> from logic.src.policies.ant_colony_optimization_k_sparse.solver import KSparseACOSolver
+    >>> from policies.ant_colony_optimization_k_sparse.solver import KSparseACOSolver
     >>> solver = KSparseACOSolver(dist_matrix, wastes, ...)
     >>> result = solver.solve()
 
@@ -25,7 +25,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.local_search.local_search_aco import ACOLocalSearch
+from policies.helpers.local_search.local_search_aco import ACOLocalSearch
 
 from .construction import SolutionConstructor
 from .params import KSACOParams

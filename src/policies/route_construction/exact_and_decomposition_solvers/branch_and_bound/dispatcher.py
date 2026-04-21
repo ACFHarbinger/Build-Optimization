@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 import gurobipy as gp
 import numpy as np
 
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from tracking.viz_mixin import PolicyStateRecorder
 
 from .dfj import run_bb_dfj
 from .lr_uop import run_bb_lr_uop

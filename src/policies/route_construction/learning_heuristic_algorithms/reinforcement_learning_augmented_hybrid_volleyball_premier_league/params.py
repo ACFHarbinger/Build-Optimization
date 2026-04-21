@@ -3,11 +3,11 @@ from dataclasses import dataclass, field
 from typing import Any, Optional, Tuple
 
 # Local imports
-from logic.src.configs.policies.other import RLConfig
-from logic.src.policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
-from logic.src.policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
-from logic.src.policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
-from logic.src.policies.route_construction.meta_heuristics.reactive_tabu_search.params import RTSParams
+from configs.policies.other import RLConfig
+from policies.route_construction.meta_heuristics.adaptive_large_neighborhood_search.params import ALNSParams
+from policies.route_construction.meta_heuristics.ant_colony_optimization_k_sparse.params import KSACOParams
+from policies.route_construction.meta_heuristics.hybrid_genetic_search.params import HGSParams
+from policies.route_construction.meta_heuristics.reactive_tabu_search.params import RTSParams
 
 
 @dataclass

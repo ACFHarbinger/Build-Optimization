@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from logic.src.policies.helpers.operators import (
+from policies.helpers.operators import (
     greedy_insertion,
     greedy_profit_insertion,
     regret_2_insertion,
@@ -18,7 +18,7 @@ from logic.src.policies.helpers.operators import (
     shaw_removal,
     string_removal,
 )
-from logic.src.policies.helpers.operators.generalized_insertion_and_deletion import (
+from policies.helpers.operators.generalized_insertion_and_deletion import (
     stringing_insertion,
     stringing_profit_insertion,
     unstringing_profit_removal,

@@ -114,8 +114,8 @@ import gurobipy as gp
 import numpy as np
 from gurobipy import GRB
 
-from logic.src.policies.helpers.operators.recreate_repair.greedy import greedy_insertion, greedy_profit_insertion
-from logic.src.policies.helpers.solvers_and_matheuristics import (
+from policies.helpers.operators.recreate_repair.greedy import greedy_insertion, greedy_profit_insertion
+from policies.helpers.solvers_and_matheuristics import (
     AnyBranchingConstraint,
     BranchAndBoundTree,
     BranchNode,
@@ -124,15 +124,15 @@ from logic.src.policies.helpers.solvers_and_matheuristics import (
     SeparationEngine,
     VRPPMasterProblem,
 )
-from logic.src.policies.helpers.solvers_and_matheuristics.lagrangian_relaxation.subgradient_optimization import (
+from policies.helpers.solvers_and_matheuristics.lagrangian_relaxation.subgradient_optimization import (
     run_subgradient,
 )
-from logic.src.policies.helpers.solvers_and_matheuristics.lagrangian_relaxation.uncapacitated_orienteering_problem import (
+from policies.helpers.solvers_and_matheuristics.lagrangian_relaxation.uncapacitated_orienteering_problem import (
     solve_uncapacitated_op,
 )
-from logic.src.policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
-from logic.src.policies.route_construction.base.factory import RouteConstructorFactory
-from logic.src.tracking.viz_mixin import PolicyStateRecorder
+from policies.helpers.solvers_and_matheuristics.vrpp_model import VRPPModel
+from policies.route_construction.base.factory import RouteConstructorFactory
+from tracking.viz_mixin import PolicyStateRecorder
 
 from .cutting_planes import CuttingPlaneEngine, create_cutting_plane_engine
 from .params import BPCParams
@@ -289,7 +289,7 @@ def _apply_branching_to_master(
     forced_nodes: Set[int] = set()
 
     # Define child-local constraints
-    from logic.src.policies.helpers.solvers_and_matheuristics.branching import (
+    from policies.helpers.solvers_and_matheuristics.branching import (
         FleetSizeBranchingConstraint,
         NodeVisitationBranchingConstraint,
     )
@@ -354,7 +354,7 @@ def _solve_farkas_pricing_step(
     forced_nodes: Set[int] = set()
     rf_conflicts: Dict[int, Set[int]] = {}
 
-    from logic.src.policies.helpers.solvers_and_matheuristics.branching import (
+    from policies.helpers.solvers_and_matheuristics.branching import (
         NodeVisitationBranchingConstraint,
         RyanFosterBranchingConstraint,
     )
@@ -457,7 +457,7 @@ def _solve_pricing_step(
     forced_nodes: Set[int] = set()
     rf_conflicts: Dict[int, Set[int]] = {}
 
-    from logic.src.policies.helpers.solvers_and_matheuristics.branching import (
+    from policies.helpers.solvers_and_matheuristics.branching import (
         NodeVisitationBranchingConstraint,
         RyanFosterBranchingConstraint,
     )
@@ -824,7 +824,7 @@ def _extract_forced_sets_from_constraints(
     Returns:
         (forced_in, forced_out) sets of customer indices.
     """
-    from logic.src.policies.helpers.solvers_and_matheuristics.branching import (
+    from policies.helpers.solvers_and_matheuristics.branching import (
         NodeVisitationBranchingConstraint,
     )
 
@@ -901,7 +901,7 @@ def _column_generation_loop(  # noqa: C901
     elementary_nodes: Set[int] = set()
 
     # Extract nodes from Ryan-Foster branches
-    from logic.src.policies.helpers.solvers_and_matheuristics.branching import (
+    from policies.helpers.solvers_and_matheuristics.branching import (
         NodeVisitationBranchingConstraint,
         RyanFosterBranchingConstraint,
     )
@@ -929,7 +929,7 @@ def _column_generation_loop(  # noqa: C901
     # Task 5: Arc Conflict Pre-check (Exactness Rule)
     # Scan branching constraints for conflicting must_use arcs.
     # At most one must_use arc can exit node u, and at most one can enter node v.
-    from logic.src.policies.helpers.solvers_and_matheuristics.branching import EdgeBranchingConstraint
+    from policies.helpers.solvers_and_matheuristics.branching import EdgeBranchingConstraint
 
     out_arcs: Dict[int, int] = {}
     in_arcs: Dict[int, int] = {}
@@ -1626,7 +1626,7 @@ def run_bpc(  # noqa: C901
             if swc_tcf is not None:
                 # Extract forced nodes from branching constraints to guide heuristic
                 forced_nodes_heuristic = set()
-                from logic.src.policies.helpers.solvers_and_matheuristics.branching import (
+                from policies.helpers.solvers_and_matheuristics.branching import (
                     NodeVisitationBranchingConstraint,
                 )
 
@@ -1728,7 +1728,7 @@ def run_bpc(  # noqa: C901
                 f"Primary branching strategy '{branching_strategy_name}' returned no "
                 "branching candidate at a fractional node. Falling back to edge branching."
             )
-            from logic.src.policies.helpers.solvers_and_matheuristics.branching import EdgeBranching
+            from policies.helpers.solvers_and_matheuristics.branching import EdgeBranching
 
             res = EdgeBranching.find_branching_arc(master.routes, route_values)
             if res is None:
