@@ -1,0 +1,28 @@
+{
+  "name": "build-optimization-root",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "app",
+    "extension"
+  ],
+  "scripts": {
+    "install:all": "npm install --workspaces",
+    "setup": "npm run install:all",
+    "dev": "npm run tauri:dev",
+    "build": "npm run tauri:build",
+    "tauri": "npm run tauri --workspace=app --",
+    "tauri:dev": "npm run tauri:dev --workspace=app",
+    "tauri:build": "npm run tauri:build --workspace=app",
+    "start-app": "npm run dev --workspace=app",
+    "build-app": "npm run build --workspace=app",
+    "test-app": "npm run test --workspace=app",
+    "build-extension": "npm run build --workspace=extension",
+    "test-extension": "npm run test --workspace=extension",
+    "lint": "npm run lint --workspace=app && npm run lint --workspace=extension",
+    "test": "npm run test-app && npm run test-extension"
+  },
+  "devDependencies": {
+    "concurrently": "^9"
+  }
+}

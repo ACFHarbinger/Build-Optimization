@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = [
+    "app/src-tauri",
+    # Future Rust modules (e.g. an Unreal Engine plugin bridge crate,
+    # or a native replacement for a backend/ solver) join here.
+]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
