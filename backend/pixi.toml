@@ -1,0 +1,26 @@
+[workspace]
+name = "build-optimization-backend"
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64", "win-64"]
+
+[dependencies]
+python = "3.11.*"
+cmake = ">=3.18"
+ninja = "*"
+cxx-compiler = "*"
+c-compiler = "*"
+pybind11 = ">=2.13"
+
+[feature.dev.dependencies]
+catch2 = ">=3"
+
+[environments]
+default = { solve-group = "default" }
+dev = { features = ["dev"], solve-group = "default" }
+
+[tasks]
+build-base = "cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=."
+build = { cmd = "cmake --build build -j", depends-on = ["build-base"] }
+install = { cmd = "cmake --install build", depends-on = ["build"] }
+test = { cmd = "ctest --test-dir build --output-on-failure", depends-on = ["build"] }
+clean = { cmd = "rm -rf build" }

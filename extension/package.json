@@ -1,0 +1,67 @@
+{
+  "name": "build-optimization-vscode",
+  "displayName": "Build Optimization",
+  "description": "Author and run Build-Optimization Hydra configs (game/policy/optimization) from VS Code",
+  "version": "0.1.0",
+  "publisher": "ACFHarbinger",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": ["Programming Languages", "Snippets", "Other"],
+  "activationEvents": [
+    "onLanguage:yaml",
+    "workspaceContains:middleware/configs/config.yaml"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "buildOptimization.runOptimization",
+        "title": "Build Optimization: Run Optimization"
+      },
+      {
+        "command": "buildOptimization.validateConfig",
+        "title": "Build Optimization: Validate Hydra Config"
+      }
+    ],
+    "yamlValidation": [
+      {
+        "fileMatch": "middleware/configs/game/*.yaml",
+        "url": "./schemas/game.schema.json"
+      },
+      {
+        "fileMatch": "middleware/configs/policy/*.yaml",
+        "url": "./schemas/policy.schema.json"
+      },
+      {
+        "fileMatch": "middleware/configs/optimization/*.yaml",
+        "url": "./schemas/optimization.schema.json"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "build": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "test": "vscode-test",
+    "lint": "eslint src",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "js-yaml": "^4"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4",
+    "@types/node": "^20",
+    "@types/vscode": "^1.90.0",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "@typescript-eslint/parser": "^8",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2",
+    "@vscode/vsce": "^3",
+    "esbuild": "^0.23",
+    "eslint": "^9",
+    "typescript": "^5"
+  }
+}
