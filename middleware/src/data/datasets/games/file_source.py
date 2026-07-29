@@ -15,6 +15,29 @@ from core.synergy import SynergyRule
 from .base import DataSource
 
 
+def _resolve_data_path(raw_path: str) -> Path:
+    """Resolve a config-relative data path (e.g. ``src/data/sample/rpg.json``).
+
+    Game configs write paths relative to ``middleware/`` (their own source
+    tree). Try, in order: as given (absolute, or relative to the current
+    working directory), then relative to ``middleware/`` under the repo root.
+    """
+    path = Path(raw_path)
+    if path.is_absolute() or path.exists():
+        return path
+
+    try:
+        from constants import ROOT_DIR
+
+        candidate = Path(ROOT_DIR) / "middleware" / raw_path
+        if candidate.exists():
+            return candidate
+    except ImportError:
+        pass
+
+    return path
+
+
 class FileSource(DataSource):
     """Load items and synergies from local JSON or CSV files.
 
@@ -54,8 +77,8 @@ class FileSource(DataSource):
         items_path: str,
         synergies_path: Optional[str] = None,
     ) -> None:
-        self.items_path = Path(items_path)
-        self.synergies_path = Path(synergies_path) if synergies_path else None
+        self.items_path = _resolve_data_path(items_path)
+        self.synergies_path = _resolve_data_path(synergies_path) if synergies_path else None
 
     def fetch_items(self) -> List[Item]:
         """Load items from file.

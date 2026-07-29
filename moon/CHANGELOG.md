@@ -4,6 +4,21 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (B11 — tracking database, wired end-to-end)
+
+- Wired `middleware/src/pipeline/games/optimizer.py::run_optimization`/`run_batch` to persist every solve: a result JSON under `outputs/<experiment>/<solver>_<timestamp>_result.json` (consumed by the Tauri Studio's existing file-based commands) *and* a full record — experiment, run, params, metrics, artifact link — in the `tracking.db` SQLite database (schema was already present, inherited from WSmart-Route, but was never actually exercised for Build-Optimization). New `experiment_name`/`persist` parameters (defaults: game name, `True`).
+- Added `middleware/tests/test_tracking.py`: round-trip store tests plus an integration test that runs the full CLI pipeline and asserts both the output file and the tracking DB are written correctly.
+
+### Fixed (making the CLI actually runnable — none of this worked before)
+
+- `middleware/src/constants/paths.py`'s `ROOT_DIR` resolution hardcoded `"WSmart-Route"`/`"WSmartPlus-Route"` as the only recognized clone directory names — importing `constants` in Build-Optimization crashed immediately with an uncaught `ValueError`. Added `"Build-Optimization"` plus a `pyproject.toml`-marker fallback so it works under any clone name.
+- Root `pyproject.toml` had no `[tool.setuptools]` package config; `uv sync` failed outright once the repo grew past a couple of top-level directories (`setuptools` can't auto-discover a package layout among `git/`, `moon/`, `backend/`, `frontend/`, `extension/`, `archive/`, `research/`, `docker/`, `desktop/`, ...). Added `packages = []` — this pyproject only manages dependencies for `main.py`, nothing here needs to be built as an installable package.
+- `main.py` didn't add `middleware/src` to `sys.path` and pointed Hydra at a `configs/` directory that doesn't exist at the repo root (configs live at `middleware/configs/`) — `python main.py` could not run at all. Fixed both.
+- `middleware/configs/game/rpg.yaml` and `moba.yaml` pointed at `src/data/sample_games/*.json`, a directory that has never existed (the real data lives at `middleware/src/data/sample/`); `moba.json` itself didn't exist. Fixed both config paths and added a sample `moba.json` dataset. Also made `FileSource`'s path resolution robust to being invoked from any working directory (falls back to resolving relative to `middleware/` under `ROOT_DIR`).
+- `middleware/src/tracking`'s package `__init__.py` (and `integrations/__init__.py`, `profiling/__init__.py`) eagerly imported PyTorch/PyTorch-Lightning/`lightning.fabric`-dependent submodules (`hooks`, `integrations.data`, `integrations.lightning`, `integrations.zenml_bridge`) at import time, so `import tracking` failed in any environment without the full ML stack installed — including Build-Optimization's lean solver-only setup. Made those four lazy (PEP 562 module `__getattr__`) so the tracking core works standalone; they still work normally once torch/lightning are installed.
+- Added missing `__init__.py` to 4 `middleware/src` subpackages (`policies/helpers/hpo`, `policies/route_improvement/common`, `pipeline/rl/meta/multi_objective`, `policies/route_construction/meta_heuristics/simulated_annealing`) — the last one has a relative import that broke sphinx-autoapi's static resolution without it (see the docs-tooling commit).
+- Removed `middleware/tests/test_solvers.py`, which imported a `solvers.*` package that has not existed since the WSmart-Route policy-tree merge (the real greedy/SA/GA implementations live as registered functions in `pipeline/games/states/solving.py`); it could never pass and blocked test collection entirely.
+
 ### Added
 
 - Rewrote `README.md` with tech-stack badges, a full architecture diagram, and setup/run/test instructions for the C++ backend, Python middleware, Tauri + TypeScript frontend, and browser extension/engine integrations.

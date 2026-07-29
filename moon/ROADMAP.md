@@ -30,7 +30,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | B8 | Add concrete `GameAPISource` and `WebScraperSource` pipeline implementations (currently skeletons) | M | 📋 Pending |
 | B9 | Add GFlowNet-based amortized inference policy for build sampling | L | 📋 Pending |
 | B10 | Add PPO/MCTS real-time itemization policy for MOBA-style adaptive builds | L | 📋 Pending |
-| B11 | Design and implement the experiment tracking database schema (`middleware/src/tracking`) | M | 📋 Pending |
+| B11 | Design and implement the experiment tracking database schema (`middleware/src/tracking`) | M | ✅ Done |
 | B12 | Wire C++ build + Python test suite into `.github/workflows/ci.yml` | S | ✅ Done |
 
 ## Track: Browser Extension

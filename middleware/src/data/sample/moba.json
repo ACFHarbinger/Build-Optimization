@@ -1,0 +1,41 @@
+{
+  "items": [
+    {"name": "Long Sword", "slot": "weapon", "stats": {"attack_damage": 10}, "cost": 350, "rarity": "common", "level": 1, "tags": ["physical"]},
+    {"name": "Infinity Edge", "slot": "weapon", "stats": {"attack_damage": 70, "critical_chance": 20}, "cost": 3400, "rarity": "legendary", "level": 18, "tags": ["physical", "crit", "legendary_set"]},
+    {"name": "Rabadon's Deathcap", "slot": "weapon", "stats": {"ability_power": 120}, "cost": 3600, "rarity": "legendary", "level": 18, "tags": ["magic", "legendary_set"]},
+    {"name": "Blade of the Ruined King", "slot": "weapon", "stats": {"attack_damage": 40, "attack_speed": 25, "health": 40}, "cost": 3200, "rarity": "epic", "level": 16, "tags": ["physical", "sustain"]},
+    {"name": "Void Staff", "slot": "weapon", "stats": {"ability_power": 65}, "cost": 2650, "rarity": "rare", "level": 14, "tags": ["magic", "penetration"]},
+
+    {"name": "Cloth Armor", "slot": "chest", "stats": {"armor": 15}, "cost": 300, "rarity": "common", "level": 1, "tags": ["tank"]},
+    {"name": "Thornmail", "slot": "chest", "stats": {"armor": 60, "health": 350}, "cost": 2700, "rarity": "epic", "level": 16, "tags": ["tank", "physical"]},
+    {"name": "Zhonya's Hourglass", "slot": "chest", "stats": {"ability_power": 65, "armor": 45}, "cost": 2900, "rarity": "epic", "level": 16, "tags": ["magic", "tank"]},
+    {"name": "Warmog's Armor", "slot": "chest", "stats": {"health": 800}, "cost": 2850, "rarity": "epic", "level": 16, "tags": ["tank", "sustain"]},
+    {"name": "Spectre's Cowl", "slot": "chest", "stats": {"magic_resist": 30, "health": 200}, "cost": 900, "rarity": "uncommon", "level": 6, "tags": ["tank", "sustain"]},
+
+    {"name": "Cloth Cap", "slot": "helmet", "stats": {"armor": 10}, "cost": 200, "rarity": "common", "level": 1, "tags": ["tank"]},
+    {"name": "Runic Helm", "slot": "helmet", "stats": {"armor": 25, "magic_resist": 25}, "cost": 1100, "rarity": "uncommon", "level": 8, "tags": ["tank"]},
+    {"name": "Banshee's Veil", "slot": "helmet", "stats": {"ability_power": 45, "magic_resist": 40, "health": 300}, "cost": 2700, "rarity": "epic", "level": 16, "tags": ["magic", "tank"]},
+
+    {"name": "Boots of Speed", "slot": "boots", "stats": {"movement_speed": 25}, "cost": 300, "rarity": "common", "level": 1, "tags": ["mobility"]},
+    {"name": "Berserker's Greaves", "slot": "boots", "stats": {"attack_speed": 35, "movement_speed": 45}, "cost": 1100, "rarity": "uncommon", "level": 8, "tags": ["physical", "mobility"]},
+    {"name": "Sorcerer's Shoes", "slot": "boots", "stats": {"ability_power": 5, "movement_speed": 45}, "cost": 1100, "rarity": "uncommon", "level": 8, "tags": ["magic", "penetration", "mobility"]},
+    {"name": "Mercury's Treads", "slot": "boots", "stats": {"magic_resist": 25, "movement_speed": 45}, "cost": 1200, "rarity": "rare", "level": 10, "tags": ["tank", "mobility"]},
+
+    {"name": "Vampiric Scepter", "slot": "gloves", "stats": {"attack_damage": 10}, "cost": 500, "rarity": "common", "level": 1, "tags": ["physical", "sustain"]},
+    {"name": "Rageblade", "slot": "gloves", "stats": {"attack_damage": 25, "attack_speed": 25, "critical_chance": 15}, "cost": 3200, "rarity": "epic", "level": 16, "tags": ["physical", "crit"]},
+    {"name": "Gauntlet of Fury", "slot": "gloves", "stats": {"attack_damage": 20, "critical_chance": 20}, "cost": 1600, "rarity": "rare", "level": 12, "tags": ["physical", "crit"]},
+
+    {"name": "Cloak of Agility", "slot": "ring_1", "stats": {"critical_chance": 15}, "cost": 600, "rarity": "common", "level": 1, "tags": ["crit"]},
+    {"name": "Statikk Shiv", "slot": "ring_1", "stats": {"attack_damage": 35, "critical_chance": 20, "attack_speed": 15}, "cost": 2700, "rarity": "epic", "level": 16, "tags": ["physical", "crit"]},
+    {"name": "Needlessly Large Rod", "slot": "ring_2", "stats": {"ability_power": 60}, "cost": 1250, "rarity": "rare", "level": 12, "tags": ["magic"]},
+    {"name": "Seraph's Embrace", "slot": "ring_2", "stats": {"ability_power": 70, "health": 300}, "cost": 3000, "rarity": "epic", "level": 16, "tags": ["magic", "sustain"]},
+
+    {"name": "Faerie Charm", "slot": "accessory_1", "stats": {"health": 50}, "cost": 250, "rarity": "common", "level": 1, "tags": ["sustain"]},
+    {"name": "Guardian Angel", "slot": "accessory_1", "stats": {"attack_damage": 40, "armor": 40}, "cost": 3200, "rarity": "legendary", "level": 18, "tags": ["physical", "tank", "legendary_set"]},
+    {"name": "Ruby Crystal", "slot": "accessory_2", "stats": {"health": 150}, "cost": 400, "rarity": "common", "level": 1, "tags": ["tank"]},
+    {"name": "Force of Nature", "slot": "accessory_2", "stats": {"magic_resist": 55, "movement_speed": 15, "health": 300}, "cost": 2900, "rarity": "epic", "level": 16, "tags": ["tank", "sustain"]},
+
+    {"name": "Kindlegem", "slot": "amulet", "stats": {"health": 200}, "cost": 800, "rarity": "uncommon", "level": 6, "tags": ["tank"]},
+    {"name": "Athene's Unholy Grail", "slot": "amulet", "stats": {"ability_power": 45, "magic_resist": 25, "health": 200}, "cost": 2600, "rarity": "epic", "level": 16, "tags": ["magic", "tank", "sustain"]}
+  ]
+}

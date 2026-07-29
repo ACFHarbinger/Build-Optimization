@@ -10,7 +10,13 @@ Usage:
 
 import logging
 import sys
+from pathlib import Path
 from typing import Any, Dict
+
+# middleware/src holds `core`, `pipeline`, etc. as top-level importable
+# packages (not a `middleware.src.*` namespace) — add it to sys.path so this
+# entry point works regardless of the invoking working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parent / "middleware" / "src"))
 
 import hydra
 from omegaconf import DictConfig, OmegaConf
@@ -115,7 +121,7 @@ def _flatten_solver_params(raw: Any) -> Dict[str, Any]:
     return {}
 
 
-@hydra.main(config_path="configs", config_name="config", version_base=None)
+@hydra.main(config_path="middleware/configs", config_name="config", version_base=None)
 def main(cfg: DictConfig) -> None:
     """Main entry point for build optimization."""
     # Extract solver identity from the loaded policy config
@@ -144,6 +150,7 @@ def main(cfg: DictConfig) -> None:
     solver_kwargs = _flatten_solver_params(raw_params)
 
     compare = cfg.output.get("compare_baselines", False)
+    experiment_name = cfg.game.get("name", "build-optimization")
 
     if compare:
         print("  Comparing solvers: greedy / sa / ga")
@@ -156,6 +163,7 @@ def main(cfg: DictConfig) -> None:
             scoring_config=scoring_config,
             solver_configs={solver_name: solver_kwargs},
             verbose=True,
+            experiment_name=experiment_name,
         )
     else:
         result = run_optimization(
@@ -167,6 +175,7 @@ def main(cfg: DictConfig) -> None:
             scoring_config=scoring_config,
             solver_config=solver_kwargs,
             verbose=True,
+            experiment_name=experiment_name,
         )
         if not result.get("success"):
             print("  WARNING: No feasible build found within budget constraints.")

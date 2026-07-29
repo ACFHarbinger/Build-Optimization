@@ -3,7 +3,7 @@ name: "Fantasy RPG"
 description: "Classic RPG with equipment slots, stat synergies, and budget constraints"
 
 data:
-  items_path: "src/data/sample_games/rpg.json"
+  items_path: "src/data/sample/rpg.json"
 
 scoring:
   stat_weights:

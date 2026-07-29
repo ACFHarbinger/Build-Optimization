@@ -58,6 +58,14 @@ dev = [
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+# This pyproject.toml exists to manage dependencies for main.py (which adds
+# middleware/src to sys.path itself) — there is nothing here to build as an
+# installable package, so disable setuptools' automatic package discovery
+# (it errors on the repo's many top-level directories: git/, moon/, backend/,
+# frontend/, extension/, etc.).
+packages = []
+
 [tool.mypy]
 python_version = "3.9"
 warn_return_any = false

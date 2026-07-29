@@ -3,7 +3,7 @@ name: "MOBA Arena"
 description: "MOBA with gold budget, item component trees, and power spikes"
 
 data:
-  items_path: "src/data/sample_games/moba.json"
+  items_path: "src/data/sample/moba.json"
 
 scoring:
   stat_weights:

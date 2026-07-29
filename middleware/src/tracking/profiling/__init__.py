@@ -61,11 +61,30 @@ Example usage::
     stop_global_profiling()   # auto-logs CSV as artifact
 """
 
-from .memory import MemorySnapshot, MemoryTracker
+from typing import Any
+
 from .profiler import ExecutionProfiler, start_global_profiling, stop_global_profiling
 from .report import ProfilingReport
 from .throughput import ThroughputTracker
 from .timer import BlockTimer, MultiStepTimer, profile_block, profile_function
+
+# MemorySnapshot/MemoryTracker profile GPU tensor memory and require torch;
+# deferred so the rest of `profiling` works without it installed.
+_LAZY_ATTRS = {
+    "MemorySnapshot": "MemorySnapshot",
+    "MemoryTracker": "MemoryTracker",
+}
+
+
+def __getattr__(name: str) -> Any:
+    if name not in _LAZY_ATTRS:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    import importlib
+
+    module = importlib.import_module("tracking.profiling.memory")
+    value = getattr(module, _LAZY_ATTRS[name])
+    globals()[name] = value
+    return value
 
 __all__ = [
     # Execution profiler (sys.setprofile)

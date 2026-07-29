@@ -33,6 +33,8 @@ Usage::
 from __future__ import annotations
 
 import logging
+import os
+import time
 from typing import Any, Dict, List, Optional
 
 from core.scoring import ScoringConfig
@@ -41,6 +43,100 @@ from .context import GameOptimizationContext
 from .states.loading import LoadingState
 
 logger = logging.getLogger(__name__)
+
+
+def _build_to_result_json(result: Dict[str, Any]) -> Dict[str, Any]:
+    """Serialize a solver result dict into the JSON schema the Tauri Studio
+    (frontend/src/pages/BuildExplorer.tsx, SolverComparison.tsx) and the
+    browser extension's FileSource pipeline both expect.
+    """
+    build = result.get("build")
+    items = []
+    if build is not None:
+        for item in build.equipped_items:
+            items.append(
+                {
+                    "name": item.name,
+                    "slot": item.slot.name,
+                    "stats": dict(item.stats),
+                    "cost": item.cost,
+                    "rarity": item.rarity.name,
+                    "level": item.level,
+                    "tags": sorted(item.tags),
+                }
+            )
+    return {
+        "solver": result.get("solver", "unknown"),
+        "score": result.get("score", 0.0),
+        "cost": result.get("cost", 0.0),
+        "budget": result.get("budget", 0.0),
+        "items": items,
+        "synergies": result.get("active_synergies", []),
+        "items_count": result.get("items_equipped", 0),
+        "time_s": result.get("elapsed", 0.0),
+    }
+
+
+def _persist_run(
+    result: Dict[str, Any],
+    experiment_name: str,
+    solver_name: str,
+    items_path: str,
+    budget: float,
+    character_level: int,
+    time_limit: float,
+    solver_config: Dict[str, Any],
+) -> None:
+    """Best-effort: write a result JSON file to `outputs/` (read by the Tauri
+    Studio's file-based commands) and log the run to the tracking database
+    (read by future DB-backed commands, see moon/ROADMAP.md item T6).
+
+    Never raises — a broken tracking backend must not fail an optimization run.
+    """
+    result_json = _build_to_result_json(result)
+
+    try:
+        from constants import ROOT_DIR
+
+        out_dir = os.path.join(str(ROOT_DIR), "outputs", experiment_name)
+        os.makedirs(out_dir, exist_ok=True)
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        out_path = os.path.join(out_dir, f"{solver_name}_{timestamp}_result.json")
+        import json
+
+        with open(out_path, "w") as fh:
+            json.dump(result_json, fh, indent=2)
+    except Exception:  # noqa: BLE001
+        logger.debug("Could not write result JSON to outputs/", exc_info=True)
+        out_path = None
+
+    try:
+        import tracking as wst
+
+        tracker = wst.get_tracker() or wst.init(experiment_name)
+        with tracker.start_run(experiment_name, run_type="optimization") as run:
+            run.log_params(
+                {
+                    "solver": solver_name,
+                    "items_path": items_path,
+                    "budget": budget,
+                    "character_level": character_level,
+                    "time_limit": time_limit,
+                    **{f"solver_config.{k}": v for k, v in solver_config.items()},
+                }
+            )
+            run.log_metrics(
+                {
+                    "score": result.get("score", 0.0),
+                    "cost": result.get("cost", 0.0),
+                    "items_equipped": result.get("items_equipped", 0),
+                    "elapsed": result.get("elapsed", 0.0),
+                }
+            )
+            if out_path is not None:
+                run.log_artifact(out_path, artifact_type="result")
+    except Exception:  # noqa: BLE001
+        logger.debug("Could not log run to the tracking database", exc_info=True)
 
 
 def run_optimization(
@@ -52,6 +148,8 @@ def run_optimization(
     scoring_config: Optional[ScoringConfig] = None,
     solver_config: Optional[Dict[str, Any]] = None,
     verbose: bool = False,
+    experiment_name: str = "build-optimization",
+    persist: bool = True,
 ) -> Dict[str, Any]:
     """
     Run one build optimization pass and return the best build found.
@@ -69,6 +167,13 @@ def run_optimization(
         scoring_config: Stat weights and bonuses; defaults to ScoringConfig().
         solver_config:  Algorithm hyperparameters (merged with defaults).
         verbose:        If True, print a formatted result summary.
+        experiment_name: Tracking experiment name / `outputs/` subdirectory;
+            defaults to ``"build-optimization"``. Pass the game name for
+            per-game grouping (e.g. ``cfg.game.name``).
+        persist:        If True (default), write a result JSON to `outputs/`
+            and log the run to the tracking database (see
+            :func:`_persist_run`). Set False for tests/library use that
+            shouldn't touch disk.
 
     Returns:
         Result dict with keys: ``success``, ``solver``, ``score``, ``cost``,
@@ -90,6 +195,18 @@ def run_optimization(
     if verbose:
         _print_result(result)
 
+    if persist:
+        _persist_run(
+            result,
+            experiment_name=experiment_name,
+            solver_name=solver_name,
+            items_path=items_path,
+            budget=budget,
+            character_level=character_level,
+            time_limit=time_limit,
+            solver_config=solver_config or {},
+        )
+
     return result
 
 
@@ -102,6 +219,8 @@ def run_batch(
     scoring_config: Optional[ScoringConfig] = None,
     solver_configs: Optional[Dict[str, Dict[str, Any]]] = None,
     verbose: bool = False,
+    experiment_name: str = "build-optimization",
+    persist: bool = True,
 ) -> Dict[str, Dict[str, Any]]:
     """
     Run multiple solvers on the same problem and return all results.
@@ -118,6 +237,9 @@ def run_batch(
         scoring_config: Shared scoring configuration.
         solver_configs: Per-solver hyperparameter dicts (keyed by name).
         verbose:        If True, print a comparison table at the end.
+        experiment_name: Tracking experiment name / `outputs/` subdirectory,
+            shared across every solver in the batch (see `run_optimization`).
+        persist:        If True (default), persist each run (see `run_optimization`).
 
     Returns:
         Dict mapping ``solver_name → result dict``.
@@ -136,6 +258,8 @@ def run_batch(
             scoring_config=scoring_config,
             solver_config=per_solver_configs.get(name, {}),
             verbose=False,
+            experiment_name=experiment_name,
+            persist=persist,
         )
         results[name] = result
 

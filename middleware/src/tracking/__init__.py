@@ -71,15 +71,12 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from . import hooks, logging, profiling
+from . import logging, profiling
 from .core.run import Run, get_active_run, set_active_run
 from .core.tracker import Tracker, get_tracker
-from .integrations.data import RuntimeDataTracker
 from .integrations.filesystem import FilesystemTracker
-from .integrations.lightning import TrackingCallback
 from .integrations.mlflow_bridge import MLflowBridge
 from .integrations.simulation import SimulationRunTracker, get_sim_tracker
-from .integrations.zenml_bridge import ZenMLBridge
 from .viz_mixin import PolicyStateRecorder, PolicyVizMixin
 
 __all__ = [
@@ -107,6 +104,42 @@ __all__ = [
     "PolicyVizMixin",
     "PolicyStateRecorder",
 ]
+
+# ---------------------------------------------------------------------------
+# Lazy imports (PEP 562) for PyTorch-dependent members.
+#
+# `tracking.core`/`profiling`/`logging`/most `integrations` are usable for
+# lean, non-ML workloads (e.g. Build-Optimization's solver pipeline) without
+# installing torch/pytorch-lightning/lightning/zenml. `hooks`,
+# `integrations.data`, `integrations.lightning`, and `integrations.zenml_bridge`
+# pull in that stack transitively and are deferred so importing `tracking`
+# itself never requires any of it to be installed.
+# ---------------------------------------------------------------------------
+
+_LAZY_MODULES = {"hooks": "tracking.hooks"}
+_LAZY_ATTRS = {
+    "RuntimeDataTracker": ("tracking.integrations.data", "RuntimeDataTracker"),
+    "TrackingCallback": ("tracking.integrations.lightning", "TrackingCallback"),
+    "ZenMLBridge": ("tracking.integrations.zenml_bridge", "ZenMLBridge"),
+}
+
+
+def __getattr__(name: str) -> Any:
+    import importlib
+
+    if name in _LAZY_MODULES:
+        module = importlib.import_module(_LAZY_MODULES[name])
+        globals()[name] = module  # cache on the module so repeated access is direct
+        return module
+
+    target = _LAZY_ATTRS.get(name)
+    if target is None:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    module_name, attr_name = target
+    module = importlib.import_module(module_name)
+    value = getattr(module, attr_name)
+    globals()[name] = value  # cache on the module so repeated access is direct
+    return value
 
 # ---------------------------------------------------------------------------
 # Module-level initialisation helpers
