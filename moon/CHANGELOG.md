@@ -4,6 +4,12 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (T6 — Tauri commands for the tracking database)
+
+- Added `frontend/src-tauri/src/commands/tracking.rs`: six `sqlx`-backed commands (`list_experiments`, `list_tracked_runs`, `get_run_params`, `get_run_latest_metrics`, `get_run_metric_history`, `get_run_artifacts`) reading `assets/tracking/tracking.db` read-only, mirroring `TrackingStore`'s Python query surface. All degrade to an empty result (not an error) when the database doesn't exist yet.
+- Verified against a real database (not just compiled): a `#[tokio::test]` integration test runs every query against the `tracking.db` produced by an actual `main.py` run and checks the returned params/metrics/artifact match.
+- Added a `TrackedRunsPanel` component and wired it into Build Explorer (collapsible "📊 Tracked Runs" section) — browse experiments/runs from the database and load a run's result via its logged artifact path, reusing the existing `BuildDetail` view.
+
 ### Added (B11 — tracking database, wired end-to-end)
 
 - Wired `middleware/src/pipeline/games/optimizer.py::run_optimization`/`run_batch` to persist every solve: a result JSON under `outputs/<experiment>/<solver>_<timestamp>_result.json` (consumed by the Tauri Studio's existing file-based commands) *and* a full record — experiment, run, params, metrics, artifact link — in the `tracking.db` SQLite database (schema was already present, inherited from WSmart-Route, but was never actually exercised for Build-Optimization). New `experiment_name`/`persist` parameters (defaults: game name, `True`).

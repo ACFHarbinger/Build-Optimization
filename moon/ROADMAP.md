@@ -64,9 +64,10 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | T3 | Implement the Solver Comparison page (native port of the archived `middleware/ui` Streamlit page) | M | ✅ Done |
 | T4 | Implement the Training Monitor page (file-based: reads `outputs/**/metrics.csv` / `training_log.jsonl`) | M | ✅ Done |
 | T5 | Implement the Item Database Browser page | M | ✅ Done |
-| T6 | Wire Tauri Rust commands to the middleware's SQLite tracking database via `sqlx`, replacing the current file-based reads in T4/T5 | M | 📋 Pending |
+| T6 | Wire Tauri Rust commands to the middleware's SQLite tracking database via `sqlx` | M | ✅ Done |
 | T7 | Add cross-platform bundling CI (Linux `.deb`/`.AppImage`, macOS `.dmg`, Windows `.msi`) | M | 📋 Pending |
 | T8 | Code-split the ECharts bundle (currently a single >1.3MB chunk) via dynamic `import()` per page | S | 📋 Pending |
+| T9 | Replace Training Monitor's/Item Database's file-based reads (T4/T5) with the T6 tracking-DB commands now that they exist; extend `TrackedRunsPanel` (currently only in Build Explorer) to Solver Comparison | M | 📋 Pending |
 
 ## Track: Documentation
 

@@ -200,6 +200,28 @@ h3 {
   color: #555;
 }
 
+/* --- Tracked runs panel --- */
+.tracked-runs-details {
+  border: 1px solid #e8eaed;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.tracked-runs-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.tracked-run-row {
+  cursor: pointer;
+}
+
+.tracked-run-row:hover {
+  background: rgba(26, 115, 232, 0.06);
+}
+
 /* --- Banners --- */
 .info-banner,
 .error-banner {
@@ -283,6 +305,12 @@ h3 {
   h2,
   h3 {
     color: #e8eaed;
+  }
+  .tracked-runs-details {
+    border-color: #3c4043;
+  }
+  .tracked-run-row:hover {
+    background: rgba(138, 180, 248, 0.1);
   }
   .sidebar {
     background-color: #1e1e1e;

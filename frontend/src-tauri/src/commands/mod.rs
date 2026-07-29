@@ -1,4 +1,5 @@
 pub mod data;
+pub mod tracking;
 pub mod training;
 
 use std::path::{Path, PathBuf};

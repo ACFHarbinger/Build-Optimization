@@ -22,3 +22,27 @@ export interface SolverResult {
 }
 
 export type TrainingRecord = Record<string, number | string>;
+
+export interface Experiment {
+  id: number;
+  name: string;
+  created_at: string;
+  description: string;
+}
+
+export interface TrackedRun {
+  id: string;
+  experiment_name: string;
+  name: string | null;
+  status: string;
+  run_type: string;
+  start_time: string;
+  end_time: string | null;
+}
+
+export interface RunArtifact {
+  name: string;
+  path: string;
+  artifact_type: string;
+  created_at: string;
+}

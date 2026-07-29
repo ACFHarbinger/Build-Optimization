@@ -12,6 +12,12 @@ pub fn run() {
             commands::data::read_items_json,
             commands::training::list_training_runs,
             commands::training::read_training_log,
+            commands::tracking::list_experiments,
+            commands::tracking::list_tracked_runs,
+            commands::tracking::get_run_params,
+            commands::tracking::get_run_latest_metrics,
+            commands::tracking::get_run_metric_history,
+            commands::tracking::get_run_artifacts,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Build-Optimization Studio");

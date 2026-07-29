@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import { KpiRow } from "../components/KpiRow";
 import { StatusPill } from "../components/StatusPill";
+import { TrackedRunsPanel } from "../components/TrackedRunsPanel";
 import { RARITY_COLORS } from "../lib/colors";
 import { basename, listSolverResults, readSolverResult } from "../lib/tauriApi";
 import { useAutoRefresh } from "../lib/useAutoRefresh";
@@ -151,6 +152,11 @@ export function BuildExplorer() {
   return (
     <div>
       <h2>🛡️ Build Explorer</h2>
+
+      <details className="tracked-runs-details">
+        <summary>📊 Tracked Runs (Database)</summary>
+        <TrackedRunsPanel onSelectResultPath={setSelected} />
+      </details>
 
       {loading ? (
         <p>Loading…</p>
