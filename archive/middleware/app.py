@@ -12,19 +12,19 @@ import time
 
 import streamlit as st
 
-from ui.components.sidebar import (
+from .ui.components.sidebar import (
     render_about_section,
     render_auto_refresh_toggle,
     render_mode_selector,
 )
-from ui.pages import (
+from .ui.pages import (
     render_build_explorer,
     render_item_database,
     render_solver_comparison,
     render_training_monitor,
 )
-from ui.styles.colors import get_page_config
-from ui.styles.css import CUSTOM_CSS
+from .ui.styles.colors import get_page_config
+from .ui.styles.css import CUSTOM_CSS
 
 
 def main() -> None:

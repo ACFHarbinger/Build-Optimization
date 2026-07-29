@@ -34,6 +34,7 @@ mod benchmark 'tools/benchmark'
 mod ci 'tools/ci'
 mod controller 'tools/controller'
 mod database 'tools/database'
+mod docs 'tools/docs'
 mod export 'tools/export'
 mod helper 'tools/helper'
 mod infrastructure 'tools/infrastructure'
@@ -81,6 +82,10 @@ gui: helper::_print_header
 # Launch the Tauri Studio desktop app (dev mode)
 studio: helper::_print_header
     just app::studio
+
+# Build the full multi-language documentation site
+docs: helper::_print_header
+    just docs::build
 
 # Run fast unit tests (use `just test::test` for the full suite)
 test-fast: helper::_print_header

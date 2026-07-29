@@ -1,0 +1,96 @@
+site_name: Build-Optimization Documentation
+site_description: >-
+  Unified documentation portal for Build-Optimization — a C++ solver
+  backend, Python middleware, Tauri + TypeScript desktop Studio, and
+  browser-extension data pipeline for videogame build optimization.
+site_author: ACFHarbinger
+repo_url: https://github.com/ACFHarbinger/Build-Optimization
+repo_name: ACFHarbinger/Build-Optimization
+edit_uri: edit/main/docs/
+
+docs_dir: .
+site_dir: ../site
+exclude_docs: |
+  sphinx/conf.py
+  build_docs.sh
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+
+# The Getting Started / Contributing / Roadmap / Changelog pages embed real
+# repo files via pymdownx.snippets — those files link to many repo paths
+# (middleware/pyproject.toml, .agent/AGENTS.md, ...) that aren't part of this
+# docs set. That's expected, not a broken doc-internal link, so it's downgraded
+# below rather than failing `mkdocs build --strict`.
+validation:
+  links:
+    not_found: info
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Quick Start: getting-started.md
+      - Contributing: contributing.md
+  - Reference:
+      - Architecture: ARCHITECTURE.md
+      - Development: DEVELOPMENT.md
+      - Testing: TESTING.md
+  - API Reference:
+      - Python Middleware (Sphinx): api/python.md
+      - C++ Backend (Doxygen): api/cpp.md
+      - Tauri Frontend (TypeDoc): api/frontend.md
+      - Browser Extension (TypeDoc): api/extension.md
+      - Tauri Rust Shell (rustdoc): api/rust.md
+  - Roadmap & Changelog:
+      - Roadmap: roadmap.md
+      - Changelog: changelog.md
+  - Research:
+      - Overview: research.md
+  - Building the Docs: building.md

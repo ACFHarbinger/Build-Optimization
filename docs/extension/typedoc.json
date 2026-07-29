@@ -1,0 +1,18 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "Build-Optimization Browser Extension",
+  "entryPoints": ["../../extension/src"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "../../extension/tsconfig.json",
+  "out": "../_build/api/extension",
+  "readme": "none",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "githubPages": false,
+  "navigationLinks": {
+    "Repository": "https://github.com/ACFHarbinger/Build-Optimization",
+    "Docs Home": "../../index.html"
+  },
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/node_modules/**"]
+}

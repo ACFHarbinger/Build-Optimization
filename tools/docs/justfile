@@ -1,0 +1,16 @@
+# Build-Optimization — Docs: multi-language documentation site
+
+set unstable := true
+set working-directory := '../..'
+
+# Build the full docs site (Sphinx, Doxygen, TypeDoc x2, rustdoc, MkDocs)
+build:
+    bash docs/build_docs.sh
+
+# Serve just the MkDocs narrative site (no API generators)
+serve:
+    uv run mkdocs serve -f docs/mkdocs.yml
+
+# Remove generated docs output
+clean:
+    rm -rf site docs/_build

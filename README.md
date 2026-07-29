@@ -32,6 +32,14 @@
 [![Dependabot](https://img.shields.io/badge/Dependabot-enabled-025E8C?logo=dependabot&logoColor=white)](https://dependabot.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+</br>
+
+[![MkDocs Material](https://img.shields.io/badge/MkDocs-Material-526CFE?logo=materialformkdocs&logoColor=white)](https://squidfunk.github.io/mkdocs-material/)
+[![Sphinx](https://img.shields.io/badge/Sphinx-autoapi-000000?logo=sphinx&logoColor=white)](https://www.sphinx-doc.org/)
+[![Doxygen](https://img.shields.io/badge/Doxygen-C%2B%2B_Docs-2C4AA8?logo=c%2B%2B&logoColor=white)](https://www.doxygen.nl/)
+[![TypeDoc](https://img.shields.io/badge/TypeDoc-TS_Docs-3178C6?logo=typescript&logoColor=white)](https://typedoc.org/)
+[![rustdoc](https://img.shields.io/badge/rustdoc-Rust_Docs-E57300?logo=rust&logoColor=white)](https://doc.rust-lang.org/rustdoc/)
+
 <p>
   <a href="#overview"><strong>Overview</strong></a> |
   <a href="#tech-stack--capabilities"><strong>Tech Stack</strong></a> |
@@ -301,6 +309,7 @@ Coverage is tracked via [Codecov](https://codecov.io/) (config: [`git/codecov.ya
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Module boundaries and data flow. |
 | [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) | Environment setup and day-to-day workflows. |
 | [`docs/TESTING.md`](docs/TESTING.md) | Test organization and coverage requirements. |
+| [`docs/mkdocs.yml`](docs/mkdocs.yml) (`just docs`) | Unified documentation portal — narrative pages plus per-language API references (Sphinx/autoapi for Python, Doxygen for C++, TypeDoc for both TypeScript modules, rustdoc for the Tauri shell). See [`docs/building.md`](docs/building.md). |
 | [`moon/ROADMAP.md`](moon/ROADMAP.md) | Planned work, phased by module. |
 | [`moon/CHANGELOG.md`](moon/CHANGELOG.md) | Release history. |
 | [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/) | Live issue tracking, labeled by component: C++ Backend + Python Middleware, Browser Extension, Unreal Engine Plugin, and Tauri App. |

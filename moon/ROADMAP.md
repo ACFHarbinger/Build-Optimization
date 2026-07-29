@@ -10,7 +10,7 @@
 
 ## Overview
 
-This document tracks planned implementation work for Build-Optimization, organized into the four tracks that mirror the component labels on the [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/): **C++ Backend + Python Middleware**, **Browser Extension**, **Unreal Engine Plugin**, and **Tauri App**. Completed items move to [`moon/CHANGELOG.md`](CHANGELOG.md).
+This document tracks planned implementation work for Build-Optimization. The first four tracks mirror the component labels on the [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/): **C++ Backend + Python Middleware**, **Browser Extension**, **Unreal Engine Plugin**, and **Tauri App**. **Documentation** is a cross-cutting infrastructure track without a dedicated board label. Completed items move to [`moon/CHANGELOG.md`](CHANGELOG.md).
 
 Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
@@ -67,6 +67,19 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | T6 | Wire Tauri Rust commands to the middleware's SQLite tracking database via `sqlx`, replacing the current file-based reads in T4/T5 | M | 📋 Pending |
 | T7 | Add cross-platform bundling CI (Linux `.deb`/`.AppImage`, macOS `.dmg`, Windows `.msi`) | M | 📋 Pending |
 | T8 | Code-split the ECharts bundle (currently a single >1.3MB chunk) via dynamic `import()` per page | S | 📋 Pending |
+
+## Track: Documentation
+
+| # | Item | Effort | Status |
+| --- | --- | --- | --- |
+| D1 | Scaffold the MkDocs Material portal (`docs/mkdocs.yml`) embedding README/CONTRIBUTING/ROADMAP/CHANGELOG via `pymdownx.snippets` | S | ✅ Done |
+| D2 | Wire sphinx-autoapi for the Python middleware reference (`docs/sphinx/`) | S | ✅ Done |
+| D3 | Wire Doxygen for the C++ backend reference (`docs/cpp/Doxyfile`) | S | ✅ Done |
+| D4 | Wire TypeDoc for the Tauri frontend and browser extension references | S | ✅ Done |
+| D5 | Wire `cargo doc` (rustdoc) for the Tauri Rust shell reference | S | ✅ Done |
+| D6 | Orchestrate all five generators + MkDocs in `docs/build_docs.sh`, tolerant of missing tools/unscaffolded modules | S | ✅ Done |
+| D7 | Wire `.github/workflows/docs.yml` (per-generator jobs + GitHub Pages deploy on `main`) | S | ✅ Done |
+| D8 | Add a `docs/plugin/` Unreal Engine plugin Doxygen config once the plugin (U1) is scaffolded | S | 📋 Pending |
 
 ---
 
