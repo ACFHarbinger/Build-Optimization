@@ -4,6 +4,12 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (B2 — branch-and-bound MCKP solver)
+
+- Added `backend/include/build_optimizer/mckp.hpp` / `backend/src/mckp.cpp`: an exact solver for the **Multiple-Choice Knapsack Problem** — classes of mutually-exclusive options (equipment slots, directly matching `Build`'s one-item-per-slot structure) with at most one selected per class, subject to a shared weight/cost capacity. Uses depth-first branch-and-bound with an admissible fractional-relaxation upper bound (Dantzig's classic 0-1 knapsack bound, generalized to MCKP) for pruning — genuinely different from, and complementary to, the existing DP-based plain 0-1 `solve_knapsack`.
+- Exposed via pybind11 (`MckpOption`, `MckpResult`, `solve_mckp_branch_and_bound`) and verified callable from Python, not just compiled.
+- Wired `backend/CMakeLists.txt` to build a Catch2 test executable (`backend/tests/test_knapsack.cpp`, `backend/tests/test_mckp.cpp`) when the `dev` Pixi environment is active, registered with CTest via `catch_discover_tests` — `pixi run -e dev ctest --test-dir build` (10 tests) now actually runs, which it did not before (the `pixi.toml` `test` task existed but no tests were ever registered). Includes a brute-force cross-check test for the MCKP solver on a 4-class/12-option instance.
+
 ### Added (T6 — Tauri commands for the tracking database)
 
 - Added `frontend/src-tauri/src/commands/tracking.rs`: six `sqlx`-backed commands (`list_experiments`, `list_tracked_runs`, `get_run_params`, `get_run_latest_metrics`, `get_run_metric_history`, `get_run_artifacts`) reading `assets/tracking/tracking.db` read-only, mirroring `TrackingStore`'s Python query surface. All degrade to an empty result (not an error) when the database doesn't exist yet.

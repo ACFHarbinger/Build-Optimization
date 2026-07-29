@@ -21,7 +21,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
 | B1 | Scaffold `backend/` C++ module (`CMakeLists.txt`, `pixi.toml`, pybind11 bindings entry point) | S | ✅ Done |
-| B2 | Implement branch-and-bound exact solver for the 0-1 / multiple-choice knapsack | M | 📋 Pending |
+| B2 | Implement branch-and-bound exact solver for the 0-1 / multiple-choice knapsack | M | ✅ Done |
 | B3 | Implement quadratic knapsack solver for synergy / set-bonus terms | M | 📋 Pending |
 | B4 | Add McCormick-envelope / Fortet-inequality linearization utilities for multiplicative stat terms | M | 📋 Pending |
 | B5 | Expose backend solvers to Python via `pybind11` and wire them into `middleware/src/policies` as selectable Hydra policies | M | 📋 Pending |

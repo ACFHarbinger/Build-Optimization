@@ -28,6 +28,7 @@ endif()
 pybind11_add_module(build_optimizer_backend
   src/bindings.cpp
   src/knapsack.cpp
+  src/mckp.cpp
 )
 
 target_include_directories(build_optimizer_backend PRIVATE
@@ -35,3 +36,24 @@ target_include_directories(build_optimizer_backend PRIVATE
 )
 
 install(TARGETS build_optimizer_backend DESTINATION .)
+
+# --- Tests (Catch2) -------------------------------------------------------
+# Only built when the `dev` Pixi environment (which provides Catch2) is
+# active; a bare `cmake` invocation without it simply skips tests.
+find_package(Catch2 3 QUIET)
+if(Catch2_FOUND)
+  enable_testing()
+  include(CTest)
+  include(Catch)
+
+  add_executable(build_optimizer_tests
+    tests/test_knapsack.cpp
+    tests/test_mckp.cpp
+    src/knapsack.cpp
+    src/mckp.cpp
+  )
+  target_include_directories(build_optimizer_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_link_libraries(build_optimizer_tests PRIVATE Catch2::Catch2WithMain)
+
+  catch_discover_tests(build_optimizer_tests)
+endif()
