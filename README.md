@@ -80,7 +80,7 @@ The project is organized as a polyglot monorepo:
 | **C++ Backend** | Performance-critical exact and combinatorial solvers, exposed to Python via `pybind11`. |
 | **Python Middleware** | Hydra-driven orchestration: the existing solver suite, data pipeline, experiment tracking, and Streamlit dashboard. |
 | **Tauri + TypeScript Frontend** | Cross-platform desktop "Studio" for exploring builds, comparing solvers, and monitoring training runs. |
-| **IDE / Engine Integrations** | A VS Code extension for authoring build configs, and a planned Unreal Engine plugin for in-editor optimization. |
+| **Browser Extension / Engine Integrations** | A browser extension for scraping item and build data from game wikis into the pipeline, and a planned Unreal Engine plugin for in-editor optimization. |
 
 ## Tech Stack & Capabilities
 
@@ -116,7 +116,7 @@ Lives in [`middleware/`](middleware/). Owns its own [`pyproject.toml`](middlewar
 
 [![Tauri](https://img.shields.io/badge/Tauri-2.0-24C8DB?logo=tauri&logoColor=white)](https://tauri.app/) [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite](https://img.shields.io/badge/Vite-Build-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 
-Lives in [`app/`](app/) (Rust shell in `app/src-tauri/`). Ships its own [`package.json`](app/package.json).
+Lives in [`frontend/`](frontend/) (Rust shell in `frontend/src-tauri/`). Ships its own [`package.json`](frontend/package.json).
 
 | Capability | Description |
 | --- | --- |
@@ -126,13 +126,13 @@ Lives in [`app/`](app/) (Rust shell in `app/src-tauri/`). Ships its own [`packag
 | **Item Database Browser** | Searchable, filterable item catalog view. |
 | **Native Desktop Shell** | Single Rust/Tauri binary per platform (Linux `.deb`/`.AppImage`, macOS `.dmg`, Windows `.msi`). |
 
-### IDE & Engine Integrations
+### Browser Extension & Engine Integrations
 
-[![VS Code](https://img.shields.io/badge/VS_Code-Extension-007ACC?logo=visualstudiocode&logoColor=white)](https://code.visualstudio.com/) [![Unreal Engine](https://img.shields.io/badge/Unreal_Engine-Plugin_(planned)-0E1128?logo=unrealengine&logoColor=white)](https://www.unrealengine.com/)
+[![Chrome](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/) [![Firefox](https://img.shields.io/badge/Firefox-Extension-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/) [![Unreal Engine](https://img.shields.io/badge/Unreal_Engine-Plugin_(planned)-0E1128?logo=unrealengine&logoColor=white)](https://www.unrealengine.com/)
 
 | Capability | Description |
 | --- | --- |
-| **VS Code Extension** (`extension/`) | Authoring support, schema validation, and inline previews for Hydra `game`/`policy` YAML configs. |
+| **Wiki Data Extractor** (`extension/`) | Chrome/Firefox/Edge (Manifest V3) extension that scrapes item, stat, and skill data from game wikis (Fandom, wiki.gg) into JSON matching `middleware/src/pipeline/file_source.py`'s schema. |
 | **Unreal Engine Plugin** (planned) | In-editor build optimization for UE-based game projects; tracked on the [project board](#documentation). |
 
 ## Architecture
@@ -156,10 +156,10 @@ Build-Optimization/
 │   ├── ui/                     # Streamlit control tower dashboard
 │   ├── tests/
 │   └── validation/              # Static analysis tooling
-├── app/                        # Tauri + TypeScript desktop Studio
+├── frontend/                    # Tauri + TypeScript desktop Studio
 │   ├── package.json
 │   └── src-tauri/               # Rust shell (Cargo workspace member)
-├── extension/                   # VS Code extension
+├── extension/                   # Browser extension (wiki data scraper)
 │   └── package.json
 ├── research/                    # Domain research (knapsack-routing theory)
 ├── tools/*/justfile             # Per-domain command runner modules
@@ -170,8 +170,8 @@ Build-Optimization/
 ├── docs/                        # Architecture / development / testing references
 ├── env/                         # Conda environment + env-var templates
 ├── desktop/                     # Linux / macOS / Windows build & run scripts
-├── package.json                 # Root NPM workspace (app, extension)
-└── Cargo.toml                   # Root Cargo workspace (app/src-tauri, future Rust modules)
+├── package.json                 # Root NPM workspace (frontend, extension)
+└── Cargo.toml                   # Root Cargo workspace (frontend/src-tauri, future Rust modules)
 ```
 
 ## Domain Mapping
@@ -211,7 +211,7 @@ Plus the full `middleware/src/policies/` folder — 28 additional metaheuristic 
 | Component | Minimum | Purpose |
 | --- | --- | --- |
 | Python | 3.9+ | Middleware, solvers, dashboard |
-| Node.js | 18+ | Tauri frontend, VS Code extension |
+| Node.js | 18+ | Tauri frontend, browser extension |
 | Rust | 1.75+ | Tauri desktop shell |
 | CMake | 3.18+ | C++ backend build |
 | [uv](https://github.com/astral-sh/uv) | latest | Python dependency management |
@@ -236,14 +236,14 @@ pixi install
 just build-base   # configures + builds the pybind11 extension via CMake
 ```
 
-### 3. Tauri Frontend & VS Code Extension (NPM Workspace)
+### 3. Tauri Frontend & Browser Extension (NPM Workspace)
 
 ```bash
-# From the repo root — installs app/ and extension/ together
+# From the repo root — installs frontend/ and extension/ together
 npm install
 
 # Rust side of the Tauri shell
-cd app/src-tauri && cargo fetch
+cd frontend/src-tauri && cargo fetch
 ```
 
 ### 4. Everything at once
@@ -268,10 +268,10 @@ uv run python main.py policy=policy_alns optimization.budget=2000 optimization.t
 just dashboard
 
 # Launch the Tauri desktop Studio (dev mode)
-cd app && npm run tauri dev
+cd frontend && npm run tauri dev
 
-# Run the VS Code extension in a dev host
-cd extension && npm run watch   # then F5 in VS Code
+# Build the browser extension (all targets) and load it unpacked
+cd extension && npm run build:all   # outputs to extension/dist/{chrome,firefox,edge}
 ```
 
 See the root [`justfile`](justfile) for the full set of `train` / `eval` / `optimize` / `gui` / `dashboard` recipes.
@@ -286,9 +286,9 @@ uv run pytest middleware/tests -v
 cd backend && pixi run test
 
 # Tauri frontend
-cd app && npm test
+cd frontend && npm test
 
-# VS Code extension
+# Browser extension
 cd extension && npm test
 ```
 
@@ -304,7 +304,7 @@ Coverage is tracked via [Codecov](https://codecov.io/) (config: [`.github/codeco
 | [`docs/TESTING.md`](docs/TESTING.md) | Test organization and coverage requirements. |
 | [`.moon/ROADMAP.md`](.moon/ROADMAP.md) | Planned work, phased by module. |
 | [`.moon/CHANGELOG.md`](.moon/CHANGELOG.md) | Release history. |
-| [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/) | Live issue tracking across C++ Backend + Python Middleware, IDE Extension, Unreal Engine Plugin, and Tauri App views. |
+| [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/) | Live issue tracking, labeled by component: C++ Backend + Python Middleware, Browser Extension, Unreal Engine Plugin, and Tauri App. |
 
 ## Contributing
 

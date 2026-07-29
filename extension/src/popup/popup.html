@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Build-Optimization Data Extractor</title>
+    <style>
+      body { font: 13px system-ui, sans-serif; width: 240px; padding: 12px; }
+      button { width: 100%; margin-top: 6px; padding: 6px; }
+    </style>
+  </head>
+  <body>
+    <p>Scrape the current wiki page, then export the collected items as JSON for <code>middleware/src/pipeline/file_source.py</code>.</p>
+    <button id="scrape">Scrape This Page</button>
+    <button id="export">Export Items JSON</button>
+    <script src="popup.js"></script>
+  </body>
+</html>

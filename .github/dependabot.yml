@@ -10,7 +10,7 @@ updates:
         patterns: ["*"]
     open-pull-requests-limit: 10
 
-  # Root NPM workspace (app/, extension/)
+  # Root NPM workspace (frontend/, extension/)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -20,7 +20,7 @@ updates:
         patterns: ["*"]
     open-pull-requests-limit: 10
 
-  # Cargo workspace (app/src-tauri)
+  # Cargo workspace (frontend/src-tauri)
   - package-ecosystem: "cargo"
     directory: "/"
     schedule:

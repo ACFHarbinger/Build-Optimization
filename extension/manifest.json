@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Build-Optimization Data Extractor",
+  "description": "Scrapes item, skill, and stat data from game wikis for use with Build-Optimization's solver pipeline.",
+  "version": "0.1.0",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "icons/icon48.png"
+  },
+  "background": {
+    "service_worker": "background/index.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.fandom.com/*",
+        "*://*.wiki.gg/*",
+        "*://*.gamepedia.com/*"
+      ],
+      "js": ["content/scraper.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["activeTab", "scripting", "storage", "downloads"],
+  "host_permissions": ["*://*.fandom.com/*", "*://*.wiki.gg/*", "*://*.gamepedia.com/*"]
+}

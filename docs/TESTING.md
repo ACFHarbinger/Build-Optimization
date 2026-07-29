@@ -10,9 +10,9 @@ uv run pytest middleware/tests -v --cov=src --cov-report=term-missing
 cd backend && pixi run test
 
 # Tauri frontend
-cd app && npm test
+cd frontend && npm test
 
-# VS Code extension
+# Browser extension
 cd extension && npm test
 ```
 
@@ -37,4 +37,4 @@ Coverage is enforced at the Python-middleware level (`fail_under = 60` in `middl
 
 - Python: pytest classes named `Test*`, functions named `test_*`; mirror the `middleware/src/` package layout under `middleware/tests/`.
 - C++: Catch2, added under `backend/tests/` (enable via the `dev` Pixi environment).
-- TypeScript: Vitest for unit/component tests (`app/`), `@vscode/test-cli` for the extension.
+- TypeScript: Vitest for unit/component tests (`frontend/`), Jest for the browser extension (`extension/`).

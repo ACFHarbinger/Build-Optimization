@@ -7,8 +7,8 @@ flowchart TD
     subgraph Entry Points
         CLI[main.py — Hydra CLI]
         Dashboard[middleware/ui — Streamlit]
-        Studio[app/ — Tauri Studio]
-        VSCode[extension/ — VS Code]
+        Studio[frontend/ — Tauri Studio]
+        Extension[extension/ — Browser Extension]
     end
 
     subgraph Python Middleware
@@ -29,7 +29,7 @@ flowchart TD
     Dashboard --> Tracking
     Dashboard --> Core
     Studio -. reads .-> Tracking
-    VSCode -. authors .-> CLI
+    Extension -. exports item JSON .-> Pipeline
     Solvers --> Backend
     Policies --> Pipeline
     Pipeline --> Core
@@ -39,7 +39,7 @@ flowchart TD
 
 - `middleware/src/core` is the domain model and must not import from `middleware/ui` or `backend/`.
 - `backend/` exposes a stable `pybind11` API (`build_optimizer_backend`); Python code only calls into it through `middleware/src/policies`, never imports backend internals directly.
-- `app/` (Tauri) and `extension/` (VS Code) are presentation layers — they read from the middleware's tracking database and shell out to `main.py`; they do not reimplement solver logic.
+- `frontend/` (Tauri) is a presentation layer — it reads from the middleware's tracking database and shells out to `main.py`; it does not reimplement solver logic. `extension/` (browser extension) only produces item JSON for `middleware/src/pipeline`'s `FileSource` — it has no runtime dependency on the rest of the stack.
 
 ## Data Flow
 

@@ -10,7 +10,7 @@
 
 ## Overview
 
-This document tracks planned implementation work for Build-Optimization, organized into the four tracks that mirror the [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/) views: **C++ Backend + Python Middleware**, **IDE Extension**, **Unreal Engine Plugin**, and **Tauri App**. Completed items move to [`.moon/CHANGELOG.md`](CHANGELOG.md).
+This document tracks planned implementation work for Build-Optimization, organized into the four tracks that mirror the component labels on the [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/): **C++ Backend + Python Middleware**, **Browser Extension**, **Unreal Engine Plugin**, and **Tauri App**. Completed items move to [`.moon/CHANGELOG.md`](CHANGELOG.md).
 
 Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
@@ -33,16 +33,16 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | B11 | Design and implement the experiment tracking database schema (`middleware/src/tracking`) | M | 📋 Pending |
 | B12 | Wire C++ build + Python test suite into `.github/workflows/ci.yml` | S | ✅ Done |
 
-## Track: IDE Extension
+## Track: Browser Extension
 
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
-| E1 | Scaffold `extension/` VS Code extension project (`package.json`, activation events, command palette entries) | S | ✅ Done |
-| E2 | Implement JSON Schema validation for Hydra `game` / `policy` / `optimization` YAML configs | M | 📋 Pending |
-| E3 | Add inline autocomplete for solver keys, game profiles, and policy parameters | M | 📋 Pending |
-| E4 | Add a "Run Optimization" editor command that shells out to `main.py` with the active config | S | 📋 Pending |
-| E5 | Add build-result preview panel (webview rendering the last optimization result) | M | 📋 Pending |
-| E6 | Publish the extension to the VS Code Marketplace and wire a release workflow | S | 📋 Pending |
+| E1 | Scaffold `extension/` Manifest V3 browser extension project (`package.json`, `manifest.json`, per-browser webpack configs) | S | ✅ Done |
+| E2 | Add per-site wiki selector profiles (Fandom, wiki.gg, Gamepedia) with slot/rarity/stat-block mapping | M | 📋 Pending |
+| E3 | Implement a review/edit UI in the popup for correcting scraped fields before export | M | 📋 Pending |
+| E4 | Wire `EXPORT_ITEMS` output directly into `middleware/src/pipeline/file_source.py`'s expected JSON schema, with per-game presets | S | 📋 Pending |
+| E5 | Add bulk-scrape support (category/index page crawling within a tab, rate-limited) | M | 📋 Pending |
+| E6 | Package and publish to the Chrome Web Store and Firefox Add-ons, and wire a release workflow | S | 📋 Pending |
 
 ## Track: Unreal Engine Plugin
 
@@ -59,7 +59,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
-| T1 | Scaffold `app/` Tauri + React + TypeScript project (`package.json`, `src-tauri/`) | S | ✅ Done |
+| T1 | Scaffold `frontend/` Tauri + React + TypeScript project (`package.json`, `src-tauri/`) | S | ✅ Done |
 | T2 | Implement the Build Explorer page (native port of `middleware/ui/pages/build_explorer.py`) | M | 📋 Pending |
 | T3 | Implement the Solver Comparison page (native port of `middleware/ui/pages/solver_comparison.py`) | M | 📋 Pending |
 | T4 | Implement the Training Monitor page backed by the middleware tracking database | M | 📋 Pending |
@@ -71,6 +71,6 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
 ## How to Use This Document
 
-- Pick up any `📋 Pending` item, open a matching GitHub issue on the [project board](https://github.com/users/ACFHarbinger/projects/15/) under the track's view, and reference it in your PR.
+- Pick up any `📋 Pending` item, open a matching GitHub issue labeled for the track on the [project board](https://github.com/users/ACFHarbinger/projects/15/), and reference it in your PR.
 - Mark items `🚧 In Progress` while active, and move completed entries into [`CHANGELOG.md`](CHANGELOG.md) under `Unreleased` when merged.
 - See [`.github/CONTRIBUTING.md`](../.github/CONTRIBUTING.md) for the full contribution workflow.

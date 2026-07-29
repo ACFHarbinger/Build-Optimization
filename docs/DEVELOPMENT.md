@@ -29,8 +29,8 @@ Run `just help` for the full categorized command reference, or `just --list` for
 | --- | --- |
 | `middleware/` | `uv run pytest middleware/tests -v` after each change |
 | `backend/` | `cd backend && pixi run build && pixi run test` |
-| `app/` | `cd app && npm run tauri:dev` |
-| `extension/` | `cd extension && npm run watch`, then `F5` in VS Code |
+| `frontend/` | `cd frontend && npm run tauri:dev` |
+| `extension/` | `cd extension && npm run watch:chrome`, then load `extension/dist/chrome` unpacked |
 
 ## Debugging
 

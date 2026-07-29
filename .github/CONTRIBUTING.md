@@ -47,7 +47,7 @@ Thank you for your interest in contributing to Build-Optimization! This document
 3. **Bug Fixes** — labeled `bug`
 4. **Feature Requests** — labeled `enhancement`
 
-Issues are triaged onto the [project board](https://github.com/users/ACFHarbinger/projects/15/), split into four views: **C++ Backend + Python Middleware**, **IDE Extension**, **Unreal Engine Plugin**, and **Tauri App**.
+Issues are triaged onto the [project board](https://github.com/users/ACFHarbinger/projects/15/) and labeled by component: **C++ Backend + Python Middleware**, **Browser Extension**, **Unreal Engine Plugin**, and **Tauri App**.
 
 ### 1.3 Communication Channels
 
@@ -82,7 +82,7 @@ pre-commit install
 
 ### 2.4 IDE Configuration
 
-VS Code is recommended. Install the Python, rust-analyzer, and ESLint extensions; the repo's `extension/` module itself targets VS Code, so use two windows if you're actively developing it (one for the extension source, one running the Extension Development Host).
+VS Code is recommended for the Python/Rust/TypeScript codebase. Install the Python, rust-analyzer, and ESLint extensions. When developing `extension/` (the browser extension), build it (`npm run build:chrome`) and load `extension/dist/chrome` as an unpacked extension in `chrome://extensions` to test changes.
 
 ## 3. Code Style Guidelines
 
@@ -99,7 +99,7 @@ uv run ruff check . --fix
 uv run ruff format .
 uv run mypy middleware/src
 
-# TypeScript (app/ or extension/)
+# TypeScript (frontend/ or extension/)
 npm run lint
 npm run format
 ```
@@ -163,8 +163,8 @@ CI must pass, at least one approval is required, and review comments must be add
 | --- | --- | --- |
 | Python middleware | `uv run pytest middleware/tests -v` | 60% |
 | C++ backend | `cd backend && pixi run test` | n/a (build must pass) |
-| Tauri frontend | `cd app && npm test` | n/a |
-| VS Code extension | `cd extension && npm test` | n/a |
+| Tauri frontend | `cd frontend && npm test` | n/a |
+| Browser extension | `cd extension && npm test` | n/a |
 
 Use pytest markers (`slow`, `fast`, `unit`, `integration`, `model`, `data`) to scope test runs — see `pyproject.toml` → `[tool.pytest.ini_options]`.
 
@@ -188,7 +188,7 @@ Use pytest markers (`slow`, `fast`, `unit`, `integration`, `model`, `data`) to s
 
 ## 10. Issue Reporting
 
-**Bug reports** should include: reproduction steps, expected vs. actual behavior, module affected (backend/middleware/app/extension), and environment (OS, Python/Node/Rust versions).
+**Bug reports** should include: reproduction steps, expected vs. actual behavior, module affected (backend/middleware/frontend/extension), and environment (OS, Python/Node/Rust versions).
 
 **Feature requests** should include: the problem being solved, a proposed solution, and alternatives considered.
 

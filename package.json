@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "workspaces": [
-    "app",
+    "frontend",
     "extension"
   ],
   "scripts": {
@@ -11,16 +11,16 @@
     "setup": "npm run install:all",
     "dev": "npm run tauri:dev",
     "build": "npm run tauri:build",
-    "tauri": "npm run tauri --workspace=app --",
-    "tauri:dev": "npm run tauri:dev --workspace=app",
-    "tauri:build": "npm run tauri:build --workspace=app",
-    "start-app": "npm run dev --workspace=app",
-    "build-app": "npm run build --workspace=app",
-    "test-app": "npm run test --workspace=app",
-    "build-extension": "npm run build --workspace=extension",
+    "tauri": "npm run tauri --workspace=frontend --",
+    "tauri:dev": "npm run tauri:dev --workspace=frontend",
+    "tauri:build": "npm run tauri:build --workspace=frontend",
+    "start-frontend": "npm run dev --workspace=frontend",
+    "build-frontend": "npm run build --workspace=frontend",
+    "test-frontend": "npm run test --workspace=frontend",
+    "build-extension": "npm run build:all --workspace=extension",
     "test-extension": "npm run test --workspace=extension",
-    "lint": "npm run lint --workspace=app && npm run lint --workspace=extension",
-    "test": "npm run test-app && npm run test-extension"
+    "lint": "npm run lint --workspace=frontend && npm run typecheck --workspace=extension",
+    "test": "npm run test-frontend && npm run test-extension"
   },
   "devDependencies": {
     "concurrently": "^9"

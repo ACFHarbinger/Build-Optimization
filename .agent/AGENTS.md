@@ -28,16 +28,17 @@ Build-Optimization solves videogame character "build" optimization — selecting
 | --- | --- | --- |
 | Python | 3.9+ | Managed via `uv`; always `source .venv/bin/activate` |
 | C++ | 17 | Built via CMake, environment managed by Pixi |
-| TypeScript | 5 | Tauri frontend (`app/`) and VS Code extension (`extension/`) |
-| Rust | stable | Tauri shell only (`app/src-tauri/`) |
+| TypeScript | 5 | Tauri frontend (`frontend/`) and browser extension (`extension/`) |
+| Rust | stable | Tauri shell only (`frontend/src-tauri/`) |
 | Config | Hydra | All solver/game/pipeline parameters composed from `middleware/configs/` |
 
 ## 3. Module Boundaries
 
-- `middleware/src/core` — domain model (`Item`, `Build`, `Synergy`, `Scoring`). No imports from `ui/`, `backend/`, or `app/`.
+- `middleware/src/core` — domain model (`Item`, `Build`, `Synergy`, `Scoring`). No imports from `ui/`, `backend/`, or `frontend/`.
 - `middleware/src/solvers` / `middleware/src/policies` — algorithms. May call into `backend/`'s `pybind11` module but must not duplicate its logic in Python.
 - `backend/` — C++ solver core. Exposes only what's declared in `backend/src/bindings.cpp`; no Python-specific logic leaks into C++.
-- `app/` and `extension/` — presentation only. They read the tracking database or shell out to `main.py`; they never reimplement scoring/solving.
+- `frontend/` — presentation only. Reads the tracking database or shells out to `main.py`; never reimplements scoring/solving.
+- `extension/` — browser extension, standalone. Produces item JSON matching `middleware/src/pipeline/file_source.py`'s schema; has no runtime dependency on backend/middleware/frontend.
 
 Full data-flow diagram: [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md).
 
@@ -49,10 +50,11 @@ Full data-flow diagram: [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md).
 | Run optimization | `uv run python main.py policy=policy_sa game=rpg` |
 | Launch dashboard | `just dashboard` |
 | Build C++ backend | `cd backend && pixi run build` |
-| Launch Tauri Studio (dev) | `cd app && npm run tauri:dev` |
+| Launch Tauri Studio (dev) | `cd frontend && npm run tauri:dev` |
 | Run Python tests | `uv run pytest middleware/tests -v` |
 | Run C++ tests | `cd backend && pixi run test` |
-| Run frontend tests | `cd app && npm test` |
+| Run frontend tests | `cd frontend && npm test` |
+| Build browser extension | `cd extension && npm run build:chrome` |
 
 ## 5. Coding Standards
 
@@ -64,5 +66,5 @@ Full data-flow diagram: [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md).
 ## 6. Known Constraints
 
 - The C++ backend has no Python-only fallback for its exact solvers — if `backend/` isn't built, only the pure-Python heuristics in `middleware/src/solvers` are available.
-- The Tauri Studio (`app/`) reads the middleware's tracking database directly; it does not (yet) invoke Python at runtime.
+- The Tauri Studio (`frontend/`) reads the middleware's tracking database directly; it does not (yet) invoke Python at runtime.
 - Coverage gate is 60% for the Python middleware; C++ and TypeScript modules are build/test-pass gated only (see `.github/codecov.yaml`).

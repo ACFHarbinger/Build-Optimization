@@ -1,7 +1,7 @@
 # =============================================================================
 # Build-Optimization Studio (Tauri) — Linux bundle build container
 # =============================================================================
-# Builds the Studio desktop application (app/) into distributable Linux
+# Builds the Studio desktop application (frontend/) into distributable Linux
 # bundles (.deb + .AppImage). Extract the artifacts with:
 #
 #   docker build -f docker/Dockerfile --output type=local,dest=dist-studio .
@@ -29,17 +29,17 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /build
 
 # Install frontend dependencies first (better layer caching)
-COPY app/package.json app/package-lock.json* ./app/
-RUN cd app && npm install
+COPY frontend/package.json frontend/package-lock.json* ./frontend/
+RUN cd frontend && npm install
 
 # Copy the Studio sources and build the bundles
-COPY app ./app
-RUN cd app && npm run tauri:build:linux
+COPY frontend ./frontend
+RUN cd frontend && npm run tauri:build:linux
 
 # -----------------------------------------------------------------------------
 # Final stage: bundles only
 # -----------------------------------------------------------------------------
 FROM scratch AS bundles
 
-COPY --from=builder /build/app/src-tauri/target/release/bundle/deb/*.deb /
-COPY --from=builder /build/app/src-tauri/target/release/bundle/appimage/*.AppImage /
+COPY --from=builder /build/frontend/src-tauri/target/release/bundle/deb/*.deb /
+COPY --from=builder /build/frontend/src-tauri/target/release/bundle/appimage/*.AppImage /

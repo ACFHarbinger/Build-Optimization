@@ -58,6 +58,6 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm install --workspaces
-      - run: npm run test-app
+      - run: npm run test-frontend
       - run: npm run test-extension
-      - run: cd app/src-tauri && cargo check
+      - run: cd frontend/src-tauri && cargo check
