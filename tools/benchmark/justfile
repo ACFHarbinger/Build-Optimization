@@ -1,0 +1,16 @@
+# Build-Optimization — Benchmark: performance and mutation testing
+
+set unstable := true
+set working-directory := '../..'
+
+# Run performance benchmarks
+benchmark:
+    export PYTHONPATH=. && uv run python -m middleware.benchmark.run_all
+
+# Run mutation tests using mutmut
+mutation-test:
+    export PYTHONPATH=. && uv run mutmut run --paths-to-mutate middleware/src/
+
+# Show mutation test results
+mutation-report:
+    uv run mutmut show all

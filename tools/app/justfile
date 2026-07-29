@@ -1,0 +1,12 @@
+# Build-Optimization — App: GUI and Dashboard interfaces
+
+set unstable := true
+set working-directory := '../..'
+
+# Launch the GUI
+gui:
+    uv run python main.py gui
+
+# Launch the dashboard
+dashboard:
+    uv run streamlit run src/ui/app.py

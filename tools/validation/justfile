@@ -1,0 +1,78 @@
+# Build-Optimization — Validation: static analysis and codebase health checks
+
+set unstable := true
+set working-directory := '../..'
+
+# Pyrefly type checking for logic
+pyrefly-logic:
+    uv run pyrefly check middleware/src --output-format min-text
+
+# Count lines of code and comments (use group_by=N to aggregate by directory depth)
+count-loc group_by="0":
+    uv run python middleware/validation/count_loc.py middleware/src --group-by-dir {{ group_by }}
+
+# Tree view of lines of code and comments
+tree-loc:
+    uv run python middleware/validation/tree_loc.py middleware/src
+
+# Check docstring coverage
+check-docs:
+    uv run python middleware/src/utils/docs/check_docstrings.py middleware/src
+
+# Check Google-style docstrings
+check-google-docs:
+    uv run python middleware/src/utils/docs/check_google_style.py middleware/src \
+        --exclude_dir middleware/src/pipeline/simulations/wsmart_bin_analysis/test/
+
+# Check for multiple classes in one file
+check-multi-classes:
+    uv run python middleware/validation/check_multi_classes.py middleware/src --exclude pipeline/simulations/wsmart_bin_analysis/test
+
+# Find all relative imports (add exclude_same_package=true to filter intra-package imports)
+check-relative-imports exclude_same_package="":
+    uv run python middleware/validation/check_relative_imports.py middleware/src \
+        --exclude pipeline/simulations/wsmart_bin_analysis/test --stats \
+        {{ if exclude_same_package != "" { "--exclude-same-package" } else { "" } }}
+
+# Check for nested imports
+check-nested-imports:
+    uv run python middleware/validation/check_nested_imports.py middleware/src --exclude pipeline/simulations/wsmart_bin_analysis/test --ignore_factories
+
+# Check for nested imports with a per-package summary table
+check-nested-imports-stats:
+    uv run python middleware/validation/check_nested_imports.py middleware/src --exclude pipeline/simulations/wsmart_bin_analysis/test --ignore_factories --stats
+
+# Detect circular import chains using Tarjan's SCC algorithm
+check-circular-imports html="":
+    uv run python middleware/validation/check_circular_imports.py middleware/src \
+        --exclude pipeline/simulations/wsmart_bin_analysis/test \
+        {{ if html != "" { "--html " + html } else { "" } }}
+
+# Check that all concrete classes fully implement their ABC/Protocol interface contracts
+check-interface-compliance:
+    uv run python middleware/validation/check_interface_compliance.py middleware/src
+
+# Measure type annotation coverage per file (worst-coverage files shown first)
+check-type-coverage sort="coverage" limit="40":
+    uv run python middleware/validation/check_type_coverage.py middleware/src \
+        --sort {{ sort }} --limit {{ limit }}
+
+# Generate interactive module-level import graph (opens in browser)
+
+# Use depth=N to collapse to top-N package levels; set html= to change output path.
+module-graph html="module_graph.html" depth="10":
+    uv run python middleware/validation/visualize_module_graph.py ./middleware/src \
+        --exclude .venv venv node_modules \
+        --html {{ html }} --depth {{ depth }}
+
+# Create a graph with exported and imported dependencies (functions, classes, etc.)
+dependency-graph target_file="middleware/src/utils/helpers/wrappers.py" target_name="greedy_day_route":
+    uv run python middleware/validation/trace_dependencies.py middleware/src {{ target_file }} {{ target_name }}
+
+# Check for embedded languages in the Python source code
+check-embedded-languages:
+    uv run python middleware/validation/check_embedded_languages.py middleware/src
+
+# Check for unused imports in the Python source code
+check-unused-imports:
+    uv run python middleware/validation/check_unused_imports.py middleware/src --exclude pipeline/simulations/wsmart_bin_analysis/test --ignore_factories

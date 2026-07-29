@@ -1,0 +1,14 @@
+# Build-Optimization — Export: automated algorithm export pipeline
+
+set unstable := true
+set working-directory := '../..'
+
+# Run the automated algorithm export process.
+algo-export constructors="" selectors="" improvement="" acceptance="" joint="" models="" rl_algorithms="" imitation_policies="" drop_features="" envs="" sim_datasets="" distributions="" network="" skip_build="false" dry_run="false":
+    @printf "\033[0;36m╔════════════════════════════════════════════════════════════╗\033[0m\n"
+    @printf "\033[0;36m║\033[0m \033[1m%-58s\033[0m   \033[0;36m║\033[0m\n" "📦 ALGORITHM EXPORT"
+    @printf "\033[0;36m╠════════════════════════════════════════════════════════════╣\033[0m\n"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-18s\033[0m \033[0;35m%-39s\033[0m \033[0;36m║\033[0m\n" "Constructors:"    "{{ constructors }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-18s\033[0m \033[0;35m%-39s\033[0m \033[0;36m║\033[0m\n" "Skip Build:"      "{{ skip_build }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-18s\033[0m \033[0;35m%-39s\033[0m \033[0;36m║\033[0m\n" "Dry Run:"         "{{ dry_run }}"
+    @printf "\033[0;36m╚════════════════════════════════════════════════════════════╝\033[0m\n"

@@ -1,0 +1,12 @@
+# Build-Optimization — Test: pytest runners
+
+set unstable := true
+set working-directory := '../..'
+
+# Run all tests with coverage
+test:
+    uv run pytest --cov=src --cov-report=xml --cov-report=term-missing
+
+# Run fast unit tests
+test-fast:
+    uv run pytest -m "fast or unit"

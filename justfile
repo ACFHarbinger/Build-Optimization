@@ -1,4 +1,6 @@
-# Build-Optimization Justfile
+# Build-Optimization — Justfile
+
+set unstable := true
 
 red := '\033[0;31m'
 green := '\033[0;32m'
@@ -9,7 +11,7 @@ cyan := '\033[0;36m'
 bold := '\033[1m'
 reset := '\033[0m'
 
-# Default variables (can be overridden: just train problem=wcvrp)
+# Default variables (can be overridden: just train game=darktide model=am)
 
 game := "darktide"
 model := "am"
@@ -24,136 +26,90 @@ distribution := "default"
 n_cores := "10"
 policies := "sa,ga,alns"
 
-# --- Setup & Environment ---
+# --- Submodules ---
+
+mod agent 'tools/agent'
+mod app 'tools/app'
+mod benchmark 'tools/benchmark'
+mod ci 'tools/ci'
+mod controller 'tools/controller'
+mod database 'tools/database'
+mod export 'tools/export'
+mod helper 'tools/helper'
+mod infrastructure 'tools/infrastructure'
+mod reducer 'tools/reducer'
+mod script 'tools/script'
+mod test 'tools/test'
+mod validation 'tools/validation'
+
+# --- Help ---
+
+# Print available commands with descriptions
+help: helper::_print_header
+    just helper::help
+
+# --- Shorthands ---
+
+# Initialize environment and install all dependencies
+setup: helper::_print_header
+    just infrastructure::setup
 
 # Sync dependencies using uv
-sync:
-    uv sync --all-groups --all-extras
+sync: helper::_print_header
+    just infrastructure::sync
 
 # Install dependencies via pip
-install:
-    uv pip install -r requirements.txt || uv pip install -e .
+install: helper::_print_header
+    just infrastructure::install
 
-# --- Primary Execution Commands (Hydra-based) ---
-# Train a model with Hydra configs
-
-# Usage: just train game=my_game model=am epochs=100
-train game=game model=model epochs=epochs encoder=encoder decoder=decoder batch_size=batch_size distribution=distribution:
-    @printf "{{ cyan }}╔════════════════════════════════════════════════════════════╗{{ reset }}\n"
-    @printf "{{ cyan }}║{{ reset }} {{ bold }}%-58s{{ reset }}   {{ cyan }}║{{ reset }}\n" "🚀 STARTING HYDRA TRAINING SESSION"
-    @printf "{{ cyan }}╠════════════════════════════════════════════════════════════╣{{ reset }}\n"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Game:" "{{ game }}"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Model:" "{{ model }} ({{ encoder }})"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Epochs:" "{{ epochs }}"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Batch Size:" "{{ batch_size }}"
-    @printf "{{ cyan }}╚════════════════════════════════════════════════════════════╝{{ reset }}\n"
-
-    export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True" && \
-    uv run python main.py train \
-        game={{ game }} \
-        models={{ model }} \
-        model.encoder.type={{ encoder }} \
-        train.data_distribution={{ distribution }} \
-        train.n_epochs={{ epochs }} \
-        train.batch_size={{ batch_size }}
+# Train a model with Hydra configs (game=darktide model=am)
+train game=game model=model epochs=epochs encoder=encoder decoder=decoder batch_size=batch_size distribution=distribution: helper::_print_header
+    just controller::train '{{ game }}' '{{ model }}' '{{ epochs }}' '{{ encoder }}' '{{ decoder }}' '{{ batch_size }}' '{{ distribution }}'
 
 # Run model evaluation with Hydra configs
+eval model_path="" dataset="" game=game strategy=strategy: helper::_print_header
+    just controller::eval '{{ model_path }}' '{{ dataset }}' '{{ game }}' '{{ strategy }}'
 
-# Usage: just eval model_path=./weights/best.pt dataset=data/test.pkl game=my_game strategy=greedy
-eval model_path="" dataset="" game=game strategy=strategy:
-    @printf "{{ cyan }}╔════════════════════════════════════════════════════════════╗{{ reset }}\n"
-    @printf "{{ cyan }}║{{ reset }} {{ bold }}%-58s{{ reset }}   {{ cyan }}║{{ reset }}\n" "📊 STARTING MODEL EVALUATION"
-    @printf "{{ cyan }}╠════════════════════════════════════════════════════════════╣{{ reset }}\n"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Model Path:" "{{ model_path }}"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Dataset:" "{{ dataset }}"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Game:" "{{ game }}"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Strategy:" "{{ strategy }}"
-    @printf "{{ cyan }}╚════════════════════════════════════════════════════════════╝{{ reset }}\n"
-    uv run python main.py eval \
-        eval.policy.model.load_path={{ model_path }} \
-        eval.datasets=[{{ dataset }}] \
-        eval.game={{ game }} \
-        eval.val_size={{ samples }} \
-        eval.decoding.strategy={{ strategy }}
-
-# Run build optimization across the defined policies for a given game.
-# Budget, level, and time default to the game's optimization config profile.
-# Usage: just optimize                                   # darktide, default policies
-#        just optimize game=rpg                          # rpg, game-config defaults
-#        just optimize game=darktide budget=30000        # endgame Darktide build
-#        just optimize game=rpg policies=sa,ga time=120
-optimize game=game policies=policies budget="" level="" time="":
-    @printf "{{ cyan }}╔════════════════════════════════════════════════════════════╗{{ reset }}\n"
-    @printf "{{ cyan }}║{{ reset }} {{ bold }}%-58s{{ reset }}   {{ cyan }}║{{ reset }}\n" "🎮 BUILD OPTIMIZATION"
-    @printf "{{ cyan }}╠════════════════════════════════════════════════════════════╣{{ reset }}\n"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Game:" "{{ game }}"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Policies:" "{{ policies }}"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Budget:" "{{ if budget != '' { budget } else { 'from configs/optimization/' + game + '.yaml' } }}"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Level cap:" "{{ if level != '' { level } else { 'from configs/optimization/' + game + '.yaml' } }}"
-    @printf "{{ cyan }}║{{ reset }} {{ yellow }}%-15s{{ reset }} {{ purple }}%-42s{{ reset }} {{ cyan }}║{{ reset }}\n" "Time limit:" "{{ if time != '' { time + 's' } else { 'from configs/optimization/' + game + '.yaml' } }}"
-    @printf "{{ cyan }}╚════════════════════════════════════════════════════════════╝{{ reset }}\n"
-    for policy in $(echo "{{ policies }}" | tr ',' ' '); do \
-        printf "\n{{ bold }}>>> Policy: $policy{{ reset }}\n"; \
-        EXTRA=""; \
-        [ -n "{{ budget }}" ] && EXTRA="$EXTRA optimization.budget={{ budget }}"; \
-        [ -n "{{ level }}" ]  && EXTRA="$EXTRA optimization.character_level={{ level }}"; \
-        [ -n "{{ time }}" ]   && EXTRA="$EXTRA optimization.time_limit={{ time }}"; \
-        uv run python main.py \
-            policy=policy_$policy \
-            optimization={{ game }} \
-            game={{ game }} \
-            output.compare_baselines=false \
-            $EXTRA || true; \
-    done
+# Run build optimization across the defined policies for a given game
+optimize game=game policies=policies budget="" level="" time="": helper::_print_header
+    just controller::optimize '{{ game }}' '{{ policies }}' '{{ budget }}' '{{ level }}' '{{ time }}'
 
 # Launch the GUI
-gui:
-    uv run python main.py gui
+gui: helper::_print_header
+    just app::gui
 
 # Launch the dashboard
-dashboard:
-    uv run streamlit run src/ui/app.py
+dashboard: helper::_print_header
+    just app::dashboard
 
-# --- Test & Quality ---
-
-# Run all tests
-test:
-    uv run pytest --cov=src --cov-report=xml --cov-report=term-missing
-
-# Run fast unit tests
-test-fast:
-    uv run pytest -m "fast or unit"
+# Run fast unit tests (use `just test::test` for the full suite)
+test-fast: helper::_print_header
+    just test::test-fast
 
 # Check code quality with ruff
-lint:
-    uv run ruff check . --fix --exclude ".venv"
+lint: helper::_print_header
+    just ci::lint
 
-# Format code with black and ruff
-format:
-    uv run ruff format . --exclude ".venv"
+# Format code with ruff
+format: helper::_print_header
+    just ci::format
 
-# --- Maintenance ---
+# Clean caches and build artifacts
+clean: helper::_print_header
+    just reducer::clean
 
-# Clean caches and artifacts
-clean:
-    find . -type d -name "__pycache__" -exec rm -rf {} +
-    find . -type d -name ".pytest_cache" -exec rm -rf {} +
-    find . -type d -name ".ruff_cache" -exec rm -rf {} +
-    find . -type d -name ".mypy_cache" -exec rm -rf {} +
-    find . -type d -name ".hypothesis" -exec rm -rf {} +
-    find . -type f -name "coverage.xml" -exec rm {} +
-    find . -type f -name ".coverage" -exec rm {} +
-    rm -rf build/
-    rm -rf dist/
-    rm -rf temp/
-    rm -rf wandb/
-    rm -rf mlruns/
-    rm -rf outputs/
-    rm -rf checkpoints/
-    rm -rf *.egg-info
-    rm -rf logs/
-    rm -rf model_weights/
+# Generic run command — pass any main.py arguments directly
+run *args: helper::_print_header
+    just helper::run {{ args }}
 
-# Generic run command
-run *args:
-    uv run python main.py {{ args }}
+# Commit using the .gitmessage template
+commit message: helper::_print_header
+    just helper::commit '{{ message }}'
+
+# Loop the Claude Code agent on a stateful context with live-streaming reasoning steps
+loop-claude prompt="Continue implementing the studio, updating the ROADMAP and CHANGELOG, and commiting your work": helper::_print_header
+    just agent::loop-claude '{{ prompt }}'
+
+# Loop the Grok agent on a stateful context with live-streaming reasoning steps
+loop-grok prompt="Continue implementing the studio, updating the ROADMAP and CHANGELOG, and commiting your work": helper::_print_header
+    just agent::loop-grok '{{ prompt }}'

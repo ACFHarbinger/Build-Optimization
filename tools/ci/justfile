@@ -1,0 +1,12 @@
+# Build-Optimization — CI: linting and formatting
+
+set unstable := true
+set working-directory := '../..'
+
+# Check code quality with ruff
+lint:
+    uv run ruff check . --fix --exclude ".venv"
+
+# Format code with ruff
+format:
+    uv run ruff format . --exclude ".venv"

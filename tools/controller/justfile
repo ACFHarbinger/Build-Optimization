@@ -1,0 +1,71 @@
+# Build-Optimization — Controller: Hydra-based execution commands
+
+set unstable := true
+set working-directory := '../..'
+
+# Train a model with Hydra configs
+
+# Usage: just controller::train game=darktide model=am epochs=100
+train game="" model="" epochs="" encoder="" decoder="" batch_size="" distribution="":
+    @printf "\033[0;36m╔════════════════════════════════════════════════════════════╗\033[0m\n"
+    @printf "\033[0;36m║\033[0m \033[1m%-58s\033[0m   \033[0;36m║\033[0m\n" "🚀 STARTING HYDRA TRAINING SESSION"
+    @printf "\033[0;36m╠════════════════════════════════════════════════════════════╣\033[0m\n"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Game:" "{{ game }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Model:" "{{ model }} ({{ encoder }})"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Epochs:" "{{ epochs }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Batch Size:" "{{ batch_size }}"
+    @printf "\033[0;36m╚════════════════════════════════════════════════════════════╝\033[0m\n"
+    export PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True" && \
+    uv run python main.py train \
+        game={{ game }} \
+        models={{ model }} \
+        model.encoder.type={{ encoder }} \
+        train.data_distribution={{ distribution }} \
+        train.n_epochs={{ epochs }} \
+        train.batch_size={{ batch_size }}
+
+# Run model evaluation with Hydra configs
+
+# Usage: just controller::eval model_path=./weights/best.pt dataset=data/test.pkl game=darktide strategy=greedy
+eval model_path="" dataset="" game="" strategy="":
+    @printf "\033[0;36m╔════════════════════════════════════════════════════════════╗\033[0m\n"
+    @printf "\033[0;36m║\033[0m \033[1m%-58s\033[0m   \033[0;36m║\033[0m\n" "📊 STARTING MODEL EVALUATION"
+    @printf "\033[0;36m╠════════════════════════════════════════════════════════════╣\033[0m\n"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Model Path:" "{{ model_path }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Dataset:" "{{ dataset }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Game:" "{{ game }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Strategy:" "{{ strategy }}"
+    @printf "\033[0;36m╚════════════════════════════════════════════════════════════╝\033[0m\n"
+    uv run python main.py eval \
+        eval.policy.model.load_path={{ model_path }} \
+        eval.datasets=[{{ dataset }}] \
+        eval.game={{ game }} \
+        eval.decoding.strategy={{ strategy }}
+
+# Run build optimization across the defined policies for a given game.
+
+# Budget, level, and time default to the game's optimization config profile.
+# Usage: just controller::optimize game=darktide policies=sa,ga,alns
+optimize game="" policies="" budget="" level="" time="":
+    @printf "\033[0;36m╔════════════════════════════════════════════════════════════╗\033[0m\n"
+    @printf "\033[0;36m║\033[0m \033[1m%-58s\033[0m   \033[0;36m║\033[0m\n" "🎮 BUILD OPTIMIZATION"
+    @printf "\033[0;36m╠════════════════════════════════════════════════════════════╣\033[0m\n"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Game:" "{{ game }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Policies:" "{{ policies }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Budget:" "{{ if budget != '' { budget } else { 'from configs/optimization/' + game + '.yaml' } }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Level cap:" "{{ if level != '' { level } else { 'from configs/optimization/' + game + '.yaml' } }}"
+    @printf "\033[0;36m║\033[0m \033[0;33m%-15s\033[0m \033[0;35m%-42s\033[0m \033[0;36m║\033[0m\n" "Time limit:" "{{ if time != '' { time + 's' } else { 'from configs/optimization/' + game + '.yaml' } }}"
+    @printf "\033[0;36m╚════════════════════════════════════════════════════════════╝\033[0m\n"
+    for policy in $(echo "{{ policies }}" | tr ',' ' '); do \
+        printf "\n\033[1m>>> Policy: $policy\033[0m\n"; \
+        EXTRA=""; \
+        [ -n "{{ budget }}" ] && EXTRA="$EXTRA optimization.budget={{ budget }}"; \
+        [ -n "{{ level }}" ]  && EXTRA="$EXTRA optimization.character_level={{ level }}"; \
+        [ -n "{{ time }}" ]   && EXTRA="$EXTRA optimization.time_limit={{ time }}"; \
+        uv run python main.py \
+            policy=policy_$policy \
+            optimization={{ game }} \
+            game={{ game }} \
+            output.compare_baselines=false \
+            $EXTRA || true; \
+    done

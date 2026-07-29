@@ -1,0 +1,12 @@
+# Build-Optimization — Script: shell script runners
+
+set unstable := true
+set working-directory := '../..'
+
+# Run training script (scripts/train.sh)
+run-train:
+    bash scripts/train.sh
+
+# Run evaluation script (scripts/evaluation.sh)
+run-eval:
+    bash scripts/evaluation.sh

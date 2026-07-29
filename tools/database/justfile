@@ -1,0 +1,43 @@
+# Build-Optimization — Database: tracking database management
+
+set unstable := true
+set working-directory := '../..'
+
+# Print an overview of experiments, runs, and record counts
+db-inspect:
+    uv run python -m middleware.src.tracking.database inspect
+
+# Delete all tracking data while preserving the schema
+db-clean:
+    uv run python -m middleware.src.tracking.database clean
+
+# Integrity check, WAL checkpoint, and VACUUM
+db-compact:
+    uv run python -m middleware.src.tracking.database compact
+
+# Remove stale runs
+db-prune older_than="30" status="failed" experiment="" dry_run="":
+    uv run python -m middleware.src.tracking.database prune \
+        --older-than {{ older_than }} \
+        --status {{ status }} \
+        {{ if experiment != "" { "--experiment " + experiment } else { "" } }} \
+        {{ if dry_run != "" { "--dry-run" } else { "" } }}
+
+# Export a run to JSON
+db-export run_id="" experiment="" output="" latest="":
+    uv run python -m middleware.src.tracking.database export \
+        {{ if run_id != "" { "--run-id " + run_id } else { "" } }} \
+        {{ if experiment != "" { "--experiment " + experiment } else { "" } }} \
+        {{ if output != "" { "--output " + output } else { "" } }} \
+        {{ if latest != "" { "--latest" } else { "" } }}
+
+# Show comprehensive database statistics
+db-stats experiment="":
+    uv run python -m middleware.src.tracking.database stats \
+        {{ if experiment != "" { "--experiment " + experiment } else { "" } }}
+
+# Show per-metric statistics
+db-metrics key="" experiment="":
+    uv run python -m middleware.src.tracking.database metrics \
+        {{ if key != "" { "--key " + key } else { "" } }} \
+        {{ if experiment != "" { "--experiment " + experiment } else { "" } }}
