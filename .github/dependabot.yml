@@ -1,0 +1,46 @@
+version: 2
+updates:
+  # Python middleware (uv-managed)
+  - package-ecosystem: "uv"
+    directory: "/middleware"
+    schedule:
+      interval: "weekly"
+    groups:
+      middleware-dependencies:
+        patterns: ["*"]
+    open-pull-requests-limit: 10
+
+  # Root NPM workspace (app/, extension/)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      npm-dependencies:
+        patterns: ["*"]
+    open-pull-requests-limit: 10
+
+  # Cargo workspace (app/src-tauri)
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      cargo-dependencies:
+        patterns: ["*"]
+    open-pull-requests-limit: 10
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions-dependencies:
+        patterns: ["*"]
+
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/docker"
+    schedule:
+      interval: "weekly"
