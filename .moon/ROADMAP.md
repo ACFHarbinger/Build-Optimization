@@ -20,7 +20,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
-| B1 | Scaffold `backend/` C++ module (`CMakeLists.txt`, `pixi.toml`, pybind11 bindings entry point) | S | 🚧 In Progress |
+| B1 | Scaffold `backend/` C++ module (`CMakeLists.txt`, `pixi.toml`, pybind11 bindings entry point) | S | ✅ Done |
 | B2 | Implement branch-and-bound exact solver for the 0-1 / multiple-choice knapsack | M | 📋 Pending |
 | B3 | Implement quadratic knapsack solver for synergy / set-bonus terms | M | 📋 Pending |
 | B4 | Add McCormick-envelope / Fortet-inequality linearization utilities for multiplicative stat terms | M | 📋 Pending |
@@ -31,13 +31,13 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | B9 | Add GFlowNet-based amortized inference policy for build sampling | L | 📋 Pending |
 | B10 | Add PPO/MCTS real-time itemization policy for MOBA-style adaptive builds | L | 📋 Pending |
 | B11 | Design and implement the experiment tracking database schema (`middleware/src/tracking`) | M | 📋 Pending |
-| B12 | Wire C++ build + Python test suite into `.github/workflows/ci.yml` | S | 📋 Pending |
+| B12 | Wire C++ build + Python test suite into `.github/workflows/ci.yml` | S | ✅ Done |
 
 ## Track: IDE Extension
 
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
-| E1 | Scaffold `extension/` VS Code extension project (`package.json`, activation events, command palette entries) | S | 🚧 In Progress |
+| E1 | Scaffold `extension/` VS Code extension project (`package.json`, activation events, command palette entries) | S | ✅ Done |
 | E2 | Implement JSON Schema validation for Hydra `game` / `policy` / `optimization` YAML configs | M | 📋 Pending |
 | E3 | Add inline autocomplete for solver keys, game profiles, and policy parameters | M | 📋 Pending |
 | E4 | Add a "Run Optimization" editor command that shells out to `main.py` with the active config | S | 📋 Pending |
@@ -59,7 +59,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
-| T1 | Scaffold `app/` Tauri + React + TypeScript project (`package.json`, `src-tauri/`) | S | 🚧 In Progress |
+| T1 | Scaffold `app/` Tauri + React + TypeScript project (`package.json`, `src-tauri/`) | S | ✅ Done |
 | T2 | Implement the Build Explorer page (native port of `middleware/ui/pages/build_explorer.py`) | M | 📋 Pending |
 | T3 | Implement the Solver Comparison page (native port of `middleware/ui/pages/solver_comparison.py`) | M | 📋 Pending |
 | T4 | Implement the Training Monitor page backed by the middleware tracking database | M | 📋 Pending |
