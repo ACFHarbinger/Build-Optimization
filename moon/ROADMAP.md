@@ -10,7 +10,7 @@
 
 ## Overview
 
-This document tracks planned implementation work for Build-Optimization. The first four tracks mirror the component labels on the [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/): **C++ Backend + Python Middleware**, **Browser Extension**, **Unreal Engine Plugin**, and **Tauri App**. **Documentation** is a cross-cutting infrastructure track without a dedicated board label. Completed items move to [`moon/CHANGELOG.md`](CHANGELOG.md).
+This document tracks planned implementation work for Build-Optimization. The first four tracks mirror the component labels on the [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/): **C++ Backend + Python Middleware**, **Browser Extension**, **Unreal Engine Plugin**, and **Tauri App**. **Documentation** and **Slay the Spire 2 Vertical Slice** are cross-cutting tracks without a dedicated board label — their issues are tagged with whichever component label matches where the work actually lives. Completed items move to [`moon/CHANGELOG.md`](CHANGELOG.md).
 
 Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
@@ -82,6 +82,24 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | D6 | Orchestrate all five generators + MkDocs in `docs/build_docs.sh`, tolerant of missing tools/unscaffolded modules | S | ✅ Done |
 | D7 | Wire `.github/workflows/docs.yml` (per-generator jobs + GitHub Pages deploy on `main`) | S | ✅ Done |
 | D8 | Add a `docs/plugin/` Unreal Engine plugin Doxygen config once the plugin (U1) is scaffolded | S | 📋 Pending |
+
+## Track: Slay the Spire 2 Vertical Slice
+
+A cross-cutting initiative (no dedicated board label — issues are tagged `component:backend-middleware`/`component:tauri-app` per where the work lives), based on [`reports/Slay the Spire 2 Guide.md`](../reports/Slay%20the%20Spire%202%20Guide.md). Goal: a *thin, real, end-to-end* path — one character, one archetype — proving the domain generalizes beyond fixed-equipment-slot games, not a full simulation of the game's mechanics.
+
+**Domain mismatch this track has to resolve**: every existing game (`rpg`/`moba`/`darktide`) is modeled as *exactly one item per fixed equipment slot* (`core.item.Slot`, `core.build.Build`). Slay the Spire 2 deckbuilding has no slots — a deck is a *variable-size subset* of cards from a pool, bounded by a target deck size (the report's own strategic lever: 6-8 cards early Act 1, 16-18 by Act 2, 20-30 in Act 3, or a compressed 10-15 for the Regent's Star Engine). That's a plain 0-1 knapsack (weight=1 per card, capacity=target deck size, value=an archetype-fit score) — **not** the Multiple-Choice Knapsack B2/B5 just wired up (which requires mutually-exclusive classes/slots). The existing `solve_knapsack` C++ binding (built in B2 alongside the MCKP solver, unused since B5 chose MCKP for equipment) is exactly this shape, so **the vertical slice needs zero new C++ code** — pure Python/config wiring, reusing `backend/`'s existing plain-knapsack export.
+
+| # | Item | Effort | Status |
+| --- | --- | --- | --- |
+| V1 | Design doc: the Card~Item / Deck~knapsack-subset mapping (this table's second paragraph, expanded with field-by-field mapping) as a short `docs/` note, so V2-V8 have one source of truth instead of re-deriving it | S | 📋 Pending |
+| V2 | Add `middleware/src/core/deck_problem.py`: a `DeckProblem` class parallel to `BuildProblem` but for *subset* selection (no per-slot exclusivity) — `score_fast`/`score_full`-equivalent methods, and a `to_result_json()` emitting the *same* `{solver, score, cost, budget, items, synergies}` shape the existing games use, so the current frontend pages and tracking pipeline (B11/T6) work on it completely unmodified | M | 📋 Pending |
+| V3 | Register a `deck` solver (new `middleware/src/pipeline/decks/` mini-pipeline, mirroring `pipeline/games`) that calls the existing `solve_knapsack` binding via `core.native_backend`, with a pure-Python greedy fallback when the backend isn't built (matching `bnb`'s graceful-failure precedent from B5) | M | 📋 Pending |
+| V4 | Author a sample Ironclad card dataset (~30-40 cards: Strikes/Defends plus the report's "Strength Scaling" archetype priorities — passive Strength generators, multi-hit attacks) as `middleware/src/data/sample/slay_the_spire_2_ironclad.json`, reusing the existing item-JSON schema (`name`/`slot`=card type/`stats`=power contributions/`cost`=energy/`rarity`/`tags`=archetype tags e.g. `strength`, `multi_hit`, `scaling`) | M | 📋 Pending |
+| V5 | Add `middleware/configs/game/slay_the_spire_2.yaml` (stat weights rewarding the Strength-scaling/multi-hit synergy from the report; deck-size "budget" targeting the Act-1-boss-to-Act-2 range of 16-18 cards) and a matching `middleware/configs/optimization/slay_the_spire_2.yaml` | S | 📋 Pending |
+| V6 | Wire `main.py`: add `slay_the_spire_2` to the game roster and `deck` to `_PIPELINE_SOLVERS`/policy resolution so `python main.py game=slay_the_spire_2 policy=policy_deck` runs end-to-end — result JSON to `outputs/`, run logged to the tracking DB, exactly like every other game (B11's `_persist_run` needs no changes) | S | 📋 Pending |
+| V7 | Add `middleware/tests/test_deck_problem.py`: a hand-verified small instance plus a brute-force cross-check, matching the rigor of B2's `test_mckp.cpp` | S | 📋 Pending |
+| V8 | Verify frontend rendering: confirm Build Explorer and Item Database Browser render an STS2 result/card-pool file correctly via the existing generic schema (expected: no frontend code changes; flag anything that reads oddly, e.g. the KPI row's "Budget Left" label for a deck-size-shaped budget) | S | 📋 Pending |
+| V9 | *(Explicitly beyond the vertical slice — future track)* Additional characters/archetypes (Silent Poison Engine, Regent Star Engine, Necrobinder Doom Execution, Defect Orb/Focus scaling), Enchantments and Ancients as scoring bonuses/penalties, Act-phased deck-size constraints, boss/elite encounter modeling | XL | 📋 Pending |
 
 ---
 
