@@ -1,3 +1,0 @@
-"""
-Validation utilities module.
-"""
