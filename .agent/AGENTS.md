@@ -67,4 +67,4 @@ Full data-flow diagram: [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md).
 
 - The C++ backend has no Python-only fallback for its exact solvers — if `backend/` isn't built, only the pure-Python heuristics in `middleware/src/solvers` are available.
 - The Tauri Studio (`frontend/`) reads the middleware's tracking database directly; it does not (yet) invoke Python at runtime.
-- Coverage gate is 60% for the Python middleware; C++ and TypeScript modules are build/test-pass gated only (see `.github/codecov.yaml`).
+- Coverage gate is 60% for the Python middleware; C++ and TypeScript modules are build/test-pass gated only (see `git/codecov.yaml`).

@@ -1,14 +1,14 @@
 # Changelog
 
-All notable changes to Build-Optimization are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); items graduate here from [`.moon/ROADMAP.md`](ROADMAP.md) once merged.
+All notable changes to Build-Optimization are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); items graduate here from [`moon/ROADMAP.md`](ROADMAP.md) once merged.
 
 ## [Unreleased]
 
 ### Added
 
 - Rewrote `README.md` with tech-stack badges, a full architecture diagram, and setup/run/test instructions for the C++ backend, Python middleware, Tauri + TypeScript frontend, and browser extension/engine integrations.
-- Added `.github/codecov.yaml` and `.github/CONTRIBUTING.md`.
-- Added `.moon/ROADMAP.md` and `.moon/CHANGELOG.md`.
+- Added `git/codecov.yaml` and `git/CONTRIBUTING.md`.
+- Added `moon/ROADMAP.md` and `moon/CHANGELOG.md`.
 - Added `backend/CMakeLists.txt` and `backend/pixi.toml` scaffolding the C++ solver module.
 - Added `middleware/pyproject.toml` for the Python middleware package.
 - Added `extension/package.json` (Manifest V3 browser extension for wiki data scraping) and `frontend/package.json` (Tauri + TypeScript frontend).

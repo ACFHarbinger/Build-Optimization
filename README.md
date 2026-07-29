@@ -54,7 +54,7 @@
   - [C++ Backend](#c-backend)
   - [Python Middleware](#python-middleware)
   - [Tauri + TypeScript Frontend](#tauri--typescript-frontend)
-  - [IDE & Engine Integrations](#ide--engine-integrations)
+  - [Browser Extension & Engine Integrations](#browser-extension--engine-integrations)
 - [Architecture](#architecture)
 - [Domain Mapping](#domain-mapping)
 - [Available Solvers](#available-solvers)
@@ -164,8 +164,9 @@ Build-Optimization/
 ├── research/                    # Domain research (knapsack-routing theory)
 ├── tools/*/justfile             # Per-domain command runner modules
 ├── .agent/                      # AI coding-assistant guide (AGENTS.md, prompts, rules, skills, workflows)
-├── .github/                     # CI/CD workflows, CONTRIBUTING.md, codecov.yaml
-├── .moon/                       # ROADMAP.md, CHANGELOG.md
+├── .github/                     # CI/CD workflows, dependabot.yml
+├── git/                         # CONTRIBUTING.md, codecov.yaml
+├── moon/                        # ROADMAP.md, CHANGELOG.md
 ├── docker/                      # Container build definitions
 ├── docs/                        # Architecture / development / testing references
 ├── env/                         # Conda environment + env-var templates
@@ -292,7 +293,7 @@ cd frontend && npm test
 cd extension && npm test
 ```
 
-Coverage is tracked via [Codecov](https://codecov.io/) (config: [`.github/codecov.yaml`](.github/codecov.yaml)); the Python suite targets ≥60% (`pyproject.toml` → `[tool.coverage.report]`).
+Coverage is tracked via [Codecov](https://codecov.io/) (config: [`git/codecov.yaml`](git/codecov.yaml)); the Python suite targets ≥60% (`pyproject.toml` → `[tool.coverage.report]`).
 
 ## Documentation
 
@@ -302,13 +303,13 @@ Coverage is tracked via [Codecov](https://codecov.io/) (config: [`.github/codeco
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Module boundaries and data flow. |
 | [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) | Environment setup and day-to-day workflows. |
 | [`docs/TESTING.md`](docs/TESTING.md) | Test organization and coverage requirements. |
-| [`.moon/ROADMAP.md`](.moon/ROADMAP.md) | Planned work, phased by module. |
-| [`.moon/CHANGELOG.md`](.moon/CHANGELOG.md) | Release history. |
+| [`moon/ROADMAP.md`](moon/ROADMAP.md) | Planned work, phased by module. |
+| [`moon/CHANGELOG.md`](moon/CHANGELOG.md) | Release history. |
 | [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/) | Live issue tracking, labeled by component: C++ Backend + Python Middleware, Browser Extension, Unreal Engine Plugin, and Tauri App. |
 
 ## Contributing
 
-See [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) for code style, git workflow, and the pull-request process.
+See [`git/CONTRIBUTING.md`](git/CONTRIBUTING.md) for code style, git workflow, and the pull-request process.
 
 ## License
 

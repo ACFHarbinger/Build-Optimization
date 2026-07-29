@@ -48,4 +48,4 @@ flowchart TD
 3. The selected solver (native Python or `backend/`-bound C++) searches for the best build under `middleware/src/core.scoring`.
 4. Results are persisted via `middleware/src/tracking` and surfaced in the Streamlit dashboard or the Tauri Studio.
 
-See [`.moon/ROADMAP.md`](../.moon/ROADMAP.md) for planned architectural additions (lexicographic solve loop, Benders decomposition, GFlowNet policy).
+See [`moon/ROADMAP.md`](../moon/ROADMAP.md) for planned architectural additions (lexicographic solve loop, Benders decomposition, GFlowNet policy).

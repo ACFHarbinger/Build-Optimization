@@ -38,4 +38,4 @@ Run `just help` for the full categorized command reference, or `just --list` for
 - C++: build with `-DCMAKE_BUILD_TYPE=Debug` (edit `backend/pixi.toml`'s `build-base` task) and use `gdb`/`lldb` against the compiled `.so`.
 - Tauri: `npm run tauri:dev` opens devtools automatically in debug builds.
 
-See [`docs/TESTING.md`](TESTING.md) for coverage requirements and [`.github/CONTRIBUTING.md`](../.github/CONTRIBUTING.md) for the full contribution workflow.
+See [`docs/TESTING.md`](TESTING.md) for coverage requirements and [`git/CONTRIBUTING.md`](../git/CONTRIBUTING.md) for the full contribution workflow.

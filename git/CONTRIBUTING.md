@@ -140,8 +140,8 @@ git push --force-with-lease
 
 - [ ] Tests pass locally for every module you touched
 - [ ] Linters/formatters pass
-- [ ] Documentation updated (README, `docs/`, or `.moon/ROADMAP.md` as relevant)
-- [ ] `.moon/CHANGELOG.md` updated under `Unreleased`
+- [ ] Documentation updated (README, `docs/`, or `moon/ROADMAP.md` as relevant)
+- [ ] `moon/CHANGELOG.md` updated under `Unreleased`
 
 ### 5.2 PR Size Guidelines
 
@@ -172,7 +172,7 @@ Use pytest markers (`slow`, `fast`, `unit`, `integration`, `model`, `data`) to s
 
 - Update `README.md` when public commands, directories, or setup steps change.
 - Update the relevant file under `docs/` (`ARCHITECTURE.md`, `DEVELOPMENT.md`, `TESTING.md`) when module boundaries or workflows change.
-- Update `.moon/ROADMAP.md` and `.moon/CHANGELOG.md` when completing roadmap items.
+- Update `moon/ROADMAP.md` and `moon/CHANGELOG.md` when completing roadmap items.
 
 ## 8. Architecture Guidelines
 
@@ -199,7 +199,7 @@ Use pytest markers (`slow`, `fast`, `unit`, `integration`, `model`, `data`) to s
 
 ## 12. Community Standards
 
-Be respectful and constructive. Contributions are credited in `.moon/CHANGELOG.md` and release notes.
+Be respectful and constructive. Contributions are credited in `moon/CHANGELOG.md` and release notes.
 
 ---
 

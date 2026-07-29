@@ -10,7 +10,7 @@
 
 ## Overview
 
-This document tracks planned implementation work for Build-Optimization, organized into the four tracks that mirror the component labels on the [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/): **C++ Backend + Python Middleware**, **Browser Extension**, **Unreal Engine Plugin**, and **Tauri App**. Completed items move to [`.moon/CHANGELOG.md`](CHANGELOG.md).
+This document tracks planned implementation work for Build-Optimization, organized into the four tracks that mirror the component labels on the [GitHub Project Board](https://github.com/users/ACFHarbinger/projects/15/): **C++ Backend + Python Middleware**, **Browser Extension**, **Unreal Engine Plugin**, and **Tauri App**. Completed items move to [`moon/CHANGELOG.md`](CHANGELOG.md).
 
 Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
@@ -73,4 +73,4 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
 - Pick up any `📋 Pending` item, open a matching GitHub issue labeled for the track on the [project board](https://github.com/users/ACFHarbinger/projects/15/), and reference it in your PR.
 - Mark items `🚧 In Progress` while active, and move completed entries into [`CHANGELOG.md`](CHANGELOG.md) under `Unreleased` when merged.
-- See [`.github/CONTRIBUTING.md`](../.github/CONTRIBUTING.md) for the full contribution workflow.
+- See [`git/CONTRIBUTING.md`](../git/CONTRIBUTING.md) for the full contribution workflow.

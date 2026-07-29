@@ -31,7 +31,7 @@ Defined in `middleware/pyproject.toml` → `[tool.pytest.ini_options]`:
 
 ## Coverage
 
-Coverage is enforced at the Python-middleware level (`fail_under = 60` in `middleware/pyproject.toml`) and reported to [Codecov](https://codecov.io/) per [`.github/codecov.yaml`](../.github/codecov.yaml). Patch coverage is currently informational only.
+Coverage is enforced at the Python-middleware level (`fail_under = 60` in `middleware/pyproject.toml`) and reported to [Codecov](https://codecov.io/) per [`git/codecov.yaml`](../git/codecov.yaml). Patch coverage is currently informational only.
 
 ## Writing Tests
 
