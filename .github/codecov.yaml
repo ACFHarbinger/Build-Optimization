@@ -1,0 +1,15 @@
+coverage:
+  status:
+    project:
+      default:
+        # Fail the build if overall coverage drops below this target
+        target: 60%
+    patch:
+      default:
+        # Informational only for now — show patch coverage without gating
+        target: 0%
+        threshold: 0%
+        base: auto
+
+# Temporarily avoid PR comments until the coverage baseline stabilizes
+comment: false
