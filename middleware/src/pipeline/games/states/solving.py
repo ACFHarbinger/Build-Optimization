@@ -56,6 +56,55 @@ def _solve_greedy(
 
 
 # ---------------------------------------------------------------------------
+# Exact solver (C++ backend, branch-and-bound MCKP)
+# ---------------------------------------------------------------------------
+
+
+@_register("bnb")
+def _solve_bnb(
+    problem: "BuildProblem",
+    config: Dict[str, Any],
+    time_limit: float,
+) -> Tuple[np.ndarray, float]:
+    """Exact solve via the C++ branch-and-bound MCKP solver (backend/mckp.cpp).
+
+    Each equipment slot is an MCKP class and each item a class option, which
+    is an exact model of `Build`'s one-item-per-slot structure. Optimizes
+    `score_fast` (the additive per-item objective every solver here uses
+    internally) to global optimality; synergy bonuses are layered on
+    afterward via `score_full`, the same as every other solver.
+
+    Requires the backend extension to be built (see
+    `core.native_backend.load_backend`); raises `ImportError` with build
+    instructions if it isn't.
+    """
+    from core.native_backend import load_backend
+
+    backend = load_backend()
+
+    options = []
+    for item_idx in range(problem.num_items):
+        value = float(np.dot(problem.stat_matrix[item_idx], problem.stat_weights))
+        value += problem.slot_bonus
+        value += float(problem.rarities[item_idx]) * problem.rarity_bonus
+        weight = int(round(float(problem.costs[item_idx])))
+        options.append(backend.MckpOption(int(problem.slot_ids[item_idx]), weight, value))
+
+    capacity = int(round(problem.budget)) if math.isfinite(problem.budget) else int(problem.costs.sum()) + 1
+
+    result = backend.solve_mckp_branch_and_bound(options, problem.num_slots, capacity)
+
+    solution = np.full(problem.num_slots, -1, dtype=np.int64)
+    # `selected_option_indices` refers to indices into `options`, which was
+    # built 1:1 aligned with item indices — no separate mapping needed.
+    for item_idx in result.selected_option_indices:
+        solution[int(problem.slot_ids[item_idx])] = item_idx
+
+    score = problem.score_fast(solution)
+    return solution, score
+
+
+# ---------------------------------------------------------------------------
 # Simulated Annealing solver
 # ---------------------------------------------------------------------------
 

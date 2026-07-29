@@ -27,7 +27,7 @@ from pipeline.games import run_batch, run_optimization
 logger = logging.getLogger(__name__)
 
 # Solvers natively supported by the games pipeline
-_PIPELINE_SOLVERS = {"greedy", "sa", "ga"}
+_PIPELINE_SOLVERS = {"greedy", "sa", "ga", "bnb"}
 
 # Best-effort mapping from policy names to pipeline solver names
 _SOLVER_ALIAS: Dict[str, str] = {

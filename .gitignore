@@ -438,6 +438,8 @@ frontend/src-tauri/gen/schemas/
 
 # CMake / C++ backend
 backend/build/
+backend/*.so
+backend/*.pyd
 
 # Generated documentation
 site/

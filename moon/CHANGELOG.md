@@ -4,6 +4,14 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (B5 — backend solver wired into a selectable Hydra policy)
+
+- Added `middleware/src/core/native_backend.py`: lazily locates and imports the compiled `build_optimizer_backend` extension from `backend/` (built by a separate Pixi toolchain, not on `sys.path` by default), with a clear `ImportError` and build instructions if it isn't built yet.
+- Registered a `bnb` solver in `pipeline/games/states/solving.py`: converts `BuildProblem` into the C++ solver's `MckpOption` list (class = slot, weight = cost, value = the same per-item `score_fast` contribution every other solver optimizes internally), calls `solve_mckp_branch_and_bound`, converts the result back into a `slot_to_item` array. Added `middleware/configs/policy/policy_bnb.yaml` and `bnb` to `main.py`'s `_PIPELINE_SOLVERS`, so `policy=policy_bnb` is selectable end-to-end from the CLI.
+- Verified with real runs, not just unit tests: on the RPG sample data at the default budget it reaches the *same* optimum SA already found (1037.1); at a tighter budget (1200) it finds a **materially better** solution than greedy on the shared fast-score objective (79.4 vs 28.7) — the expected signature of an exact solver beating a heuristic once the problem is more constrained.
+- Extended `.github/workflows/ci.yml` so `test-python` actually exercises this: `build-backend` now uploads the compiled `.so` as an artifact, `test-python` downloads it and pins `uv sync --python 3.11` to match Pixi's build ABI. `middleware/tests/test_native_backend.py`'s backend-dependent tests skip gracefully (not fail) when the artifact isn't present.
+- Corrected two stale README sections found while updating them: the "Available Solvers" table listed 8 solvers (`random`, `ils`, `lahc`, `rrt`, `gls`, `rts`, `oba`, `alns`) that were never actually registered in `pipeline/games/states/solving.py` (only `greedy`/`sa`/`ga` — the others are just aliased to one of those three in `main.py`'s `_SOLVER_ALIAS`); and the "Native Solver Bindings" capability row claimed backend calls went through `middleware/src/policies`, which isn't where this wiring lives.
+
 ### Added (B2 — branch-and-bound MCKP solver)
 
 - Added `backend/include/build_optimizer/mckp.hpp` / `backend/src/mckp.cpp`: an exact solver for the **Multiple-Choice Knapsack Problem** — classes of mutually-exclusive options (equipment slots, directly matching `Build`'s one-item-per-slot structure) with at most one selected per class, subject to a shared weight/cost capacity. Uses depth-first branch-and-bound with an admissible fractional-relaxation upper bound (Dantzig's classic 0-1 knapsack bound, generalized to MCKP) for pruning — genuinely different from, and complementary to, the existing DP-based plain 0-1 `solve_knapsack`.

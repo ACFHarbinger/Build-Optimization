@@ -100,10 +100,10 @@ Lives in [`backend/`](backend/). Ships as a `pybind11` extension module consumed
 
 | Capability | Description |
 | --- | --- |
-| **Exact Knapsack Solvers** | Branch-and-bound and dynamic-programming solvers for 0-1 / multiple-choice / quadratic knapsack formulations. |
-| **Lexicographic Optimization** | Sequential goal-programming solve order for ranked objectives (DPS → EHP → cost, etc.). |
-| **Synergy Linearization** | McCormick envelope / Fortet-inequality linearization of multiplicative set-bonus terms. |
-| **Native Solver Bindings** | `pybind11`-exposed entry points callable from `middleware/src/policies` alongside the pure-Python solvers. |
+| **Exact Knapsack Solvers** | Dynamic-programming solver for plain 0-1 knapsack (`solve_knapsack`) and branch-and-bound for the Multiple-Choice Knapsack Problem (`solve_mckp_branch_and_bound`) — one option per equipment slot, matching `Build`'s domain model exactly. Quadratic (synergy-aware) knapsack is planned. |
+| **Lexicographic Optimization** | Sequential goal-programming solve order for ranked objectives (DPS → EHP → cost, etc.) — planned. |
+| **Synergy Linearization** | McCormick envelope / Fortet-inequality linearization of multiplicative set-bonus terms — planned. |
+| **Native Solver Bindings** | `pybind11`-exposed entry points, called from Python via `core.native_backend.load_backend()`; selectable today as `policy=policy_bnb`. |
 
 ### Python Middleware
 
@@ -196,21 +196,16 @@ Build-Optimization/
 
 ## Available Solvers
 
-| Solver                        | Key      | Description                           |
-| ----------------------------- | -------- | -------------------------------------- |
-| Greedy                        | `greedy` | Greedy fill by best score improvement  |
-| Random Search                 | `random` | Best of N random builds                |
-| Simulated Annealing           | `sa`     | Temperature-based acceptance            |
-| Genetic Algorithm             | `ga`     | Crossover + mutation evolution          |
-| Iterated Local Search         | `ils`    | Perturbation + local search restarts    |
-| Late Acceptance Hill Climbing | `lahc`   | Score history-based acceptance          |
-| Record-to-Record Travel       | `rrt`    | Record + tolerance threshold            |
-| Guided Local Search           | `gls`    | Augmented cost with penalties           |
-| Reactive Tabu Search          | `rts`    | Adaptive tabu tenure                    |
-| Old Bachelor Acceptance       | `oba`    | Age-based acceptance threshold          |
-| ALNS                          | `alns`   | Adaptive operator weighting             |
+The `pipeline.games` pipeline (`main.py`'s actual solve path) natively implements four solvers, selectable via `policy=policy_<key>`:
 
-Plus the full `middleware/src/policies/` folder — 28 additional metaheuristic implementations carried over from WSmart-Route.
+| Solver                            | Key      | Description                                                  |
+| ---------------------------------- | -------- | -------------------------------------------------------------- |
+| Greedy                             | `greedy` | Deterministic best-affordable-item-per-slot fill               |
+| Simulated Annealing                 | `sa`     | Temperature-based acceptance over slot-to-item assignments     |
+| Genetic Algorithm                   | `ga`     | Crossover + mutation evolution over build populations          |
+| Branch-and-Bound (exact, C++)       | `bnb`    | Globally optimal MCKP solve via `backend/` — see [C++ Backend](#c-backend); requires `cd backend && pixi run build` first |
+
+Any other `policy_*.yaml` config (the 28 metaheuristics carried over from WSmart-Route, under [`middleware/src/policies/`](middleware/src/policies/)) is accepted too — `main.py` maps its policy key to the nearest of `greedy`/`sa`/`ga` (see `_SOLVER_ALIAS` in [`main.py`](main.py)) rather than running that metaheuristic's own implementation, which is not yet wired into this pipeline (tracked in `moon/ROADMAP.md`).
 
 ## Installation & Setup
 

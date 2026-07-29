@@ -29,9 +29,8 @@ class TestTrackingStore:
 
     def test_failed_run_records_error(self, tmp_path) -> None:
         tracker = Tracker(tracking_uri=str(tmp_path))
-        with pytest.raises(ValueError):
-            with tracker.start_run("exp", run_type="test") as run:
-                raise ValueError("boom")
+        with pytest.raises(ValueError), tracker.start_run("exp", run_type="test") as run:
+            raise ValueError("boom")
 
         stored = tracker.get_run(run.run_id)
         assert stored["status"] == "failed"

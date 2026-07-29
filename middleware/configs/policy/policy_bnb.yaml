@@ -1,0 +1,14 @@
+# Policy Configuration
+# =============================================================================
+# BNB (Branch-and-Bound) Policy Configuration
+# =============================================================================
+# PURPOSE:
+#   Exact solve via the C++ backend's Multiple-Choice Knapsack solver
+#   (backend/src/mckp.cpp) — globally optimal for the additive per-item
+#   `score_fast` objective (see pipeline/games/states/solving.py::_solve_bnb).
+#   Requires the backend extension to be built first:
+#     cd backend && pixi run build && pixi run install
+# =============================================================================
+
+bnb:
+  custom: []

@@ -24,7 +24,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | B2 | Implement branch-and-bound exact solver for the 0-1 / multiple-choice knapsack | M | ✅ Done |
 | B3 | Implement quadratic knapsack solver for synergy / set-bonus terms | M | 📋 Pending |
 | B4 | Add McCormick-envelope / Fortet-inequality linearization utilities for multiplicative stat terms | M | 📋 Pending |
-| B5 | Expose backend solvers to Python via `pybind11` and wire them into `middleware/src/policies` as selectable Hydra policies | M | 📋 Pending |
+| B5 | Expose backend solvers to Python via `pybind11` and wire them into a selectable Hydra policy (`policy=policy_bnb`) | M | ✅ Done |
 | B6 | Implement lexicographic goal-programming solve loop (ranked objective sequencing) | L | 📋 Pending |
 | B7 | Implement Benders decomposition solver for black-box simulator constraints | L | 📋 Pending |
 | B8 | Add concrete `GameAPISource` and `WebScraperSource` pipeline implementations (currently skeletons) | M | 📋 Pending |
@@ -32,6 +32,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | B10 | Add PPO/MCTS real-time itemization policy for MOBA-style adaptive builds | L | 📋 Pending |
 | B11 | Design and implement the experiment tracking database schema (`middleware/src/tracking`) | M | ✅ Done |
 | B12 | Wire C++ build + Python test suite into `.github/workflows/ci.yml` | S | ✅ Done |
+| B13 | Fix the pre-existing `uv run mypy src` failures (51 errors in 22 files, all inherited RL-pipeline code — `configs.Config` attribute errors, torch `Tensor \| Module` union-attr issues, etc.); `lint-python` in CI has likely never been green | M | 📋 Pending |
 
 ## Track: Browser Extension
 

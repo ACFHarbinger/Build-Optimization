@@ -35,7 +35,7 @@ flowchart TD
 ## Layering Rules
 
 - `middleware/src/core` is the domain model and must not import from `backend/`.
-- `backend/` exposes a stable `pybind11` API (`build_optimizer_backend`); Python code only calls into it through `middleware/src/policies`, never imports backend internals directly.
+- `backend/` exposes a stable `pybind11` API (`build_optimizer_backend`); Python code only calls into it through `core.native_backend.load_backend()` (see `pipeline/games/states/solving.py`'s `bnb` solver for the reference usage), never imports backend internals directly.
 - `frontend/` (Tauri) is a presentation layer — its Rust commands (`frontend/src-tauri/src/commands/`) read solver-result and item-data files directly from `outputs/`/`data/` and shell out to `main.py`; it does not reimplement solver logic. Direct `middleware/src/tracking` database access is planned (see `moon/ROADMAP.md` item T6). `extension/` (browser extension) only produces item JSON for `middleware/src/pipeline`'s `FileSource` — it has no runtime dependency on the rest of the stack.
 
 ## Data Flow
