@@ -1,4 +1,4 @@
-# Build-Optimization — App: GUI and Dashboard interfaces
+# Build-Optimization — App: GUI and Tauri Studio interfaces
 
 set unstable := true
 set working-directory := '../..'
@@ -7,6 +7,10 @@ set working-directory := '../..'
 gui:
     uv run python main.py gui
 
-# Launch the dashboard
-dashboard:
-    uv run streamlit run src/ui/app.py
+# Launch the Tauri Studio desktop app (dev mode, hot reload)
+studio:
+    cd frontend && npm run tauri:dev
+
+# Build the Tauri Studio release bundle
+studio-build:
+    cd frontend && npm run tauri:build

@@ -60,12 +60,13 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
 | T1 | Scaffold `frontend/` Tauri + React + TypeScript project (`package.json`, `src-tauri/`) | S | ✅ Done |
-| T2 | Implement the Build Explorer page (native port of `middleware/ui/pages/build_explorer.py`) | M | 📋 Pending |
-| T3 | Implement the Solver Comparison page (native port of `middleware/ui/pages/solver_comparison.py`) | M | 📋 Pending |
-| T4 | Implement the Training Monitor page backed by the middleware tracking database | M | 📋 Pending |
-| T5 | Implement the Item Database Browser page | M | 📋 Pending |
-| T6 | Wire Tauri Rust commands to the middleware's SQLite tracking database via `sqlx` | M | 📋 Pending |
+| T2 | Implement the Build Explorer page (native port of the archived `middleware/ui` Streamlit page) | M | ✅ Done |
+| T3 | Implement the Solver Comparison page (native port of the archived `middleware/ui` Streamlit page) | M | ✅ Done |
+| T4 | Implement the Training Monitor page (file-based: reads `outputs/**/metrics.csv` / `training_log.jsonl`) | M | ✅ Done |
+| T5 | Implement the Item Database Browser page | M | ✅ Done |
+| T6 | Wire Tauri Rust commands to the middleware's SQLite tracking database via `sqlx`, replacing the current file-based reads in T4/T5 | M | 📋 Pending |
 | T7 | Add cross-platform bundling CI (Linux `.deb`/`.AppImage`, macOS `.dmg`, Windows `.msi`) | M | 📋 Pending |
+| T8 | Code-split the ECharts bundle (currently a single >1.3MB chunk) via dynamic `import()` per page | S | 📋 Pending |
 
 ---
 

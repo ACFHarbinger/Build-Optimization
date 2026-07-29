@@ -17,7 +17,7 @@ help:
     @printf "\033[0;33mModules:\033[0m\n"
     @printf "  \033[0;32minfrastructure\033[0m   - setup, sync, install\n"
     @printf "  \033[0;32mcontroller\033[0m       - train, eval, optimize\n"
-    @printf "  \033[0;32mapp\033[0m              - gui, dashboard\n"
+    @printf "  \033[0;32mapp\033[0m              - gui, studio, studio-build\n"
     @printf "  \033[0;32mtest\033[0m             - test, test-fast\n"
     @printf "  \033[0;32mci\033[0m               - lint, format\n"
     @printf "  \033[0;32mreducer\033[0m          - clean\n"
@@ -34,7 +34,7 @@ help:
     @printf "  just app::gui\n"
     @printf "\n"
     @printf "\033[0;36mShorthands (root justfile):\033[0m\n"
-    @printf "  just train / just eval / just optimize / just gui / just dashboard / just clean / just lint\n"
+    @printf "  just train / just eval / just optimize / just gui / just studio / just clean / just lint\n"
     @printf "\n"
     @printf "\033[0;36mVariables:\033[0m game=\033[0;35mdarktide\033[0m  model=\033[0;35mam\033[0m  policies=\033[0;35msa,ga,alns\033[0m  seed=\033[0;35m42\033[0m\n"
 

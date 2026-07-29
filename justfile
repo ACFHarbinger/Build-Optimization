@@ -78,9 +78,9 @@ optimize game=game policies=policies budget="" level="" time="": helper::_print_
 gui: helper::_print_header
     just app::gui
 
-# Launch the dashboard
-dashboard: helper::_print_header
-    just app::dashboard
+# Launch the Tauri Studio desktop app (dev mode)
+studio: helper::_print_header
+    just app::studio
 
 # Run fast unit tests (use `just test::test` for the full suite)
 test-fast: helper::_print_header

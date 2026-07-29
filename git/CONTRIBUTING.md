@@ -176,7 +176,7 @@ Use pytest markers (`slow`, `fast`, `unit`, `integration`, `model`, `data`) to s
 
 ## 8. Architecture Guidelines
 
-- **Layer separation**: `middleware/src/core` must not import from `middleware/ui`; `backend/` exposes solvers via a stable `pybind11` interface consumed only through `middleware/src/policies`.
+- **Layer separation**: `middleware/src/core` must not import from `frontend/`; `backend/` exposes solvers via a stable `pybind11` interface consumed only through `middleware/src/policies`.
 - **Adding a new solver**: implement `BaseSolver` in `middleware/src/solvers/`, register a Hydra config under `middleware/configs/policy/`, and add a row to the [README's solver table](../README.md#available-solvers).
 - **Adding a C++ export**: add the source under `backend/src/`, declare bindings in `backend/src/bindings.cpp`, and rebuild via `just backend::build-base`.
 

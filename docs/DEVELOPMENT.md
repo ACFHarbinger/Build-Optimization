@@ -15,7 +15,7 @@ Per-module setup is documented in [README.md § Installation & Setup](../README.
 just train game=rpg model=am           # Hydra-driven training
 just optimize game=rpg policies=sa,ga  # Run the optimization pipeline
 just gui                               # Launch the PySide/CLI GUI entry point
-just dashboard                         # Launch the Streamlit control tower
+just studio                            # Launch the Tauri Studio (Control Tower dashboard)
 just lint                              # ruff check
 just format                            # ruff format
 just test-fast                         # quick unit tests (see tools/test/justfile)

@@ -4,7 +4,7 @@ Policy Visualization Mixin.
 Provides lightweight, zero-overhead state recording for classical and
 heuristic policies.  Import :class:`PolicyVizMixin` and add it as a
 mixin base-class to any policy that should expose iteration data to the
-Streamlit dashboard.
+Tauri Studio (`frontend/`) Training Monitor page.
 
 Usage::
 

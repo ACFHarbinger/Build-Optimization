@@ -430,3 +430,10 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Rust / Cargo / Tauri
+target/
+frontend/src-tauri/gen/schemas/
+
+# CMake / C++ backend
+backend/build/

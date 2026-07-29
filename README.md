@@ -78,7 +78,7 @@ The project is organized as a polyglot monorepo:
 | Layer | Role |
 | --- | --- |
 | **C++ Backend** | Performance-critical exact and combinatorial solvers, exposed to Python via `pybind11`. |
-| **Python Middleware** | Hydra-driven orchestration: the existing solver suite, data pipeline, experiment tracking, and Streamlit dashboard. |
+| **Python Middleware** | Hydra-driven orchestration: the solver suite, data pipeline, and experiment tracking, consumed by the Tauri Studio. |
 | **Tauri + TypeScript Frontend** | Cross-platform desktop "Studio" for exploring builds, comparing solvers, and monitoring training runs. |
 | **Browser Extension / Engine Integrations** | A browser extension for scraping item and build data from game wikis into the pipeline, and a planned Unreal Engine plugin for in-editor optimization. |
 
@@ -99,7 +99,7 @@ Lives in [`backend/`](backend/). Ships as a `pybind11` extension module consumed
 
 ### Python Middleware
 
-[![Python](https://img.shields.io/badge/Python-3.9+-3776ab?logo=python&logoColor=white)](https://www.python.org/) [![Hydra](https://img.shields.io/badge/Hydra-1.3-blue)](https://hydra.cc/) [![uv](https://img.shields.io/badge/managed%20by-uv-261230.svg)](https://github.com/astral-sh/uv) [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Python](https://img.shields.io/badge/Python-3.9+-3776ab?logo=python&logoColor=white)](https://www.python.org/) [![Hydra](https://img.shields.io/badge/Hydra-1.3-blue)](https://hydra.cc/) [![uv](https://img.shields.io/badge/managed%20by-uv-261230.svg)](https://github.com/astral-sh/uv)
 
 Lives in [`middleware/`](middleware/). Owns its own [`pyproject.toml`](middleware/pyproject.toml).
 
@@ -109,21 +109,20 @@ Lives in [`middleware/`](middleware/). Owns its own [`pyproject.toml`](middlewar
 | **Hydra Config System** | Composable `game` / `optimization` / `pipeline` / `policy` configs under [`middleware/configs/`](middleware/configs/). |
 | **Data Pipeline** | `FileSource`, `GameAPISource`, and `WebScraperSource` ingestion backends with shared normalization transforms. |
 | **Experiment Tracking** | SQLite-backed run/metric tracking (`middleware/src/tracking`), inspectable via `just database::db-*` recipes. |
-| **Control Tower Dashboard** | Streamlit UI (`middleware/ui`) for build exploration, solver comparison, training monitoring, and item browsing. |
 | **Static Validation** | Import-cycle, interface-compliance, and type-coverage checks (`middleware/validation`). |
 
 ### Tauri + TypeScript Frontend
 
-[![Tauri](https://img.shields.io/badge/Tauri-2.0-24C8DB?logo=tauri&logoColor=white)](https://tauri.app/) [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite](https://img.shields.io/badge/Vite-Build-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tauri](https://img.shields.io/badge/Tauri-2.0-24C8DB?logo=tauri&logoColor=white)](https://tauri.app/) [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite](https://img.shields.io/badge/Vite-Build-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/) [![ECharts](https://img.shields.io/badge/ECharts-Charts-AA344D?logo=apacheecharts&logoColor=white)](https://echarts.apache.org/)
 
-Lives in [`frontend/`](frontend/) (Rust shell in `frontend/src-tauri/`). Ships its own [`package.json`](frontend/package.json).
+Lives in [`frontend/`](frontend/) (Rust shell in `frontend/src-tauri/`). Ships its own [`package.json`](frontend/package.json). The full Control Tower dashboard — previously a Python Streamlit app, archived at [`archive/middleware/`](archive/middleware/) — now lives here natively.
 
 | Capability | Description |
 | --- | --- |
-| **Build Explorer** | Interactive build inspection with synergy and effectiveness breakdowns (native port of `middleware/ui/pages/build_explorer.py`). |
-| **Solver Comparison** | Side-by-side solver benchmarking, mirroring `middleware/ui/pages/solver_comparison.py`. |
-| **Training Monitor** | Live run tracking backed by the middleware's tracking database. |
-| **Item Database Browser** | Searchable, filterable item catalog view. |
+| **Build Explorer** | Interactive build inspection with synergy and effectiveness breakdowns and an ECharts stat radar. |
+| **Solver Comparison** | Side-by-side solver benchmarking with score/cost bar charts and a results table. |
+| **Training Monitor** | RL training curves (loss/reward) with per-run smoothing, read from `outputs/` run directories. |
+| **Item Database Browser** | Searchable, filterable item catalog with stats-by-rarity and cost-vs-efficiency charts. |
 | **Native Desktop Shell** | Single Rust/Tauri binary per platform (Linux `.deb`/`.AppImage`, macOS `.dmg`, Windows `.msi`). |
 
 ### Browser Extension & Engine Integrations
@@ -153,12 +152,12 @@ Build-Optimization/
 │   │   ├── policies/              # 28 WSmart-Route-derived metaheuristics
 │   │   ├── pipeline/               # Data ingestion + transforms
 │   │   └── tracking/               # Experiment tracking database
-│   ├── ui/                     # Streamlit control tower dashboard
 │   ├── tests/
 │   └── validation/              # Static analysis tooling
-├── frontend/                    # Tauri + TypeScript desktop Studio
+├── frontend/                    # Tauri + TypeScript desktop Studio (Control Tower dashboard)
 │   ├── package.json
-│   └── src-tauri/               # Rust shell (Cargo workspace member)
+│   ├── src/pages/                # Build Explorer, Solver Comparison, Training Monitor, Item Database
+│   └── src-tauri/               # Rust shell + data-access commands (Cargo workspace member)
 ├── extension/                   # Browser extension (wiki data scraper)
 │   └── package.json
 ├── research/                    # Domain research (knapsack-routing theory)
@@ -211,7 +210,7 @@ Plus the full `middleware/src/policies/` folder — 28 additional metaheuristic 
 
 | Component | Minimum | Purpose |
 | --- | --- | --- |
-| Python | 3.9+ | Middleware, solvers, dashboard |
+| Python | 3.9+ | Middleware, solvers |
 | Node.js | 18+ | Tauri frontend, browser extension |
 | Rust | 1.75+ | Tauri desktop shell |
 | CMake | 3.18+ | C++ backend build |
@@ -265,17 +264,16 @@ uv run python main.py policy=policy_sa game=rpg
 # Adjust budget and time limit
 uv run python main.py policy=policy_alns optimization.budget=2000 optimization.time_limit=120
 
-# Launch the Streamlit control tower dashboard
-just dashboard
-
-# Launch the Tauri desktop Studio (dev mode)
-cd frontend && npm run tauri dev
+# Launch the Tauri desktop Studio (dev mode) — Build Explorer, Solver Comparison,
+# Training Monitor, and Item Database all live here
+just studio
+# or: cd frontend && npm run tauri dev
 
 # Build the browser extension (all targets) and load it unpacked
 cd extension && npm run build:all   # outputs to extension/dist/{chrome,firefox,edge}
 ```
 
-See the root [`justfile`](justfile) for the full set of `train` / `eval` / `optimize` / `gui` / `dashboard` recipes.
+See the root [`justfile`](justfile) for the full set of `train` / `eval` / `optimize` / `gui` / `studio` recipes.
 
 ## Testing
 
