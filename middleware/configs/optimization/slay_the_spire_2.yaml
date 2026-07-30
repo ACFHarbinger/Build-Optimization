@@ -1,0 +1,9 @@
+# Slay the Spire 2 optimization defaults
+#
+# max_deck_size targets the report's "Act 1 Boss to Act 2 (Mid Game)"
+# range (16-18 total cards) -- the primary strategic sizing lever the
+# report itself uses, standing in for `character_level` in the equipment
+# games' optimization configs (decks have no character-level gating).
+max_deck_size: 18
+budget: .inf
+time_limit: 30.0

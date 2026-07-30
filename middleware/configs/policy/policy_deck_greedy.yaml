@@ -1,0 +1,12 @@
+# Policy Configuration
+# =============================================================================
+# Deck Greedy Policy Configuration (deckbuilding games only)
+# =============================================================================
+# PURPOSE:
+#   Deterministic greedy deck-building baseline: takes cards in descending
+#   archetype-fit value order until the target deck size is reached.
+#   See pipeline/decks/optimizer.py's `greedy` solver.
+# =============================================================================
+
+deck_greedy:
+  custom: []

@@ -1,0 +1,31 @@
+# Slay the Spire 2 game profile — Ironclad, Strength Scaling archetype
+#
+# Deckbuilding, not equipment: `problem_type: deck` routes main.py to
+# pipeline.decks.run_deck_optimization (core.deck_problem.DeckProblem --
+# variable-size card *subset* selection) instead of
+# pipeline.games.run_optimization (core.problem.BuildProblem --
+# one-item-per-slot). See docs/deck-problem-mapping.md and
+# moon/ROADMAP.md's "Slay the Spire 2 Vertical Slice" track.
+name: "Slay the Spire 2 (Ironclad)"
+description: "Deckbuilding roguelike -- Ironclad's Strength Scaling archetype (see reports/Slay the Spire 2 Guide.md)"
+problem_type: "deck"
+
+data:
+  items_path: "src/data/sample/slay_the_spire_2_ironclad.json"
+
+scoring:
+  stat_weights:
+    attack: 1.0
+    block: 0.7
+    strength_gain: 3.0
+    multi_hit: 2.5
+    draw: 1.0
+    vulnerable: 0.3
+    block_conversion: 1.0
+    hp_loss: -2.0
+  synergy_multiplier: 1.5
+  cost_penalty: 0.0
+  slot_bonus: 2.0
+  rarity_bonus: 1.0
+  diminishing_returns: false
+  diminishing_threshold: 200.0

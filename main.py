@@ -22,12 +22,22 @@ import hydra
 from omegaconf import DictConfig, OmegaConf
 
 from core.scoring import ScoringConfig
+from pipeline.decks import run_deck_optimization
 from pipeline.games import run_batch, run_optimization
 
 logger = logging.getLogger(__name__)
 
-# Solvers natively supported by the games pipeline
+# Solvers natively supported by the (equipment) games pipeline
 _PIPELINE_SOLVERS = {"greedy", "sa", "ga", "bnb"}
+
+# Deck-building games (game.problem_type: "deck") use a separate solver
+# namespace/pipeline (pipeline.decks) -- see core.deck_problem.DeckProblem's
+# module docstring for why equipment's Multiple-Choice Knapsack model
+# doesn't apply to variable-size deck subset selection.
+_DECK_POLICY_TO_SOLVER: Dict[str, str] = {
+    "deck_knapsack": "knapsack",
+    "deck_greedy": "greedy",
+}
 
 # Best-effort mapping from policy names to pipeline solver names
 _SOLVER_ALIAS: Dict[str, str] = {
@@ -121,11 +131,57 @@ def _flatten_solver_params(raw: Any) -> Dict[str, Any]:
     return {}
 
 
+def _run_deck_game(cfg: DictConfig, policy_cfg: DictConfig, scoring_config: ScoringConfig, items_path: str) -> None:
+    """Dispatch for deckbuilding games (game.problem_type: "deck"), e.g.
+    Slay the Spire 2 -- see core.deck_problem.DeckProblem and
+    pipeline.decks.run_deck_optimization."""
+    policy_key = list(policy_cfg.keys())[0] if policy_cfg else "deck_knapsack"
+    solver_name = _DECK_POLICY_TO_SOLVER.get(policy_key, "knapsack")
+    if policy_key not in _DECK_POLICY_TO_SOLVER:
+        logger.warning("Unknown deck policy '%s'; defaulting to 'knapsack'", policy_key)
+
+    max_deck_size = OmegaConf.select(cfg, "optimization.max_deck_size", default=18)
+    budget = OmegaConf.select(cfg, "optimization.budget", default=float("inf"))
+    time_limit = OmegaConf.select(cfg, "optimization.time_limit", default=30.0)
+    experiment_name = cfg.game.get("name", "deck-optimization")
+
+    print("=" * 62)
+    print("  BUILD OPTIMIZATION — Deckbuilding")
+    print("=" * 62)
+    print(f"\n  Game:      {cfg.game.get('name', 'Unknown')}")
+    print(f"  Solver:    {policy_key} → {solver_name}")
+    print(f"  Deck size: {max_deck_size}")
+    print(f"  Budget:    {budget:,.0f}" if budget != float("inf") else "  Budget:    inf")
+    print(f"  Time:      {time_limit}s")
+    print()
+
+    result = run_deck_optimization(
+        solver_name=solver_name,
+        items_path=items_path,
+        max_deck_size=max_deck_size,
+        budget=budget,
+        time_limit=time_limit,
+        scoring_config=scoring_config,
+        verbose=True,
+        experiment_name=experiment_name,
+    )
+    if not result.get("success"):
+        print("  WARNING: No feasible deck found within size/budget constraints.")
+        sys.exit(1)
+
+
 @hydra.main(config_path="middleware/configs", config_name="config", version_base=None)
 def main(cfg: DictConfig) -> None:
     """Main entry point for build optimization."""
-    # Extract solver identity from the loaded policy config
+    scoring_config = _build_scoring_config(cfg)
+    items_path = cfg.game.data.items_path
     policy_cfg = cfg.get("policy", {})
+
+    if cfg.game.get("problem_type", "build") == "deck":
+        _run_deck_game(cfg, policy_cfg, scoring_config, items_path)
+        return
+
+    # Extract solver identity from the loaded policy config
     policy_key = list(policy_cfg.keys())[0] if policy_cfg else "sa"
     solver_name = _resolve_solver(policy_key)
 
@@ -142,9 +198,6 @@ def main(cfg: DictConfig) -> None:
     print(f"  Level:  {cfg.optimization.character_level}")
     print(f"  Time:   {cfg.optimization.time_limit}s")
     print()
-
-    scoring_config = _build_scoring_config(cfg)
-    items_path = cfg.game.data.items_path
 
     raw_params = OmegaConf.to_container(policy_cfg.get(policy_key, {}), resolve=True)
     solver_kwargs = _flatten_solver_params(raw_params)

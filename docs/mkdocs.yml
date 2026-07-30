@@ -82,6 +82,7 @@ nav:
       - Architecture: ARCHITECTURE.md
       - Development: DEVELOPMENT.md
       - Testing: TESTING.md
+      - Domain Mapping (STS2): deck-problem-mapping.md
   - API Reference:
       - Python Middleware (Sphinx): api/python.md
       - C++ Backend (Doxygen): api/cpp.md

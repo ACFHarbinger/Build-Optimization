@@ -33,6 +33,7 @@ Usage::
 from __future__ import annotations
 
 import logging
+import math
 import os
 import time
 from typing import Any, Dict, List, Optional
@@ -43,6 +44,22 @@ from .context import GameOptimizationContext
 from .states.loading import LoadingState
 
 logger = logging.getLogger(__name__)
+
+# A budget this large is "unbounded" for any realistic game/deck instance,
+# but stays a finite, spec-compliant JSON number -- unlike float("inf")
+# (the default for `run_optimization`/`run_deck_optimization`'s `budget`
+# param), which Python's json.dump happily emits as the bareword `Infinity`.
+# That's a non-standard JSON extension: serde_json (the Tauri Rust
+# commands that read this file) rejects it outright with a parse error, so
+# every non-finite float bound for this JSON must be sanitized before write.
+_JSON_SAFE_INFINITY = 1e12
+
+
+def _json_safe_float(value: float, fallback: float = _JSON_SAFE_INFINITY) -> float:
+    """Replace a non-finite float with a large-but-finite sentinel so the
+    result JSON stays valid for strict parsers (serde_json has no
+    NaN/Infinity literal support by default)."""
+    return fallback if not math.isfinite(value) else value
 
 
 def _build_to_result_json(result: Dict[str, Any]) -> Dict[str, Any]:
@@ -69,7 +86,7 @@ def _build_to_result_json(result: Dict[str, Any]) -> Dict[str, Any]:
         "solver": result.get("solver", "unknown"),
         "score": result.get("score", 0.0),
         "cost": result.get("cost", 0.0),
-        "budget": result.get("budget", 0.0),
+        "budget": _json_safe_float(result.get("budget", 0.0)),
         "items": items,
         "synergies": result.get("active_synergies", []),
         "items_count": result.get("items_equipped", 0),
@@ -83,13 +100,19 @@ def _persist_run(
     solver_name: str,
     items_path: str,
     budget: float,
-    character_level: int,
     time_limit: float,
     solver_config: Dict[str, Any],
+    extra_params: Optional[Dict[str, Any]] = None,
 ) -> None:
     """Best-effort: write a result JSON file to `outputs/` (read by the Tauri
     Studio's file-based commands) and log the run to the tracking database
     (read by future DB-backed commands, see moon/ROADMAP.md item T6).
+
+    `extra_params` are logged as-is alongside the common ones (solver,
+    items_path, budget, time_limit) -- e.g. `character_level` for equipment
+    games, `max_deck_size` for deckbuilding games (pipeline.decks.optimizer)
+    -- so callers with different domain concepts don't have to force their
+    parameters into a fixed, equipment-specific signature.
 
     Never raises — a broken tracking backend must not fail an optimization run.
     """
@@ -120,8 +143,8 @@ def _persist_run(
                     "solver": solver_name,
                     "items_path": items_path,
                     "budget": budget,
-                    "character_level": character_level,
                     "time_limit": time_limit,
+                    **(extra_params or {}),
                     **{f"solver_config.{k}": v for k, v in solver_config.items()},
                 }
             )
@@ -202,9 +225,9 @@ def run_optimization(
             solver_name=solver_name,
             items_path=items_path,
             budget=budget,
-            character_level=character_level,
             time_limit=time_limit,
             solver_config=solver_config or {},
+            extra_params={"character_level": character_level},
         )
 
     return result

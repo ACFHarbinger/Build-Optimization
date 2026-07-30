@@ -1,0 +1,61 @@
+{
+  "items": [
+    {"name": "Strike", "slot": "attack", "stats": {"attack": 6}, "cost": 1, "rarity": "common", "tags": ["basic"]},
+    {"name": "Strike+", "slot": "attack", "stats": {"attack": 9}, "cost": 1, "rarity": "common", "tags": ["basic"]},
+    {"name": "Defend", "slot": "skill", "stats": {"block": 5}, "cost": 1, "rarity": "common", "tags": ["basic"]},
+    {"name": "Defend+", "slot": "skill", "stats": {"block": 8}, "cost": 1, "rarity": "common", "tags": ["basic"]},
+
+    {"name": "Bash", "slot": "attack", "stats": {"attack": 8, "vulnerable": 2}, "cost": 2, "rarity": "common", "tags": ["strength"]},
+    {"name": "Anger", "slot": "attack", "stats": {"attack": 6}, "cost": 0, "rarity": "common", "tags": []},
+    {"name": "Clash", "slot": "attack", "stats": {"attack": 14}, "cost": 0, "rarity": "common", "tags": []},
+    {"name": "Cleave", "slot": "attack", "stats": {"attack": 8, "multi_hit": 1}, "cost": 1, "rarity": "common", "tags": ["multi_hit"]},
+    {"name": "Iron Wave", "slot": "attack", "stats": {"attack": 5, "block": 5}, "cost": 1, "rarity": "common", "tags": []},
+    {"name": "Pommel Strike", "slot": "attack", "stats": {"attack": 9, "draw": 1}, "cost": 1, "rarity": "common", "tags": []},
+    {"name": "Twin Strike", "slot": "attack", "stats": {"attack": 5, "multi_hit": 2}, "cost": 1, "rarity": "common", "tags": ["multi_hit", "strength"]},
+    {"name": "Thunderclap", "slot": "attack", "stats": {"attack": 4, "vulnerable": 1, "multi_hit": 1}, "cost": 1, "rarity": "common", "tags": ["multi_hit"]},
+
+    {"name": "Sword Boomerang", "slot": "attack", "stats": {"attack": 3, "multi_hit": 3}, "cost": 1, "rarity": "uncommon", "tags": ["multi_hit", "strength"]},
+    {"name": "Whirlwind", "slot": "attack", "stats": {"attack": 5, "multi_hit": 4}, "cost": 1, "rarity": "uncommon", "tags": ["multi_hit", "strength"]},
+    {"name": "Pummel", "slot": "attack", "stats": {"attack": 2, "multi_hit": 4}, "cost": 1, "rarity": "uncommon", "tags": ["multi_hit", "strength"]},
+    {"name": "Heavy Blade", "slot": "attack", "stats": {"attack": 14, "strength_gain": 0}, "cost": 2, "rarity": "uncommon", "tags": ["strength"]},
+    {"name": "Uppercut", "slot": "attack", "stats": {"attack": 13, "vulnerable": 1}, "cost": 2, "rarity": "uncommon", "tags": []},
+    {"name": "Carnage", "slot": "attack", "stats": {"attack": 20}, "cost": 2, "rarity": "uncommon", "tags": []},
+    {"name": "Rampage", "slot": "attack", "stats": {"attack": 8, "strength_gain": 3}, "cost": 1, "rarity": "uncommon", "tags": ["strength", "scaling"]},
+
+    {"name": "Bludgeon", "slot": "attack", "stats": {"attack": 32}, "cost": 3, "rarity": "rare", "tags": []},
+    {"name": "Reaper", "slot": "attack", "stats": {"attack": 20, "draw": 0}, "cost": 2, "rarity": "rare", "tags": []},
+    {"name": "Fiend Fire", "slot": "attack", "stats": {"attack": 7, "multi_hit": 3}, "cost": 2, "rarity": "rare", "tags": ["multi_hit"]},
+    {"name": "Feed", "slot": "attack", "stats": {"attack": 10}, "cost": 1, "rarity": "rare", "tags": []},
+
+    {"name": "Shrug It Off", "slot": "skill", "stats": {"block": 8, "draw": 1}, "cost": 1, "rarity": "common", "tags": []},
+    {"name": "Armaments", "slot": "skill", "stats": {"block": 5}, "cost": 1, "rarity": "common", "tags": []},
+    {"name": "True Grit", "slot": "skill", "stats": {"block": 7}, "cost": 1, "rarity": "common", "tags": []},
+    {"name": "Flex", "slot": "skill", "stats": {"strength_gain": 2}, "cost": 0, "rarity": "common", "tags": ["strength"]},
+    {"name": "Body Slam", "slot": "attack", "stats": {"attack": 0, "block_conversion": 1}, "cost": 1, "rarity": "common", "tags": ["block_synergy"]},
+
+    {"name": "Entrench", "slot": "skill", "stats": {"block": 5}, "cost": 2, "rarity": "uncommon", "tags": []},
+    {"name": "Second Wind", "slot": "skill", "stats": {"block": 5, "draw": 1}, "cost": 1, "rarity": "uncommon", "tags": []},
+    {"name": "Spot Weakness", "slot": "skill", "stats": {"strength_gain": 3}, "cost": 1, "rarity": "uncommon", "tags": ["strength", "scaling"]},
+    {"name": "Sever Soul", "slot": "attack", "stats": {"attack": 16}, "cost": 2, "rarity": "uncommon", "tags": []},
+    {"name": "Disarm", "slot": "skill", "stats": {"vulnerable": 0, "block": 0}, "cost": 1, "rarity": "uncommon", "tags": []},
+
+    {"name": "Barricade", "slot": "power", "stats": {"block": 0}, "cost": 3, "rarity": "rare", "tags": ["block_synergy"]},
+    {"name": "Berserk", "slot": "power", "stats": {"strength_gain": 2, "draw": 1}, "cost": 0, "rarity": "rare", "tags": ["strength", "scaling"]},
+    {"name": "Demon Form", "slot": "power", "stats": {"strength_gain": 6}, "cost": 3, "rarity": "rare", "tags": ["strength", "scaling"]},
+    {"name": "Inflame", "slot": "power", "stats": {"strength_gain": 4}, "cost": 1, "rarity": "uncommon", "tags": ["strength", "scaling"]},
+    {"name": "Feel No Pain", "slot": "power", "stats": {"block": 4}, "cost": 1, "rarity": "uncommon", "tags": ["block_synergy"]},
+    {"name": "Combust", "slot": "power", "stats": {"attack": 3}, "cost": 1, "rarity": "uncommon", "tags": []},
+    {"name": "Rupture", "slot": "power", "stats": {"strength_gain": 2, "hp_loss": 1}, "cost": 1, "rarity": "rare", "tags": ["strength", "scaling"]},
+    {"name": "Corruption", "slot": "power", "stats": {"attack": 0, "hp_loss": 2}, "cost": 3, "rarity": "rare", "tags": []}
+  ],
+  "synergies": [
+    {"name": "Strength Engine (3pc)", "tag": "strength", "threshold": 3, "bonus_stats": {"attack": 10}, "description": "3 Strength-tagged cards grant bonus attack from the Strength stacking engine."},
+    {"name": "Strength Engine (5pc)", "tag": "strength", "threshold": 5, "bonus_stats": {"attack": 25, "strength_gain": 5}, "description": "5 Strength-tagged cards make Strength your primary win condition."},
+    {"name": "Strength Engine (7pc)", "tag": "strength", "threshold": 7, "bonus_stats": {"attack": 45, "strength_gain": 10}, "description": "7 Strength-tagged cards: full Strength Scaling archetype online."},
+    {"name": "Multi-Hit Mastery (2pc)", "tag": "multi_hit", "threshold": 2, "bonus_stats": {"attack": 15}, "description": "2 multi-hit attacks multiply Strength across every hit landed."},
+    {"name": "Multi-Hit Mastery (4pc)", "tag": "multi_hit", "threshold": 4, "bonus_stats": {"attack": 35}, "description": "4 multi-hit attacks turn every point of Strength into overwhelming burst damage."},
+    {"name": "Scaling Powerhouse (2pc)", "tag": "scaling", "threshold": 2, "bonus_stats": {"strength_gain": 8}, "description": "2 scaling Power cards compound your Strength growth turn over turn."},
+    {"name": "Scaling Powerhouse (4pc)", "tag": "scaling", "threshold": 4, "bonus_stats": {"strength_gain": 18}, "description": "4 scaling Power cards: an unstoppable late-game Strength engine."},
+    {"name": "Block Conversion (2pc)", "tag": "block_synergy", "threshold": 2, "bonus_stats": {"block": 10}, "description": "2 block-conversion cards reward stacking Block before releasing it as damage."}
+  ]
+}

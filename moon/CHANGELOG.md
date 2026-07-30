@@ -4,6 +4,17 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (Slay the Spire 2 Vertical Slice — V1–V8)
+
+- **V1 (Design Doc)**: Added `docs/deck-problem-mapping.md` documenting the domain mapping between cards, decks, energy/gold costs, card type slots (`ATTACK`, `SKILL`, `POWER`), and 0-1 knapsack subset selection. Linked in `docs/mkdocs.yml`.
+- **V2 (Deck Problem)**: Added `middleware/src/core/deck_problem.py` (`DeckProblem`) and `middleware/src/core/deck.py` (`Deck`) for subset selection, with `score_fast`, `score_full`, `to_deck`, and `to_result_json` producing standard result JSON payloads. Added card type slots (`ATTACK`, `SKILL`, `POWER`) to `Slot` enum and `FileSource` taxonomy map.
+- **V3 (Deck Pipeline & Knapsack Solver)**: Added `middleware/src/pipeline/decks/optimizer.py` and `middleware/src/pipeline/decks/__init__.py` registering `knapsack` (calling C++ `solve_knapsack` via `core.native_backend`) and `greedy` solvers for deck optimization.
+- **V4 (Ironclad Card Dataset)**: Authored `middleware/src/data/sample/slay_the_spire_2_ironclad.json` with 41 cards and 8 archetype synergy rules (Strength Scaling, Multi-Hit Mastery, Scaling Powerhouse, Block Conversion).
+- **V5 (Config Profiles)**: Added `middleware/configs/game/slay_the_spire_2.yaml` (stat weights and synergy rules) and `middleware/configs/optimization/slay_the_spire_2.yaml` (deck size cap = 18). Added policy configs `policy_deck_knapsack.yaml` and `policy_deck_greedy.yaml`.
+- **V6 (Hydra Routing)**: Extended `main.py` to route `problem_type: "deck"` games through `_run_deck_game` and `run_deck_optimization`, writing results to `outputs/` and logging runs to `tracking.db`. Safely sanitized non-finite float budgets (`_json_safe_float`) for strict `serde_json` compatibility.
+- **V7 (Tests)**: Added `middleware/tests/test_deck_problem.py` with hand-verified unit tests, brute-force search cross-checks, and pipeline integration tests. All 29 unit tests pass cleanly.
+- **V8 (Frontend & Build Verification)**: Verified that Tauri Studio frontend (`frontend/`) and TypeScript build (`npm run build`, `npm test`) compile cleanly without code changes.
+
 ### Added (B5 — backend solver wired into a selectable Hydra policy)
 
 - Added `middleware/src/core/native_backend.py`: lazily locates and imports the compiled `build_optimizer_backend` extension from `backend/` (built by a separate Pixi toolchain, not on `sys.path` by default), with a clear `ImportError` and build instructions if it isn't built yet.

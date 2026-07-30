@@ -62,6 +62,10 @@ class FileSource(DataSource):
         "ring_1": Slot.RING_1,
         "ring_2": Slot.RING_2,
         "amulet": Slot.AMULET,
+        # Card types (deckbuilding games, e.g. Slay the Spire 2)
+        "attack": Slot.ATTACK,
+        "skill": Slot.SKILL,
+        "power": Slot.POWER,
     }
 
     RARITY_MAP: Dict[str, Rarity] = {

@@ -1,0 +1,14 @@
+# Policy Configuration
+# =============================================================================
+# Deck Knapsack Policy Configuration (deckbuilding games only)
+# =============================================================================
+# PURPOSE:
+#   Exact deck-building solve via the C++ backend's plain 0-1 knapsack
+#   (backend/src/knapsack.cpp) -- see pipeline/decks/optimizer.py's
+#   `knapsack` solver. Requires the backend extension to be built first:
+#     cd backend && pixi run build && pixi run install
+#   Falls back to greedy automatically if it isn't.
+# =============================================================================
+
+deck_knapsack:
+  custom: []

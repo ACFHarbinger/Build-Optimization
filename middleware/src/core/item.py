@@ -11,7 +11,16 @@ from typing import Dict, FrozenSet, Optional
 
 
 class Slot(Enum):
-    """Equipment slots available for a character build."""
+    """Equipment slots available for a character build.
+
+    Also doubles as the card-type taxonomy for deckbuilding games (see
+    core.deck_problem.DeckProblem): ATTACK/SKILL/POWER are Slay the Spire 2's
+    real card categories. Deck-building games don't use these for the
+    one-item-per-slot exclusivity that equipment games do (core.deck.Deck
+    allows any number of cards sharing a "slot"/type) -- they're carried on
+    Item purely for display/reporting, reusing the existing serialization
+    (item.slot.name) rather than adding a parallel field.
+    """
 
     WEAPON = auto()
     HELMET = auto()
@@ -23,6 +32,11 @@ class Slot(Enum):
     RING_1 = auto()
     RING_2 = auto()
     AMULET = auto()
+
+    # Card types (deckbuilding games only)
+    ATTACK = auto()
+    SKILL = auto()
+    POWER = auto()
 
 
 class Rarity(Enum):
