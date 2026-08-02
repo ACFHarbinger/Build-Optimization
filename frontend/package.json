@@ -21,7 +21,7 @@
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-dialog": "^2",
     "@tauri-apps/plugin-shell": "^2",
-    "echarts": "^5",
+    "echarts": "^6",
     "echarts-for-react": "^3",
     "lucide-react": "^0.414",
     "react": "^19",
