@@ -2,7 +2,7 @@
 name = "build-optimization-middleware"
 version = "0.1.0"
 description = "Python middleware: Hydra orchestration, solver policies, data pipeline, and experiment tracking for Build-Optimization"
-license = { text = "MIT" }
+license = { text = "AGPL-3.0-or-later" }
 requires-python = ">=3.9"
 dependencies = [
     "numpy>=1.26.4",

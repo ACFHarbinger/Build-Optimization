@@ -30,7 +30,7 @@
 [![Coverage](https://img.shields.io/badge/coverage-60%25-green.svg)](https://codecov.io/)
 [![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?logo=githubactions&logoColor=white)](https://github.com/features/actions)
 [![Dependabot](https://img.shields.io/badge/Dependabot-enabled-025E8C?logo=dependabot&logoColor=white)](https://dependabot.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: AGPL-3.0 / Commercial](https://img.shields.io/badge/License-AGPL--3.0%20%2F%20Commercial-blue.svg)](LICENSE.md)
 
 </br>
 
@@ -315,4 +315,13 @@ See [`git/CONTRIBUTING.md`](git/CONTRIBUTING.md) for code style, git workflow, a
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+This project is dual-licensed under an open-core model:
+
+- **Open source (free) — GNU AGPL-3.0.** Free to use, modify, and
+  distribute for hobbyists, students, researchers, non-profits, and any
+  other use that complies with the [AGPL-3.0](LICENSE.md)'s copyleft and
+  network source-disclosure terms.
+- **Commercial (paid).** For proprietary, closed-source, or SaaS use that
+  can't comply with the AGPL's obligations, a paid
+  [commercial license](LICENSE.txt) is available — contact ACFHarbinger
+  <afonso.fernandes100@gmail.com> for pricing and terms.

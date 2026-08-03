@@ -3,7 +3,7 @@ name = "build-optimization"
 version = "0.1.0"
 description = "A set of optimization algorithms to help create the best builds for videogames"
 readme = "README.md"
-license = { text = "MIT" }
+license = { text = "AGPL-3.0-or-later" }
 requires-python = ">=3.9"
 dependencies = [
     "numpy>=1.26.4",
