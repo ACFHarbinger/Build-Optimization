@@ -28,7 +28,7 @@ dependencies = [
 [project.optional-dependencies]
 solvers = [
     "gurobipy>=11.0.3",
-    "hexaly>=14.0.20251008",
+    "hexaly>=15.0.20260731",
     "ortools>=9.4.1874",
     "pyvrp>=0.9.1",
     "alns>=7.0.0",
@@ -42,12 +42,12 @@ dev = [
     "mypy>=1.11.0",
     "pytest>=8.0.0",
     "pytest-mock>=3.12.0",
-    "ruff>=0.14.3",
+    "ruff>=0.16.1",
     "black>=24.0.0",
 ]
 
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=83.0.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.mypy]
