@@ -7,7 +7,7 @@ Description: Serverless Backend stack for the Build Optimization.
 
 Resources:
   # DynamoDB Database Table
-  Build_optimizationTable:
+  BuildOptimizationTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:
@@ -18,7 +18,7 @@ Resources:
         WriteCapacityUnits: 5
 
   # Lambda Function
-  Build_optimizationFunction:
+  BuildOptimizationFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: handler.lambda_handler
@@ -26,10 +26,10 @@ Resources:
       CodeUri: ./src
       Environment:
         Variables:
-          TABLE_NAME: !Ref Build_optimizationTable
+          TABLE_NAME: !Ref BuildOptimizationTable
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref Build_optimizationTable
+            TableName: !Ref BuildOptimizationTable
       Events:
         ApiEvent:
           Type: Api
