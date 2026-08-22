@@ -1,5 +1,18 @@
 import { ScrapedItem } from "../lib/types";
-import { profileForHost } from "./selectors";
+import { WikiSelectorProfile, profileForHost } from './selectors';
+
+function normaliseLabel(value: string): string {
+  return value.replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function rowValue(container: Element, profile: WikiSelectorProfile, acceptedLabels: string[]): string | undefined {
+  for (const row of Array.from(container.querySelectorAll(profile.statBlock.row))) {
+    const label = row.querySelector(profile.statBlock.label)?.textContent;
+    const value = row.querySelector(profile.statBlock.value)?.textContent;
+    if (label && value && acceptedLabels.includes(normaliseLabel(label))) return value.trim();
+  }
+  return undefined;
+}
 
 function parseInfobox(container: Element, sourceUrl: string): ScrapedItem | null {
   const profile = profileForHost(window.location.hostname);
@@ -9,22 +22,25 @@ function parseInfobox(container: Element, sourceUrl: string): ScrapedItem | null
   if (!nameEl?.textContent) return null;
 
   const stats: Record<string, number> = {};
-  container.querySelectorAll(profile.statRow).forEach((row) => {
-    const label = row.querySelector("h3, .pi-data-label")?.textContent?.trim().toLowerCase();
-    const value = row.querySelector(".pi-data-value")?.textContent?.trim();
+  container.querySelectorAll(profile.statBlock.row).forEach((row) => {
+    const label = row.querySelector(profile.statBlock.label)?.textContent?.trim().toLowerCase();
+    const value = row.querySelector(profile.statBlock.value)?.textContent?.trim();
     const numeric = value ? Number.parseFloat(value.replace(/[^0-9.\-]/g, "")) : NaN;
     if (label && Number.isFinite(numeric)) {
       stats[label.replace(/\s+/g, "_")] = numeric;
     }
   });
 
-  const rarity = profile.rarity ? (container.querySelector(profile.rarity)?.textContent?.trim() ?? "unknown") : "unknown";
+  const slot = rowValue(container, profile, profile.slotLabels) ?? 'unknown';
+  const rarity = rowValue(container, profile, profile.rarityLabels) ?? 'unknown';
+  const costText = rowValue(container, profile, profile.costLabels);
+  const cost = costText ? Number.parseFloat(costText.replace(/[^0-9.\-]/g, '')) || 0 : 0;
 
   return {
     name: nameEl.textContent.trim(),
-    slot: "unknown",
+    slot: normaliseLabel(slot).replace(/\s+/g, '_'),
     stats,
-    cost: 0,
+    cost,
     rarity,
     level: 1,
     tags: [],

@@ -39,7 +39,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
 | E1 | Scaffold `extension/` Manifest V3 browser extension project (`package.json`, `manifest.json`, per-browser webpack configs) | S | ✅ Done |
-| E2 | Add per-site wiki selector profiles (Fandom, wiki.gg, Gamepedia) with slot/rarity/stat-block mapping | M | 📋 Pending |
+| E2 | Add per-site wiki selector profiles (Fandom, wiki.gg, Gamepedia) with slot/rarity/stat-block mapping | M | ✅ Done |
 | E3 | Implement a review/edit UI in the popup for correcting scraped fields before export | M | 📋 Pending |
 | E4 | Wire `EXPORT_ITEMS` output directly into `middleware/src/pipeline/file_source.py`'s expected JSON schema, with per-game presets | S | 📋 Pending |
 | E5 | Add bulk-scrape support (category/index page crawling within a tab, rate-limited) | M | 📋 Pending |

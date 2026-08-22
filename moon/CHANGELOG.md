@@ -4,6 +4,12 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (E2 — per-site wiki selector profiles)
+
+- Added explicit Fandom, wiki.gg, and legacy Gamepedia selector profiles for the browser extension. Each declares its item container, title, stat-table row/label/value selectors, and slot/rarity/cost labels instead of sharing a brittle PortableInfobox assumption.
+- Updated the content scraper to use the selected profile for slot, rarity, cost, and numeric-stat extraction. The wiki.gg profile covers its verified MediaWiki `.infobox.item` / `table.stat` layout.
+- Added TypeScript Jest configuration and five selector-profile tests; extension test, typecheck, and Chrome production bundle pass.
+
 ### Added (SA8/SA10 — screenshot OCR ingestion + RecognizedName seam)
 
 - **SA8 (Local screenshot ingestion)**:
