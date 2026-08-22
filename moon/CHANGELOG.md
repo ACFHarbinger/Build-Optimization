@@ -4,6 +4,13 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (SA2 — wiki.gg catalogue ingest + local overlay)
+
+- Added `middleware/src/pipeline/catalogue/`: ingest slaythespire.wiki.gg `Module:Cards/StS2 data/*` Lua modules into a **gitignored** user-local cache (`$STS2_CATALOGUE_DIR` or `~/.local/share/build-optimization/sts2`). Stable character-tagged ids (`ironclad:strike` / `ironclad:strike+`), aliases, numeric stats parsed from `[base|upgraded]` text. Card art and wiki prose are not stored.
+- Local overlay (`overlay.json`, also gitignored) adds missing rows and overrides wiki stats/tags by `card_id`.
+- Committed `THIRD_PARTY_NOTICES.md` (CC BY-SA attribution). Tests use a synthetic Lua fixture, not a scrape dump. Sample Ironclad JSON remains the advisor CLI test fixture; wiring the cache into `advisor_cli.py` is a follow-up.
+- Live ingest: `python -m pipeline.catalogue` (from `middleware/`). Verified against the real Ironclad module (182 catalogue rows, Strike 6/9).
+
 ### Added (E2 — per-site wiki selector profiles)
 
 - Added explicit Fandom, wiki.gg, and legacy Gamepedia selector profiles for the browser extension. Each declares its item container, title, stat-table row/label/value selectors, and slot/rarity/cost labels instead of sharing a brittle PortableInfobox assumption.

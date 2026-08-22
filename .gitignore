@@ -444,3 +444,9 @@ backend/*.pyd
 # Generated documentation
 site/
 docs/_build/
+
+# SA2: wiki.gg catalogue cache + local overlay (never commit scrape dumps)
+.cache/sts2/
+**/sts2-catalogue-cache/
+# Default app-data dir is outside the repo; keep a local override ignored too.
+.sts2-catalogue/
