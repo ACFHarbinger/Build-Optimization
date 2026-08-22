@@ -18,6 +18,7 @@ pub fn run() {
             commands::tracking::get_run_latest_metrics,
             commands::tracking::get_run_metric_history,
             commands::tracking::get_run_artifacts,
+            commands::advisor::run_sts2_advisor,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Build-Optimization Studio");

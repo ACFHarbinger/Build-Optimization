@@ -1,3 +1,4 @@
+pub mod advisor;
 pub mod data;
 pub mod tracking;
 pub mod training;

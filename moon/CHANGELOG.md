@@ -4,6 +4,24 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (T7 — Cross-platform Tauri bundling CI)
+
+- Added multi-platform GitHub Actions workflow `.github/workflows/package-and-build.yml` with a matrix building on `ubuntu-22.04` (Linux `.deb`, `.AppImage`), `macos-latest` (macOS `.dmg`), and `windows-latest` (Windows `.msi`, `.exe`). Configured Linux system dependencies (`libwebkit2gtk-4.1-dev`, `libayatana-appindicator3-dev`, etc.) and artifact uploads.
+- Configured Tauri bundle icon paths in `frontend/src-tauri/tauri.conf.json`.
+
+### Added (SA6/SA7 — Slay the Spire 2 Study Reward Advisor in Tauri Studio)
+
+- **SA6 (Tauri IPC Bridge)**: Added `frontend/src-tauri/src/commands/advisor.rs` with `run_sts2_advisor` command, interfacing with `advisor_cli.py` via JSON IPC, with full deterministic analytical fallback for development and testing.
+- **SA7 (Advisor Page & Visualization)**: Added `frontend/src/pages/Advisor.tsx` study screen in Tauri Studio:
+  - 3-card reward offer inputs with card suggestions and upgrade indicators.
+  - Deck manager with starter preset (5 Strike, 4 Defend, 1 Bash), Strength archetype, Block archetype, and blank custom deck options.
+  - Run context controls (Act, Floor, HP %, Gold, Relics, Potions).
+  - Preference & strategy weights (Balanced, Tempo Survival, Archetype Scaling, Anti-Dilution) with configurable Monte Carlo rollouts and RNG seed.
+  - Interactive recommendation banner, ranked choice breakdown table, Pareto frontier non-dominated markers, and synergy delta explanations.
+  - ECharts metric comparison bar chart and Monte Carlo confidence interval error-band visualization.
+- **Navigation & Types**: Added `/advisor` route to `frontend/src/App.tsx`, sidebar navigation link in `frontend/src/components/Sidebar.tsx`, and TypeScript interfaces in `frontend/src/lib/types.ts` and `frontend/src/lib/tauriApi.ts`.
+- **Tests**: Added `frontend/src/lib/__tests__/advisor.test.ts` validating request construction and response Pareto front processing. All 9 frontend tests pass cleanly.
+
 ### Added (Slay the Spire 2 Vertical Slice — V1–V8)
 
 - **V1 (Design Doc)**: Added `docs/deck-problem-mapping.md` documenting the domain mapping between cards, decks, energy/gold costs, card type slots (`ATTACK`, `SKILL`, `POWER`), and 0-1 knapsack subset selection. Linked in `docs/mkdocs.yml`.

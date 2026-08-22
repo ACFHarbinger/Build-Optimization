@@ -4,6 +4,7 @@ import { BuildExplorer } from "./pages/BuildExplorer";
 import { SolverComparison } from "./pages/SolverComparison";
 import { TrainingMonitor } from "./pages/TrainingMonitor";
 import { ItemDatabase } from "./pages/ItemDatabase";
+import { Advisor } from "./pages/Advisor";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<BuildExplorer />} />
+            <Route path="/advisor" element={<Advisor />} />
             <Route path="/solver-comparison" element={<SolverComparison />} />
             <Route path="/training-monitor" element={<TrainingMonitor />} />
             <Route path="/item-database" element={<ItemDatabase />} />

@@ -361,3 +361,137 @@ h3 {
     background: linear-gradient(to right, transparent, #3c4043, transparent);
   }
 }
+
+/* --- Advisor Styles (SA7) --- */
+.advisor-card-section {
+  border: 1px solid #e8eaed;
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: #ffffff;
+}
+
+.advisor-input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.btn-primary {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #1557b0;
+}
+
+.btn-preset {
+  background-color: #f1f3f4;
+  border: 1px solid #dadce0;
+  color: #3c4043;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-preset:hover {
+  background-color: #e8eaed;
+}
+
+.btn-preset.active {
+  background-color: #1a73e8;
+  color: white;
+  border-color: #1a73e8;
+}
+
+.deck-card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.deck-card-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background: #f8f9fa;
+  border: 1px solid #e8eaed;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.deck-card-name {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.deck-card-counter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.deck-card-counter button {
+  background: #dadce0;
+  border: none;
+  border-radius: 3px;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recommendation-banner {
+  border-left: 6px solid #2e7d32;
+  background: #f1f8e9;
+  border-radius: 10px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .advisor-card-section {
+    background: #2d2e30;
+    border-color: #3c4043;
+  }
+  .advisor-input {
+    background: #202124;
+    color: #e8eaed;
+    border-color: #5f6368;
+  }
+  .btn-preset {
+    background-color: #3c4043;
+    border-color: #5f6368;
+    color: #e8eaed;
+  }
+  .deck-card-item {
+    background: #202124;
+    border-color: #3c4043;
+  }
+  .deck-card-counter button {
+    background: #3c4043;
+    color: #e8eaed;
+  }
+  .recommendation-banner {
+    background: #1e2c1e;
+  }
+}
+

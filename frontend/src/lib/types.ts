@@ -46,3 +46,70 @@ export interface RunArtifact {
   artifact_type: string;
   created_at: string;
 }
+
+// --- Slay the Spire 2 Advisor Types (Track SA1/SA6/SA7) ---
+export interface CardEntry {
+  card_id: string;
+  count: number;
+}
+
+export interface RunContextInput {
+  act?: number;
+  floor?: number;
+  hp_pct?: number;
+  gold?: number;
+  relics?: string[];
+  potions?: string[];
+}
+
+export interface AdvisorPreferencesInput {
+  tempo_weight?: number;
+  synergy_weight?: number;
+  dilution_weight?: number;
+  mc_weight?: number;
+  mc_rollouts?: number;
+  seed?: number;
+}
+
+export interface Sts2AdvisorRequest {
+  character: string;
+  deck: CardEntry[];
+  offers: string[];
+  context?: RunContextInput;
+  preferences?: AdvisorPreferencesInput;
+}
+
+export interface ChoiceMetrics {
+  tempo_score: number;
+  synergy_score: number;
+  dilution_penalty: number;
+  mc_projected_mean: number;
+  mc_projected_ci_lower: number;
+  mc_projected_ci_upper: number;
+}
+
+export interface AdvisorChoice {
+  action: "skip" | "take" | string;
+  card_id?: string | null;
+  card_name?: string | null;
+  is_upgrade: boolean;
+  rank: number;
+  total_score: number;
+  score_delta: number;
+  metrics: ChoiceMetrics;
+  pareto_optimal: boolean;
+  synergy_deltas: string[];
+  explanation: string;
+}
+
+export interface Sts2AdvisorResponse {
+  status: "ok" | "error" | "blocked" | string;
+  character: string;
+  evaluated_at: string;
+  base_deck_size: number;
+  choices: AdvisorChoice[];
+  pareto_front: string[];
+  recommendation: string;
+  diagnostics?: string | null;
+}
+

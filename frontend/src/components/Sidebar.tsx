@@ -3,6 +3,7 @@ import { useAppStore } from "../store/useAppStore";
 
 const NAV_ITEMS = [
   { to: "/", label: "🛡️ Build Explorer" },
+  { to: "/advisor", label: "🔮 Reward Advisor" },
   { to: "/solver-comparison", label: "🏆 Solver Comparison" },
   { to: "/training-monitor", label: "📈 Training Monitor" },
   { to: "/item-database", label: "📚 Item Database" },

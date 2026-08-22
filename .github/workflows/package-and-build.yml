@@ -6,13 +6,52 @@ on:
     tags: ["v*"]
 
 jobs:
-  bundle-linux:
-    runs-on: ubuntu-latest
+  bundle-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: "ubuntu-22.04"
+            target-name: "linux"
+          - platform: "macos-latest"
+            target-name: "macos"
+          - platform: "windows-latest"
+            target-name: "windows"
+    runs-on: ${{ matrix.platform }}
+
     steps:
       - uses: actions/checkout@v7
-      - name: Build Studio bundles
-        run: docker build -f docker/Dockerfile --output type=local,dest=dist-studio .
-      - uses: actions/upload-artifact@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
         with:
-          name: build-optimization-studio-linux
-          path: dist-studio/*
+          node-version: 22
+          cache: npm
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Linux dependencies
+        if: matrix.target-name == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+
+      - name: Install dependencies
+        run: npm install --workspaces
+
+      - name: Build frontend and bundles
+        run: cd frontend && npm run tauri:build
+
+      - name: Upload bundle artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: build-optimization-studio-${{ matrix.target-name }}
+          path: |
+            frontend/src-tauri/target/release/bundle/deb/*.deb
+            frontend/src-tauri/target/release/bundle/appimage/*.AppImage
+            frontend/src-tauri/target/release/bundle/dmg/*.dmg
+            frontend/src-tauri/target/release/bundle/msi/*.msi
+            frontend/src-tauri/target/release/bundle/nsis/*.exe
+          if-no-files-found: ignore
+
