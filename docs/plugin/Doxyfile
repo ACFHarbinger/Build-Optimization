@@ -1,0 +1,43 @@
+# Doxygen configuration for the Build-Optimization Unreal Engine plugin
+# (unreal-plugin/). Build with: doxygen docs/plugin/Doxyfile   (run from the
+# repo root). This is D8, wired only now that U1 scaffolded the plugin.
+
+PROJECT_NAME           = "Build-Optimization Unreal Engine Plugin"
+PROJECT_BRIEF          = "In-editor and Blueprint-callable build optimization for UE-based game projects, bridging the shared C++ solver core"
+PROJECT_NUMBER         = 0.1.0
+
+# Paths are relative to the directory doxygen is invoked from (repo root).
+INPUT                  = unreal-plugin/Source/BuildOptimization/Public unreal-plugin/Source/BuildOptimization/Private
+OUTPUT_DIRECTORY       = docs/_build/api/plugin-doxygen
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h *.hpp *.cpp *.inl
+EXCLUDE_PATTERNS       = */Intermediate/* */Binaries/* */Build/* */DerivedDataCache/*
+
+# Extraction — document everything public; keep internals out.
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = NO
+EXTRACT_PRIVATE        = NO
+HIDE_UNDOC_MEMBERS     = NO
+INTERNAL_DOCS          = NO
+WARN_IF_UNDOCUMENTED   = YES
+QUIET                  = YES
+
+# Non-standard macros (UE's IMPLEMENT_MODULE etc.) marked as predefined so
+# declarations still parse. PREDEFINED entries are harmless without a UE build.
+PREDEFINED             = "IMPLEMENT_MODULE(x,y)=" "UCLASS(x)=" "USTRUCT(x)=" "UENUM(x)=" "UPROPERTY(x)=" "UFUNCTION(x)=" "GENERATED_BODY()="
+
+# Output — HTML only (the MkDocs umbrella links to it).
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_LATEX         = NO
+GENERATE_TREEVIEW      = YES
+HTML_COLORSTYLE        = AUTO_DARK
+
+# Diagrams (uses dot from graphviz if available; degrades gracefully).
+HAVE_DOT               = NO
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = NO
+
+# Source browsing
+SOURCE_BROWSER         = YES
+STRIP_CODE_COMMENTS    = NO

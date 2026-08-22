@@ -49,7 +49,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
-| U1 | Scaffold the UE plugin skeleton (`.uplugin` descriptor, module source layout) | S | 📋 Pending |
+| U1 | Scaffold the UE plugin skeleton (`.uplugin` descriptor, module source layout) | S | ✅ Done |
 | U2 | Define C++ data marshalling between UE types and `Item` / `Build` / `Synergy` domain objects | M | 📋 Pending |
 | U3 | Build an in-editor build-optimization panel (Slate UI) | L | 📋 Pending |
 | U4 | Expose solver calls as Blueprint-callable nodes | M | 📋 Pending |
@@ -81,7 +81,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | D5 | Wire `cargo doc` (rustdoc) for the Tauri Rust shell reference | S | ✅ Done |
 | D6 | Orchestrate all five generators + MkDocs in `docs/build_docs.sh`, tolerant of missing tools/unscaffolded modules | S | ✅ Done |
 | D7 | Wire `.github/workflows/docs.yml` (per-generator jobs + GitHub Pages deploy on `main`) | S | ✅ Done |
-| D8 | Add a `docs/plugin/` Unreal Engine plugin Doxygen config once the plugin (U1) is scaffolded | S | 📋 Pending |
+| D8 | Add a `docs/plugin/` Unreal Engine plugin Doxygen config once the plugin (U1) is scaffolded | S | ✅ Done |
 
 ## Track: Slay the Spire 2 Vertical Slice
 

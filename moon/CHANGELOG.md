@@ -4,6 +4,19 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (U1 — Unreal Engine plugin skeleton)
+
+- Added `unreal-plugin/` — the first real step on the Unreal Engine plugin track:
+  - `BuildOptimization.uplugin` descriptor (FileVersion 3, Runtime module `BuildOptimization`, LoadingPhase Default, `IsExperimentalVersion: true`).
+  - `Source/BuildOptimization/BuildOptimization.Build.cs` module rules (PCH usage, Core/CoreUObject/Engine public deps; solver core deliberately not referenced yet, to be bridged in U5).
+  - `Source/BuildOptimization/Public/BuildOptimizationModule.h` + `Private/BuildOptimizationModule.cpp` (empty `IModuleInterface` StartupModule/ShutdownModule hooks, `IMPLEMENT_MODULE`).
+  - `unreal-plugin/.gitignore` for UE-generated `Binaries/`/`Intermediate/`/etc.
+- **Verification caveat**: authored against UE5 module conventions and reviewed for structural correctness only — **no Unreal Engine install is present in this environment, so the plugin was NOT compiled or loaded against a real UE project.** U2+ build on this skeleton.
+
+### Added (D8 — Unreal Engine plugin Doxygen config)
+
+- Added `docs/plugin/Doxyfile` (mirrors `docs/cpp/Doxyfile`; inputs `unreal-plugin/Source/...`, UE-macro PREDEFINED so declarations parse without a UE build) and `docs/api/plugin.md`. Wired the plugin build into `docs/build_docs.sh` (tolerant skip when `unreal-plugin/Source` is missing or `doxygen` is absent) and the `mkdocs.yml` nav ("Unreal Engine Plugin (Doxygen)" under API Reference).
+
 ### Added (SA1 / SA6 middleware — advisor contract and CLI)
 
 - Added `pipeline.decks.advisor_schema`, the versioned (`1.0`) JSON contract for the STS2 reward advisor. It validates a duplicate-preserving deck multiset, exactly three offers, optional run context, and Pareto/Monte-Carlo preferences while retaining a forward-compatible response envelope.

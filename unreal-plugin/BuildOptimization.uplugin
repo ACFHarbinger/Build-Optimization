@@ -1,0 +1,25 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "Build Optimization",
+	"Description": "In-editor build optimization for UE-based game projects. Bridges the shared C++ solver core (backend/) to Unreal so a character build can be optimized directly in the editor or from Blueprint.",
+	"Category": "Gameplay",
+	"CreatedBy": "ACFHarbinger",
+	"CreatedByURL": "https://github.com/ACFHarbinger",
+	"DocsURL": "https://github.com/ACFHarbinger/Build-Optimization",
+	"MarketplaceURL": "",
+	"SupportURL": "https://github.com/ACFHarbinger/Build-Optimization/issues",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": true,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "BuildOptimization",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"Description": "Core module for in-editor and Blueprint-callable build optimization. Editor-only UI (the Slate panel, U3) is planned as a separate Editor module built on top of this runtime core."
+		}
+	]
+}

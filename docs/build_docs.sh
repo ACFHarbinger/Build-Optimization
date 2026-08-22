@@ -46,6 +46,18 @@ else
   skip "doxygen not found — install it, or run: cd backend && pixi install"
 fi
 
+# ---------------------------------------------------------------- Unreal Engine plugin (Doxygen)
+if [ ! -d "$ROOT/unreal-plugin/Source" ]; then
+  skip "Doxygen (plugin): unreal-plugin/Source not scaffolded yet"
+elif command -v doxygen >/dev/null; then
+  note "Doxygen: building Unreal Engine plugin API"
+  (cd "$ROOT" && doxygen docs/plugin/Doxyfile >/dev/null) || fail=1
+  rm -rf "$API/plugin"
+  mv "$API/plugin-doxygen/html" "$API/plugin" 2>/dev/null && rm -rf "$API/plugin-doxygen"
+else
+  skip "doxygen not found — install it, or run: cd backend && pixi install"
+fi
+
 # ---------------------------------------------------------------- TypeScript (TypeDoc)
 run_typedoc() { # $1=workspace  $2=config
   local ws="$1" cfg="$2"

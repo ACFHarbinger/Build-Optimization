@@ -1,0 +1,26 @@
+# Unreal Engine plugin local ignores.
+# UE generates these at build time; the repo should never commit them.
+
+# Compiled binaries and intermediate build data
+Binaries/
+Intermediate/
+DerivedDataCache/
+Saved/
+Build/
+
+# Unreal-generated module/DLL metadata
+*.modules
+*.target
+*.autogen.cpp
+*.generated.*
+*.gen.cpp
+*.gen.h
+
+# Rider / Clion / IDE
+.idea/
+.vs/
+*.sln
+*.suo
+*.vcxproj
+*.filters
+*.user

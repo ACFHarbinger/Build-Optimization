@@ -89,6 +89,7 @@ nav:
       - Tauri Frontend (TypeDoc): api/frontend.md
       - Browser Extension (TypeDoc): api/extension.md
       - Tauri Rust Shell (rustdoc): api/rust.md
+      - Unreal Engine Plugin (Doxygen): api/plugin.md
   - Roadmap & Changelog:
       - Roadmap: roadmap.md
       - Changelog: changelog.md
