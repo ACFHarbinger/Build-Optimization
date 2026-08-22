@@ -4,6 +4,11 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (SA5 — Seeded Monte-Carlo projected-run planner)
+
+- Added `middleware/src/core/mc_planner.py` (SA5): a pure, core-only, **seeded** Monte-Carlo projected-run planner for the STS2 reward advisor. It samples remaining *rarity-weighted* future card rewards (and, when gold is provided, a minimal shop buy-vs-remove sub-model) across the Act/floor horizon, **without playing combats**, and reports a **mean + confidence band** per candidate action `{Skip, offer A, offer B, offer C}`. Determinism is the contract: the same `seed`, deck and catalogue produce byte-for-byte identical bands (verified by unit tests). `slot_bonus` is neutralised in the default scorer so the projected axis doesn't inherit V1-V8's fill-the-deck bias (per Grok's scoping; SA3/SA4 own the concrete `score_build` deltas and Pareto front).
+- Added `middleware/tests/test_mc_planner.py` (SA5): 9 unit tests covering determinism, Skip-vs-Take semantics, rarity-weighted sampling, the shop buy-vs-remove sub-model, and result/band bounds. All deterministic under pinned seeds.
+
 ### Added (T7 — Cross-platform Tauri bundling CI)
 
 - Added multi-platform GitHub Actions workflow `.github/workflows/package-and-build.yml` with a matrix building on `ubuntu-22.04` (Linux `.deb`, `.AppImage`), `macos-latest` (macOS `.dmg`), and `windows-latest` (Windows `.msi`, `.exe`). Configured Linux system dependencies (`libwebkit2gtk-4.1-dev`, `libayatana-appindicator3-dev`, etc.) and artifact uploads.
