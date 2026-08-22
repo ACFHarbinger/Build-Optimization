@@ -17,12 +17,13 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 - Added `docs/plugin/Doxyfile` (mirrors `docs/cpp/Doxyfile`; inputs `unreal-plugin/Source/...`, UE-macro PREDEFINED so declarations parse without a UE build) and `docs/api/plugin.md`. Wired the plugin build into `docs/build_docs.sh` (tolerant skip when `unreal-plugin/Source` is missing or `doxygen` is absent) and the `mkdocs.yml` nav ("Unreal Engine Plugin (Doxygen)" under API Reference).
 
-### Added (SA1 / SA6 middleware — advisor contract and CLI)
+### Added (SA1 / SA6 middleware — advisor contract, STS2AdvisorService, and CLI)
 
 - Added `pipeline.decks.advisor_schema`, the versioned (`1.0`) JSON contract for the STS2 reward advisor. It validates a duplicate-preserving deck multiset, exactly three offers, optional run context, and Pareto/Monte-Carlo preferences while retaining a forward-compatible response envelope.
-- Added `middleware/advisor_cli.py`, the one-shot stdin/stdout bridge used by the Tauri Advisor page. It loads the local Ironclad sample catalogue, combines `evaluate_reward` with seeded `MonteCarloPlanner` bands, and returns the existing Tauri response shape plus contract/catalogue versions.
-- Unknown deck or offer card identifiers now produce a structured blocking `needs_dataset_entry` diagnostic; they are never guessed or silently mapped.
-- Added four contract/CLI tests. Middleware suite: 55 passed, 3 skipped (native backend not built).
+- Added `middleware/src/core/advisor_service.py` (`STS2AdvisorService`), a decoupled stateless core service encapsulating catalogue indexing, character verification, marginal evaluation (`evaluate_reward`), and Monte Carlo projections (`MonteCarloPlanner`). Allows in-memory evaluation and establishes the clean interface for a future local daemon without touching solver logic.
+- Refactored `middleware/advisor_cli.py` into a thin stdin/stdout wrapper delegating directly to `STS2AdvisorService`.
+- Unknown deck or offer card identifiers produce a structured blocking `needs_dataset_entry` diagnostic; they are never guessed or silently mapped.
+- Added unit tests in `middleware/tests/test_advisor_service.py` and contract tests in `middleware/tests/test_advisor_schema.py`. Middleware suite: 59 passed, 3 skipped (native backend not built).
 
 ### Fixed (B13 — pre-existing `mypy src` failures)
 
