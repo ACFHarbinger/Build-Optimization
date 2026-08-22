@@ -40,6 +40,10 @@ class RL4COLitModule(DataMixin, OptimizationMixin, StepMixin, pl.LightningModule
 
     cfg: Optional[Config] = None
     baseline: Any
+    # Declared here so LightningModule's Tensor|Module attribute fallback
+    # does not type ``self.env`` / ``self.policy`` as buffers.
+    env: "IEnv"
+    policy: Any
 
     def __init__(
         self,

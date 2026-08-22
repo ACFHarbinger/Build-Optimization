@@ -1,23 +1,29 @@
 """Synthetic problem-instance generators for build-optimisation environments."""
 
+from typing import Any, Dict, Type
+
 from .base import BuildGenerator
 from .fps import FPSGenerator
 from .moba import MOBAGenerator
 from .rpg import RPGGenerator
 
-GENERATOR_REGISTRY = {
+GENERATOR_REGISTRY: Dict[str, Type[BuildGenerator]] = {
     "rpg": RPGGenerator,
     "fps": FPSGenerator,
     "moba": MOBAGenerator,
 }
 
 
-def get_generator(name: str, **kwargs) -> BuildGenerator:
+def get_generator(name: str, **kwargs: Any) -> BuildGenerator:
     """Factory: instantiate a generator by game-type name."""
     name = name.lower()
-    if name not in GENERATOR_REGISTRY:
-        raise ValueError(f"Unknown generator: '{name}'. Available: {list(GENERATOR_REGISTRY)}")
-    return GENERATOR_REGISTRY[name](**kwargs)
+    if name == "rpg":
+        return RPGGenerator(**kwargs)
+    if name == "fps":
+        return FPSGenerator(**kwargs)
+    if name == "moba":
+        return MOBAGenerator(**kwargs)
+    raise ValueError(f"Unknown generator: '{name}'. Available: {list(GENERATOR_REGISTRY)}")
 
 
 __all__ = [

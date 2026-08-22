@@ -6,10 +6,11 @@ import json
 import threading
 from typing import Any, Dict, List, Optional, Sequence, Union
 
-import constants as udef
 import pandas as pd
 from omegaconf import OmegaConf
 from utils.configs.setup_utils import deep_sanitize
+
+import constants as udef
 
 
 def send_daily_output_to_gui(
@@ -64,7 +65,10 @@ def send_daily_output_to_gui(
         full_payload.update({"must_go": mapped_must_go})
 
     full_payload = deep_sanitize(full_payload)
-    full_payload = OmegaConf.to_container(OmegaConf.create(full_payload), resolve=True)
+    converted = OmegaConf.to_container(OmegaConf.create(full_payload), resolve=True)
+    if not isinstance(converted, dict):
+        raise TypeError(f"GUI daily payload must be a mapping, got {type(converted)!r}")
+    full_payload = {str(k): v for k, v in converted.items()}
     log_msg = f"GUI_DAY_LOG_START:{policy},{sample_idx},{day},{json.dumps(full_payload)}"
     acquired = lock.acquire(timeout=udef.LOCK_TIMEOUT) if lock is not None else True
     if not acquired:
@@ -94,7 +98,7 @@ def send_final_output_to_gui(
         if log_std is None
         else {k: [list(v) if isinstance(v, (tuple, list)) else v for v in pol_data] for k, pol_data in log_std.items()}
     )
-    summary_data = {
+    summary_data: Dict[str, Any] = {
         "log": {k: [list(v) if isinstance(v, (tuple, list)) else v for v in pol_data] for k, pol_data in log.items()},
         "log_std": lgsd,
         "n_samples": n_samples,
@@ -103,7 +107,10 @@ def send_final_output_to_gui(
 
     # Deep sanitize summary_data to handle any remaining ListConfigs/DictConfigs and NumPy types
     summary_data = deep_sanitize(summary_data)
-    summary_data = OmegaConf.to_container(OmegaConf.create(summary_data), resolve=True)
+    converted_summary = OmegaConf.to_container(OmegaConf.create(summary_data), resolve=True)
+    if not isinstance(converted_summary, dict):
+        raise TypeError(f"GUI summary payload must be a mapping, got {type(converted_summary)!r}")
+    summary_data = {str(k): v for k, v in converted_summary.items()}
 
     summary_message = f"GUI_SUMMARY_LOG_START: {json.dumps(summary_data)}"
     acquired = lock.acquire(timeout=udef.LOCK_TIMEOUT) if lock is not None else True

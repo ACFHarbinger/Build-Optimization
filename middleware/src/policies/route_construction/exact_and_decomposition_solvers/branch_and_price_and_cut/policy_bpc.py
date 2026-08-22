@@ -214,6 +214,6 @@ class BPCPolicy(BaseRoutingPolicy):
 
             path = [0] + inner + [0]
             for i in range(len(path) - 1):
-                raw_distance += sub_dist_matrix[path[i]][path[i + 1]]
+                raw_distance += float(sub_dist_matrix[path[i]][path[i + 1]])
 
         return routes, profit, raw_distance

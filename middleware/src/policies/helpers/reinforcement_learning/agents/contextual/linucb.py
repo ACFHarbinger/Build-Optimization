@@ -40,12 +40,13 @@ class LinUCBAgent(ContextualBanditAgent):
         self.alpha = alpha
 
         # Per-arm parameters: A_a = M_a' * M_a + I_d, b_a = M_a' * r_a
-        # A_a is (d x d), b_a is (d x 1)
-        self.A = [np.identity(self.d) for _ in range(n_arms)]
-        self.b = [np.zeros((self.d, 1)) for _ in range(n_arms)]
+        # A_a is (d x d), b_a is (d x 1). Untyped ndarrays so np.linalg.inv's
+        # ``floating[Any]`` result assigns cleanly.
+        self.A: List[np.ndarray] = [np.identity(self.d) for _ in range(n_arms)]
+        self.b: List[np.ndarray] = [np.zeros((self.d, 1)) for _ in range(n_arms)]
 
         # Cache inverses for efficiency
-        self.A_inv = [np.identity(self.d) for _ in range(n_arms)]
+        self.A_inv: List[np.ndarray] = [np.identity(self.d) for _ in range(n_arms)]
         self._cache_valid = [True] * n_arms
 
     def select_action(self, context: np.ndarray, rng: np.random.Generator) -> int:

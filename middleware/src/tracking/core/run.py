@@ -6,7 +6,7 @@ import contextlib
 import math
 import os
 import threading
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Literal, Optional, Tuple
 
 from ..validation.hashing import hash_file
 from .store import TrackingStore
@@ -362,7 +362,7 @@ class Run:
         exc_type: Any,
         exc_val: Any,
         exc_tb: Any,
-    ) -> bool:
+    ) -> Literal[False]:
         if exc_type is not None:
             self.finish(status="failed", error=str(exc_val))
         else:

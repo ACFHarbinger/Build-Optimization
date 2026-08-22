@@ -4,6 +4,21 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Fixed (B13 — pre-existing `mypy src` failures)
+
+- `uv run mypy src` is clean (1445 files). The 51 errors in 22 files were inherited RL-pipeline issues, not silenced with a blanket `# type: ignore`.
+- Restored `from configs import Config` by adding the missing `configs.envs.objective.ObjectiveConfig` and a `HPOConfig` field on root `Config` (`cfg.hpo.n_trials`).
+- Aliased `RL4COEnvBase = BuildEnvBase` so inherited policy/model imports resolve.
+- Typed the remaining concrete mismatches: Lightning `env`/`policy` buffers (Protocol + cast), `asdict` only on dataclass instances, numpy `randint`/`linalg.inv` dtypes, `__exit__ -> Literal[False]`, OmegaConf `to_container` dict conversion, attention `last_attn` as a sequence, generator factory instantiating concrete classes.
+- Added `middleware/configs/__init__.pyi` so mypy's cwd-on-path does not treat the Hydra YAML directory as an empty `configs` namespace that shadows `src/configs`.
+- Raised `[tool.mypy] python_version` to `"3.10"` (current mypy dropped 3.9 as a type-check target). Runtime remains `requires-python = ">=3.9"`.
+
+### Added (SA3/SA4 — marginal reward eval + Pareto front)
+
+- Added `middleware/src/core/reward_eval.py` (SA3): `evaluate_reward` scores `{Skip, offer1, offer2, offer3}` as `score_build(D)` vs `score_build(D+x)` over a duplicate-preserving deck. Does **not** extend `DeckProblem` or call knapsack/`score_fast`. `slot_bonus` is forced to 0 so Take is not rewarded for enlarging the deck. Dilution is an explicit penalty (Skip is 0); Skip can sit on the Pareto front.
+- Added `middleware/src/core/pareto.py` (SA4): non-dominated set over tempo (max), synergy (max), dilution (min), resilience (max). Preference weights select a point *from* the front; they do not collapse it.
+- Added `middleware/tests/test_reward_eval.py` and `middleware/tests/test_pareto.py`. Full middleware suite: 51 passed, 3 skipped (native backend not built).
+
 ### Added (SA5 — Seeded Monte-Carlo projected-run planner)
 
 - Added `middleware/src/core/mc_planner.py` (SA5): a pure, core-only, **seeded** Monte-Carlo projected-run planner for the STS2 reward advisor. It samples remaining *rarity-weighted* future card rewards (and, when gold is provided, a minimal shop buy-vs-remove sub-model) across the Act/floor horizon, **without playing combats**, and reports a **mean + confidence band** per candidate action `{Skip, offer A, offer B, offer C}`. Determinism is the contract: the same `seed`, deck and catalogue produce byte-for-byte identical bands (verified by unit tests). `slot_bonus` is neutralised in the default scorer so the projected axis doesn't inherit V1-V8's fill-the-deck bias (per Grok's scoping; SA3/SA4 own the concrete `score_build` deltas and Pareto front).

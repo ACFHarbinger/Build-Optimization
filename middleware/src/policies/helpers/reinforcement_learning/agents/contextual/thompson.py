@@ -38,12 +38,13 @@ class ContextualThompsonSamplingAgent(ContextualBanditAgent):
         self.v2 = noise_variance  # sigma^2
 
         # Precision matrices (B) and weighted reward vectors (f)
-        # B_a is (d x d), f_a is (d x 1)
-        self.B = [np.identity(self.d) * lambda_prior for _ in range(n_arms)]
-        self.f = [np.zeros((self.d, 1)) for _ in range(n_arms)]
+        # B_a is (d x d), f_a is (d x 1). Untyped ndarrays so np.linalg.inv's
+        # ``floating[Any]`` result assigns cleanly (it is not dtype-float64).
+        self.B: List[np.ndarray] = [np.identity(self.d) * lambda_prior for _ in range(n_arms)]
+        self.f: List[np.ndarray] = [np.zeros((self.d, 1)) for _ in range(n_arms)]
 
         # Cache for B_inv
-        self.B_inv = [np.identity(self.d) / lambda_prior for _ in range(n_arms)]
+        self.B_inv: List[np.ndarray] = [np.identity(self.d) / lambda_prior for _ in range(n_arms)]
         self._cache_valid = [True] * n_arms
 
     def select_action(self, context: np.ndarray, rng: np.random.Generator) -> int:

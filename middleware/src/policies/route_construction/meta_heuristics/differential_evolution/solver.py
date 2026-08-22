@@ -322,8 +322,9 @@ class DESolver:
         NP, D = target_pop.shape
         CR = self.params.crossover_rate
 
-        # 1. Select starting indices n for each individual
-        n_starts = self.rng.randint(0, D, size=NP)
+        # 1. Select starting indices n for each individual.
+        # RandomState.randint is overloaded (scalar vs array); pin the array form.
+        n_starts = np.asarray(self.rng.randint(0, D, size=NP), dtype=int)
 
         # 2. Simulate the do...while loop with a Geometric Stop
         # P(L=k) = CR^(k-1) * (1-CR) for k in [1, D]

@@ -86,3 +86,7 @@ class BuildEnvBase(BatchMixin, OpsMixin, EnvBase):
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(name={self.name}, device={self.device})"
+
+
+# Inherited RL4CO policy/model modules still import this name.
+RL4COEnvBase = BuildEnvBase

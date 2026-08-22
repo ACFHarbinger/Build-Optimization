@@ -11,6 +11,7 @@ Usage::
 from dataclasses import dataclass, field
 
 from .game import GameConfig, GameDataConfig
+from .hpo import HPOConfig
 from .models.model import ModelConfig
 from .optimization import OptimizationConfig
 from .pipeline import DataSourceConfig, PipelineConfig
@@ -31,6 +32,7 @@ class Config:
         rl: Reinforcement learning settings (algorithm, baseline).
         tracking: Experiment tracking and logging settings.
         model: Model configuration (type, architecture).
+        hpo: Hyperparameter-optimization settings (inherited RL pipeline).
         seed: Global random seed.
         device: Compute device ('cpu', 'cuda', 'cuda:0').
         output_dir: Directory for outputs and checkpoints.
@@ -43,6 +45,7 @@ class Config:
     rl: RLConfig = field(default_factory=RLConfig)
     tracking: TrackingConfig = field(default_factory=TrackingConfig)
     model: ModelConfig = field(default_factory=ModelConfig)
+    hpo: HPOConfig = field(default_factory=HPOConfig)
     seed: int = 42
     device: str = "cpu"
     output_dir: str = "outputs"
@@ -54,6 +57,7 @@ __all__ = [
     "GameConfig",
     "GameDataConfig",
     "GraphConfig",
+    "HPOConfig",
     "OptimizationConfig",
     "PipelineConfig",
     "RLConfig",

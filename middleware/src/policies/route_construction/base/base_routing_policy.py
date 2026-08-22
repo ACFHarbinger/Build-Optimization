@@ -200,8 +200,10 @@ class BaseRoutingPolicy(PolicyVizMixin, IRouteConstructor):
         Q, R, B, C, V = load_area_and_waste_type_params(area, waste_type)
 
         # Build the policy config dict from the typed config or raw dict
-        if self._config is not None and is_dataclass(self._config):
-            # Typed config takes priority, then overlay any runtime overrides
+        if self._config is not None and is_dataclass(self._config) and not isinstance(self._config, type):
+            # Typed config takes priority, then overlay any runtime overrides.
+            # ``is_dataclass`` is true for both instances and classes; asdict
+            # only accepts instances.
             config_key = self._get_config_key()
             runtime_overrides = config.get(config_key, config)  # Handle case where config IS the policy section
             if not isinstance(runtime_overrides, dict):

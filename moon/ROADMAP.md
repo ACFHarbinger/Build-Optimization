@@ -32,7 +32,7 @@ Status markers: ✅ Done · 🚧 In Progress · 📋 Pending
 | B10 | Add PPO/MCTS real-time itemization policy for MOBA-style adaptive builds | L | 📋 Pending |
 | B11 | Design and implement the experiment tracking database schema (`middleware/src/tracking`) | M | ✅ Done |
 | B12 | Wire C++ build + Python test suite into `.github/workflows/ci.yml` | S | ✅ Done |
-| B13 | Fix the pre-existing `uv run mypy src` failures (51 errors in 22 files, all inherited RL-pipeline code — `configs.Config` attribute errors, torch `Tensor \| Module` union-attr issues, etc.); `lint-python` in CI has likely never been green | M | 📋 Pending |
+| B13 | Fix the pre-existing `uv run mypy src` failures (51 errors in 22 files, all inherited RL-pipeline code — `configs.Config` attribute errors, torch `Tensor \| Module` union-attr issues, etc.); `lint-python` in CI has likely never been green | M | ✅ Done |
 
 ## Track: Browser Extension
 
@@ -115,8 +115,8 @@ A cross-cutting initiative (no dedicated board label — issues tagged `componen
 | --- | --- | --- | --- |
 | SA1 | Define the advisor's versioned JSON decision contract: deck (character-tagged multiset of card ids/counts), 3 offers, optional context (gold, relics, potions, Act/floor, HP%), preferences, catalogue/scoring-config versions, recognition diagnostics, ranked result + explanations | S | 📋 Pending |
 | SA2 | Canonical stable-ID STS2 card catalogue: `slaythespire.wiki.gg` ingestion into a gitignored app-data cache (never committed) with attribution notices (committed), base/`+`-variant ids, aliases, character tag; a gitignored local overlay for user-added/overridden rows | M | 📋 Pending |
-| SA3 | New `middleware/src/core/reward_eval.py`: pure `evaluate_reward(base, offers, scoring, synergies, preferences, context) -> RewardAdvice`, scoring `score_build(Deck(base))` vs `score_build(Deck(base + offer))` per action over a duplicate-preserving multiset — **not** a `DeckProblem`/knapsack change, and not using `score_fast`'s pool-relative normalization | M | 📋 Pending |
-| SA4 | Multi-objective Pareto scoring over SA3's four outcomes: immediate tempo/survival, synergy/archetype delta, dilution/consistency (must let `Skip` win), resource/run-risk resilience — return the full non-dominated set, never one collapsed weighted number | L | 📋 Pending |
+| SA3 | New `middleware/src/core/reward_eval.py`: pure `evaluate_reward(base, offers, scoring, synergies, preferences, context) -> RewardAdvice`, scoring `score_build(Deck(base))` vs `score_build(Deck(base + offer))` per action over a duplicate-preserving multiset — **not** a `DeckProblem`/knapsack change, and not using `score_fast`'s pool-relative normalization | M | ✅ Done |
+| SA4 | Multi-objective Pareto scoring over SA3's four outcomes: immediate tempo/survival, synergy/archetype delta, dilution/consistency (must let `Skip` win), resource/run-risk resilience — return the full non-dominated set, never one collapsed weighted number | L | ✅ Done |
 | SA5 | Seeded Monte-Carlo projected-run planner: samples remaining rarity-weighted reward offers (and shop buy-vs-remove if gold is provided) across the Act/floor horizon, no combat simulation; user-visible seed, configurable rollout count, mean + bands per `{Skip, A, B, C}` | L | ✅ Done |
 | SA6 | One-shot `advisor_cli.py` (versioned JSON in/out, app-controlled temp paths), Python core decoupled as `STS2AdvisorService` for a later local-daemon migration; manual/typed deck+offer+context entry (per-character starter deck, fork-starter, blank, named local presets) is the first working end-to-end input, shipped before recognition exists | M | 🚧 In Progress |
 | SA7 | New top-level Tauri "Advisor" page (a study screen, not a combat overlay) invoking SA6 via `tauri-plugin-shell`: full Pareto frontier + MC bands, priority sliders/presets, comparison vs every offer and Skip, score/metric breakdowns, synergy/weakness explanations, deck-preset picker, optional context pickers | L | ✅ Done |

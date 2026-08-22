@@ -1,7 +1,8 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, cast
 
 import torch
 from tensordict import TensorDict
+from torch import nn
 
 if TYPE_CHECKING:
     from interfaces.env import IEnv
@@ -30,9 +31,14 @@ class TimeOptimizedREINFORCE(REINFORCE):
         super().__init__(**kwargs)
         self.time_sensitivity = time_sensitivity
 
-        # Wrap policy for time tracking if needed
+        # Wrap policy for time tracking if needed. ``getattr`` keeps this
+        # independent of LightningModule's Tensor|Module ``env``/``policy``
+        # buffers so mypy can see an nn.Module going into the wrapper.
         if self.time_sensitivity > 0:
-            self.policy = TimeTrackingPolicy(self.policy)  # type: ignore[arg-type, assignment]
+            # LightningModule's attribute type is not resolved at this point
+            # (has-type); the wrap is IPolicy → TimeTrackingPolicy (nn.Module).
+            current_policy = cast(nn.Module, self.policy)  # type: ignore[has-type]
+            self.policy = TimeTrackingPolicy(current_policy)
 
     def calculate_loss(
         self,

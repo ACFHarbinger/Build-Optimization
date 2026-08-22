@@ -24,9 +24,11 @@ def add_attention_hooks(model_module: nn.Module) -> Dict[str, Any]:
 
     def hook(module: nn.Module, input: Any, output: Any) -> None:
         """Forward hook to capture attention weights."""
-        if hasattr(module, "last_attn") and module.last_attn is not None:
-            graph_masks.append(module.last_attn[-1])
-            attention_weights.append(module.last_attn[0])
+        attn = getattr(module, "last_attn", None)
+        # last_attn is a sequence of tensors (weights, mask, …), not a Module.
+        if isinstance(attn, (list, tuple)) and len(attn) >= 1:
+            graph_masks.append(attn[-1])
+            attention_weights.append(attn[0])
 
     # Register hooks on all MHA layers
     hook_data = {"weights": attention_weights, "masks": graph_masks, "handles": []}
