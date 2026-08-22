@@ -4,6 +4,17 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (SA8/SA10 — screenshot OCR ingestion + RecognizedName seam)
+
+- **SA8 (Local screenshot ingestion)**:
+  - `middleware/src/pipeline/recognition/transcribe.py` — `OcrTranscriber` crops the configured offer-name-banner sub-regions (16:9 and 16:10, resolution-independent fractions) and OCRs **only that crop** (never whole-image, since card names are art-integrated). `CropBoxes` carries the crop geometry; `load_image`/`load_image_bytes` handle disk + clipboard-paste bytes. `ocr_available()` hard-checks the tesseract binary so the OCR path degrades to a clean skip when absent (mirrors `core.native_backend`'s precedent).
+  - `middleware/src/pipeline/recognition/fixtures.py` — deterministic (seeded) synthetic reward-screen generator: three card-shaped regions with abstract art blocks so naive whole-image OCR can't read the name, plus a name-banner strip at the *same* fractions the recognizer crops (one layout source of truth). Committed fixtures (`reward_clean`, `reward_degraded`, `reward_unknown`) are synthetic output only — **never real game assets**.
+  - `middleware/configs/recognition/default.yaml` — new composable Hydra group (`local.engine`, `crop_boxes.offers/name_banner`, `thresholds.local_accept/cloud_accept`, `cloud.enabled: false`).
+  - Added `Pillow` + `pytesseract` to middleware deps (optional `recognition` group + `dev` group). **Deliberate new dependency** for local OCR; `pytesseract` wraps the external `tesseract` binary. Justified: recognition is core to the G3/V1 definition of done; both are lightweight.
+- **SA10 (`RecognizedName` seam)**:
+  - `middleware/src/core/recognition.py` — `RecognizedName` (`raw_text`, `normalized`, `confidence`, `method`, `matched_card_id`, `needs_dataset_entry`, bounded `candidates`), `NameMatcher` (deterministic exact → alias → space-insensitive fuzzy; near-ties and unmatched names never silently resolve), normalization that preserves the ``+`` upgrade marker, and a per-user confidence policy (`apply_confidence` → `TENTATIVE`/`BLOCK`).
+- **Tests**: `tests/test_recognition.py` (SA10, pure — 15 tests) and `tests/test_recognition_fixtures.py` (SA8 — crop geometry, fixture determinism, and OCR transcription gated on OCR deps). Middleware suite: 82 passed, 3 skipped.
+
 ### Added (U1 — Unreal Engine plugin skeleton)
 
 - Added `unreal-plugin/` — the first real step on the Unreal Engine plugin track:

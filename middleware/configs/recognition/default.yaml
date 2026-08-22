@@ -1,0 +1,43 @@
+# STS2 reward-screenshot recognition defaults (SA8/SA10).
+#
+# Composable from the main config like game/optimization/pipeline/policy. This
+# group is NOT wired into main.py's roster yet — it's the recognition-layer
+# config the SA8 transcription pipeline and Advisor page will read once G3 is
+# wired end-to-end (that wiring is a follow-up; the config lands with the
+# recognition seam so the layout source-of-truth is committed, not guessed).
+
+# Local OCR engine + behaviour
+local:
+  engine: tesseract          # only option this slice; keep the field for clarity
+  psm: 7                     # single-line page segmentation (name-banner strip)
+  upscale_factor: 2.0        # pre-OCR upscale for small banner text
+
+# Configured crop boxes (fractions of width/height — resolution independent).
+# One layout source of truth for BOTH the recognizer and the synthetic fixture
+# generator. A 16:10 (Steam Deck) variant differs only by the aspect that
+# scales these fractions; the fractions themselves are shared.
+crop_boxes:
+  # three post-fight card-reward offer regions (left, top, right, bottom)
+  offers:
+    - [0.06, 0.18, 0.31, 0.95]
+    - [0.36, 0.18, 0.61, 0.95]
+    - [0.66, 0.18, 0.91, 0.95]
+  # name-banner sub-region inside each card
+  name_banner:
+    - [0.10, 0.82, 0.90, 0.95]
+  # deck-grid screen (SA9) — intentionally empty placeholder this slice.
+  deck_grid: null
+
+# Per-user confidence threshold (SA10 uncertainty policy): at or above this and
+# a transcribed name is a *flagged tentative* answer; below it, BLOCK for
+# correction. Real UI surfaces this as a user setting.
+thresholds:
+  local_accept: 0.90
+  cloud_accept: 0.95
+
+# Optional text-only cloud fallback (SA11). Disabled by default; credentials
+# via RECOGNITION_CLOUD_API_KEY (absent ⇒ disabled). Never receives the image.
+cloud:
+  enabled: false
+  provider: null
+  request_text_only: true

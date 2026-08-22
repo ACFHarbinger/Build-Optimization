@@ -36,6 +36,12 @@ solvers = [
 ]
 ml = ["torch>=2.2.2", "torchrl==0.3.1", "tensordict==0.3.1"]
 gui = ["matplotlib>=3.9.4", "seaborn>=0.13.2", "plotly>=6.3.0"]
+# Local screenshot OCR (SA8). pytesseract wraps the system `tesseract` binary,
+# which must be installed separately (e.g. apt-get install tesseract-ocr).
+recognition = [
+    "Pillow>=10.0.0",
+    "pytesseract>=0.3.10",
+]
 
 [dependency-groups]
 dev = [
@@ -44,6 +50,9 @@ dev = [
     "pytest-mock>=3.12.0",
     "ruff>=0.14.3",
     "black>=24.0.0",
+    # SA8 local screenshot OCR — pytesseract wraps the system `tesseract` binary.
+    "Pillow>=10.0.0",
+    "pytesseract>=0.3.10",
 ]
 
 [build-system]
