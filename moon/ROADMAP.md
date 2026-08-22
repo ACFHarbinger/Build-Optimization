@@ -113,7 +113,7 @@ A cross-cutting initiative (no dedicated board label — issues tagged `componen
 
 | # | Item | Effort | Status |
 | --- | --- | --- | --- |
-| SA1 | Define the advisor's versioned JSON decision contract: deck (character-tagged multiset of card ids/counts), 3 offers, optional context (gold, relics, potions, Act/floor, HP%), preferences, catalogue/scoring-config versions, recognition diagnostics, ranked result + explanations | S | 📋 Pending |
+| SA1 | Define the advisor's versioned JSON decision contract: deck (character-tagged multiset of card ids/counts), 3 offers, optional context (gold, relics, potions, Act/floor, HP%), preferences, catalogue/scoring-config versions, recognition diagnostics, ranked result + explanations | S | ✅ Done |
 | SA2 | Canonical stable-ID STS2 card catalogue: `slaythespire.wiki.gg` ingestion into a gitignored app-data cache (never committed) with attribution notices (committed), base/`+`-variant ids, aliases, character tag; a gitignored local overlay for user-added/overridden rows | M | 📋 Pending |
 | SA3 | New `middleware/src/core/reward_eval.py`: pure `evaluate_reward(base, offers, scoring, synergies, preferences, context) -> RewardAdvice`, scoring `score_build(Deck(base))` vs `score_build(Deck(base + offer))` per action over a duplicate-preserving multiset — **not** a `DeckProblem`/knapsack change, and not using `score_fast`'s pool-relative normalization | M | ✅ Done |
 | SA4 | Multi-objective Pareto scoring over SA3's four outcomes: immediate tempo/survival, synergy/archetype delta, dilution/consistency (must let `Skip` win), resource/run-risk resilience — return the full non-dominated set, never one collapsed weighted number | L | ✅ Done |

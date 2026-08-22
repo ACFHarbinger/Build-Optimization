@@ -4,6 +4,13 @@ All notable changes to Build-Optimization are documented here. Format follows [K
 
 ## [Unreleased]
 
+### Added (SA1 / SA6 middleware — advisor contract and CLI)
+
+- Added `pipeline.decks.advisor_schema`, the versioned (`1.0`) JSON contract for the STS2 reward advisor. It validates a duplicate-preserving deck multiset, exactly three offers, optional run context, and Pareto/Monte-Carlo preferences while retaining a forward-compatible response envelope.
+- Added `middleware/advisor_cli.py`, the one-shot stdin/stdout bridge used by the Tauri Advisor page. It loads the local Ironclad sample catalogue, combines `evaluate_reward` with seeded `MonteCarloPlanner` bands, and returns the existing Tauri response shape plus contract/catalogue versions.
+- Unknown deck or offer card identifiers now produce a structured blocking `needs_dataset_entry` diagnostic; they are never guessed or silently mapped.
+- Added four contract/CLI tests. Middleware suite: 55 passed, 3 skipped (native backend not built).
+
 ### Fixed (B13 — pre-existing `mypy src` failures)
 
 - `uv run mypy src` is clean (1445 files). The 51 errors in 22 files were inherited RL-pipeline issues, not silenced with a blanket `# type: ignore`.
