@@ -23,6 +23,6 @@
     "test": "npm run test-frontend && npm run test-extension"
   },
   "devDependencies": {
-    "concurrently": "^9"
+    "concurrently": "^10"
   }
 }
